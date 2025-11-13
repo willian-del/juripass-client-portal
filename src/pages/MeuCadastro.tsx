@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { perfilSchema } from '@/lib/validators';
@@ -20,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 type PerfilForm = z.infer<typeof perfilSchema>;
 
 export default function MeuCadastro() {
-  const { usuario } = useAuth();
+  const { usuario, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,6 +94,48 @@ export default function MeuCadastro() {
   const formatarDataAdesao = (dataISO: string) => {
     return format(new Date(dataISO), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
   };
+
+  if (authLoading) {
+    return (
+      <DashboardLayout>
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10" />
+            <div className="flex-1">
+              <Skeleton className="h-8 w-64 mb-2" />
+              <Skeleton className="h-4 w-96" />
+            </div>
+          </div>
+          
+          <div className="grid gap-6 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <Skeleton className="h-6 w-48 mb-2" />
+                <Skeleton className="h-4 w-64" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <Skeleton className="h-6 w-48 mb-2" />
+                <Skeleton className="h-4 w-64" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   if (!usuario) return null;
 
