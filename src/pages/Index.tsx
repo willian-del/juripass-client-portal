@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Loader2 } from 'lucide-react';
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -21,9 +21,14 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-primary">
-      <div className="text-center">
-        <Loader2 className="h-12 w-12 animate-spin text-white mx-auto" />
-        <p className="mt-4 text-white text-lg">Carregando...</p>
+      <div className="flex flex-col items-center gap-6 animate-fade-in">
+        <LogoJuripass variant="full" size="xl" color="white" />
+        <div className="flex items-center gap-3">
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]" />
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]" />
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce" />
+        </div>
+        <p className="text-white text-lg font-medium">Carregando...</p>
       </div>
     </div>
   );

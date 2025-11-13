@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 type LoginForm = z.infer<typeof loginSchema>;
 
@@ -69,13 +70,11 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-primary">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-2xl font-bold text-primary-foreground">JP</span>
-            </div>
+        <CardHeader className="space-y-4 text-center">
+          <div className="flex justify-center">
+            <LogoJuripass variant="full" size="lg" />
           </div>
-          <CardTitle className="text-2xl font-bold">Juripass</CardTitle>
+          <CardTitle className="text-2xl font-bold">Acesse sua conta</CardTitle>
           <CardDescription>Entre com suas credenciais para acessar</CardDescription>
         </CardHeader>
         <CardContent>

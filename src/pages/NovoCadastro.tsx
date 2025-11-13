@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 type CadastroForm = z.infer<typeof cadastroSchema>;
 
@@ -173,11 +174,9 @@ export default function NovoCadastro() {
   return (
     <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-primary">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-2xl font-bold text-primary-foreground">JP</span>
-            </div>
+        <CardHeader className="space-y-4 text-center">
+          <div className="flex justify-center">
+            <LogoJuripass variant="full" size="lg" />
           </div>
           <CardTitle className="text-2xl font-bold">Novo Cadastro</CardTitle>
           <CardDescription>Preencha seus dados para criar sua conta</CardDescription>
