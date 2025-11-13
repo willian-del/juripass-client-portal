@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { perfilSchema } from '@/lib/validators';
-import { maskCPF, formatPhone } from '@/lib/cpfUtils';
+import { maskCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { toast } from 'sonner';
 import { Loader2, Edit2, Save, X } from 'lucide-react';
 
@@ -47,7 +47,7 @@ export default function MeuCadastro() {
         .update({
           nome: data.nome,
           email: data.email,
-          telefone: data.telefone || null,
+          telefone: data.telefone ? cleanPhone(data.telefone) : null,
         } as any)
         .eq('id', usuario.id);
 

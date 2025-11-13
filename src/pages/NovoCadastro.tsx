@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { cadastroSchema } from '@/lib/validators';
-import { cleanCPF, formatCPF, formatPhone } from '@/lib/cpfUtils';
+import { cleanCPF, formatCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -145,9 +145,9 @@ export default function NovoCadastro() {
         .insert({
           id_auth: authData.user.id,
           cpf_criptografado: cpfLimpo,
-          nome: data.nome,
-          email: data.email,
-          telefone: data.telefone || null,
+        nome: data.nome,
+        email: data.email,
+        telefone: data.telefone ? cleanPhone(data.telefone) : null,
           tipo_usuario: 'principal',
           id_empresa: empresaData.id,
         } as any);

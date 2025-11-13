@@ -15,9 +15,11 @@ export const cadastroSchema = z.object({
     .email("E-mail inválido")
     .max(255, "E-mail muito longo"),
   telefone: z.string()
-    .regex(/^\d{10,11}$/, "Telefone inválido")
-    .optional()
-    .or(z.literal("")),
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val === '' || /^\d{10,11}$/.test(val), {
+      message: "Telefone inválido"
+    })
+    .optional(),
   codigo_empresa: z.string()
     .min(1, "Código da empresa é obrigatório"),
   senha: z.string()
@@ -46,9 +48,11 @@ export const finalizarDependenteSchema = z.object({
     .email("E-mail inválido")
     .max(255, "E-mail muito longo"),
   telefone: z.string()
-    .regex(/^\d{10,11}$/, "Telefone inválido")
-    .optional()
-    .or(z.literal("")),
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val === '' || /^\d{10,11}$/.test(val), {
+      message: "Telefone inválido"
+    })
+    .optional(),
   grau_parentesco: z.enum(["conjuge", "filho", "pai_mae", "irmao", "outro"], {
     errorMap: () => ({ message: "Selecione o grau de parentesco" }),
   }),
@@ -86,7 +90,9 @@ export const perfilSchema = z.object({
     .email("E-mail inválido")
     .max(255, "E-mail muito longo"),
   telefone: z.string()
-    .regex(/^\d{10,11}$/, "Telefone inválido")
-    .optional()
-    .or(z.literal("")),
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val === '' || /^\d{10,11}$/.test(val), {
+      message: "Telefone inválido"
+    })
+    .optional(),
 });
