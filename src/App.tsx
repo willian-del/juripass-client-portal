@@ -11,6 +11,7 @@ import NovoCadastro from "./pages/NovoCadastro";
 import Dashboard from "./pages/Dashboard";
 import IniciarAtendimento from "./pages/IniciarAtendimento";
 import MeuCadastro from "./pages/MeuCadastro";
+import Dependentes from "./pages/Dependentes";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/dashboard/atendimento" element={<ProtectedRoute><IniciarAtendimento /></ProtectedRoute>} />
             <Route path="/dashboard/meu-cadastro" element={<ProtectedRoute><MeuCadastro /></ProtectedRoute>} />
+            <Route path="/dashboard/dependentes" element={<ProtectedRoute><Dependentes /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
