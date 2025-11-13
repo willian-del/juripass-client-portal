@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,7 +25,7 @@ type DependenteForm = z.infer<typeof dependenteSchema>;
 type FinalizarDependenteForm = z.infer<typeof finalizarDependenteSchema>;
 
 export default function Dependentes() {
-  const { usuario } = useAuth();
+  const { usuario, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [dependentes, setDependentes] = useState<Usuario[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -187,6 +188,29 @@ export default function Dependentes() {
     };
     return labels[grau] || grau;
   };
+
+  if (authLoading) {
+    return (
+      <DashboardLayout>
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10" />
+            <div className="flex-1">
+              <Skeleton className="h-8 w-64 mb-2" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+          </div>
+          <Card>
+            <CardContent className="py-12">
+              <div className="flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   if (!usuario) {
     return null;
