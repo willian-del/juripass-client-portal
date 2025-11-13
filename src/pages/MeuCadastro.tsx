@@ -162,16 +162,19 @@ export default function MeuCadastro() {
           </div>
 
           {!isEditing && (
-            <Button onClick={() => setIsEditing(true)}>
+            <Button 
+              onClick={() => setIsEditing(true)}
+              className="bg-juripass-primary hover:bg-juripass-primary-dark"
+            >
               <Edit2 className="mr-2 h-4 w-4" />
               Editar
             </Button>
           )}
         </div>
 
-        <Card className="max-w-2xl">
+        <Card className="max-w-2xl shadow-primary">
           <CardHeader>
-            <CardTitle>Informações da Conta</CardTitle>
+            <CardTitle className="text-juripass-primary-dark">Informações da Conta</CardTitle>
             <CardDescription>
               Dados da sua conta no sistema
             </CardDescription>
@@ -204,9 +207,9 @@ export default function MeuCadastro() {
           </CardContent>
         </Card>
 
-        <Card className="max-w-2xl">
+        <Card className={`max-w-2xl shadow-primary ${isEditing ? 'border-juripass-primary border-2' : ''}`}>
           <CardHeader>
-            <CardTitle>Informações Pessoais</CardTitle>
+            <CardTitle className="text-juripass-primary-dark">Informações Pessoais</CardTitle>
             <CardDescription>
               {isEditing
                 ? 'Edite os campos abaixo e clique em Salvar'
@@ -270,7 +273,11 @@ export default function MeuCadastro() {
 
               {isEditing && (
                 <div className="flex gap-4 pt-4">
-                  <Button type="submit" disabled={isLoading} className="flex-1">
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading} 
+                    className="flex-1 bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
+                  >
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -288,6 +295,7 @@ export default function MeuCadastro() {
                     variant="outline"
                     onClick={handleCancel}
                     disabled={isLoading}
+                    className="border-juripass-primary text-juripass-primary hover:bg-juripass-primary/10"
                   >
                     <X className="mr-2 h-4 w-4" />
                     Cancelar
