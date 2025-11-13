@@ -87,3 +87,10 @@ export function formatCNPJ(cnpj: string): string {
   
   return cleanCNPJ.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
 }
+
+/**
+ * Remove a formatação do telefone, mantendo apenas dígitos
+ */
+export function cleanPhone(phone: string): string {
+  return phone.replace(/\D/g, '');
+}
