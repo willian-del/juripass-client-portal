@@ -59,23 +59,23 @@ export default function Dashboard() {
             return (
               <Card
                 key={card.path}
-                className="hover:shadow-lg transition-shadow cursor-pointer group"
+                className="hover:shadow-primary transition-all cursor-pointer group shadow-md"
                 onClick={() => navigate(card.path)}
               >
                 <CardHeader>
                   <div className={cn(
-                    'w-12 h-12 rounded-lg flex items-center justify-center mb-4',
+                    'w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-primary',
                     card.color
                   )}>
                     <Icon className="h-6 w-6 text-white" />
                   </div>
-                  <CardTitle className="group-hover:text-primary transition-colors">
+                  <CardTitle className="group-hover:text-juripass-primary transition-colors">
                     {card.title}
                   </CardTitle>
                   <CardDescription>{card.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="ghost" className="w-full">
+                  <Button variant="ghost" className="w-full text-juripass-primary hover:text-juripass-primary-dark hover:bg-juripass-primary/10">
                     Acessar
                   </Button>
                 </CardContent>
@@ -85,14 +85,14 @@ export default function Dashboard() {
         </div>
 
         {usuario?.tipo_usuario === 'dependente' && usuario.usuario_principal && (
-          <Card className="border-primary/20 bg-primary/5">
+          <Card className="border-juripass-primary/30 bg-juripass-primary/5 shadow-primary">
             <CardHeader>
-              <CardTitle className="text-base">Informação</CardTitle>
+              <CardTitle className="text-base text-juripass-primary-dark">Informação</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
                 Você é um dependente vinculado ao titular{' '}
-                <span className="font-medium text-foreground">
+                <span className="font-medium text-juripass-primary-dark">
                   {usuario.usuario_principal.nome}
                 </span>
               </p>

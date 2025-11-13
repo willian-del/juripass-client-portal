@@ -232,9 +232,14 @@ export default function Dependentes() {
             </Button>
 
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Cadastrar Dependentes</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold tracking-tight">Cadastrar Dependentes</h1>
+                <Badge className="bg-juripass-accent text-white">
+                  {dependentes.length} / 4
+                </Badge>
+              </div>
               <p className="text-muted-foreground mt-2">
-                {dependentes.length} de 4 dependentes cadastrados
+                Adicione até 4 dependentes à sua conta
               </p>
             </div>
           </div>
@@ -243,6 +248,7 @@ export default function Dependentes() {
             <Button
               onClick={() => setStep('validate-cpf')}
               disabled={dependentes.length >= 4}
+              className="bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
             >
               <UserPlus className="mr-2 h-4 w-4" />
               Adicionar Dependente
@@ -260,14 +266,17 @@ export default function Dependentes() {
                 </CardContent>
               </Card>
             ) : dependentes.length === 0 ? (
-              <Card>
+              <Card className="shadow-primary">
                 <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                  <Users className="h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Nenhum dependente cadastrado</h3>
+                  <Users className="h-12 w-12 text-juripass-primary mb-4" />
+                  <h3 className="text-lg font-semibold mb-2 text-juripass-primary-dark">Nenhum dependente cadastrado</h3>
                   <p className="text-muted-foreground mb-4">
                     Você pode cadastrar até 4 dependentes
                   </p>
-                  <Button onClick={() => setStep('validate-cpf')}>
+                  <Button 
+                    onClick={() => setStep('validate-cpf')}
+                    className="bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
+                  >
                     <UserPlus className="mr-2 h-4 w-4" />
                     Adicionar Primeiro Dependente
                   </Button>
@@ -276,11 +285,11 @@ export default function Dependentes() {
             ) : (
               <div className="grid gap-4 md:grid-cols-2">
                 {dependentes.map((dep) => (
-                  <Card key={dep.id}>
+                  <Card key={dep.id} className="shadow-primary border-juripass-primary/20 hover:border-juripass-primary/40 transition-colors">
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
-                        <CardTitle className="text-lg">{dep.nome}</CardTitle>
-                        <Badge variant="secondary">Ativo</Badge>
+                        <CardTitle className="text-lg text-juripass-primary-dark">{dep.nome}</CardTitle>
+                        <Badge className="bg-juripass-accent text-white">Ativo</Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-2 text-sm">
@@ -314,9 +323,9 @@ export default function Dependentes() {
 
         {/* Passo 1: Validar CPF */}
         {step === 'validate-cpf' && (
-          <Card>
+          <Card className="shadow-primary border-juripass-primary/30">
             <CardHeader>
-              <CardTitle>Validar CPF do Dependente</CardTitle>
+              <CardTitle className="text-juripass-primary-dark">Validar CPF do Dependente</CardTitle>
             </CardHeader>
             <CardContent>
               <Form {...cpfForm}>
@@ -346,10 +355,15 @@ export default function Dependentes() {
                       variant="outline"
                       onClick={handleCancel}
                       disabled={isSaving}
+                      className="border-juripass-primary text-juripass-primary hover:bg-juripass-primary/10"
                     >
                       Cancelar
                     </Button>
-                    <Button type="submit" disabled={isSaving}>
+                    <Button 
+                      type="submit" 
+                      disabled={isSaving}
+                      className="bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
+                    >
                       {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Validar CPF
                     </Button>
@@ -362,11 +376,11 @@ export default function Dependentes() {
 
         {/* Passo 2: Dados Completos */}
         {step === 'complete-form' && (
-          <Card>
+          <Card className="shadow-primary border-juripass-primary/30">
             <CardHeader>
-              <CardTitle>Dados do Dependente</CardTitle>
+              <CardTitle className="text-juripass-primary-dark">Dados do Dependente</CardTitle>
               <p className="text-sm text-muted-foreground">
-                CPF: {formatCPF(cpfValidado)} (validado)
+                CPF: <span className="text-juripass-primary font-medium">{formatCPF(cpfValidado)}</span> (validado)
               </p>
             </CardHeader>
             <CardContent>
@@ -478,11 +492,16 @@ export default function Dependentes() {
                       variant="outline"
                       onClick={handleCancel}
                       disabled={isSaving}
+                      className="border-juripass-primary text-juripass-primary hover:bg-juripass-primary/10"
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Voltar
                     </Button>
-                    <Button type="submit" disabled={isSaving}>
+                    <Button 
+                      type="submit" 
+                      disabled={isSaving}
+                      className="bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
+                    >
                       {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Cadastrar Dependente
                     </Button>
