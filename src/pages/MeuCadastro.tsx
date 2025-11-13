@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -75,6 +77,10 @@ export default function MeuCadastro() {
     setIsEditing(false);
   };
 
+  const formatarDataAdesao = (dataISO: string) => {
+    return format(new Date(dataISO), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  };
+
   if (!usuario) return null;
 
   return (
@@ -98,6 +104,41 @@ export default function MeuCadastro() {
 
         <Card className="max-w-2xl">
           <CardHeader>
+            <CardTitle>Informações da Conta</CardTitle>
+            <CardDescription>
+              Dados da sua conta no sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Data de Adesão</Label>
+                <Input value={formatarDataAdesao(usuario.created_at)} disabled />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Número do Cliente</Label>
+                <Input value={usuario.numero_cliente} disabled />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Tipo de Usuário</Label>
+                <Input
+                  value={usuario.tipo_usuario === 'principal' ? 'Principal' : 'Dependente'}
+                  disabled
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Empresa</Label>
+                <Input value={usuario.empresas?.nome || 'N/A'} disabled />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="max-w-2xl">
+          <CardHeader>
             <CardTitle>Informações Pessoais</CardTitle>
             <CardDescription>
               {isEditing
@@ -107,16 +148,9 @@ export default function MeuCadastro() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Número do Cliente</Label>
-                  <Input value={usuario.numero_cliente} disabled />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>CPF</Label>
-                  <Input value={maskCPF(usuario.cpf_criptografado)} disabled />
-                </div>
+              <div className="space-y-2">
+                <Label>CPF</Label>
+                <Input value={maskCPF(usuario.cpf_criptografado)} disabled />
               </div>
 
               <div className="space-y-2">
@@ -158,21 +192,6 @@ export default function MeuCadastro() {
                 {errors.telefone && (
                   <p className="text-sm text-destructive">{errors.telefone.message}</p>
                 )}
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Tipo de Usuário</Label>
-                  <Input
-                    value={usuario.tipo_usuario === 'principal' ? 'Principal' : 'Dependente'}
-                    disabled
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Empresa</Label>
-                  <Input value={usuario.empresas?.nome || 'N/A'} disabled />
-                </div>
               </div>
 
               {usuario.tipo_usuario === 'dependente' && (
