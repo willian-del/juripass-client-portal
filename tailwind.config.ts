@@ -57,6 +57,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        juripass: {
+          primary: "hsl(var(--juripass-primary))",
+          "primary-dark": "hsl(var(--juripass-primary-dark))",
+          "primary-light": "hsl(var(--juripass-primary-light))",
+          accent: "hsl(var(--juripass-accent))",
+          gold: "hsl(var(--juripass-gold))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
