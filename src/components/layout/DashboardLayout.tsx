@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -65,12 +66,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
-            <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-lg font-bold text-primary-foreground">JP</span>
-              </div>
-              <span className="font-bold text-xl hidden sm:inline">Juripass</span>
-            </Link>
+            <div className="hidden sm:block">
+              <LogoJuripass variant="horizontal" size="md" clickable />
+            </div>
+            <div className="sm:hidden">
+              <LogoJuripass variant="icon" size="md" clickable />
+            </div>
           </div>
 
           <div className="flex items-center gap-4">

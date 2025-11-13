@@ -1,0 +1,22 @@
+{
+  "name": "Juripass - Área do Cliente",
+  "short_name": "Juripass",
+  "description": "Segurança jurídica na palma da sua mão",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4A8FE0",
+  "icons": [
+    {
+      "src": "/images/branding/juripass-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ]
+}

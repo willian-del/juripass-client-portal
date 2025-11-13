@@ -1,0 +1,9 @@
+<svg width="240" height="48" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon JP -->
+  <rect x="2" y="2" width="44" height="44" rx="10" fill="white"/>
+  <path d="M16 34V18H19.5V30H26.5V34H16Z" fill="#4A8FE0" stroke="#4A8FE0" stroke-width="0.5"/>
+  <path d="M30 18H37C38.933 18 40.5 19.567 40.5 21.5V25.5C40.5 27.433 38.933 29 37 29H33.5V34H30V18ZM33.5 21.5V25.5H37V21.5H33.5Z" fill="#4A8FE0" stroke="#4A8FE0" stroke-width="0.5"/>
+  
+  <!-- Text "Juripass" -->
+  <text x="56" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="white">Juripass</text>
+</svg>
