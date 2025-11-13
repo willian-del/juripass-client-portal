@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -37,6 +37,17 @@ export default function MeuCadastro() {
       telefone: usuario?.telefone || '',
     },
   });
+
+  // Atualizar valores do formulário quando usuario for carregado
+  useEffect(() => {
+    if (usuario) {
+      reset({
+        nome: usuario.nome || '',
+        email: usuario.email || '',
+        telefone: usuario.telefone || '',
+      });
+    }
+  }, [usuario, reset]);
 
   const onSubmit = async (data: PerfilForm) => {
     if (!usuario) return;
