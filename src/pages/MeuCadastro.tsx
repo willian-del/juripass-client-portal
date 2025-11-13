@@ -14,12 +14,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { perfilSchema } from '@/lib/validators';
 import { maskCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { toast } from 'sonner';
-import { Loader2, Edit2, Save, X } from 'lucide-react';
+import { Loader2, Edit2, Save, X, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 type PerfilForm = z.infer<typeof perfilSchema>;
 
 export default function MeuCadastro() {
   const { usuario } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -98,11 +100,22 @@ export default function MeuCadastro() {
     <DashboardLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Meu Cadastro</h1>
-            <p className="text-muted-foreground mt-2">
-              Visualize e edite suas informações pessoais
-            </p>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              size="icon"
+              onClick={() => navigate('/dashboard')}
+              title="Voltar ao Dashboard"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Meu Cadastro</h1>
+              <p className="text-muted-foreground mt-2">
+                Visualize e edite suas informações pessoais
+              </p>
+            </div>
           </div>
 
           {!isEditing && (
