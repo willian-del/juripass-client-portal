@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,10 +9,11 @@ import { cleanCPF, formatCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { Footer } from '@/components/ui/Footer';
+import { JuripassCard } from '@/components/ui/JuripassCard';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 type CadastroForm = z.infer<typeof cadastroSchema>;
 
@@ -38,6 +39,8 @@ export default function NovoCadastro() {
 
   const codigoEmpresa = watch('codigo_empresa');
   const cpf = watch('cpf');
+  const cpfValue = watch('cpf');
+  const nomeValue = watch('nome');
 
   // Verificar empresa quando o código mudar
   useEffect(() => {
@@ -172,158 +175,182 @@ export default function NovoCadastro() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl shadow-primary">
-        <CardHeader className="space-y-4 text-center">
-          <div className="flex justify-center">
-            <LogoJuripass variant="full" size="lg" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
+      {/* Header */}
+      <div className="text-center py-8 md:py-12 px-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
+          <span className="text-primary">Queremos</span> conhecer você
+        </h1>
+        <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
+          Para garantir o seu acesso, preencha suas informações nos campos abaixo e complete o seu cadastro.
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 flex-grow pb-12">
+        <div className="grid lg:grid-cols-2 gap-8 items-start max-w-7xl mx-auto">
+          {/* Formulário */}
+          <Card className="shadow-lg">
+            <CardContent className="pt-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {/* CPF */}
+                <div className="space-y-2">
+                  <Label htmlFor="cpf">CPF *</Label>
+                  <Input
+                    id="cpf"
+                    {...register('cpf')}
+                    onBlur={handleCPFBlur}
+                    onChange={(e) => {
+                      const formatted = formatCPF(e.target.value);
+                      setValue('cpf', formatted);
+                      if (cpfChecked) setCpfChecked(false);
+                    }}
+                    placeholder="000.000.000-00"
+                    maxLength={14}
+                    disabled={isLoading}
+                  />
+                  {errors.cpf && (
+                    <p className="text-sm text-destructive">{errors.cpf.message}</p>
+                  )}
+                </div>
+
+                {/* Nome */}
+                <div className="space-y-2">
+                  <Label htmlFor="nome">Nome Completo *</Label>
+                  <Input
+                    id="nome"
+                    {...register('nome')}
+                    placeholder="Seu nome completo"
+                    disabled={isLoading}
+                  />
+                  {errors.nome && (
+                    <p className="text-sm text-destructive">{errors.nome.message}</p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <Label htmlFor="email">E-mail *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    placeholder="seu@email.com"
+                    disabled={isLoading}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-destructive">{errors.email.message}</p>
+                  )}
+                </div>
+
+                {/* Telefone */}
+                <div className="space-y-2">
+                  <Label htmlFor="telefone">Telefone *</Label>
+                  <Input
+                    id="telefone"
+                    {...register('telefone')}
+                    onChange={(e) => {
+                      const formatted = formatPhone(e.target.value);
+                      setValue('telefone', formatted);
+                    }}
+                    placeholder="(00) 00000-0000"
+                    maxLength={15}
+                    disabled={isLoading}
+                  />
+                  {errors.telefone && (
+                    <p className="text-sm text-destructive">{errors.telefone.message}</p>
+                  )}
+                </div>
+
+                {/* Código da Empresa */}
+                <div className="space-y-2">
+                  <Label htmlFor="codigo_empresa">Código da Empresa *</Label>
+                  <Input
+                    id="codigo_empresa"
+                    {...register('codigo_empresa')}
+                    placeholder="Digite o código da empresa"
+                    disabled={isLoading}
+                  />
+                  {empresaNome && (
+                    <p className="text-sm text-primary font-medium">
+                      Empresa: {empresaNome}
+                    </p>
+                  )}
+                  {errors.codigo_empresa && (
+                    <p className="text-sm text-destructive">
+                      {errors.codigo_empresa.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Senha */}
+                <div className="space-y-2">
+                  <Label htmlFor="senha">Senha *</Label>
+                  <Input
+                    id="senha"
+                    type="password"
+                    {...register('senha')}
+                    placeholder="Mínimo 6 caracteres"
+                    disabled={isLoading}
+                  />
+                  {errors.senha && (
+                    <p className="text-sm text-destructive">{errors.senha.message}</p>
+                  )}
+                </div>
+
+                {/* Confirmar Senha */}
+                <div className="space-y-2">
+                  <Label htmlFor="confirmar_senha">Confirmar Senha *</Label>
+                  <Input
+                    id="confirmar_senha"
+                    type="password"
+                    {...register('confirmar_senha')}
+                    placeholder="Digite a senha novamente"
+                    disabled={isLoading}
+                  />
+                  {errors.confirmar_senha && (
+                    <p className="text-sm text-destructive">
+                      {errors.confirmar_senha.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Botão Submit */}
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Cadastrando...
+                    </>
+                  ) : (
+                    'Finalizar Cadastro'
+                  )}
+                </Button>
+
+                {/* Link para Login */}
+                <p className="text-center text-sm text-muted-foreground">
+                  Já tem uma conta?{' '}
+                  <Link to="/login" className="text-primary hover:underline font-medium">
+                    Faça login
+                  </Link>
+                </p>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Carteirinha Juripass */}
+          <div className="lg:sticky lg:top-8">
+            <JuripassCard 
+              cpf={cpfValue}
+              nome={nomeValue}
+              organizacao={empresaNome}
+            />
           </div>
-          <CardTitle className="text-2xl font-bold">Novo Cadastro</CardTitle>
-          <CardDescription>Preencha seus dados para criar sua conta</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="cpf">CPF *</Label>
-                <Input
-                  id="cpf"
-                  placeholder="000.000.000-00"
-                  {...register('cpf')}
-                  onBlur={handleCPFBlur}
-                  onChange={(e) => {
-                    const formatted = formatCPF(e.target.value);
-                    setValue('cpf', formatted);
-                    setCpfChecked(false);
-                  }}
-                  disabled={isLoading}
-                />
-                {errors.cpf && (
-                  <p className="text-sm text-destructive">{errors.cpf.message}</p>
-                )}
-              </div>
+        </div>
+      </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="nome">Nome Completo *</Label>
-                <Input
-                  id="nome"
-                  placeholder="Seu nome completo"
-                  {...register('nome')}
-                  disabled={isLoading}
-                />
-                {errors.nome && (
-                  <p className="text-sm text-destructive">{errors.nome.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">E-mail *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="seu@email.com"
-                  {...register('email')}
-                  disabled={isLoading}
-                />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="telefone">Telefone</Label>
-                <Input
-                  id="telefone"
-                  placeholder="(00) 00000-0000"
-                  {...register('telefone')}
-                  onChange={(e) => {
-                    const formatted = formatPhone(e.target.value);
-                    setValue('telefone', formatted);
-                  }}
-                  disabled={isLoading}
-                />
-                {errors.telefone && (
-                  <p className="text-sm text-destructive">{errors.telefone.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="codigo_empresa">Código da Empresa *</Label>
-                <Input
-                  id="codigo_empresa"
-                  placeholder="ABC123"
-                  {...register('codigo_empresa')}
-                  disabled={isLoading}
-                />
-                {errors.codigo_empresa && (
-                  <p className="text-sm text-destructive">{errors.codigo_empresa.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label>Nome da Empresa</Label>
-                <Input
-                  value={empresaNome}
-                  disabled
-                  placeholder="Será preenchido automaticamente"
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="senha">Senha *</Label>
-                <Input
-                  id="senha"
-                  type="password"
-                  placeholder="Mínimo 6 caracteres"
-                  {...register('senha')}
-                  disabled={isLoading}
-                />
-                {errors.senha && (
-                  <p className="text-sm text-destructive">{errors.senha.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmar_senha">Confirmar Senha *</Label>
-                <Input
-                  id="confirmar_senha"
-                  type="password"
-                  placeholder="Confirme sua senha"
-                  {...register('confirmar_senha')}
-                  disabled={isLoading}
-                />
-                {errors.confirmar_senha && (
-                  <p className="text-sm text-destructive">{errors.confirmar_senha.message}</p>
-                )}
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isLoading || !empresaNome}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Cadastrando...
-                </>
-              ) : (
-                'Criar Conta'
-              )}
-            </Button>
-
-            <p className="text-center text-sm text-muted-foreground">
-              Já tem uma conta?{' '}
-              <a href="/login" className="text-primary hover:underline">
-                Faça login
-              </a>
-            </p>
-          </form>
-        </CardContent>
-      </Card>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
