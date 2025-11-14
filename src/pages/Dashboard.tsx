@@ -5,7 +5,6 @@ import {
   MessageSquare, 
   User, 
   Users, 
-  CreditCard, 
   HelpCircle 
 } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
@@ -36,12 +35,6 @@ export default function Dashboard() {
       path: '/dashboard/dependentes',
       color: 'bg-juripass-primary-dark',
     }] : []),
-    {
-      title: 'Minha Carteirinha Juripass',
-      icon: CreditCard,
-      path: '/dashboard/carteirinha',
-      color: 'bg-juripass-accent',
-    },
     {
       title: 'Dúvidas e Orientações',
       icon: HelpCircle,
