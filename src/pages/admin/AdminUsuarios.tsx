@@ -18,10 +18,16 @@ import { Search, UserPlus, Upload, Download, Edit, Trash2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
+import { UserFormDialog } from '@/components/admin/UserFormDialog';
+import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
 
 export default function AdminUsuarios() {
   const { isSuperAdmin, usuario } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUsuario, setSelectedUsuario] = useState<Usuario | null>(null);
 
   const { data: usuarios, isLoading, refetch } = useQuery({
     queryKey: ['admin-usuarios', usuario?.id_empresa],
@@ -87,7 +93,7 @@ export default function AdminUsuarios() {
               <Upload className="h-4 w-4" />
               Importar
             </Button>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => setCreateDialogOpen(true)}>
               <UserPlus className="h-4 w-4" />
               Novo Usuário
             </Button>
@@ -148,10 +154,24 @@ export default function AdminUsuarios() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedUsuario(usuario);
+                            setEditDialogOpen(true);
+                          }}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedUsuario(usuario);
+                            setDeleteDialogOpen(true);
+                          }}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -169,6 +189,32 @@ export default function AdminUsuarios() {
           </Table>
         </div>
       </div>
+
+      <UserFormDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        mode="create"
+        onSuccess={refetch}
+      />
+
+      {selectedUsuario && (
+        <>
+          <UserFormDialog
+            open={editDialogOpen}
+            onOpenChange={setEditDialogOpen}
+            mode="edit"
+            usuario={selectedUsuario}
+            onSuccess={refetch}
+          />
+
+          <DeleteUserDialog
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+            usuario={selectedUsuario}
+            onSuccess={refetch}
+          />
+        </>
+      )}
     </AdminLayout>
   );
 }
