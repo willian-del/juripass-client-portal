@@ -61,7 +61,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen w-full bg-muted/30 flex flex-col">
         {/* Header fixo */}
-        <header className="bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
+        <header className="relative z-50 bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
           <div className="container mx-auto px-4 h-full flex items-center justify-between">
             <div className="flex items-center gap-4">
               {/* Desktop - Sidebar Toggle */}
@@ -102,9 +102,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
         <div className="flex flex-1 w-full" style={{ height: 'calc(100vh - 4rem)' }}>
           {/* Sidebar - Desktop (Collapsible) */}
-          <div className="hidden lg:block">
-            <AppSidebar />
-          </div>
+          <AppSidebar className="hidden lg:block" />
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
