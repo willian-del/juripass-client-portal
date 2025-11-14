@@ -17,11 +17,15 @@ import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
+import { InvitationLinkGenerator } from '@/components/admin/InvitationLinkGenerator';
+import { useState } from 'react';
+import { Switch } from '@/components/ui/switch';
 
 export default function AdminInvitationLinks() {
   const { isSuperAdmin, usuario } = useAuth();
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
 
-  const { data: links, isLoading } = useQuery({
+  const { data: links, isLoading, refetch } = useQuery({
     queryKey: ['invitation-links', usuario?.id_empresa],
     queryFn: async () => {
       let query = supabase
@@ -58,6 +62,40 @@ export default function AdminInvitationLinks() {
     return <Badge variant="default">Ativo</Badge>;
   };
 
+  const toggleLinkActive = async (linkId: string, currentActive: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('invitation_links')
+        .update({ active: !currentActive })
+        .eq('id', linkId);
+
+      if (error) throw error;
+      
+      toast.success(`Link ${!currentActive ? 'ativado' : 'desativado'} com sucesso`);
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao atualizar link');
+    }
+  };
+
+  const deleteLink = async (linkId: string) => {
+    if (!confirm('Tem certeza que deseja excluir este link?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('invitation_links')
+        .delete()
+        .eq('id', linkId);
+
+      if (error) throw error;
+      
+      toast.success('Link excluído com sucesso');
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao excluir link');
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -68,7 +106,7 @@ export default function AdminInvitationLinks() {
               Gerencie links de cadastro para suas empresas
             </p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2" onClick={() => setLinkDialogOpen(true)}>
             <Link2 className="h-4 w-4" />
             Gerar Novo Link
           </Button>
@@ -149,6 +187,12 @@ export default function AdminInvitationLinks() {
           </CardContent>
         </Card>
       </div>
+
+      <InvitationLinkGenerator
+        open={linkDialogOpen}
+        onOpenChange={setLinkDialogOpen}
+        onSuccess={refetch}
+      />
     </AdminLayout>
   );
 }

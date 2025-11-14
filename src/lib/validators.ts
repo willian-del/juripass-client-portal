@@ -70,17 +70,6 @@ export const loginSchema = z.object({
   senha: z.string().min(1, "Senha é obrigatória"),
 });
 
-export const empresaSchema = z.object({
-  nome: z.string()
-    .min(3, "Nome deve ter pelo menos 3 caracteres")
-    .max(100, "Nome muito longo"),
-  cnpj: z.string()
-    .regex(/^\d{14}$/, "CNPJ deve conter 14 dígitos"),
-  codigo_empresa: z.string()
-    .min(4, "Código deve ter pelo menos 4 caracteres")
-    .max(20, "Código muito longo")
-    .regex(/^[A-Z0-9]+$/, "Código deve conter apenas letras maiúsculas e números"),
-});
 
 export const perfilSchema = z.object({
   nome: z.string()
@@ -151,4 +140,27 @@ export const adminUsuarioEditSchema = z.object({
     })
     .optional(),
   ativo: z.boolean(),
+});
+
+export const empresaSchema = z.object({
+  nome: z.string()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .max(100, "Nome muito longo"),
+  cnpj: z.string()
+    .min(14, "CNPJ deve conter 14 dígitos")
+    .max(18, "CNPJ inválido")
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val.length === 14, {
+      message: "CNPJ deve conter 14 dígitos"
+    }),
+  codigo_empresa: z.string()
+    .min(3, "Código deve ter pelo menos 3 caracteres")
+    .max(20, "Código muito longo")
+    .regex(/^[A-Z0-9_-]+$/, "Código deve conter apenas letras maiúsculas, números, _ ou -"),
+});
+
+export const invitationLinkSchema = z.object({
+  id_empresa: z.string().uuid("Empresa inválida"),
+  max_uses: z.number().int().positive().optional().nullable(),
+  expires_at: z.date().optional().nullable(),
 });
