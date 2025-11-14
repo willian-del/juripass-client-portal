@@ -96,3 +96,59 @@ export const perfilSchema = z.object({
     })
     .optional(),
 });
+
+export const adminUsuarioSchema = z.object({
+  cpf: z.string()
+    .min(11, "CPF deve conter 11 dígitos")
+    .max(14, "CPF inválido")
+    .refine((cpf) => validateCPF(cpf), {
+      message: "CPF inválido",
+    }),
+  nome: z.string()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .max(100, "Nome muito longo"),
+  email: z.string()
+    .email("E-mail inválido")
+    .max(255, "E-mail muito longo"),
+  telefone: z.string()
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val === '' || /^\d{10,11}$/.test(val), {
+      message: "Telefone inválido"
+    })
+    .optional(),
+  id_empresa: z.string()
+    .uuid("Empresa inválida"),
+  tipo_usuario: z.enum(["principal", "dependente"], {
+    errorMap: () => ({ message: "Selecione o tipo de usuário" }),
+  }),
+  grau_parentesco: z.string().optional(),
+  id_usuario_principal: z.string().uuid().optional(),
+  ativo: z.boolean().default(true),
+  senha: z.string()
+    .min(6, "Senha deve ter pelo menos 6 caracteres")
+    .max(50, "Senha muito longa"),
+}).refine((data) => {
+  if (data.tipo_usuario === 'dependente') {
+    return !!data.grau_parentesco && !!data.id_usuario_principal;
+  }
+  return true;
+}, {
+  message: "Dependentes precisam de grau de parentesco e usuário principal",
+  path: ["grau_parentesco"],
+});
+
+export const adminUsuarioEditSchema = z.object({
+  nome: z.string()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .max(100, "Nome muito longo"),
+  email: z.string()
+    .email("E-mail inválido")
+    .max(255, "E-mail muito longo"),
+  telefone: z.string()
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val === '' || /^\d{10,11}$/.test(val), {
+      message: "Telefone inválido"
+    })
+    .optional(),
+  ativo: z.boolean(),
+});
