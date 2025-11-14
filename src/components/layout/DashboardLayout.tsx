@@ -103,8 +103,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex w-full" style={{ height: 'calc(100vh - 4rem)' }}>
           {/* Sidebar - Desktop (Collapsible) */}
           <div className="hidden lg:block">
-            <AppSidebar />
-          </div>
+          <AppSidebar />
+        </div>
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
