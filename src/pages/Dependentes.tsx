@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, UserPlus, Users, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Usuario } from '@/types/database';
+import { Usuario, TipoUsuario } from '@/types/database';
 import { z } from 'zod';
 
 type Step = 'list' | 'validate-cpf' | 'complete-form';
@@ -69,7 +69,7 @@ export default function Dependentes() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setDependentes(data || []);
+      setDependentes((data || []) as Usuario[]);
     } catch (error) {
       console.error('Erro ao carregar dependentes:', error);
       toast.error('Erro ao carregar dependentes');
@@ -133,20 +133,20 @@ export default function Dependentes() {
 
       if (cpfError) throw cpfError;
 
-      // 3. Inserir na tabela usuarios
+      // 3. Inserir na tabela usuarios (sem id_auth no insert, será preenchido pelo trigger ou constraint default)
       const { error: insertError } = await supabase
         .from('usuarios')
-        .insert({
-          id_auth: authData.user.id,
-          cpf_criptografado: cpfCripto,
+        .insert([{
+          cpf_criptografado: cpfCripto as string,
           nome: formData.nome,
           email: formData.email,
           telefone: formData.telefone ? cleanPhone(formData.telefone) : null,
           tipo_usuario: 'dependente',
           id_usuario_principal: usuario?.id,
-          id_empresa: usuario?.id_empresa,
+          id_empresa: usuario?.id_empresa!,
           grau_parentesco: formData.grau_parentesco,
-        });
+          ativo: true,
+        } as any]);
 
       if (insertError) throw insertError;
 
