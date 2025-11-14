@@ -15,6 +15,7 @@ import {
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
+import { DynamicBreadcrumb } from '@/components/ui/DynamicBreadcrumb';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -153,7 +154,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           )}
 
           {/* Main Content */}
-          <main>{children}</main>
+          <main className="min-h-[calc(100vh-8rem)]">
+            <DynamicBreadcrumb />
+            {children}
+          </main>
         </div>
       </div>
     </div>
