@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import IniciarAtendimento from "./pages/IniciarAtendimento";
 import MeuCadastro from "./pages/MeuCadastro";
 import Dependentes from "./pages/Dependentes";
+import Carteirinha from "./pages/Carteirinha";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/dashboard/atendimento" element={<ProtectedRoute><IniciarAtendimento /></ProtectedRoute>} />
             <Route path="/dashboard/meu-cadastro" element={<ProtectedRoute><MeuCadastro /></ProtectedRoute>} />
             <Route path="/dashboard/dependentes" element={<ProtectedRoute><Dependentes /></ProtectedRoute>} />
+            <Route path="/dashboard/carteirinha" element={<ProtectedRoute><Carteirinha /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
