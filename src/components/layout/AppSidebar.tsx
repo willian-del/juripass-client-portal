@@ -47,7 +47,7 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar collapsible="icon" className="border-r h-full">
+    <Sidebar collapsible="icon" className="border-r h-full transition-all duration-300 ease-in-out">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -72,8 +72,10 @@ export function AppSidebar() {
                             : 'text-foreground hover:bg-accent hover:text-accent-foreground'
                         )}
                       >
-                        <Icon className="h-5 w-5" />
-                        <span>{item.label}</span>
+                        <Icon className="h-5 w-5 flex-shrink-0" />
+                        <span className="transition-opacity duration-300 group-data-[collapsible=icon]:opacity-0">
+                          {item.label}
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -64,7 +64,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="container mx-auto px-4 h-full flex items-center justify-between">
           <div className="flex items-center gap-4">
             {/* Desktop - Sidebar Toggle */}
-            <SidebarTrigger className="hidden lg:flex" />
+            <SidebarTrigger className="hidden lg:flex transition-transform hover:scale-110" />
             
             {/* Mobile - Menu Toggle */}
             <button
@@ -138,7 +138,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           )}
 
           {/* Main Content */}
-          <main className="flex-1 overflow-auto p-6">
+          <main className="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out">
             <DynamicBreadcrumb />
             {children}
           </main>
