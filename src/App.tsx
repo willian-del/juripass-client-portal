@@ -13,6 +13,10 @@ import IniciarAtendimento from "./pages/IniciarAtendimento";
 import MeuCadastro from "./pages/MeuCadastro";
 import Dependentes from "./pages/Dependentes";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsuarios from "./pages/admin/AdminUsuarios";
+import AdminEmpresas from "./pages/admin/AdminEmpresas";
+import AdminInvitationLinks from "./pages/admin/AdminInvitationLinks";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +35,13 @@ const App = () => (
             <Route path="/dashboard/atendimento" element={<ProtectedRoute><IniciarAtendimento /></ProtectedRoute>} />
             <Route path="/dashboard/meu-cadastro" element={<ProtectedRoute><MeuCadastro /></ProtectedRoute>} />
             <Route path="/dashboard/dependentes" element={<ProtectedRoute><Dependentes /></ProtectedRoute>} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/dashboard" element={<ProtectedRoute requireRole={['super_admin', 'admin_empresa']} requireAnyRole={true}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/usuarios" element={<ProtectedRoute requireRole={['super_admin', 'admin_empresa']} requireAnyRole={true}><AdminUsuarios /></ProtectedRoute>} />
+            <Route path="/admin/empresas" element={<ProtectedRoute requireRole={['super_admin']}><AdminEmpresas /></ProtectedRoute>} />
+            <Route path="/admin/convites" element={<ProtectedRoute requireRole={['super_admin', 'admin_empresa']} requireAnyRole={true}><AdminInvitationLinks /></ProtectedRoute>} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

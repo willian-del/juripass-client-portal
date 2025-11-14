@@ -23,6 +23,7 @@ export interface Usuario {
   id_usuario_principal: string | null;
   id_empresa: string;
   grau_parentesco: string | null;
+  ativo: boolean;
   created_at: string;
   deleted_at: string | null;
   empresas?: Empresa;
@@ -48,4 +49,40 @@ export interface Atendimento {
   deleted_at: string | null;
   usuarios?: Usuario;
   empresas?: Empresa;
+}
+
+export interface InvitationLink {
+  id: string;
+  id_empresa: string;
+  token: string;
+  max_uses: number | null;
+  current_uses: number;
+  expires_at: string | null;
+  created_by: string;
+  created_at: string;
+  active: boolean;
+  empresas?: Empresa;
+}
+
+export interface UserImport {
+  id: string;
+  id_empresa: string;
+  uploaded_by: string;
+  filename: string;
+  total_rows: number;
+  successful_rows: number;
+  failed_rows: number;
+  status: 'processing' | 'completed' | 'failed';
+  error_log: any[];
+  created_at: string;
+  empresas?: Empresa;
+}
+
+export interface AdminStats {
+  total_usuarios: number;
+  usuarios_ativos: number;
+  novos_usuarios_7d: number;
+  total_empresas: number;
+  atendimentos_pendentes: number;
+  taxa_conclusao: number;
 }
