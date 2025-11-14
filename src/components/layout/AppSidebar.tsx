@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 
-export function AppSidebar() {
+export function AppSidebar({ className }: { className?: string }) {
   const { usuario } = useAuth();
   const location = useLocation();
   const { open } = useSidebar();
@@ -47,7 +47,13 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar collapsible="icon" className="border-r h-full transition-all duration-300 ease-in-out">
+    <Sidebar 
+      collapsible="icon" 
+      className={cn(
+        "border-r h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out z-40",
+        className
+      )}
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
