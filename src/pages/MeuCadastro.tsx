@@ -142,23 +142,23 @@ export default function MeuCadastro() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/dashboard')}
+            className="text-juripass-primary hover:text-juripass-primary-dark hover:bg-juripass-primary/10"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar
+          </Button>
+        </div>
+        
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => navigate('/dashboard')}
-              title="Voltar ao Dashboard"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">Meu Cadastro</h1>
-              <p className="text-muted-foreground mt-2">
-                Visualize e edite suas informações pessoais
-              </p>
-            </div>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Meu Cadastro</h1>
+            <p className="text-muted-foreground mt-2">
+              Visualize e edite suas informações pessoais
+            </p>
           </div>
 
           {!isEditing && (
