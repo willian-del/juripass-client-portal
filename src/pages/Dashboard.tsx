@@ -31,7 +31,7 @@ export default function Dashboard() {
       color: 'bg-juripass-primary',
     },
     ...(usuario?.tipo_usuario === 'principal' ? [{
-      title: 'Cadastrar Dependentes',
+      title: 'Meus Dependentes',
       icon: Users,
       path: '/dashboard/dependentes',
       color: 'bg-juripass-primary-dark',
