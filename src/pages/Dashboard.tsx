@@ -5,7 +5,8 @@ import {
   MessageSquare, 
   User, 
   Users, 
-  HelpCircle 
+  HelpCircle,
+  LogOut 
 } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Footer } from '@/components/ui/Footer';
@@ -14,7 +15,12 @@ import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { usuario } = useAuth();
+  const { usuario, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/login');
+  };
 
   const menuItems = [
     {
@@ -47,8 +53,23 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="bg-white border-b border-border py-4 px-6">
-        <div className="container mx-auto">
+        <div className="container mx-auto flex items-center justify-between">
           <LogoJuripass variant="horizontal" size="md" />
+          
+          <div className="flex items-center gap-4">
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-medium">{usuario?.nome}</p>
+              <p className="text-xs text-muted-foreground">{usuario?.numero_cliente}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleSignOut}
+              title="Sair"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
