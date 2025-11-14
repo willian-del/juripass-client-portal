@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminDashboard() {
-  const { isSuperAdmin, isAdminEmpresa, usuario } = useAuth();
+  const { isSuperAdmin, usuario } = useAuth();
   const navigate = useNavigate();
 
   const { data: stats, isLoading } = useQuery({
