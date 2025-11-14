@@ -1,109 +1,121 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, User, Users, HelpCircle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { 
+  MessageSquare, 
+  User, 
+  Users, 
+  CreditCard, 
+  HelpCircle 
+} from 'lucide-react';
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
+import { Footer } from '@/components/ui/Footer';
 import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { usuario } = useAuth();
 
-  const cards = [
+  const menuItems = [
     {
-      title: 'Iniciar Atendimento',
-      description: 'Entre em contato via WhatsApp',
+      title: 'Iniciar Novo Atendimento',
       icon: MessageSquare,
       path: '/dashboard/atendimento',
       color: 'bg-juripass-primary',
     },
     {
-      title: 'Meu Cadastro',
-      description: 'Visualize e edite seus dados',
+      title: 'Quero Me Cadastrar',
       icon: User,
       path: '/dashboard/meu-cadastro',
-      color: 'bg-juripass-accent',
+      color: 'bg-juripass-primary',
     },
     ...(usuario?.tipo_usuario === 'principal' ? [{
       title: 'Cadastrar Dependentes',
-      description: 'Adicione até 4 dependentes',
       icon: Users,
       path: '/dashboard/dependentes',
       color: 'bg-juripass-primary-dark',
     }] : []),
     {
-      title: 'Como Utilizar',
-      description: 'Tutoriais e perguntas frequentes',
+      title: 'Minha Carteirinha Juripass',
+      icon: CreditCard,
+      path: '/dashboard/carteirinha',
+      color: 'bg-juripass-accent',
+    },
+    {
+      title: 'Dúvidas e Orientações',
       icon: HelpCircle,
       path: '/dashboard/como-utilizar',
-      color: 'bg-juripass-gold',
+      color: 'bg-juripass-primary',
     },
   ];
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Bem-vindo, {usuario?.nome?.split(' ')[0]}!
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Escolha uma das opções abaixo para começar
-          </p>
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Header */}
+      <header className="bg-white border-b border-border py-4 px-6">
+        <div className="container mx-auto">
+          <LogoJuripass variant="horizontal" size="md" />
         </div>
+      </header>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {cards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <Card
-                key={card.path}
-                className="hover:shadow-primary transition-all cursor-pointer group shadow-md"
-                onClick={() => navigate(card.path)}
-              >
-                <CardHeader>
-                  <div className={cn(
-                    'w-12 h-12 rounded-lg flex items-center justify-center mb-4 shadow-primary',
-                    card.color
-                  )}>
-                    <Icon className="h-6 w-6 text-white" />
+      {/* Main Content */}
+      <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
+        <div className="space-y-8">
+          {/* Welcome Section */}
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              Bem-vindo ao seu novo benefício!
+            </h1>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Por onde você gostaria de começar? Selecione uma das opções abaixo.
+            </p>
+          </div>
+
+          {/* Menu Cards */}
+          <div className="space-y-4">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Card
+                  key={item.path}
+                  className="p-4 hover:shadow-md transition-shadow cursor-pointer border-border"
+                  onClick={() => navigate(item.path)}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Icon */}
+                    <div className={cn(
+                      'w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0',
+                      item.color
+                    )}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+
+                    {/* Title */}
+                    <div className="flex-1">
+                      <h3 className="font-medium text-juripass-primary">
+                        {item.title}
+                      </h3>
+                    </div>
+
+                    {/* Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-juripass-primary text-juripass-primary hover:bg-juripass-primary hover:text-white transition-colors"
+                    >
+                      Acessar
+                    </Button>
                   </div>
-                  <CardTitle className="group-hover:text-juripass-primary transition-colors">
-                    {card.title}
-                  </CardTitle>
-                  <CardDescription>{card.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="ghost" className="w-full text-juripass-primary hover:text-juripass-primary-dark hover:bg-juripass-primary/10">
-                    Acessar
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
+                </Card>
+              );
+            })}
+          </div>
         </div>
+      </main>
 
-        {usuario?.tipo_usuario === 'dependente' && usuario.usuario_principal && (
-          <Card className="border-juripass-primary/30 bg-juripass-primary/5 shadow-primary">
-            <CardHeader>
-              <CardTitle className="text-base text-juripass-primary-dark">Informação</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Você é um dependente vinculado ao titular{' '}
-                <span className="font-medium text-juripass-primary-dark">
-                  {usuario.usuario_principal.nome}
-                </span>
-              </p>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-    </DashboardLayout>
+      {/* Footer */}
+      <Footer />
+    </div>
   );
-}
-
-function cn(...classes: any[]) {
-  return classes.filter(Boolean).join(' ');
 }
