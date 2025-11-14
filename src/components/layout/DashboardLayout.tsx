@@ -58,7 +58,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   ];
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen w-full bg-muted/30 flex flex-col">
         {/* Header fixo */}
         <header className="relative z-50 bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
