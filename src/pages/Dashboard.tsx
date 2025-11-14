@@ -25,7 +25,7 @@ export default function Dashboard() {
       color: 'bg-juripass-primary',
     },
     {
-      title: 'Quero Me Cadastrar',
+      title: 'Meu Cadastro',
       icon: User,
       path: '/dashboard/meu-cadastro',
       color: 'bg-juripass-primary',
