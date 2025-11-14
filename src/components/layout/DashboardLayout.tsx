@@ -16,6 +16,8 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { DynamicBreadcrumb } from '@/components/ui/DynamicBreadcrumb';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from './AppSidebar';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -56,71 +58,53 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      {/* Header */}
-      <header className="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              className="lg:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X /> : <Menu />}
-            </button>
-            <div className="hidden sm:block">
-              <LogoJuripass variant="horizontal" size="md" clickable />
+    <SidebarProvider defaultOpen={true}>
+      <div className="min-h-screen w-full bg-muted/30">
+        {/* Header */}
+        <header className="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
+          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              {/* Desktop - Sidebar Toggle */}
+              <SidebarTrigger className="hidden lg:flex" />
+              
+              {/* Mobile - Menu Toggle */}
+              <button
+                className="lg:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X /> : <Menu />}
+              </button>
+              
+              <div className="hidden sm:block">
+                <LogoJuripass variant="horizontal" size="md" clickable />
+              </div>
+              <div className="sm:hidden">
+                <LogoJuripass variant="icon" size="md" clickable />
+              </div>
             </div>
-            <div className="sm:hidden">
-              <LogoJuripass variant="icon" size="md" clickable />
+
+            <div className="flex items-center gap-4">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium">{usuario?.nome}</p>
+                <p className="text-xs text-muted-foreground">{usuario?.numero_cliente}</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSignOut}
+                title="Sair"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
             </div>
           </div>
+        </header>
 
-          <div className="flex items-center gap-4">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium">{usuario?.nome}</p>
-              <p className="text-xs text-muted-foreground">{usuario?.numero_cliente}</p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleSignOut}
-              title="Sair"
-            >
-              <LogOut className="h-5 w-5" />
-            </Button>
+        <div className="flex w-full">
+          {/* Sidebar - Desktop (Collapsible) */}
+          <div className="hidden lg:block">
+            <AppSidebar />
           </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-[250px_1fr] gap-6">
-          {/* Sidebar - Desktop */}
-          <aside className="hidden lg:block">
-            <Card className="p-4 sticky top-24">
-              <nav className="space-y-2">
-                {menuItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location.pathname === item.path;
-                  
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={cn(
-                        'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
-                        isActive
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-foreground hover:bg-accent hover:text-accent-foreground'
-                      )}
-                    >
-                      <Icon className="h-5 w-5" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </Card>
-          </aside>
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
@@ -154,12 +138,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           )}
 
           {/* Main Content */}
-          <main className="min-h-[calc(100vh-8rem)]">
+          <main className="flex-1 p-6">
             <DynamicBreadcrumb />
             {children}
           </main>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

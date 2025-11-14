@@ -1,0 +1,88 @@
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { 
+  MessageSquare, 
+  User, 
+  Users, 
+  HelpCircle
+} from 'lucide-react';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
+
+export function AppSidebar() {
+  const { usuario } = useAuth();
+  const location = useLocation();
+  const { open } = useSidebar();
+
+  const menuItems = [
+    {
+      path: '/dashboard/atendimento',
+      icon: MessageSquare,
+      label: 'Iniciar Atendimento',
+    },
+    {
+      path: '/dashboard/meu-cadastro',
+      icon: User,
+      label: 'Meu Cadastro',
+    },
+    ...(usuario?.tipo_usuario === 'principal' ? [{
+      path: '/dashboard/dependentes',
+      icon: Users,
+      label: 'Cadastrar Dependentes',
+    }] : []),
+    {
+      path: '/dashboard/como-utilizar',
+      icon: HelpCircle,
+      label: 'Como Utilizar',
+    },
+  ];
+
+  return (
+    <Sidebar collapsible="icon" className="border-r">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                
+                return (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.label}
+                    >
+                      <Link
+                        to={item.path}
+                        className={cn(
+                          'flex items-center gap-3 transition-colors',
+                          isActive
+                            ? 'bg-primary text-primary-foreground'
+                            : 'text-foreground hover:bg-accent hover:text-accent-foreground'
+                        )}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  );
+}
