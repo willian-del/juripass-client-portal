@@ -3,12 +3,14 @@ import { LayoutDashboard, Users, Building2, Link2, Upload, Shield } from 'lucide
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
@@ -81,6 +83,10 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      
+      <SidebarFooter>
+        <SidebarTrigger className="w-full" />
+      </SidebarFooter>
     </Sidebar>
   );
 }
