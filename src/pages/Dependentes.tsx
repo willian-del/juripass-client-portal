@@ -218,37 +218,26 @@ export default function Dependentes() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Cabeçalho */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate('/dashboard')}
-              title="Voltar ao Dashboard"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold tracking-tight">Cadastrar Dependentes</h1>
-                <Badge className="bg-juripass-accent text-white">
-                  {dependentes.length} / 4
-                </Badge>
-              </div>
-              <p className="text-muted-foreground mt-2">
-                Adicione até 4 dependentes à sua conta
-              </p>
-            </div>
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
+              Meus Dependentes
+            </h1>
+            <Badge className="bg-juripass-accent text-white text-xs sm:text-sm">
+              {dependentes.length} / 4
+            </Badge>
           </div>
+          <p className="text-muted-foreground text-xs sm:text-sm">
+            Adicione até 4 dependentes à sua conta
+          </p>
 
           {step === 'list' && (
             <Button
               onClick={() => setStep('validate-cpf')}
               disabled={dependentes.length >= 4}
-              className="bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
+              className="w-full sm:w-auto bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
             >
               <UserPlus className="mr-2 h-4 w-4" />
               Adicionar Dependente
@@ -283,16 +272,16 @@ export default function Dependentes() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {dependentes.map((dep) => (
                   <Card key={dep.id} className="shadow-primary border-juripass-primary/20 hover:border-juripass-primary/40 transition-colors">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <CardTitle className="text-lg text-juripass-primary-dark">{dep.nome}</CardTitle>
-                        <Badge className="bg-juripass-accent text-white">Ativo</Badge>
+                    <CardHeader className="pb-3 p-4 sm:p-6">
+                      <div className="flex items-start justify-between gap-2">
+                        <CardTitle className="text-base sm:text-lg text-juripass-primary-dark break-words">{dep.nome}</CardTitle>
+                        <Badge className="bg-juripass-accent text-white text-xs shrink-0">Ativo</Badge>
                       </div>
                     </CardHeader>
-                    <CardContent className="space-y-2 text-sm">
+                    <CardContent className="space-y-2 text-xs sm:text-sm p-4 sm:p-6 pt-0">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">CPF:</span>
                         <span className="font-medium">{maskCPF(dep.cpf_criptografado)}</span>
@@ -324,10 +313,10 @@ export default function Dependentes() {
         {/* Passo 1: Validar CPF */}
         {step === 'validate-cpf' && (
           <Card className="shadow-primary border-juripass-primary/30">
-            <CardHeader>
-              <CardTitle className="text-juripass-primary-dark">Validar CPF do Dependente</CardTitle>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-juripass-primary-dark text-lg sm:text-xl">Validar CPF do Dependente</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6 pt-0">
               <Form {...cpfForm}>
                 <form onSubmit={cpfForm.handleSubmit(handleValidateCPF)} className="space-y-4">
                   <FormField
@@ -377,13 +366,13 @@ export default function Dependentes() {
         {/* Passo 2: Dados Completos */}
         {step === 'complete-form' && (
           <Card className="shadow-primary border-juripass-primary/30">
-            <CardHeader>
-              <CardTitle className="text-juripass-primary-dark">Dados do Dependente</CardTitle>
-              <p className="text-sm text-muted-foreground">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-juripass-primary-dark text-lg sm:text-xl">Dados do Dependente</CardTitle>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 CPF: <span className="text-juripass-primary font-medium">{formatCPF(cpfValidado)}</span> (validado)
               </p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6 pt-0">
               <Form {...dependenteForm}>
                 <form onSubmit={dependenteForm.handleSubmit(handleCreateDependente)} className="space-y-4">
                   <FormField

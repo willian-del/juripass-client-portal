@@ -141,22 +141,11 @@ export default function MeuCadastro() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/dashboard')}
-            className="text-juripass-primary hover:text-juripass-primary-dark hover:bg-juripass-primary/10"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Voltar
-          </Button>
-        </div>
-        
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Meu Cadastro</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Meu Cadastro</h1>
+            <p className="text-muted-foreground mt-2 text-sm sm:text-base">
               Visualize e edite suas informações pessoais
             </p>
           </div>
@@ -164,7 +153,8 @@ export default function MeuCadastro() {
           {!isEditing && (
             <Button 
               onClick={() => setIsEditing(true)}
-              className="bg-juripass-primary hover:bg-juripass-primary-dark"
+              size="sm"
+              className="bg-juripass-primary hover:bg-juripass-primary-dark w-full sm:w-auto"
             >
               <Edit2 className="mr-2 h-4 w-4" />
               Editar
@@ -172,15 +162,15 @@ export default function MeuCadastro() {
           )}
         </div>
 
-        <Card className="max-w-2xl shadow-primary">
-          <CardHeader>
-            <CardTitle className="text-juripass-primary-dark">Informações da Conta</CardTitle>
-            <CardDescription>
+        <Card className="shadow-primary">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-juripass-primary-dark text-lg sm:text-2xl">Informações da Conta</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Dados da sua conta no sistema
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-4">
+          <CardContent className="p-4 sm:p-6 pt-0">
+            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label>Data de Adesão</Label>
                 <Input value={formatarDataAdesao(usuario.created_at)} disabled />
@@ -207,16 +197,16 @@ export default function MeuCadastro() {
           </CardContent>
         </Card>
 
-        <Card className={`max-w-2xl shadow-primary ${isEditing ? 'border-juripass-primary border-2' : ''}`}>
-          <CardHeader>
-            <CardTitle className="text-juripass-primary-dark">Informações Pessoais</CardTitle>
-            <CardDescription>
+        <Card className={`shadow-primary ${isEditing ? 'border-juripass-primary border-2' : ''}`}>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-juripass-primary-dark text-lg sm:text-2xl">Informações Pessoais</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               {isEditing
                 ? 'Edite os campos abaixo e clique em Salvar'
                 : 'Suas informações cadastradas no sistema'}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label>CPF</Label>
