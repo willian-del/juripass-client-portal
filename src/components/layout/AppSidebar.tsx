@@ -50,7 +50,7 @@ export function AppSidebar({ className }: { className?: string }) {
     <Sidebar 
       collapsible="icon" 
       className={cn(
-        "border-r h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out z-40",
+        "border-r md:top-16 md:h-[calc(100svh-4rem)] h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out z-40",
         className
       )}
     >
