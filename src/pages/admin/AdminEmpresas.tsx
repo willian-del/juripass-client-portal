@@ -15,11 +15,21 @@ import { Empresa } from '@/types/database';
 import { useState } from 'react';
 import { Search, Building2, Edit, Trash2, Link2, Users } from 'lucide-react';
 import { format } from 'date-fns';
+import { CompanyFormDialog } from '@/components/admin/CompanyFormDialog';
+import { DeleteCompanyDialog } from '@/components/admin/DeleteCompanyDialog';
+import { InvitationLinkGenerator } from '@/components/admin/InvitationLinkGenerator';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminEmpresas() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [companyDialogOpen, setCompanyDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [selectedEmpresa, setSelectedEmpresa] = useState<Empresa | null>(null);
+  const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
 
-  const { data: empresas, isLoading } = useQuery({
+  const { data: empresas, isLoading, refetch } = useQuery({
     queryKey: ['admin-empresas'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -53,7 +63,14 @@ export default function AdminEmpresas() {
               Visualize e gerencie todas as empresas cadastradas
             </p>
           </div>
-          <Button className="gap-2">
+          <Button 
+            className="gap-2"
+            onClick={() => {
+              setDialogMode('create');
+              setSelectedEmpresa(null);
+              setCompanyDialogOpen(true);
+            }}
+          >
             <Building2 className="h-4 w-4" />
             Nova Empresa
           </Button>
@@ -98,16 +115,46 @@ export default function AdminEmpresas() {
                     <TableCell>{format(new Date(empresa.created_at), 'dd/MM/yyyy')}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="sm" title="Ver usuários">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          title="Ver usuários"
+                          onClick={() => navigate('/admin/usuarios')}
+                        >
                           <Users className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" title="Gerar link de convite">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          title="Gerar link de convite"
+                          onClick={() => {
+                            setSelectedEmpresa(empresa);
+                            setLinkDialogOpen(true);
+                          }}
+                        >
                           <Link2 className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" title="Editar">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          title="Editar"
+                          onClick={() => {
+                            setSelectedEmpresa(empresa);
+                            setDialogMode('edit');
+                            setCompanyDialogOpen(true);
+                          }}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" title="Excluir">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          title="Excluir"
+                          onClick={() => {
+                            setSelectedEmpresa(empresa);
+                            setDeleteDialogOpen(true);
+                          }}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -125,6 +172,31 @@ export default function AdminEmpresas() {
           </Table>
         </div>
       </div>
+
+      <CompanyFormDialog
+        open={companyDialogOpen}
+        onOpenChange={setCompanyDialogOpen}
+        mode={dialogMode}
+        empresa={selectedEmpresa || undefined}
+        onSuccess={refetch}
+      />
+
+      {selectedEmpresa && (
+        <>
+          <DeleteCompanyDialog
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+            empresa={selectedEmpresa}
+            onSuccess={refetch}
+          />
+          <InvitationLinkGenerator
+            open={linkDialogOpen}
+            onOpenChange={setLinkDialogOpen}
+            onSuccess={refetch}
+            preSelectedEmpresa={selectedEmpresa.id}
+          />
+        </>
+      )}
     </AdminLayout>
   );
 }

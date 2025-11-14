@@ -9,6 +9,8 @@ import { AdminStats } from '@/types/database';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { ChartCadastros } from '@/components/admin/ChartCadastros';
+import { ChartAtendimentos } from '@/components/admin/ChartAtendimentos';
 
 export default function AdminDashboard() {
   const { isSuperAdmin, usuario } = useAuth();
@@ -176,9 +178,7 @@ export default function AdminDashboard() {
                   <CardTitle>Cadastros ao Longo do Tempo</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                    Gráfico de cadastros em desenvolvimento
-                  </div>
+                  <ChartCadastros />
                 </CardContent>
               </Card>
 
@@ -187,9 +187,7 @@ export default function AdminDashboard() {
                   <CardTitle>Atendimentos por Status</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                    Gráfico de atendimentos em desenvolvimento
-                  </div>
+                  <ChartAtendimentos />
                 </CardContent>
               </Card>
             </div>
