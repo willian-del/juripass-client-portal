@@ -16,7 +16,6 @@ const routeLabels: Record<string, string> = {
   '/dashboard/atendimento': 'Iniciar Atendimento',
   '/dashboard/meu-cadastro': 'Meu Cadastro',
   '/dashboard/dependentes': 'Cadastrar Dependentes',
-  '/dashboard/carteirinha': 'Minha Carteirinha Juripass',
   '/dashboard/como-utilizar': 'Como Utilizar',
 };
 
