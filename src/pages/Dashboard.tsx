@@ -6,7 +6,8 @@ import {
   User, 
   Users, 
   HelpCircle,
-  LogOut 
+  LogOut,
+  Shield 
 } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Footer } from '@/components/ui/Footer';
@@ -15,7 +16,7 @@ import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { usuario, signOut } = useAuth();
+  const { usuario, signOut, isSuperAdmin, isAdminEmpresa } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -23,6 +24,12 @@ export default function Dashboard() {
   };
 
   const menuItems = [
+    ...(isSuperAdmin || isAdminEmpresa ? [{
+      title: 'Painel Administrativo',
+      icon: Shield,
+      path: '/admin/dashboard',
+      color: 'bg-orange-500',
+    }] : []),
     {
       title: 'Iniciar Novo Atendimento',
       icon: MessageSquare,
