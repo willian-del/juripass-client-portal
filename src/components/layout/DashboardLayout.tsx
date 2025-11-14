@@ -58,49 +58,49 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   ];
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen w-full bg-muted/30">
-        {/* Header */}
-        <header className="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
-          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {/* Desktop - Sidebar Toggle */}
-              <SidebarTrigger className="hidden lg:flex" />
-              
-              {/* Mobile - Menu Toggle */}
-              <button
-                className="lg:hidden"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? <X /> : <Menu />}
-              </button>
-              
-              <div className="hidden sm:block">
-                <LogoJuripass variant="horizontal" size="md" clickable />
-              </div>
-              <div className="sm:hidden">
-                <LogoJuripass variant="icon" size="md" clickable />
-              </div>
+    <div className="min-h-screen w-full bg-muted/30">
+      {/* Header fixo */}
+      <header className="bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
+        <div className="container mx-auto px-4 h-full flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {/* Desktop - Sidebar Toggle */}
+            <SidebarTrigger className="hidden lg:flex" />
+            
+            {/* Mobile - Menu Toggle */}
+            <button
+              className="lg:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X /> : <Menu />}
+            </button>
+            
+            <div className="hidden sm:block">
+              <LogoJuripass variant="horizontal" size="md" clickable />
             </div>
-
-            <div className="flex items-center gap-4">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium">{usuario?.nome}</p>
-                <p className="text-xs text-muted-foreground">{usuario?.numero_cliente}</p>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSignOut}
-                title="Sair"
-              >
-                <LogOut className="h-5 w-5" />
-              </Button>
+            <div className="sm:hidden">
+              <LogoJuripass variant="icon" size="md" clickable />
             </div>
           </div>
-        </header>
 
-        <div className="flex w-full">
+          <div className="flex items-center gap-4">
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-medium">{usuario?.nome}</p>
+              <p className="text-xs text-muted-foreground">{usuario?.numero_cliente}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleSignOut}
+              title="Sair"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <SidebarProvider defaultOpen={true}>
+        <div className="flex w-full" style={{ height: 'calc(100vh - 4rem)' }}>
           {/* Sidebar - Desktop (Collapsible) */}
           <div className="hidden lg:block">
             <AppSidebar />
@@ -138,12 +138,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           )}
 
           {/* Main Content */}
-          <main className="flex-1 p-6">
+          <main className="flex-1 overflow-auto p-6">
             <DynamicBreadcrumb />
             {children}
           </main>
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </div>
   );
 }
