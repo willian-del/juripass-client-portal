@@ -20,6 +20,7 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { UserFormDialog } from '@/components/admin/UserFormDialog';
 import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
+import { UserImportDialog } from '@/components/admin/UserImportDialog';
 
 export default function AdminUsuarios() {
   const { isSuperAdmin, usuario } = useAuth();
@@ -27,6 +28,7 @@ export default function AdminUsuarios() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState<Usuario | null>(null);
 
   const { data: usuarios, isLoading, refetch } = useQuery({
@@ -89,10 +91,10 @@ export default function AdminUsuarios() {
               <Download className="h-4 w-4" />
               Exportar
             </Button>
-            <Button variant="outline" className="gap-2">
-              <Upload className="h-4 w-4" />
-              Importar
-            </Button>
+              <Button variant="outline" className="gap-2" onClick={() => setImportDialogOpen(true)}>
+                <Upload className="h-4 w-4" />
+                Importar
+              </Button>
             <Button className="gap-2" onClick={() => setCreateDialogOpen(true)}>
               <UserPlus className="h-4 w-4" />
               Novo Usuário
@@ -211,6 +213,12 @@ export default function AdminUsuarios() {
             open={deleteDialogOpen}
             onOpenChange={setDeleteDialogOpen}
             usuario={selectedUsuario}
+            onSuccess={refetch}
+          />
+
+          <UserImportDialog
+            open={importDialogOpen}
+            onOpenChange={setImportDialogOpen}
             onSuccess={refetch}
           />
         </>
