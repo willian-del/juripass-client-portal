@@ -47,7 +47,7 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" className="border-r h-full">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
