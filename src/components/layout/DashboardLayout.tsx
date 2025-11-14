@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { DynamicBreadcrumb } from '@/components/ui/DynamicBreadcrumb';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from './AppSidebar';
 
 interface DashboardLayoutProps {
@@ -64,9 +64,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <header className="relative z-50 bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
           <div className="container mx-auto px-4 h-full flex items-center justify-between">
             <div className="flex items-center gap-4">
-              {/* Desktop - Sidebar Toggle */}
-              <SidebarTrigger className="hidden lg:flex transition-transform hover:scale-110" />
-              
               {/* Mobile - Menu Toggle */}
               <button
                 className="lg:hidden"
