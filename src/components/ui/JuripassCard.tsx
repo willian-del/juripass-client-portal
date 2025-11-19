@@ -21,6 +21,7 @@ export function JuripassCard({ cpf, nome, organizacao }: JuripassCardProps) {
             variant="horizontal" 
             color="white" 
             size="lg"
+            format="png"
           />
         </div>
 
