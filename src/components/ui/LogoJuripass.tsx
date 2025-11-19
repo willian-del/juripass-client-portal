@@ -7,6 +7,7 @@ interface LogoJuripassProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   color?: 'default' | 'white';
   clickable?: boolean;
+  format?: 'svg' | 'png';
   className?: string;
 }
 
@@ -36,9 +37,12 @@ export function LogoJuripass({
   size = 'md',
   color = 'default',
   clickable = false,
+  format = 'svg',
   className
 }: LogoJuripassProps) {
-  const logoSrc = `/images/branding/juripass-logo-${variant}${color === 'white' ? '-white' : ''}.svg`;
+  const logoSrc = format === 'png' 
+    ? `/images/branding/juripass-logo-${variant}.png`
+    : `/images/branding/juripass-logo-${variant}${color === 'white' ? '-white' : ''}.svg`;
   
   const logoImg = (
     <img
