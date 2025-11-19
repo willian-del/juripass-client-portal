@@ -61,7 +61,7 @@ export default function Dashboard() {
       {/* Header */}
       <header className="bg-white border-b border-border py-4 px-6">
         <div className="container mx-auto flex items-center justify-between">
-          <LogoJuripass variant="horizontal" size="md" />
+          <LogoJuripass variant="full" size="md" format="png" />
           
           <div className="flex items-center gap-4">
             <div className="text-right hidden sm:block">
