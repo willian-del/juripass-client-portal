@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4A8FE0",
+  "theme_color": "#2C3E7D",
   "icons": [
     {
       "src": "/images/branding/juripass-icon.svg",
