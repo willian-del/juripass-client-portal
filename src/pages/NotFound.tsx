@@ -15,7 +15,7 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-primary">
       <div className="text-center space-y-8 p-8">
-        <LogoJuripass variant="full" size="xl" color="white" />
+        <LogoJuripass variant="full" size="xl" color="white" format="png" />
         
         <div className="space-y-4">
           <h1 className="text-8xl font-bold text-white">404</h1>

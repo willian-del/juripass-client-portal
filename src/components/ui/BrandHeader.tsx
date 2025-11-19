@@ -17,7 +17,7 @@ export function BrandHeader({
   return (
     <div className="flex flex-col items-center text-center space-y-4">
       {showLogo && (
-        <LogoJuripass variant="full" size={logoSize} />
+        <LogoJuripass variant="full" size={logoSize} format="png" />
       )}
       {title && (
         <h1 className="text-2xl font-bold text-foreground">

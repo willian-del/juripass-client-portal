@@ -22,7 +22,7 @@ const Index = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-primary">
       <div className="flex flex-col items-center gap-6 animate-fade-in">
-        <LogoJuripass variant="full" size="xl" color="white" />
+        <LogoJuripass variant="full" size="xl" color="white" format="png" />
         <div className="flex items-center gap-3">
           <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]" />
           <div className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]" />

@@ -72,7 +72,7 @@ export default function Login() {
       <Card className="w-full max-w-md shadow-primary">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
-            <LogoJuripass variant="full" size="lg" />
+            <LogoJuripass variant="full" size="lg" format="png" />
           </div>
           <CardTitle className="text-2xl font-bold">Acesse sua conta</CardTitle>
           <CardDescription>Entre com suas credenciais para acessar</CardDescription>
