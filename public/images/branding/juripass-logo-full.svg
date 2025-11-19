@@ -1,9 +1,12 @@
 <svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Icon JP -->
-  <rect x="4" y="4" width="52" height="52" rx="12" fill="#4A8FE0"/>
-  <path d="M20 38V22H24V34H32V38H20Z" fill="white" stroke="white" stroke-width="0.5"/>
-  <path d="M36 22H44C46.2091 22 48 23.7909 48 26V30C48 32.2091 46.2091 34 44 34H40V38H36V22ZM40 26V30H44V26H40Z" fill="white" stroke="white" stroke-width="0.5"/>
+  <!-- Icon -->
+  <rect x="4" y="4" width="52" height="52" rx="12" fill="#2C3E7D"/>
+  <path d="M24 20C24 18.8954 24.8954 18 26 18H28C29.1046 18 30 18.8954 30 20V32C30 35.3137 27.3137 38 24 38C20.6863 38 18 35.3137 18 32V30H24V32C24 32.5523 24.4477 33 25 33C25.5523 33 26 32.5523 26 32V20H24Z" fill="white"/>
+  <circle cx="44" cy="20" r="8" fill="#4A9FD8"/>
+  <path d="M44 17V20L46 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   
-  <!-- Text "Juripass" -->
-  <text x="68" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="600" fill="#1E3A5F">Juripass</text>
+  <!-- Text JURIPASS -->
+  <text x="68" y="38" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="24" font-weight="700" letter-spacing="-0.5">
+    <tspan fill="#4A9FD8">JURI</tspan><tspan fill="#2C3E7D">PASS</tspan>
+  </text>
 </svg>

@@ -2,9 +2,9 @@ export const BRAND = {
   name: 'Juripass',
   tagline: 'Segurança jurídica na palma da sua mão',
   colors: {
-    primary: '#4A8FE0',
-    primaryDark: '#1E3A5F',
-    primaryLight: '#5B9FE3'
+    primary: '#4A9FD8',
+    primaryDark: '#2C3E7D',
+    primaryLight: '#5BA5DE'
   },
   whatsapp: '5511XXXXXXXXX',
   assets: {
