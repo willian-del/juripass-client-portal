@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AdminSidebar } from './AdminSidebar';
+import { AdminBreadcrumb } from './AdminBreadcrumb';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
@@ -53,6 +54,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <AdminSidebar />
 
         <main className="flex-1 mt-16 p-6 md:p-8">
+          <AdminBreadcrumb />
           {children}
         </main>
       </div>
