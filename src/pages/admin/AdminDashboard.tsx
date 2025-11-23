@@ -2,19 +2,16 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { StatCard } from '@/components/admin/StatCard';
 import { Users, UserCheck, UserPlus, Building2, Clock, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { AdminStats } from '@/types/database';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 import { ChartCadastros } from '@/components/admin/ChartCadastros';
 import { ChartAtendimentos } from '@/components/admin/ChartAtendimentos';
 
 export default function AdminDashboard() {
   const { isSuperAdmin, usuario } = useAuth();
-  const navigate = useNavigate();
 
   const { data: stats, isLoading } = useQuery({
     queryKey: ['admin-stats', usuario?.id_empresa],
@@ -117,82 +114,68 @@ export default function AdminDashboard() {
           </p>
         </div>
 
-        <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="usuarios" onClick={() => navigate('/admin/usuarios')}>
-              Usuários
-            </TabsTrigger>
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <StatCard
+              title="Total de Usuários"
+              value={stats?.total_usuarios || 0}
+              icon={Users}
+              description="Usuários principais e dependentes"
+            />
+            <StatCard
+              title="Usuários Ativos"
+              value={stats?.usuarios_ativos || 0}
+              icon={UserCheck}
+              description="Contas ativas no sistema"
+            />
+            <StatCard
+              title="Novos Usuários (7 dias)"
+              value={stats?.novos_usuarios_7d || 0}
+              icon={UserPlus}
+              description="Cadastros na última semana"
+            />
             {isSuperAdmin && (
-              <TabsTrigger value="empresas" onClick={() => navigate('/admin/empresas')}>
-                Empresas
-              </TabsTrigger>
+              <StatCard
+                title="Total de Empresas"
+                value={stats?.total_empresas || 0}
+                icon={Building2}
+                description="Empresas cadastradas"
+              />
             )}
-          </TabsList>
+            <StatCard
+              title="Atendimentos Pendentes"
+              value={stats?.atendimentos_pendentes || 0}
+              icon={Clock}
+              description="Aguardando atendimento"
+            />
+            <StatCard
+              title="Taxa de Conclusão"
+              value={`${stats?.taxa_conclusao || 0}%`}
+              icon={CheckCircle2}
+              description="Atendimentos concluídos"
+            />
+          </div>
 
-          <TabsContent value="dashboard" className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <StatCard
-                title="Total de Usuários"
-                value={stats?.total_usuarios || 0}
-                icon={Users}
-                description="Usuários principais e dependentes"
-              />
-              <StatCard
-                title="Usuários Ativos"
-                value={stats?.usuarios_ativos || 0}
-                icon={UserCheck}
-                description="Contas ativas no sistema"
-              />
-              <StatCard
-                title="Novos Usuários (7 dias)"
-                value={stats?.novos_usuarios_7d || 0}
-                icon={UserPlus}
-                description="Cadastros na última semana"
-              />
-              {isSuperAdmin && (
-                <StatCard
-                  title="Total de Empresas"
-                  value={stats?.total_empresas || 0}
-                  icon={Building2}
-                  description="Empresas cadastradas"
-                />
-              )}
-              <StatCard
-                title="Atendimentos Pendentes"
-                value={stats?.atendimentos_pendentes || 0}
-                icon={Clock}
-                description="Aguardando atendimento"
-              />
-              <StatCard
-                title="Taxa de Conclusão"
-                value={`${stats?.taxa_conclusao || 0}%`}
-                icon={CheckCircle2}
-                description="Atendimentos concluídos"
-              />
-            </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Cadastros ao Longo do Tempo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ChartCadastros />
+              </CardContent>
+            </Card>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Cadastros ao Longo do Tempo</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ChartCadastros />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Atendimentos por Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ChartAtendimentos />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
+            <Card>
+              <CardHeader>
+                <CardTitle>Atendimentos por Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ChartAtendimentos />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );
