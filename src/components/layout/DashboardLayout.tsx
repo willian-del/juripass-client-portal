@@ -61,7 +61,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen w-full bg-muted/30 flex flex-col">
         {/* Header fixo */}
-        <header className="relative z-50 bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
+        <header className="sticky top-0 z-50 bg-white border-b border-border shadow-sm h-16 flex-shrink-0">
           <div className="container mx-auto px-4 h-full flex items-center justify-between">
             <div className="flex items-center gap-4">
               {/* Mobile - Menu Toggle */}
