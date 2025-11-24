@@ -42,6 +42,8 @@ export function LogoJuripass({
 }: LogoJuripassProps) {
   const logoSrc = format === 'png' 
     ? `/images/branding/juripass-logo-${variant}${color === 'white' ? '-white' : ''}.png`
+    : variant === 'icon'
+    ? `/images/branding/juripass-icon.svg`
     : `/images/branding/juripass-logo-${variant}${color === 'white' ? '-white' : ''}.svg`;
   
   const logoImg = (
