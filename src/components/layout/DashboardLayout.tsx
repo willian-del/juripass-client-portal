@@ -76,7 +76,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <LogoJuripass variant="full" size="md" clickable format="png" />
               </div>
               <div className="sm:hidden">
-                <LogoJuripass variant="icon" size="md" clickable />
+                <LogoJuripass variant="full" size="sm" clickable format="png" />
               </div>
             </div>
 
