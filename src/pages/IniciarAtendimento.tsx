@@ -1,12 +1,15 @@
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, ArrowLeft } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '5511999999999'; // Número do WhatsApp da Juripass
 
 export default function IniciarAtendimento() {
+  const navigate = useNavigate();
+  
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent('Olá! Gostaria de iniciar um atendimento.');
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
@@ -15,6 +18,15 @@ export default function IniciarAtendimento() {
   return (
     <DashboardLayout>
       <div className="space-y-3 sm:space-y-4 max-w-lg mx-auto">
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/dashboard')}
+          className="mb-2 -ml-2 text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Voltar ao Dashboard
+        </Button>
+
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Iniciar Atendimento</h1>
           <p className="text-muted-foreground mt-1 text-sm">
