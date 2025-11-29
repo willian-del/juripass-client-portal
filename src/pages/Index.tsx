@@ -5,19 +5,17 @@ import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, isLoading, isSuperAdmin, isAdminEmpresa } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     if (!isLoading) {
       if (!user) {
         navigate('/login');
-      } else if (isSuperAdmin || isAdminEmpresa) {
-        navigate('/admin/dashboard');
       } else {
         navigate('/dashboard');
       }
     }
-  }, [user, isLoading, isSuperAdmin, isAdminEmpresa, navigate]);
+  }, [user, isLoading, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-primary">

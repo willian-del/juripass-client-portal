@@ -39,20 +39,7 @@ export default function Login() {
       if (authError) throw authError;
 
       if (authData.user) {
-        // Check user roles
-        const { data: rolesData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', authData.user.id);
-
-        const roles = rolesData?.map((r) => r.role) || [];
-
-        if (roles.includes('super_admin') || roles.includes('admin_empresa')) {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/dashboard');
-        }
-
+        navigate('/dashboard');
         toast.success('Login realizado com sucesso!');
       }
     } catch (error: any) {
