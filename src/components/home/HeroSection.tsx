@@ -2,8 +2,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Users, Sparkles } from 'lucide-react';
 import { JuripassCardVisual } from './JuripassCardVisual';
+import { useScrollParallax } from '@/hooks/useScrollParallax';
 
 export function HeroSection() {
+  const scrollY = useScrollParallax();
+  
+  // Velocidades diferentes para criar profundidade
+  const blob1Y = scrollY * 0.15; // Move mais devagar (parece mais longe)
+  const blob2Y = scrollY * 0.25; // Move mais rápido (parece mais perto)
+
   const scrollToContact = () => {
     const element = document.getElementById('contato');
     if (element) {
@@ -20,10 +27,22 @@ export function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-background py-12 md:py-20">
-      {/* Decorative background elements */}
+      {/* Decorative background elements with parallax */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-accent/20 to-transparent rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4" />
+        <div 
+          className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl"
+          style={{ 
+            transform: `translate(25%, -25%) translateY(${blob1Y}px)`,
+            transition: 'transform 0.1s ease-out'
+          }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-accent/20 to-transparent rounded-full blur-3xl"
+          style={{ 
+            transform: `translate(-25%, 25%) translateY(${-blob2Y}px)`,
+            transition: 'transform 0.1s ease-out'
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-4 relative">
