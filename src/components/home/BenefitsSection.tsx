@@ -63,7 +63,7 @@ export function BenefitsSection() {
           {benefits.map((benefit, index) => (
             <Card
               key={index}
-              className="group p-8 bg-white/60 backdrop-blur-sm hover:bg-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border-2 border-transparent hover:border-primary/20 animate-fade-in"
+              className="group p-8 bg-white/80 backdrop-blur-sm hover:bg-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border-2 border-transparent hover:border-primary/20 animate-fade-in"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
               <div className="space-y-6">
@@ -74,7 +74,7 @@ export function BenefitsSection() {
                   <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                     {benefit.title}
                   </h3>
-                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                  <p className="text-sm md:text-base text-foreground/70 font-medium leading-relaxed">
                     {benefit.description}
                   </p>
                 </div>
