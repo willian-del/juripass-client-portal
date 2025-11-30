@@ -47,8 +47,8 @@ export function HeroSection() {
               </p>
               
               {/* Frase destaque - analogia plano de saúde */}
-              <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary">
-                <p className="text-lg text-foreground/80 italic">
+              <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary animate-fade-in-up" style={{ animationDelay: '0.3s', opacity: 0 }}>
+                <p className="text-lg text-foreground italic">
                   "É como se fosse um <span className="font-semibold text-primary">plano de saúde jurídica</span> para seus colaboradores e familiares."
                 </p>
               </div>
@@ -61,16 +61,16 @@ export function HeroSection() {
 
             {/* Animated Badges */}
             <div className="flex flex-wrap gap-3">
-              <Badge variant="outline" className="text-sm py-2 px-4 border-primary/20 hover:bg-primary/5 transition-colors animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                <MessageSquare className="w-4 h-4 mr-2" />
+              <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{ animationDelay: '0.4s', opacity: 0 }}>
+                <MessageSquare className="w-4 h-4 mr-2 text-primary" />
                 Atendimento Humanizado
               </Badge>
-              <Badge variant="outline" className="text-sm py-2 px-4 border-accent/20 hover:bg-accent/5 transition-colors animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <Users className="w-4 h-4 mr-2" />
+              <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{ animationDelay: '0.5s', opacity: 0 }}>
+                <Users className="w-4 h-4 mr-2 text-primary" />
                 Cobertura Familiar
               </Badge>
-              <Badge variant="outline" className="text-sm py-2 px-4 border-primary/20 hover:bg-primary/5 transition-colors animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <Sparkles className="w-4 h-4 mr-2" />
+              <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{ animationDelay: '0.6s', opacity: 0 }}>
+                <Sparkles className="w-4 h-4 mr-2 text-primary" />
                 Implementação em 48h
               </Badge>
             </div>
