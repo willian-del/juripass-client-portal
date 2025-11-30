@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+
 
 export function JuripassCardVisual() {
   return (
@@ -17,10 +17,11 @@ export function JuripassCardVisual() {
 
           {/* Logo Area */}
           <div className="absolute top-8 right-8">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-              <Sparkles className="w-5 h-5 text-white" />
-              <span className="text-white font-bold text-sm">JURIPASS</span>
-            </div>
+            <img 
+              src="/images/branding/juripass-logo-horizontal-white.png"
+              alt="Juripass"
+              className="h-8 object-contain drop-shadow-lg"
+            />
           </div>
 
           {/* Card Info */}
