@@ -23,7 +23,7 @@ export function HomeHeader({ onLoginClick }: HomeHeaderProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <LogoJuripass variant="horizontal" size="md" format="svg" clickable={false} />
+          <LogoJuripass variant="full" size="md" format="png" clickable={false} />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">

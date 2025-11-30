@@ -7,68 +7,74 @@ export function BenefitsSection() {
       icon: TrendingUp,
       title: 'Redução do Absenteísmo',
       description: 'Colaboradores resolvem problemas jurídicos sem comprometer suas jornadas de trabalho',
-      color: 'text-primary'
+      gradient: 'from-primary to-primary/60'
     },
     {
       icon: DollarSign,
       title: 'Custo Acessível',
       description: 'Benefício de alto valor percebido com investimento baixo e previsível',
-      color: 'text-accent'
+      gradient: 'from-accent to-accent/60'
     },
     {
       icon: Users,
       title: 'Extensivo a Familiares',
       description: 'Cobertura para cônjuge e filhos, ampliando o impacto do benefício',
-      color: 'text-primary'
+      gradient: 'from-juripass-primary-light to-primary'
     },
     {
       icon: Trophy,
       title: 'Diferencial Competitivo',
       description: 'Atraia e retenha talentos oferecendo um benefício único no mercado',
-      color: 'text-accent'
+      gradient: 'from-juripass-gold to-yellow-600'
     },
     {
       icon: Lock,
       title: 'Confidencialidade Total',
       description: 'Sigilo absoluto entre colaborador e advogado, garantindo privacidade',
-      color: 'text-primary'
+      gradient: 'from-primary to-juripass-primary-dark'
     },
     {
       icon: BarChart3,
       title: 'Relatórios de Utilização',
       description: 'Acompanhe o engajamento e satisfação sem violar a privacidade individual',
-      color: 'text-accent'
+      gradient: 'from-accent to-juripass-accent'
     }
   ];
 
   return (
-    <section id="beneficios" className="py-16 md:py-24 bg-muted/30 scroll-mt-16">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center space-y-4 mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+    <section id="beneficios" className="py-20 md:py-32 bg-background scroll-mt-16 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-4 relative">
+        <div className="max-w-3xl mx-auto text-center space-y-6 mb-20">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
             Vantagens para sua Empresa
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground">
+          <p className="text-xl md:text-2xl text-muted-foreground font-medium">
             Investir no bem-estar jurídico dos colaboradores traz retornos mensuráveis
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {benefits.map((benefit, index) => (
             <Card
               key={index}
-              className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group animate-fade-in"
+              className="group p-8 bg-white/60 backdrop-blur-sm hover:bg-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border-2 border-transparent hover:border-primary/20 animate-fade-in"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
-              <div className="space-y-4">
-                <div className={`w-12 h-12 rounded-xl bg-muted flex items-center justify-center group-hover:scale-110 transition-transform ${benefit.color}`}>
-                  <benefit.icon className="w-6 h-6" />
+              <div className="space-y-6">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${benefit.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                  <benefit.icon className="w-8 h-8 text-white" />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-foreground">
+                <div className="space-y-3">
+                  <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                     {benefit.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                     {benefit.description}
                   </p>
                 </div>
@@ -78,9 +84,9 @@ export function BenefitsSection() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <Card className="inline-block p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20">
-            <p className="text-lg md:text-xl font-medium text-foreground">
+        <div className="mt-20 text-center">
+          <Card className="inline-block p-10 md:p-12 bg-gradient-to-r from-primary/15 via-accent/10 to-primary/15 border-primary/30 backdrop-blur-sm shadow-xl">
+            <p className="text-xl md:text-2xl font-medium text-foreground leading-relaxed">
               Empresas que investem no bem-estar dos colaboradores{' '}
               <span className="font-bold text-primary">reduzem turnover em até 25%</span>
             </p>
