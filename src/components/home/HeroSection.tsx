@@ -99,7 +99,7 @@ export function HeroSection() {
               <Button 
                 size="lg" 
                 onClick={scrollToContact} 
-                className="text-base px-8 py-6 shadow-primary hover:shadow-xl transition-all"
+                className="text-base px-8 py-6 shadow-primary hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] hover:scale-105 transition-all duration-300"
               >
                 Solicitar Proposta
               </Button>
@@ -107,7 +107,7 @@ export function HeroSection() {
                 size="lg" 
                 variant="outline" 
                 onClick={scrollToPrograma} 
-                className="text-base px-8 py-6"
+                className="text-base px-8 py-6 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:scale-105 hover:border-primary/60 transition-all duration-300"
               >
                 Conheça o Programa
               </Button>
