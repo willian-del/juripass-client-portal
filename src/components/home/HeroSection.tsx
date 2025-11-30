@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Users, Sparkles } from 'lucide-react';
+import { JuripassCardVisual } from './JuripassCardVisual';
 
 export function HeroSection() {
   const scrollToContact = () => {
@@ -18,23 +19,33 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20 py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section className="relative overflow-hidden bg-background py-20 md:py-32">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-accent/20 to-transparent rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4" />
+      </div>
+
+      <div className="container mx-auto px-4 relative">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Column - Content */}
           <div className="space-y-8 animate-fade-in">
-            <Badge variant="secondary" className="w-fit">
+            <Badge variant="secondary" className="w-fit px-4 py-2 text-sm font-medium">
+              <Sparkles className="w-4 h-4 mr-2" />
               Novo Benefício Corporativo
             </Badge>
 
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-                Programa de Acolhimento Jurídico
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-tight">
+                Programa de
+                <span className="block text-gradient-primary">
+                  Acolhimento Jurídico
+                </span>
               </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground font-medium">
+              <p className="text-xl md:text-2xl text-muted-foreground font-medium leading-relaxed">
                 Acolhimento jurídico para cuidar de quem cuida da sua empresa
               </p>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl">
                 Oferecemos apoio jurídico rápido, humano e descomplicado para ajudar seus 
                 colaboradores a resolver questões do dia a dia.
               </p>
@@ -42,67 +53,43 @@ export function HeroSection() {
 
             {/* Animated Badges */}
             <div className="flex flex-wrap gap-3">
-              <Badge variant="outline" className="text-sm py-2 px-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              <Badge variant="outline" className="text-sm py-2 px-4 border-primary/20 hover:bg-primary/5 transition-colors animate-fade-in" style={{ animationDelay: '0.1s' }}>
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Atendimento Humanizado
               </Badge>
-              <Badge variant="outline" className="text-sm py-2 px-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <Badge variant="outline" className="text-sm py-2 px-4 border-accent/20 hover:bg-accent/5 transition-colors animate-fade-in" style={{ animationDelay: '0.2s' }}>
                 <Users className="w-4 h-4 mr-2" />
                 Cobertura Familiar
               </Badge>
-              <Badge variant="outline" className="text-sm py-2 px-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <Badge variant="outline" className="text-sm py-2 px-4 border-primary/20 hover:bg-primary/5 transition-colors animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 <Sparkles className="w-4 h-4 mr-2" />
-                Sem Custo Inicial
+                Implementação em 48h
               </Badge>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" onClick={scrollToContact} className="text-base">
+              <Button 
+                size="lg" 
+                onClick={scrollToContact} 
+                className="text-base px-8 py-6 shadow-primary hover:shadow-xl transition-all"
+              >
                 Solicitar Proposta
               </Button>
-              <Button size="lg" variant="outline" onClick={scrollToPrograma} className="text-base">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={scrollToPrograma} 
+                className="text-base px-8 py-6"
+              >
                 Conheça o Programa
               </Button>
             </div>
           </div>
 
-          {/* Right Column - Visual */}
+          {/* Right Column - Juripass Card Visual */}
           <div className="relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <div className="aspect-[4/3] bg-gradient-to-br from-primary/20 via-primary/10 to-background rounded-2xl p-8 flex items-center justify-center">
-                <div className="w-full max-w-sm bg-card rounded-xl shadow-lg p-8 border border-border">
-                  <div className="space-y-6">
-                    <div className="flex justify-center">
-                      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                        <MessageSquare className="w-8 h-8 text-primary" />
-                      </div>
-                    </div>
-                    <div className="text-center space-y-2">
-                      <h3 className="text-xl font-bold text-foreground">Juripass</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Segurança jurídica na palma da sua mão
-                      </p>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full w-3/4 bg-primary rounded-full animate-pulse" />
-                      </div>
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full w-1/2 bg-primary/60 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
-                      </div>
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full w-5/6 bg-primary/40 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Decorative Elements */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-3xl" />
-            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/20 rounded-full blur-3xl" />
+            <JuripassCardVisual />
           </div>
         </div>
       </div>
