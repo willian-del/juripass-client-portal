@@ -19,7 +19,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-background py-20 md:py-32">
+    <section className="relative overflow-hidden bg-background py-12 md:py-20">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4" />
@@ -45,6 +45,14 @@ export function HeroSection() {
               <p className="text-xl md:text-2xl text-muted-foreground font-medium leading-relaxed">
                 Acolhimento jurídico para cuidar de quem cuida da sua empresa
               </p>
+              
+              {/* Frase destaque - analogia plano de saúde */}
+              <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary">
+                <p className="text-lg text-foreground/80 italic">
+                  "É como se fosse um <span className="font-semibold text-primary">plano de saúde jurídica</span> para seus colaboradores e familiares."
+                </p>
+              </div>
+
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl">
                 Oferecemos apoio jurídico rápido, humano e descomplicado para ajudar seus 
                 colaboradores a resolver questões do dia a dia.
