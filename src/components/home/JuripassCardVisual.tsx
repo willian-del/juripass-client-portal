@@ -18,9 +18,9 @@ export function JuripassCardVisual() {
           {/* Logo Area */}
           <div className="absolute top-8 right-8">
             <img 
-              src="/images/branding/juripass-logo-horizontal-white.png"
+              src="/images/branding/juripass-icon-dark.png"
               alt="Juripass"
-              className="h-8 object-contain drop-shadow-lg"
+              className="h-10 object-contain drop-shadow-lg"
             />
           </div>
 
