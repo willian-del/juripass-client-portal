@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Users, Sparkles } from 'lucide-react';
-import { JuripassCardVisual } from './JuripassCardVisual';
 import { useScrollParallax } from '@/hooks/useScrollParallax';
 
 export function HeroSection() {
@@ -46,10 +45,10 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Column - Content */}
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Content */}
           <div className="space-y-8 animate-fade-in">
-            <Badge variant="secondary" className="w-fit px-4 py-2 text-sm font-medium">
+            <Badge variant="secondary" className="w-fit px-4 py-2 text-sm font-medium mx-auto">
               <Sparkles className="w-4 h-4 mr-2" />
               Novo Benefício Corporativo
             </Badge>
@@ -66,20 +65,20 @@ export function HeroSection() {
               </p>
               
               {/* Frase destaque - analogia plano de saúde */}
-              <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary animate-fade-in-up" style={{ animationDelay: '0.3s', opacity: 0 }}>
+              <div className="flex items-start justify-center gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary animate-fade-in-up max-w-2xl mx-auto" style={{ animationDelay: '0.3s', opacity: 0 }}>
                 <p className="text-lg text-foreground italic">
                   "É como se fosse um <span className="font-semibold text-primary">plano de saúde jurídica</span> para seus colaboradores e familiares."
                 </p>
               </div>
 
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl">
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
                 Oferecemos apoio jurídico rápido, humano e descomplicado para ajudar seus 
                 colaboradores a resolver questões do dia a dia.
               </p>
             </div>
 
             {/* Animated Badges */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap justify-center gap-3">
               <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{ animationDelay: '0.4s', opacity: 0 }}>
                 <MessageSquare className="w-4 h-4 mr-2 text-primary" />
                 Atendimento Humanizado
@@ -95,7 +94,7 @@ export function HeroSection() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <Button 
                 size="lg" 
                 onClick={scrollToContact} 
@@ -112,11 +111,6 @@ export function HeroSection() {
                 Conheça o Programa
               </Button>
             </div>
-          </div>
-
-          {/* Right Column - Juripass Card Visual */}
-          <div className="relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <JuripassCardVisual />
           </div>
         </div>
       </div>
