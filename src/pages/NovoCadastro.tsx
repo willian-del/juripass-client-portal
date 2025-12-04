@@ -142,15 +142,21 @@ export default function NovoCadastro() {
 
       if (empresaError || !empresaData) throw new Error('Empresa não encontrada');
 
-      // 3. Create usuario record
+      // 3. Encrypt CPF before storage
+      const { data: cpfCriptografado, error: cpfError } = await supabase
+        .rpc('encrypt_cpf', { cpf_plain: cpfLimpo });
+
+      if (cpfError || !cpfCriptografado) throw new Error('Erro ao processar CPF');
+
+      // 4. Create usuario record
       const { error: usuarioError } = await supabase
         .from('usuarios')
         .insert({
           id_auth: authData.user.id,
-          cpf_criptografado: cpfLimpo,
-        nome: data.nome,
-        email: data.email,
-        telefone: data.telefone ? cleanPhone(data.telefone) : null,
+          cpf_criptografado: cpfCriptografado,
+          nome: data.nome,
+          email: data.email,
+          telefone: data.telefone ? cleanPhone(data.telefone) : null,
           tipo_usuario: 'principal',
           id_empresa: empresaData.id,
         } as any);
