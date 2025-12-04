@@ -9,7 +9,7 @@ export function ProblemSection() {
     value: '28%',
     label: 'sofreu impacto na saúde mental'
   }];
-  return <section className="py-24 md:py-40 bg-primary relative overflow-hidden">
+  return <section className="py-16 md:py-24 bg-primary relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           {/* Statement - elegant typography */}
@@ -22,7 +22,7 @@ export function ProblemSection() {
           </p>
 
           {/* Subtle separator */}
-          <div className="w-24 h-px bg-white/30 mx-auto my-16 md:my-20" />
+          <div className="w-24 h-px bg-white/30 mx-auto my-10 md:my-12" />
 
           {/* Stats - giant numbers, no cards */}
           <div className="grid md:grid-cols-3 gap-12 md:gap-16 text-center">
@@ -39,12 +39,9 @@ export function ProblemSection() {
           </div>
 
           {/* Source */}
-          <p className="text-center text-xs text-white/50 mt-16 italic">
+          <p className="text-center text-xs text-white/50 mt-10 md:mt-12 italic">
             Fonte: Pesquisa MelhorRH, 2023
           </p>
-
-          {/* Subtle separator */}
-          <div className="w-24 h-px bg-white/30 mx-auto my-16 md:my-20" />
 
           {/* Impact message */}
           
