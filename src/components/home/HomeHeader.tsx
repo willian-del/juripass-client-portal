@@ -46,12 +46,6 @@ export function HomeHeader({ onLoginClick }: HomeHeaderProps) {
               Cobertura
             </button>
             <button
-              onClick={() => scrollToSection('empresas')}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
-              Para Empresas
-            </button>
-            <button
               onClick={() => scrollToSection('blog')}
               className="text-sm font-medium text-foreground hover:text-primary transition-colors"
             >
@@ -112,12 +106,6 @@ export function HomeHeader({ onLoginClick }: HomeHeaderProps) {
                 className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
               >
                 Cobertura
-              </button>
-              <button
-                onClick={() => scrollToSection('empresas')}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-              >
-                Para Empresas
               </button>
               <button
                 onClick={() => scrollToSection('blog')}
