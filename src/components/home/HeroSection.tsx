@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Users, Sparkles } from 'lucide-react';
+import { MessageSquare, Users, Sparkles, ArrowDown } from 'lucide-react';
 import { useScrollParallax } from '@/hooks/useScrollParallax';
 import { JuripassCardVisual } from '@/components/home/JuripassCardVisual';
 
@@ -114,12 +114,39 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Card Visual - Right Column */}
-          <div className="flex justify-center lg:justify-end animate-fade-in [animation-delay:0.2s]">
-            <div className="relative">
-              {/* Glow effect behind card */}
+          {/* Right Column - Visual Composition */}
+          <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s]">
+            {/* Pergunta Impactante */}
+            <div className="bg-card/90 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-lg max-w-md">
+              <p className="text-foreground/90 text-base md:text-lg leading-relaxed">
+                Imagine se você tivesse acesso a <strong className="text-primary">advogados e especialistas</strong> a qualquer momento para esclarecer dúvidas ou ajudá-los com seus <strong className="text-primary">problemas jurídicos</strong> do dia a dia?
+              </p>
+            </div>
+
+            {/* Seta Conectora */}
+            <ArrowDown className="w-6 h-6 text-primary animate-bounce" />
+
+            {/* Cartão Rotacionado com Glow */}
+            <div className="relative transform rotate-[-4deg] hover:rotate-0 transition-transform duration-500">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
-              <JuripassCardVisual />
+              <div className="scale-90">
+                <JuripassCardVisual />
+              </div>
+            </div>
+
+            {/* Callout Box */}
+            <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-4 max-w-md border-l-4 border-primary">
+              <div className="flex items-start gap-3">
+                <Sparkles className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">
+                    Chegou o seu novo <span className="text-primary">benefício jurídico</span>
+                  </h3>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    Simples e ágil para descomplicar assuntos jurídicos do dia a dia.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
