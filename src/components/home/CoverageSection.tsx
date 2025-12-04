@@ -13,32 +13,32 @@ export function CoverageSection() {
       icon: Heart,
       title: 'Família e Sucessões',
       items: ['Divórcio e separação', 'Guarda de filhos', 'Pensão alimentícia', 'Herança e inventário'],
-      gradient: 'from-accent to-accent/60'
+      gradient: 'from-primary to-primary/60'
     },
     {
       icon: Home,
       title: 'Propriedade e Moradia',
       items: ['Despejo e locação', 'Problemas com vizinhança', 'Usucapião', 'Compra e venda'],
-      gradient: 'from-juripass-primary-light to-primary'
+      gradient: 'from-primary to-primary/60'
     },
     {
       icon: Shield,
       title: 'Responsabilidade Civil',
       items: ['Acidentes', 'Danos morais', 'Indenizações', 'Reparação de danos'],
-      gradient: 'from-juripass-accent to-primary'
+      gradient: 'from-primary to-primary/60'
     },
     {
       icon: FileText,
       title: 'Contratos',
       items: ['Análise de contratos', 'Descumprimento', 'Cláusulas abusivas', 'Rescisão'],
-      gradient: 'from-primary to-juripass-primary-dark'
+      gradient: 'from-primary to-primary/60'
     }
   ];
 
   const notCoveredCard = {
     icon: X,
     title: 'O que NÃO cobrimos',
-    items: ['Direito Trabalhista', 'Direito Criminal'],
+    items: ['Direito Trabalhista', 'Direito Criminal', 'Código de Ética'],
     gradient: 'from-destructive/20 to-destructive/10',
     isNotCovered: true
   };
@@ -89,7 +89,7 @@ export function CoverageSection() {
           
           {/* Not Covered Card */}
           <Card
-            className="group p-8 border-2 border-destructive/30 bg-destructive/5 backdrop-blur-sm hover:bg-destructive/10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in"
+            className="group p-8 border-2 border-transparent bg-destructive/5 backdrop-blur-sm hover:bg-destructive/10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in"
             style={{ animationDelay: `${covered.length * 0.05}s` }}
           >
             <div className="space-y-6">
