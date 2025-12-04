@@ -2,13 +2,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Users, Sparkles } from 'lucide-react';
 import { useScrollParallax } from '@/hooks/useScrollParallax';
+import { JuripassCardVisual } from '@/components/home/JuripassCardVisual';
 
 export function HeroSection() {
   const scrollY = useScrollParallax();
   
   // Velocidades diferentes para criar profundidade
-  const blob1Y = scrollY * 0.15; // Move mais devagar (parece mais longe)
-  const blob2Y = scrollY * 0.25; // Move mais rápido (parece mais perto)
+  const blob1Y = scrollY * 0.15;
+  const blob2Y = scrollY * 0.25;
 
   const scrollToContact = () => {
     const element = document.getElementById('contato');
@@ -25,7 +26,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-background py-12 md:py-20">
+    <section className="relative overflow-hidden bg-background py-12 md:py-20 lg:py-24">
       {/* Decorative background elements with parallax */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div 
@@ -45,16 +46,16 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Content */}
-          <div className="space-y-8 animate-fade-in">
-            <Badge variant="secondary" className="w-fit px-4 py-2 text-sm font-medium mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Content - Left Column */}
+          <div className="space-y-8 animate-fade-in text-center lg:text-left">
+            <Badge variant="secondary" className="w-fit px-4 py-2 text-sm font-medium mx-auto lg:mx-0">
               <Sparkles className="w-4 h-4 mr-2" />
               Novo Benefício Corporativo
             </Badge>
 
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-foreground leading-tight">
                 Programa de
                 <span className="block text-gradient-primary">
                   Acolhimento Jurídico
@@ -65,20 +66,20 @@ export function HeroSection() {
               </p>
               
               {/* Frase destaque - analogia plano de saúde */}
-              <div className="flex items-start justify-center gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary animate-fade-in-up max-w-2xl mx-auto" style={{ animationDelay: '0.3s', opacity: 0 }}>
-                <p className="text-lg text-foreground italic">
+              <div className="flex items-start justify-center lg:justify-start gap-3 p-4 bg-primary/5 rounded-xl border-l-4 border-primary animate-fade-in-up max-w-2xl mx-auto lg:mx-0" style={{ animationDelay: '0.3s', opacity: 0 }}>
+                <p className="text-lg text-foreground italic text-left">
                   "É como se fosse um <span className="font-semibold text-primary">plano de saúde jurídica</span> para seus colaboradores e familiares."
                 </p>
               </div>
 
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Oferecemos apoio jurídico rápido, humano e descomplicado para ajudar seus 
                 colaboradores a resolver questões do dia a dia.
               </p>
             </div>
 
             {/* Animated Badges */}
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3">
               <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{ animationDelay: '0.4s', opacity: 0 }}>
                 <MessageSquare className="w-4 h-4 mr-2 text-primary" />
                 Atendimento Humanizado
@@ -94,7 +95,7 @@ export function HeroSection() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
               <Button 
                 size="lg" 
                 onClick={scrollToContact} 
@@ -110,6 +111,15 @@ export function HeroSection() {
               >
                 Conheça o Programa
               </Button>
+            </div>
+          </div>
+
+          {/* Card Visual - Right Column */}
+          <div className="flex justify-center lg:justify-end animate-fade-in [animation-delay:0.2s]">
+            <div className="relative">
+              {/* Glow effect behind card */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
+              <JuripassCardVisual />
             </div>
           </div>
         </div>
