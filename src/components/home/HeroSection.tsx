@@ -83,14 +83,10 @@ export function HeroSection() {
                 <Users className="w-4 h-4 mr-2 text-primary" />
                 Cobertura Familiar
               </Badge>
-              <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{ animationDelay: '0.6s', opacity: 0 }}>
-                <Sparkles className="w-4 h-4 mr-2 text-primary" />
-                Implementação em 48h
-              </Badge>
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-8 lg:pt-12">
               <Button 
                 size="lg" 
                 onClick={scrollToContact} 
