@@ -13,7 +13,7 @@ export function SolutionSection() {
       icon: Heart,
       title: 'Atendimento Humanizado',
       description: 'Acessível e especializado com agilidade e empatia, porque problemas jurídicos também são problemas humanos.',
-      gradient: 'from-accent to-accent/80'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: Scale,
