@@ -49,11 +49,6 @@ export function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content - Left Column */}
           <div className="space-y-8 animate-fade-in text-center lg:text-left">
-            <Badge variant="secondary" className="w-fit px-4 py-2 text-sm font-medium mx-auto lg:mx-0">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Novo Benefício Corporativo
-            </Badge>
-
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-foreground leading-tight">
                 Programa de
