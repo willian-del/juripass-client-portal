@@ -86,7 +86,7 @@ export function HeroSection() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-8 lg:pt-12">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-6">
               <Button 
                 size="lg" 
                 onClick={scrollToContact} 
