@@ -133,10 +133,11 @@ export default function Dependentes() {
 
       if (cpfError) throw cpfError;
 
-      // 3. Inserir na tabela usuarios (sem id_auth no insert, será preenchido pelo trigger ou constraint default)
+      // 3. Inserir na tabela usuarios com id_auth linkado ao auth user
       const { error: insertError } = await supabase
         .from('usuarios')
         .insert([{
+          id_auth: authData.user.id,
           cpf_criptografado: cpfCripto as string,
           nome: formData.nome,
           email: formData.email,
