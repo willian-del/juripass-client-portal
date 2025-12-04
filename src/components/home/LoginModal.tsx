@@ -66,11 +66,6 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
     }));
   };
 
-  const goToRegister = () => {
-    onOpenChange(false);
-    navigate('/novo-cadastro');
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -122,12 +117,6 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
             )}
           </Button>
         </form>
-
-        <div className="text-center pt-4">
-          <Button variant="link" onClick={goToRegister} className="text-primary text-sm">
-            Primeiro acesso? Cadastre-se aqui
-          </Button>
-        </div>
       </DialogContent>
     </Dialog>
   );

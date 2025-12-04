@@ -4,7 +4,10 @@ import {
   MessageSquare, 
   User, 
   Users, 
-  HelpCircle
+  HelpCircle,
+  Building,
+  UserCheck,
+  BarChart3
 } from 'lucide-react';
 import {
   Sidebar,
@@ -21,9 +24,11 @@ import {
 import { cn } from '@/lib/utils';
 
 export function AppSidebar({ className }: { className?: string }) {
-  const { usuario } = useAuth();
+  const { usuario, roles } = useAuth();
   const location = useLocation();
+
   const { open } = useSidebar();
+  const isRH = roles.some(r => r.role === 'admin_empresa');
 
   const menuItems = [
     {
@@ -36,11 +41,28 @@ export function AppSidebar({ className }: { className?: string }) {
       icon: User,
       label: 'Meu Cadastro',
     },
-    ...(usuario?.tipo_usuario === 'principal' ? [{
+    ...((usuario?.tipo_usuario === 'principal' || isRH) ? [{
       path: '/dashboard/dependentes',
       icon: Users,
       label: 'Cadastrar Dependentes',
     }] : []),
+    ...(isRH ? [
+      {
+        path: '/dashboard/empresa',
+        icon: Building,
+        label: 'Cadastro da Empresa',
+      },
+      {
+        path: '/dashboard/beneficiarios',
+        icon: UserCheck,
+        label: 'Meus Beneficiários',
+      },
+      {
+        path: '/dashboard/estatisticas',
+        icon: BarChart3,
+        label: 'Estatísticas Juripass',
+      },
+    ] : []),
     {
       path: '/dashboard/como-utilizar',
       icon: HelpCircle,

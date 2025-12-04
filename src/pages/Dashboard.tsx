@@ -7,7 +7,9 @@ import {
   Users, 
   HelpCircle,
   LogOut,
-  Shield 
+  Building,
+  UserCheck,
+  BarChart3
 } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Footer } from '@/components/ui/Footer';
@@ -16,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { usuario, signOut, isSuperAdmin, isAdminEmpresa } = useAuth();
+  const { usuario, signOut, isAdminEmpresa } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -24,12 +26,6 @@ export default function Dashboard() {
   };
 
   const menuItems = [
-    ...(isSuperAdmin || isAdminEmpresa ? [{
-      title: 'Painel Administrativo',
-      icon: Shield,
-      path: '/admin/dashboard',
-      color: 'bg-orange-500',
-    }] : []),
     {
       title: 'Iniciar Novo Atendimento',
       icon: MessageSquare,
@@ -42,12 +38,32 @@ export default function Dashboard() {
       path: '/dashboard/meu-cadastro',
       color: 'bg-juripass-primary',
     },
-    ...(usuario?.tipo_usuario === 'principal' ? [{
-      title: 'Meus Dependentes',
+    ...((usuario?.tipo_usuario === 'principal' || isAdminEmpresa) ? [{
+      title: 'Cadastrar Dependentes',
       icon: Users,
       path: '/dashboard/dependentes',
       color: 'bg-juripass-primary-dark',
     }] : []),
+    ...(isAdminEmpresa ? [
+      {
+        title: 'Cadastro da Empresa',
+        icon: Building,
+        path: '/dashboard/empresa',
+        color: 'bg-juripass-primary',
+      },
+      {
+        title: 'Meus Beneficiários',
+        icon: UserCheck,
+        path: '/dashboard/beneficiarios',
+        color: 'bg-juripass-primary',
+      },
+      {
+        title: 'Estatísticas Juripass',
+        icon: BarChart3,
+        path: '/dashboard/estatisticas',
+        color: 'bg-juripass-primary-dark',
+      },
+    ] : []),
     {
       title: 'Dúvidas e Orientações',
       icon: HelpCircle,
