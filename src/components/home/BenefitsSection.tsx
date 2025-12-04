@@ -7,37 +7,37 @@ export function BenefitsSection() {
       icon: TrendingUp,
       title: 'Redução do Absenteísmo',
       description: 'Colaboradores resolvem problemas jurídicos sem comprometer suas jornadas de trabalho',
-      gradient: 'from-primary to-primary/60'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: DollarSign,
       title: 'Custo Acessível',
       description: 'Benefício de alto valor percebido com investimento baixo e previsível',
-      gradient: 'from-accent to-accent/60'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: Users,
       title: 'Extensivo a Familiares',
       description: 'Cobertura para cônjuge e filhos, ampliando o impacto do benefício',
-      gradient: 'from-juripass-primary-light to-primary'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: Trophy,
       title: 'Diferencial Competitivo',
       description: 'Atraia e retenha talentos oferecendo um benefício único no mercado',
-      gradient: 'from-juripass-gold to-yellow-600'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: Lock,
       title: 'Confidencialidade Total',
       description: 'Sigilo absoluto entre colaborador e advogado, garantindo privacidade',
-      gradient: 'from-primary to-juripass-primary-dark'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: BarChart3,
       title: 'Relatórios de Utilização',
       description: 'Acompanhe o engajamento e satisfação sem violar a privacidade individual',
-      gradient: 'from-accent to-juripass-accent'
+      gradient: 'from-primary to-primary/80'
     }
   ];
 
