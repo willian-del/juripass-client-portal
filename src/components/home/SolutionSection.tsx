@@ -7,19 +7,19 @@ export function SolutionSection() {
       icon: Zap,
       title: 'Apoio Rápido e Descomplicado',
       description: 'Respostas ágeis sem burocracia, ajudando seus colaboradores quando mais precisam.',
-      gradient: 'from-primary via-primary/80 to-primary/60'
+      gradient: 'from-primary to-primary/80'
     },
     {
       icon: Heart,
       title: 'Atendimento Humanizado',
       description: 'Acessível e especializado com agilidade e empatia, porque problemas jurídicos também são problemas humanos.',
-      gradient: 'from-accent via-accent/80 to-accent/60'
+      gradient: 'from-accent to-accent/80'
     },
     {
       icon: Scale,
       title: 'Cobertura Completa',
       description: 'Desde esclarecimento de dúvidas até ajuizamento de ações em diversas áreas do direito.',
-      gradient: 'from-juripass-primary-light via-primary to-juripass-primary-dark'
+      gradient: 'from-primary to-juripass-primary-dark'
     }
   ];
 
