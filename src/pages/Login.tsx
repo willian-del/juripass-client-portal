@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -104,15 +104,6 @@ export default function Login() {
                 'Entrar'
               )}
             </Button>
-
-            <div className="text-center space-y-2">
-              <Link
-                to="/novo-cadastro"
-                className="text-sm text-primary hover:underline block"
-              >
-                Primeiro acesso? Cadastre-se aqui
-              </Link>
-            </div>
           </form>
         </CardContent>
       </Card>
