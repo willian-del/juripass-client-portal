@@ -7,13 +7,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { User, Building, Users } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 interface LoginModalProps {
   open: boolean;
@@ -74,132 +74,58 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Área do Cliente</DialogTitle>
+        <DialogHeader className="space-y-4 text-center">
+          <div className="flex justify-center">
+            <LogoJuripass variant="full" size="lg" format="png" />
+          </div>
+          <DialogTitle className="text-2xl font-bold">Acesse sua conta</DialogTitle>
           <DialogDescription>
-            Acesse sua conta para gerenciar seus atendimentos
+            Entre com suas credenciais para acessar
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="beneficiario" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="beneficiario" className="text-xs">
-              <User className="w-3 h-3 mr-1" />
-              Beneficiário
-            </TabsTrigger>
-            <TabsTrigger value="rh" className="text-xs">
-              <Building className="w-3 h-3 mr-1" />
-              RH
-            </TabsTrigger>
-            <TabsTrigger value="dependente" className="text-xs">
-              <Users className="w-3 h-3 mr-1" />
-              Dependente
-            </TabsTrigger>
-          </TabsList>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">E-mail</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              value={credentials.email}
+              onChange={handleChange}
+              required
+              placeholder="seu@email.com"
+              disabled={isLoading}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              value={credentials.password}
+              onChange={handleChange}
+              required
+              placeholder="••••••••"
+              disabled={isLoading}
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Entrando...
+              </>
+            ) : (
+              'Entrar'
+            )}
+          </Button>
+        </form>
 
-          <TabsContent value="beneficiario" className="space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email-beneficiario">E-mail</Label>
-                <Input
-                  id="email-beneficiario"
-                  name="email"
-                  type="email"
-                  value={credentials.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="seu@email.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password-beneficiario">Senha</Label>
-                <Input
-                  id="password-beneficiario"
-                  name="password"
-                  type="password"
-                  value={credentials.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="••••••••"
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Entrando...' : 'Entrar'}
-              </Button>
-            </form>
-          </TabsContent>
-
-          <TabsContent value="rh" className="space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email-rh">E-mail</Label>
-                <Input
-                  id="email-rh"
-                  name="email"
-                  type="email"
-                  value={credentials.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="rh@empresa.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password-rh">Senha</Label>
-                <Input
-                  id="password-rh"
-                  name="password"
-                  type="password"
-                  value={credentials.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="••••••••"
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Entrando...' : 'Entrar'}
-              </Button>
-            </form>
-          </TabsContent>
-
-          <TabsContent value="dependente" className="space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email-dependente">E-mail</Label>
-                <Input
-                  id="email-dependente"
-                  name="email"
-                  type="email"
-                  value={credentials.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="seu@email.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password-dependente">Senha</Label>
-                <Input
-                  id="password-dependente"
-                  name="password"
-                  type="password"
-                  value={credentials.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="••••••••"
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Entrando...' : 'Entrar'}
-              </Button>
-            </form>
-          </TabsContent>
-        </Tabs>
-
-        <div className="text-center space-y-2 pt-4 border-t">
-          <p className="text-sm text-muted-foreground">
-            Primeiro acesso?
-          </p>
-          <Button variant="link" onClick={goToRegister} className="text-primary">
-            Complete seu cadastro
+        <div className="text-center pt-4">
+          <Button variant="link" onClick={goToRegister} className="text-primary text-sm">
+            Primeiro acesso? Cadastre-se aqui
           </Button>
         </div>
       </DialogContent>
