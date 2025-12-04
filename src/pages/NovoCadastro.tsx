@@ -89,20 +89,17 @@ export default function NovoCadastro() {
 
   const verificarEmpresa = async (codigo: string) => {
     try {
-      const { data, error } = await supabase
-        .from('empresas')
-        .select('nome')
-        .eq('codigo_empresa', codigo)
-        .is('deleted_at', null)
-        .single();
+      const { data, error } = await supabase.functions.invoke('validate-company-code', {
+        body: { codigo_empresa: codigo }
+      });
 
-      if (error || !data) {
+      if (error || !data?.valid) {
         setEmpresaNome('');
         toast.error('Código de empresa inválido');
         return;
       }
 
-      setEmpresaNome(data.nome);
+      setEmpresaNome(data.empresa_nome);
     } catch (error) {
       console.error('Error checking empresa:', error);
       setEmpresaNome('');
@@ -133,14 +130,13 @@ export default function NovoCadastro() {
       if (authError) throw authError;
       if (!authData.user) throw new Error('Erro ao criar usuário');
 
-      // 2. Get empresa ID
-      const { data: empresaData, error: empresaError } = await supabase
-        .from('empresas')
-        .select('id')
-        .eq('codigo_empresa', data.codigo_empresa)
-        .single();
+      // 2. Get empresa ID via secure edge function
+      const { data: empresaData, error: empresaError } = await supabase.functions.invoke('validate-company-code', {
+        body: { codigo_empresa: data.codigo_empresa }
+      });
 
-      if (empresaError || !empresaData) throw new Error('Empresa não encontrada');
+      if (empresaError || !empresaData?.valid) throw new Error('Empresa não encontrada');
+      const empresaId = empresaData.empresa_id;
 
       // 3. Encrypt CPF before storage
       const { data: cpfCriptografado, error: cpfError } = await supabase
@@ -158,7 +154,7 @@ export default function NovoCadastro() {
           email: data.email,
           telefone: data.telefone ? cleanPhone(data.telefone) : null,
           tipo_usuario: 'principal',
-          id_empresa: empresaData.id,
+          id_empresa: empresaId,
         } as any);
 
       if (usuarioError) throw usuarioError;
