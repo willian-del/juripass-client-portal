@@ -18,13 +18,13 @@ export function ProblemSection() {
     <section className="py-24 md:py-40 bg-primary relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
-          {/* Question - elegant typography */}
+          {/* Statement - elegant typography */}
           <p className="text-xl md:text-3xl lg:text-4xl text-white/90 font-light leading-relaxed text-center animate-fade-in">
-            Imagine se seus colaboradores tivessem acesso a{' '}
+            Problemas jurídicos não resolvidos causam{' '}
             <span className="font-semibold text-white">
-              advogados e especialistas a qualquer momento
+              absenteísmo, estresse e redução de produtividade
             </span>{' '}
-            para esclarecer dúvidas ou ajudá-los com seus problemas jurídicos do dia a dia?
+            em sua equipe.
           </p>
 
           {/* Subtle separator */}
