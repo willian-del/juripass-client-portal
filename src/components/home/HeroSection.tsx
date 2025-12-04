@@ -46,16 +46,6 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4 relative">
-        {/* Cartão Flutuante - Canto Superior Direito */}
-        <div className="absolute top-4 right-0 lg:top-0 lg:-right-4 hidden lg:block z-20 animate-fade-in">
-          <div className="relative transform rotate-[8deg] hover:rotate-[4deg] transition-transform duration-500">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
-            <div className="scale-[0.55] origin-top-right">
-              <JuripassCardVisual />
-            </div>
-          </div>
-        </div>
-
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content - Left Column */}
           <div className="space-y-8 animate-fade-in text-center lg:text-left">
@@ -126,14 +116,23 @@ export function HeroSection() {
 
           {/* Right Column - Visual Composition */}
           <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s]">
-            {/* Cartão Juripass - Mobile Only */}
-            <div className="lg:hidden relative transform rotate-[-4deg] hover:rotate-0 transition-transform duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
-              <div className="scale-90">
-                <JuripassCardVisual />
+            {/* Cartão Flutuante - Desktop Only */}
+            <div className="hidden lg:block self-end -mr-4 mb-2">
+              <div className="relative transform rotate-[8deg] hover:rotate-[4deg] transition-transform duration-500">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
+                <div className="w-72">
+                  <JuripassCardVisual />
+                </div>
               </div>
             </div>
 
+            {/* Cartão Juripass - Mobile Only */}
+            <div className="lg:hidden relative transform rotate-[-4deg] hover:rotate-0 transition-transform duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
+              <div className="w-80">
+                <JuripassCardVisual />
+              </div>
+            </div>
             {/* Pergunta Impactante */}
             <div className="bg-card/90 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-lg max-w-md">
               <p className="text-foreground/90 text-base md:text-lg leading-relaxed">

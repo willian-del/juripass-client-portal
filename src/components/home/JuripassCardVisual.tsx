@@ -2,7 +2,7 @@
 
 export function JuripassCardVisual() {
   return (
-    <div className="relative w-full max-w-md mx-auto">
+    <div className="relative w-full">
       {/* Card Container with 3D effect */}
       <div className="relative transform hover:scale-105 transition-transform duration-500 animate-fade-in">
         {/* Main Card */}
