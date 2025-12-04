@@ -94,8 +94,8 @@ export function CoverageSection() {
           >
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-destructive/30 to-destructive/20 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
-                  <X className="w-7 h-7 text-destructive" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-destructive to-destructive/60 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                  <X className="w-7 h-7 text-white" />
                 </div>
                 <h4 className="font-bold text-lg text-foreground">{notCoveredCard.title}</h4>
               </div>
