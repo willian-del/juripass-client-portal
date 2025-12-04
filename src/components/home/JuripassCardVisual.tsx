@@ -26,14 +26,9 @@ export function JuripassCardVisual() {
 
           {/* Card Info */}
           <div className="absolute bottom-8 left-8 right-8 space-y-3">
-            <div className="space-y-1">
-              <p className="text-white/70 text-xs font-medium uppercase tracking-wider">
-                Nome do Titular
-              </p>
-              <p className="text-white text-lg font-bold">
-                João Silva Santos
-              </p>
-            </div>
+            <p className="text-white text-lg font-bold">
+              João Silva Santos
+            </p>
             
             <div className="flex items-center justify-between">
               <div className="space-y-1">
