@@ -46,6 +46,16 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4 relative">
+        {/* Cartão Flutuante - Canto Superior Direito */}
+        <div className="absolute top-0 right-4 lg:top-4 lg:right-8 hidden lg:block z-10 animate-fade-in">
+          <div className="relative transform rotate-[8deg] hover:rotate-[4deg] transition-transform duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
+            <div className="scale-[0.65]">
+              <JuripassCardVisual />
+            </div>
+          </div>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content - Left Column */}
           <div className="space-y-8 animate-fade-in text-center lg:text-left">
@@ -115,7 +125,15 @@ export function HeroSection() {
           </div>
 
           {/* Right Column - Visual Composition */}
-          <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s]">
+          <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s] lg:mt-20">
+            {/* Cartão Juripass - Mobile Only */}
+            <div className="lg:hidden relative transform rotate-[-4deg] hover:rotate-0 transition-transform duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
+              <div className="scale-90">
+                <JuripassCardVisual />
+              </div>
+            </div>
+
             {/* Pergunta Impactante */}
             <div className="bg-card/90 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-lg max-w-md">
               <p className="text-foreground/90 text-base md:text-lg leading-relaxed">
@@ -125,14 +143,6 @@ export function HeroSection() {
 
             {/* Seta Conectora */}
             <ArrowDown className="w-6 h-6 text-primary animate-bounce" />
-
-            {/* Cartão Rotacionado com Glow */}
-            <div className="relative transform rotate-[-4deg] hover:rotate-0 transition-transform duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
-              <div className="scale-90">
-                <JuripassCardVisual />
-              </div>
-            </div>
 
             {/* Callout Box */}
             <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-4 max-w-md border-l-4 border-primary">
