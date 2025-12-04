@@ -117,12 +117,10 @@ export function HeroSection() {
           {/* Right Column - Visual Composition */}
           <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s]">
             {/* Cartão Flutuante - Desktop Only */}
-            <div className="hidden lg:block mb-2">
+            <div className="hidden lg:block mb-2 w-full max-w-md">
               <div className="relative transform rotate-[8deg] hover:rotate-[4deg] transition-transform duration-500">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
-                <div className="max-w-md w-full">
-                  <JuripassCardVisual />
-                </div>
+                <JuripassCardVisual />
               </div>
             </div>
 
