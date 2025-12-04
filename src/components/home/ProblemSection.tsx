@@ -29,7 +29,7 @@ export function ProblemSection() {
             {stats.map((stat, index) => <div key={stat.value} className="animate-fade-in" style={{
             animationDelay: `${index * 0.15}s`
           }}>
-                <p className="text-7xl md:text-8xl lg:text-9xl font-bold text-white tracking-tight">
+                <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight">
                   {stat.value}
                 </p>
                 <p className="text-sm md:text-base text-white/70 mt-4 font-light max-w-xs mx-auto">
