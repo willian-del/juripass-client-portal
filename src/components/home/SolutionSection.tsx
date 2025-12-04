@@ -6,77 +6,54 @@ export function SolutionSection() {
     {
       icon: Zap,
       title: 'Apoio Rápido e Descomplicado',
-      description: 'Respostas ágeis sem burocracia, ajudando seus colaboradores quando mais precisam.',
-      gradient: 'from-primary to-primary/80'
+      description: 'Respostas ágeis sem burocracia, ajudando seus colaboradores quando mais precisam.'
     },
     {
       icon: Heart,
       title: 'Atendimento Humanizado',
-      description: 'Acessível e especializado com agilidade e empatia, porque problemas jurídicos também são problemas humanos.',
-      gradient: 'from-primary to-primary/80'
+      description: 'Acessível e especializado com agilidade e empatia, porque problemas jurídicos também são problemas humanos.'
     },
     {
       icon: Scale,
       title: 'Cobertura Completa',
-      description: 'Desde esclarecimento de dúvidas até ajuizamento de ações em diversas áreas do direito.',
-      gradient: 'from-primary to-juripass-primary-dark'
+      description: 'Desde esclarecimento de dúvidas até ajuizamento de ações em diversas áreas do direito.'
     }
   ];
 
   return (
-    <section id="programa" className="py-20 md:py-32 bg-muted/30 scroll-mt-16 relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
-      </div>
-
-      <div className="container mx-auto px-4 relative">
-        <div className="max-w-3xl mx-auto text-center space-y-6 mb-20">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-            O Programa de Acolhimento Jurídico Juripass
+    <section id="programa" className="py-12 md:py-20 bg-muted/20 scroll-mt-16">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            O Programa de Acolhimento Jurídico
           </h2>
-          <p className="text-xl md:text-2xl text-muted-foreground font-medium">
+          <p className="text-lg md:text-xl text-muted-foreground">
             Três pilares fundamentais para proteger seus colaboradores
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
           {pillars.map((pillar, index) => (
             <Card
               key={index}
-              className="group relative overflow-hidden p-8 bg-white/80 backdrop-blur-sm hover:bg-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in border-2 border-transparent hover:border-primary/20"
+              className="group p-6 bg-card/80 backdrop-blur-sm border border-border/50 hover:shadow-lg hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              {/* Gradient overlay on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${pillar.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-              
-              <div className="relative space-y-6">
-                <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${pillar.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                  <pillar.icon className="w-10 h-10 text-white" />
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <pillar.icon className="w-6 h-6 text-white" />
                 </div>
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                     {pillar.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed text-base">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {pillar.description}
                   </p>
                 </div>
               </div>
             </Card>
           ))}
-        </div>
-
-        {/* Additional Context */}
-        <div className="mt-20 max-w-4xl mx-auto">
-          <Card className="p-10 md:p-14 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 border-primary/20 backdrop-blur-sm shadow-xl">
-            <p className="text-center text-xl md:text-2xl text-foreground leading-relaxed font-medium">
-              O Juripass transforma a forma como sua empresa cuida dos colaboradores, 
-              oferecendo <span className="font-bold text-primary">segurança jurídica acessível e humanizada</span> que 
-              reduz o estresse, aumenta a produtividade e demonstra cuidado genuíno com o bem-estar da equipe.
-            </p>
-          </Card>
         </div>
       </div>
     </section>
