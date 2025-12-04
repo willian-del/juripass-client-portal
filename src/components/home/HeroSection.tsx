@@ -26,7 +26,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-background py-12 md:py-20 lg:py-24">
+    <section className="relative bg-background py-12 md:py-20 lg:py-24">
       {/* Decorative background elements with parallax */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div 
@@ -47,10 +47,10 @@ export function HeroSection() {
 
       <div className="container mx-auto px-4 relative">
         {/* Cartão Flutuante - Canto Superior Direito */}
-        <div className="absolute top-0 right-4 lg:top-4 lg:right-8 hidden lg:block z-10 animate-fade-in">
+        <div className="absolute top-4 right-0 lg:top-0 lg:-right-4 hidden lg:block z-20 animate-fade-in">
           <div className="relative transform rotate-[8deg] hover:rotate-[4deg] transition-transform duration-500">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
-            <div className="scale-[0.65]">
+            <div className="scale-[0.55] origin-top-right">
               <JuripassCardVisual />
             </div>
           </div>
@@ -125,7 +125,7 @@ export function HeroSection() {
           </div>
 
           {/* Right Column - Visual Composition */}
-          <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s] lg:mt-20">
+          <div className="flex flex-col items-center gap-5 animate-fade-in [animation-delay:0.2s]">
             {/* Cartão Juripass - Mobile Only */}
             <div className="lg:hidden relative transform rotate-[-4deg] hover:rotate-0 transition-transform duration-500">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/20 rounded-3xl blur-2xl scale-110 opacity-60" />
