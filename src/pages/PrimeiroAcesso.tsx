@@ -72,8 +72,28 @@ export default function PrimeiroAcesso() {
         body: { cpf: cpfLimpo }
       });
 
+      // Handle non-2xx responses - error contains the response body
       if (response.error) {
-        throw new Error(response.error.message || 'Erro ao validar CPF');
+        // Try to parse error context for specific error codes
+        const errorContext = response.error.context;
+        if (errorContext?.code === 'CPF_NOT_FOUND') {
+          toast.error('CPF não encontrado. Verifique se você foi cadastrado como dependente.');
+          return;
+        } else if (errorContext?.code === 'ALREADY_REGISTERED') {
+          toast.error('Este CPF já possui uma conta. Faça login normalmente.');
+          return;
+        }
+        
+        // Fallback: try to get message from error
+        const errorMsg = response.error.message || 'Erro ao validar CPF';
+        if (errorMsg.includes('não encontrado')) {
+          toast.error('CPF não encontrado. Verifique se você foi cadastrado como dependente.');
+        } else if (errorMsg.includes('já possui')) {
+          toast.error('Este CPF já possui uma conta. Faça login normalmente.');
+        } else {
+          toast.error(errorMsg);
+        }
+        return;
       }
 
       const result = response.data;
