@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -30,6 +30,7 @@ interface TokenValidation {
 export default function NovoCadastro() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { codigoEmpresa: pathCodigoEmpresa } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isValidatingToken, setIsValidatingToken] = useState(true);
   const [tokenValidation, setTokenValidation] = useState<TokenValidation | null>(null);
@@ -38,7 +39,8 @@ export default function NovoCadastro() {
   const [cpfChecked, setCpfChecked] = useState(false);
 
   const token = searchParams.get('token');
-  const codEmpresa = searchParams.get('codEmpresa');
+  // Prioriza código do path, depois query param
+  const codEmpresa = pathCodigoEmpresa || searchParams.get('codEmpresa');
 
   const {
     register,

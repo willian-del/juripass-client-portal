@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/novo-cadastro" element={<NovoCadastro />} />
+            <Route path="/cadastro/:codigoEmpresa" element={<NovoCadastro />} />
             <Route path="/primeiro-acesso" element={<PrimeiroAcesso />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/dashboard/atendimento" element={<ProtectedRoute><IniciarAtendimento /></ProtectedRoute>} />
