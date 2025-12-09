@@ -4,7 +4,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -12,13 +11,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { dependenteSchema, finalizarDependenteSchema } from '@/lib/validators';
-import { maskCPF, formatCPF, cleanCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
+import { formatCPF, cleanCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { toast } from 'sonner';
-import { ArrowLeft, UserPlus, Users, Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, UserPlus, Users, Loader2, Info } from 'lucide-react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Usuario, TipoUsuario } from '@/types/database';
+import { Usuario } from '@/types/database';
 import { z } from 'zod';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 type Step = 'list' | 'validate-cpf' | 'complete-form';
 type DependenteForm = z.infer<typeof dependenteSchema>;
@@ -26,7 +25,6 @@ type FinalizarDependenteForm = z.infer<typeof finalizarDependenteSchema>;
 
 export default function Dependentes() {
   const { usuario, isLoading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const [dependentes, setDependentes] = useState<Usuario[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [step, setStep] = useState<Step>('list');
@@ -47,8 +45,6 @@ export default function Dependentes() {
       email: '',
       telefone: '',
       grau_parentesco: 'filho',
-      senha: '',
-      confirmar_senha: '',
     },
   });
 
@@ -115,29 +111,17 @@ export default function Dependentes() {
     try {
       setIsSaving(true);
 
-      // 1. Criar conta no Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.senha,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`,
-        },
-      });
-
-      if (authError) throw authError;
-      if (!authData.user) throw new Error('Erro ao criar usuário');
-
-      // 2. Criptografar CPF
+      // 1. Criptografar CPF
       const { data: cpfCripto, error: cpfError } = await supabase
         .rpc('encrypt_cpf', { cpf_plain: cpfValidado });
 
       if (cpfError) throw cpfError;
 
-      // 3. Inserir na tabela usuarios com id_auth linkado ao auth user
+      // 2. Inserir na tabela usuarios SEM id_auth (será preenchido no primeiro acesso)
       const { error: insertError } = await supabase
         .from('usuarios')
         .insert([{
-          id_auth: authData.user.id,
+          id_auth: null, // Será preenchido quando o dependente fizer primeiro acesso
           cpf_criptografado: cpfCripto as string,
           nome: formData.nome,
           email: formData.email,
@@ -151,9 +135,9 @@ export default function Dependentes() {
 
       if (insertError) throw insertError;
 
-      toast.success('Dependente cadastrado com sucesso!');
+      toast.success('Dependente cadastrado! Ele receberá instruções para criar sua senha.');
 
-      // 4. Resetar e voltar
+      // 3. Resetar e voltar
       await loadDependentes();
       setStep('list');
       setCpfValidado('');
@@ -162,7 +146,7 @@ export default function Dependentes() {
     } catch (error: any) {
       console.error('Erro ao cadastrar dependente:', error);
       
-      if (error.message?.includes('already registered')) {
+      if (error.message?.includes('already registered') || error.message?.includes('duplicate')) {
         toast.error('E-mail já está em uso');
       } else {
         toast.error('Erro ao cadastrar dependente');
@@ -188,6 +172,13 @@ export default function Dependentes() {
       outro: 'Outro',
     };
     return labels[grau] || grau;
+  };
+
+  const getStatusBadge = (dep: Usuario) => {
+    if (!dep.id_auth) {
+      return <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50">Pendente</Badge>;
+    }
+    return <Badge className="bg-juripass-accent text-white">Ativo</Badge>;
   };
 
   if (authLoading) {
@@ -279,13 +270,13 @@ export default function Dependentes() {
                     <CardHeader className="pb-3 p-4 sm:p-6">
                       <div className="flex items-start justify-between gap-2">
                         <CardTitle className="text-base sm:text-lg text-juripass-primary-dark break-words">{dep.nome}</CardTitle>
-                        <Badge className="bg-juripass-accent text-white text-xs shrink-0">Ativo</Badge>
+                        {getStatusBadge(dep)}
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-2 text-xs sm:text-sm p-4 sm:p-6 pt-0">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">CPF:</span>
-                        <span className="font-medium">{maskCPF(dep.cpf_criptografado)}</span>
+                        <span className="text-muted-foreground">E-mail:</span>
+                        <span className="font-medium truncate ml-2">{dep.email}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Grau:</span>
@@ -303,6 +294,11 @@ export default function Dependentes() {
                           {new Date(dep.created_at).toLocaleDateString('pt-BR')}
                         </span>
                       </div>
+                      {!dep.id_auth && (
+                        <p className="text-xs text-amber-600 pt-2">
+                          Aguardando primeiro acesso
+                        </p>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
@@ -364,7 +360,7 @@ export default function Dependentes() {
           </Card>
         )}
 
-        {/* Passo 2: Dados Completos */}
+        {/* Passo 2: Dados Completos (sem senha) */}
         {step === 'complete-form' && (
           <Card className="shadow-primary border-juripass-primary/30">
             <CardHeader className="p-4 sm:p-6">
@@ -374,6 +370,13 @@ export default function Dependentes() {
               </p>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
+              <Alert className="mb-4 border-blue-200 bg-blue-50">
+                <Info className="h-4 w-4 text-blue-600" />
+                <AlertDescription className="text-blue-800 text-sm">
+                  O dependente criará sua própria senha no primeiro acesso ao sistema.
+                </AlertDescription>
+              </Alert>
+
               <Form {...dependenteForm}>
                 <form onSubmit={dependenteForm.handleSubmit(handleCreateDependente)} className="space-y-4">
                   <FormField
@@ -448,34 +451,6 @@ export default function Dependentes() {
                     )}
                   />
 
-                  <FormField
-                    control={dependenteForm.control}
-                    name="senha"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Senha *</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="password" placeholder="Mínimo 6 caracteres" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={dependenteForm.control}
-                    name="confirmar_senha"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirmar Senha *</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="password" placeholder="Confirme a senha" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   <div className="flex gap-3 pt-4">
                     <Button
                       type="button"
@@ -484,8 +459,7 @@ export default function Dependentes() {
                       disabled={isSaving}
                       className="border-juripass-primary text-juripass-primary hover:bg-juripass-primary/10"
                     >
-                      <ArrowLeft className="mr-2 h-4 w-4" />
-                      Voltar
+                      Cancelar
                     </Button>
                     <Button 
                       type="submit" 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -105,6 +105,15 @@ export default function Login() {
               )}
             </Button>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              É seu primeiro acesso?{' '}
+              <Link to="/primeiro-acesso" className="text-primary font-medium hover:underline">
+                Crie sua senha aqui
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
