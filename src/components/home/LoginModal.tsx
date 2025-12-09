@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -117,6 +117,19 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
             )}
           </Button>
         </form>
+
+        <div className="mt-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            É seu primeiro acesso?{' '}
+            <Link 
+              to="/primeiro-acesso" 
+              className="text-primary font-medium hover:underline"
+              onClick={() => onOpenChange(false)}
+            >
+              Crie sua senha aqui
+            </Link>
+          </p>
+        </div>
       </DialogContent>
     </Dialog>
   );
