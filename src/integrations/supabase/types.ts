@@ -221,7 +221,7 @@ export type Database = {
           email: string
           grau_parentesco: string | null
           id: string
-          id_auth: string
+          id_auth: string | null
           id_empresa: string
           id_usuario_principal: string | null
           nome: string
@@ -237,7 +237,7 @@ export type Database = {
           email: string
           grau_parentesco?: string | null
           id?: string
-          id_auth: string
+          id_auth?: string | null
           id_empresa: string
           id_usuario_principal?: string | null
           nome: string
@@ -253,7 +253,7 @@ export type Database = {
           email?: string
           grau_parentesco?: string | null
           id?: string
-          id_auth?: string
+          id_auth?: string | null
           id_empresa?: string
           id_usuario_principal?: string | null
           nome?: string
@@ -294,7 +294,7 @@ export type Database = {
           email: string
           grau_parentesco: string | null
           id: string
-          id_auth: string
+          id_auth: string | null
           id_empresa: string
           id_usuario_principal: string | null
           nome: string
