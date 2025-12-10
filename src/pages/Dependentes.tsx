@@ -9,12 +9,13 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { dependenteSchema, finalizarDependenteSchema } from '@/lib/validators';
 import { formatCPF, cleanCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { toast } from 'sonner';
-import { ArrowLeft, UserPlus, Users, Loader2, CheckCircle2, Edit2, Eye, Save, X } from 'lucide-react';
+import { ArrowLeft, UserPlus, Users, Loader2, CheckCircle2, Edit2, Eye, Save, X, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Usuario } from '@/types/database';
@@ -57,6 +58,11 @@ export default function Dependentes() {
   // Estados para visualização do card
   const [viewCardDep, setViewCardDep] = useState<DependenteWithEmpresa | null>(null);
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+  
+  // Estados para exclusão
+  const [dependenteToDelete, setDependenteToDelete] = useState<DependenteWithEmpresa | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const cpfForm = useForm<DependenteForm>({
     resolver: zodResolver(dependenteSchema),
@@ -281,6 +287,36 @@ export default function Dependentes() {
     setIsCardModalOpen(true);
   };
 
+  const openDeleteConfirmation = (dep: DependenteWithEmpresa) => {
+    setDependenteToDelete(dep);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteDependente = async () => {
+    if (!dependenteToDelete) return;
+    
+    try {
+      setIsDeleting(true);
+      
+      const { error } = await supabase
+        .from('usuarios')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', dependenteToDelete.id);
+
+      if (error) throw error;
+
+      toast.success('Dependente excluído com sucesso');
+      setIsDeleteModalOpen(false);
+      setDependenteToDelete(null);
+      loadDependentes();
+    } catch (error) {
+      console.error('Erro ao excluir dependente:', error);
+      toast.error('Erro ao excluir dependente');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const getGrauParentescoLabel = (grau: string) => {
     const labels: Record<string, string> = {
       conjuge: 'Cônjuge',
@@ -387,25 +423,27 @@ export default function Dependentes() {
                       <div className="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-1/2 -translate-x-1/2" />
                     </div>
 
-                    {/* Header compacto */}
-                    <div className="flex items-center justify-between relative z-10">
+                    {/* Header - logo no canto direito */}
+                    <div className="flex justify-end relative z-10">
                       <img 
                         src="/images/branding/juripass-logo-card.png" 
                         alt="Juripass" 
-                        className="h-5 sm:h-6" 
+                        className="h-7 sm:h-8" 
                       />
-                      <Badge 
-                        className={`text-[9px] sm:text-[10px] px-1.5 py-0 h-4 sm:h-5 ${dep.ativo ? 'bg-green-500/20 text-green-100 border border-green-400/30' : 'bg-red-500/20 text-red-100 border border-red-400/30'}`}
-                      >
-                        {dep.ativo ? 'Ativo' : 'Inativo'}
-                      </Badge>
                     </div>
 
                     {/* Conteúdo central */}
                     <div className="flex-1 flex flex-col justify-center space-y-1.5 relative z-10 py-2">
                       <div>
                         <p className="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-60">Nome</p>
-                        <p className="text-sm sm:text-base font-semibold truncate">{dep.nome}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm sm:text-base font-semibold truncate">{dep.nome}</p>
+                          <Badge 
+                            className={`text-[8px] sm:text-[9px] px-1.5 py-0 h-4 ${dep.ativo ? 'bg-green-500/20 text-green-100 border border-green-400/30' : 'bg-red-500/20 text-red-100 border border-red-400/30'}`}
+                          >
+                            {dep.ativo ? 'Ativo' : 'Inativo'}
+                          </Badge>
+                        </div>
                       </div>
                       <div className="flex gap-4">
                         <div>
@@ -448,6 +486,15 @@ export default function Dependentes() {
                         >
                           <Eye className="mr-1 h-3 w-3" />
                           Ver Cartão
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openDeleteConfirmation(dep)}
+                          className="flex-1 h-6 sm:h-7 text-[10px] sm:text-xs bg-white/10 border-white/30 text-white hover:bg-red-500/30 hover:border-red-400/50 hover:text-white px-2"
+                        >
+                          <Trash2 className="mr-1 h-3 w-3" />
+                          Excluir
                         </Button>
                       </div>
                     </div>
@@ -763,6 +810,30 @@ export default function Dependentes() {
             )}
           </DialogContent>
         </Dialog>
+
+        {/* Modal de Confirmação de Exclusão */}
+        <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Excluir dependente?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Tem certeza que deseja excluir <strong>{dependenteToDelete?.nome}</strong>? 
+                Esta ação não pode ser desfeita.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={handleDeleteDependente} 
+                disabled={isDeleting}
+                className="bg-destructive hover:bg-destructive/90"
+              >
+                {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Excluir
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </DashboardLayout>
   );
