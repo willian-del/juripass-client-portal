@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { toast } from 'sonner';
-import { Loader2, Edit2, Save, X, CheckCircle2 } from 'lucide-react';
+import { Loader2, Edit2, Save, X, CheckCircle2, ArrowLeft } from 'lucide-react';
 
 // Schema simplificado - apenas email e telefone são editáveis
 const contatoSchema = z.object({
@@ -294,6 +294,19 @@ export default function MeuCadastro() {
             </form>
           </CardContent>
         </Card>
+
+        {/* Botão Voltar ao Dashboard */}
+        <div className="flex justify-center pt-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => window.location.href = '/dashboard'}
+            className="text-muted-foreground hover:text-juripass-primary"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar ao Dashboard
+          </Button>
+        </div>
       </div>
     </DashboardLayout>
   );
