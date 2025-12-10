@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Usuario } from '@/types/database';
 import { z } from 'zod';
-import { LogoJuripass } from '@/components/ui/LogoJuripass';
+
 import { JuripassCard } from '@/components/ui/JuripassCard';
 
 type Step = 'list' | 'validate-cpf' | 'complete-form';
@@ -375,87 +375,80 @@ export default function Dependentes() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-items-center">
                 {dependentes.map((dep) => (
                   <div 
                     key={dep.id} 
-                    className="bg-gradient-to-br from-primary via-primary to-blue-700 rounded-2xl shadow-xl p-5 sm:p-6 text-white relative overflow-hidden"
+                    className="w-full max-w-sm aspect-[1.6/1] bg-gradient-to-br from-primary via-primary to-blue-700 rounded-xl shadow-lg p-3 sm:p-4 text-white relative overflow-hidden flex flex-col"
                   >
-                    {/* Pattern decorativo */}
-                    <div className="absolute inset-0 opacity-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-1/2 translate-x-1/2" />
-                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-1/2 -translate-x-1/2" />
+                    {/* Pattern decorativo sutil */}
+                    <div className="absolute inset-0 opacity-5">
+                      <div className="absolute top-0 right-0 w-20 h-20 bg-white rounded-full -translate-y-1/2 translate-x-1/2" />
+                      <div className="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-1/2 -translate-x-1/2" />
                     </div>
 
-                    {/* Header do Card */}
-                    <div className="flex items-start justify-between mb-4 relative z-10">
-                      <LogoJuripass 
-                        variant="horizontal" 
-                        color="white" 
-                        size="sm"
-                        format="png"
-                      />
+                    {/* Header compacto */}
+                    <div className="flex items-center justify-between relative z-10">
+                      <div className="flex items-center gap-1.5">
+                        <img src="/images/branding/juripass-icon.svg" className="h-5 w-5" alt="" />
+                        <span className="font-bold text-[10px] sm:text-xs tracking-wider">JURIPASS</span>
+                      </div>
                       <Badge 
-                        className={`text-xs ${dep.ativo ? 'bg-green-500/20 text-green-100 border border-green-400/30' : 'bg-red-500/20 text-red-100 border border-red-400/30'}`}
+                        className={`text-[9px] sm:text-[10px] px-1.5 py-0 h-4 sm:h-5 ${dep.ativo ? 'bg-green-500/20 text-green-100 border border-green-400/30' : 'bg-red-500/20 text-red-100 border border-red-400/30'}`}
                       >
                         {dep.ativo ? 'Ativo' : 'Inativo'}
                       </Badge>
                     </div>
 
-                    {/* Informações do Dependente */}
-                    <div className="space-y-3 relative z-10">
-                      {/* Nome */}
+                    {/* Conteúdo central */}
+                    <div className="flex-1 flex flex-col justify-center space-y-1.5 relative z-10 py-2">
                       <div>
-                        <p className="text-xs uppercase tracking-wider opacity-70 mb-0.5">Nome</p>
-                        <p className="text-lg font-semibold truncate">{dep.nome}</p>
+                        <p className="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-60">Nome</p>
+                        <p className="text-sm sm:text-base font-semibold truncate">{dep.nome}</p>
                       </div>
-
-                      {/* Grid com Número e Grau */}
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="flex gap-4">
                         <div>
-                          <p className="text-xs uppercase tracking-wider opacity-70 mb-0.5">Número</p>
-                          <p className="text-sm font-mono font-medium">{dep.numero_cliente}</p>
+                          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-60">Número</p>
+                          <p className="text-[11px] sm:text-xs font-mono">{dep.numero_cliente}</p>
                         </div>
                         <div>
-                          <p className="text-xs uppercase tracking-wider opacity-70 mb-0.5">Grau</p>
-                          <p className="text-sm font-medium">
-                            {getGrauParentescoLabel(dep.grau_parentesco || '')}
-                          </p>
+                          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-60">Grau</p>
+                          <p className="text-[11px] sm:text-xs">{getGrauParentescoLabel(dep.grau_parentesco || '')}</p>
                         </div>
-                      </div>
-
-                      {/* CPF Verificado e Data */}
-                      <div className="flex items-center justify-between pt-2 border-t border-white/20">
-                        <div className="flex items-center gap-1.5">
-                          <CheckCircle2 className="h-4 w-4 text-green-300" />
-                          <span className="text-xs opacity-90">CPF verificado</span>
-                        </div>
-                        <span className="text-xs opacity-70">
-                          Desde {new Date(dep.created_at).toLocaleDateString('pt-BR')}
-                        </span>
                       </div>
                     </div>
 
-                    {/* Botões de Ação */}
-                    <div className="flex gap-2 mt-4 pt-4 border-t border-white/20 relative z-10">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleOpenEdit(dep)}
-                        className="flex-1 bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white"
-                      >
-                        <Edit2 className="mr-1.5 h-3.5 w-3.5" />
-                        Editar
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewCard(dep)}
-                        className="flex-1 bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white"
-                      >
-                        <Eye className="mr-1.5 h-3.5 w-3.5" />
-                        Ver Cartão
-                      </Button>
+                    {/* Footer com CPF e data */}
+                    <div className="relative z-10 pt-1.5 border-t border-white/20">
+                      <div className="flex items-center justify-between text-[9px] sm:text-[10px]">
+                        <div className="flex items-center gap-1">
+                          <CheckCircle2 className="h-3 w-3 text-green-300" />
+                          <span className="opacity-80">CPF verificado</span>
+                        </div>
+                        <span className="opacity-60">Desde {new Date(dep.created_at).toLocaleDateString('pt-BR')}</span>
+                      </div>
+                      
+                      {/* Botões compactos */}
+                      <div className="flex gap-1.5 mt-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleOpenEdit(dep)}
+                          className="flex-1 h-6 sm:h-7 text-[10px] sm:text-xs bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white px-2"
+                        >
+                          <Edit2 className="mr-1 h-3 w-3" />
+                          Editar
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewCard(dep)}
+                          className="flex-1 h-6 sm:h-7 text-[10px] sm:text-xs bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white px-2"
+                        >
+                          <Eye className="mr-1 h-3 w-3" />
+                          Ver Cartão
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
