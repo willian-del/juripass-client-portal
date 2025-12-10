@@ -12,17 +12,20 @@ import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { perfilSchema } from '@/lib/validators';
-import { maskCPF, formatPhone, cleanPhone } from '@/lib/cpfUtils';
+import { formatPhone, cleanPhone } from '@/lib/cpfUtils';
 import { toast } from 'sonner';
-import { Loader2, Edit2, Save, X, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Loader2, Edit2, Save, X, CheckCircle2 } from 'lucide-react';
 
-type PerfilForm = z.infer<typeof perfilSchema>;
+// Schema simplificado - apenas email e telefone são editáveis
+const contatoSchema = z.object({
+  email: z.string().email('E-mail inválido'),
+  telefone: z.string().optional(),
+});
+
+type ContatoForm = z.infer<typeof contatoSchema>;
 
 export default function MeuCadastro() {
   const { usuario, isLoading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,27 +35,24 @@ export default function MeuCadastro() {
     formState: { errors },
     reset,
     setValue,
-  } = useForm<PerfilForm>({
-    resolver: zodResolver(perfilSchema),
+  } = useForm<ContatoForm>({
+    resolver: zodResolver(contatoSchema),
     defaultValues: {
-      nome: usuario?.nome || '',
       email: usuario?.email || '',
       telefone: usuario?.telefone || '',
     },
   });
 
-  // Atualizar valores do formulário quando usuario for carregado
   useEffect(() => {
     if (usuario) {
       reset({
-        nome: usuario.nome || '',
         email: usuario.email || '',
         telefone: usuario.telefone || '',
       });
     }
   }, [usuario, reset]);
 
-  const onSubmit = async (data: PerfilForm) => {
+  const onSubmit = async (data: ContatoForm) => {
     if (!usuario) return;
 
     setIsLoading(true);
@@ -61,7 +61,6 @@ export default function MeuCadastro() {
       const { error } = await supabase
         .from('usuarios')
         .update({
-          nome: data.nome,
           email: data.email,
           telefone: data.telefone ? cleanPhone(data.telefone) : null,
         } as any)
@@ -71,8 +70,6 @@ export default function MeuCadastro() {
 
       toast.success('Cadastro atualizado com sucesso!');
       setIsEditing(false);
-      
-      // Refresh page to update data
       window.location.reload();
     } catch (error: any) {
       console.error('Update error:', error);
@@ -84,7 +81,6 @@ export default function MeuCadastro() {
 
   const handleCancel = () => {
     reset({
-      nome: usuario?.nome || '',
       email: usuario?.email || '',
       telefone: usuario?.telefone || '',
     });
@@ -98,37 +94,35 @@ export default function MeuCadastro() {
   if (authLoading) {
     return (
       <DashboardLayout>
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
-            <Skeleton className="h-10 w-10" />
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-8 w-8" />
             <div className="flex-1">
-              <Skeleton className="h-8 w-64 mb-2" />
-              <Skeleton className="h-4 w-96" />
+              <Skeleton className="h-6 w-48 mb-1" />
+              <Skeleton className="h-3 w-72" />
             </div>
           </div>
           
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Card>
-              <CardHeader>
-                <Skeleton className="h-6 w-48 mb-2" />
-                <Skeleton className="h-4 w-64" />
+              <CardHeader className="p-3 sm:p-4">
+                <Skeleton className="h-5 w-40 mb-1" />
+                <Skeleton className="h-3 w-56" />
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
+              <CardContent className="p-3 sm:p-4 pt-0 space-y-3">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
               </CardContent>
             </Card>
             
             <Card>
-              <CardHeader>
-                <Skeleton className="h-6 w-48 mb-2" />
-                <Skeleton className="h-4 w-64" />
+              <CardHeader className="p-3 sm:p-4">
+                <Skeleton className="h-5 w-40 mb-1" />
+                <Skeleton className="h-3 w-56" />
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
+              <CardContent className="p-3 sm:p-4 pt-0 space-y-3">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
               </CardContent>
             </Card>
           </div>
@@ -141,12 +135,12 @@ export default function MeuCadastro() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-4 sm:space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Meu Cadastro</h1>
-            <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-              Visualize e edite suas informações pessoais
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Meu Cadastro</h1>
+            <p className="text-muted-foreground text-sm">
+              Visualize e edite suas informações
             </p>
           </div>
 
@@ -157,115 +151,119 @@ export default function MeuCadastro() {
               className="bg-juripass-primary hover:bg-juripass-primary-dark w-full sm:w-auto"
             >
               <Edit2 className="mr-2 h-4 w-4" />
-              Editar
+              Editar Contato
             </Button>
           )}
         </div>
 
+        {/* Card de Informações da Conta - Totalmente Read-only */}
         <Card className="shadow-primary">
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-juripass-primary-dark text-lg sm:text-2xl">Informações da Conta</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Dados da sua conta no sistema
+          <CardHeader className="p-3 sm:p-4 pb-2">
+            <CardTitle className="text-juripass-primary-dark text-base sm:text-lg">Informações da Conta</CardTitle>
+            <CardDescription className="text-xs">
+              Dados vinculados à sua conta (não editáveis)
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-              <div className="space-y-2">
-                <Label>Data de Adesão</Label>
-                <Input value={formatarDataAdesao(usuario.created_at)} disabled />
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <div className="grid sm:grid-cols-2 gap-2 sm:gap-3">
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">Nome Completo</Label>
+                <Input value={usuario.nome} disabled className="h-9 text-sm" />
               </div>
 
-              <div className="space-y-2">
-                <Label>Número do Cliente</Label>
-                <Input value={usuario.numero_cliente} disabled />
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">CPF</Label>
+                <div className="flex items-center gap-2 h-9 px-3 rounded-md border bg-muted/50 text-sm text-muted-foreground">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span>CPF cadastrado e verificado</span>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Tipo de Usuário</Label>
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">Data de Adesão</Label>
+                <Input value={formatarDataAdesao(usuario.created_at)} disabled className="h-9 text-sm" />
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">Número do Cliente</Label>
+                <Input value={usuario.numero_cliente} disabled className="h-9 text-sm" />
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">Tipo de Usuário</Label>
                 <Input
                   value={usuario.tipo_usuario === 'principal' ? 'Principal' : 'Dependente'}
                   disabled
+                  className="h-9 text-sm"
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label>Empresa</Label>
-                <Input value={usuario.empresas?.nome || 'N/A'} disabled />
+              <div className="space-y-1">
+                <Label className="text-xs text-muted-foreground">Empresa</Label>
+                <Input value={usuario.empresas?.nome || 'N/A'} disabled className="h-9 text-sm" />
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Card de Informações de Contato - Editável */}
         <Card className={`shadow-primary ${isEditing ? 'border-juripass-primary border-2' : ''}`}>
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-juripass-primary-dark text-lg sm:text-2xl">Informações Pessoais</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
+          <CardHeader className="p-3 sm:p-4 pb-2">
+            <CardTitle className="text-juripass-primary-dark text-base sm:text-lg">Informações de Contato</CardTitle>
+            <CardDescription className="text-xs">
               {isEditing
-                ? 'Edite os campos abaixo e clique em Salvar'
-                : 'Suas informações cadastradas no sistema'}
+                ? 'Edite os campos e clique em Salvar'
+                : 'Seus dados de contato'}
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label>CPF</Label>
-                <Input value={maskCPF(usuario.cpf_criptografado)} disabled />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="nome">Nome Completo</Label>
-                <Input
-                  id="nome"
-                  {...register('nome')}
-                  disabled={!isEditing || isLoading}
-                />
-                {errors.nome && (
-                  <p className="text-sm text-destructive">{errors.nome.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register('email')}
-                  disabled={!isEditing || isLoading}
-                />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="telefone">Telefone</Label>
-                <Input
-                  id="telefone"
-                  {...register('telefone')}
-                  onChange={(e) => {
-                    const formatted = formatPhone(e.target.value);
-                    setValue('telefone', formatted);
-                  }}
-                  disabled={!isEditing || isLoading}
-                />
-                {errors.telefone && (
-                  <p className="text-sm text-destructive">{errors.telefone.message}</p>
-                )}
-              </div>
-
-              {usuario.tipo_usuario === 'dependente' && (
-                <div className="space-y-2">
-                  <Label>Grau de Parentesco</Label>
-                  <Input value={usuario.grau_parentesco || 'N/A'} disabled />
+          <CardContent className="p-3 sm:p-4 pt-0">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+              <div className="grid sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="space-y-1">
+                  <Label htmlFor="email" className="text-xs text-muted-foreground">E-mail</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    disabled={!isEditing || isLoading}
+                    className="h-9 text-sm"
+                  />
+                  {errors.email && (
+                    <p className="text-xs text-destructive">{errors.email.message}</p>
+                  )}
                 </div>
-              )}
+
+                <div className="space-y-1">
+                  <Label htmlFor="telefone" className="text-xs text-muted-foreground">Telefone</Label>
+                  <Input
+                    id="telefone"
+                    {...register('telefone')}
+                    onChange={(e) => {
+                      const formatted = formatPhone(e.target.value);
+                      setValue('telefone', formatted);
+                    }}
+                    disabled={!isEditing || isLoading}
+                    className="h-9 text-sm"
+                  />
+                  {errors.telefone && (
+                    <p className="text-xs text-destructive">{errors.telefone.message}</p>
+                  )}
+                </div>
+
+                {usuario.tipo_usuario === 'dependente' && (
+                  <div className="space-y-1 sm:col-span-2">
+                    <Label className="text-xs text-muted-foreground">Grau de Parentesco</Label>
+                    <Input value={usuario.grau_parentesco || 'N/A'} disabled className="h-9 text-sm" />
+                  </div>
+                )}
+              </div>
 
               {isEditing && (
-                <div className="flex gap-4 pt-4">
+                <div className="flex gap-3 pt-2">
                   <Button 
                     type="submit" 
                     disabled={isLoading} 
+                    size="sm"
                     className="flex-1 bg-juripass-primary hover:bg-juripass-primary-dark shadow-primary"
                   >
                     {isLoading ? (
@@ -276,13 +274,14 @@ export default function MeuCadastro() {
                     ) : (
                       <>
                         <Save className="mr-2 h-4 w-4" />
-                        Salvar Alterações
+                        Salvar
                       </>
                     )}
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
+                    size="sm"
                     onClick={handleCancel}
                     disabled={isLoading}
                     className="border-juripass-primary text-juripass-primary hover:bg-juripass-primary/10"
