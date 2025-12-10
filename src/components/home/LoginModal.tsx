@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -66,6 +66,11 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
     }));
   };
 
+  const goToRegister = () => {
+    onOpenChange(false);
+    navigate('/novo-cadastro');
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -118,17 +123,10 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
           </Button>
         </form>
 
-        <div className="mt-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            É seu primeiro acesso?{' '}
-            <Link 
-              to="/primeiro-acesso" 
-              className="text-primary font-medium hover:underline"
-              onClick={() => onOpenChange(false)}
-            >
-              Crie sua senha aqui
-            </Link>
-          </p>
+        <div className="text-center pt-4">
+          <Button variant="link" onClick={goToRegister} className="text-primary text-sm">
+            Primeiro acesso? Cadastre-se aqui
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

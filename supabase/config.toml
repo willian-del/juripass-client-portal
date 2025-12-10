@@ -2,21 +2,3 @@ project_id = "qudtsgchwsuoejxxgdza"
 
 [functions.validate-company-code]
 verify_jwt = false
-
-[functions.validate-invitation-token]
-verify_jwt = false
-
-[functions.import-users]
-verify_jwt = true
-
-[functions.create-user]
-verify_jwt = true
-
-[functions.generate-invitation-link]
-verify_jwt = true
-
-[functions.first-access-validate]
-verify_jwt = false
-
-[functions.first-access-complete]
-verify_jwt = false

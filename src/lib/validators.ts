@@ -40,8 +40,6 @@ export const dependenteSchema = z.object({
     }),
 });
 
-// Schema simplificado para dependentes - SEM SENHA
-// O dependente criará sua própria senha no primeiro acesso
 export const finalizarDependenteSchema = z.object({
   nome: z.string()
     .min(3, "Nome deve ter pelo menos 3 caracteres")
@@ -58,6 +56,13 @@ export const finalizarDependenteSchema = z.object({
   grau_parentesco: z.enum(["conjuge", "filho", "pai_mae", "irmao", "outro"], {
     errorMap: () => ({ message: "Selecione o grau de parentesco" }),
   }),
+  senha: z.string()
+    .min(6, "Senha deve ter pelo menos 6 caracteres")
+    .max(50, "Senha muito longa"),
+  confirmar_senha: z.string()
+}).refine((data) => data.senha === data.confirmar_senha, {
+  message: "As senhas não conferem",
+  path: ["confirmar_senha"],
 });
 
 export const loginSchema = z.object({

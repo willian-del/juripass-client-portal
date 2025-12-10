@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, useParams, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,34 +13,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Footer } from '@/components/ui/Footer';
 import { JuripassCard } from '@/components/ui/JuripassCard';
 import { toast } from 'sonner';
-import { Loader2, AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Loader2 } from 'lucide-react';
 
 type CadastroForm = z.infer<typeof cadastroSchema>;
-
-interface TokenValidation {
-  valid: boolean;
-  empresa_id?: string;
-  empresa_nome?: string;
-  empresa_codigo?: string;
-  invitation_id?: string;
-  error?: string;
-}
 
 export default function NovoCadastro() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { codigoEmpresa: pathCodigoEmpresa } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [isValidatingToken, setIsValidatingToken] = useState(true);
-  const [tokenValidation, setTokenValidation] = useState<TokenValidation | null>(null);
   const [empresaNome, setEmpresaNome] = useState('');
-  const [empresaId, setEmpresaId] = useState('');
   const [cpfChecked, setCpfChecked] = useState(false);
-
-  const token = searchParams.get('token');
-  // Prioriza código do path, depois query param
-  const codEmpresa = pathCodigoEmpresa || searchParams.get('codEmpresa');
 
   const {
     register,
@@ -51,7 +33,7 @@ export default function NovoCadastro() {
   } = useForm<CadastroForm>({
     resolver: zodResolver(cadastroSchema),
     defaultValues: {
-      codigo_empresa: codEmpresa || '',
+      codigo_empresa: searchParams.get('codEmpresa') || '',
     },
   });
 
@@ -60,57 +42,21 @@ export default function NovoCadastro() {
   const cpfValue = watch('cpf');
   const nomeValue = watch('nome');
 
-  // Validate token on mount
+  // Verificar empresa quando o código mudar
   useEffect(() => {
-    const validateToken = async () => {
-      if (token) {
-        setIsValidatingToken(true);
-        try {
-          const { data, error } = await supabase.functions.invoke('validate-invitation-token', {
-            body: { token },
-          });
-
-          if (error) throw error;
-
-          setTokenValidation(data);
-          if (data.valid) {
-            setEmpresaNome(data.empresa_nome);
-            setEmpresaId(data.empresa_id);
-            setValue('codigo_empresa', data.empresa_codigo);
-          }
-        } catch (error) {
-          console.error('Error validating token:', error);
-          setTokenValidation({ valid: false, error: 'Erro ao validar link de convite' });
-        }
-        setIsValidatingToken(false);
-      } else if (codEmpresa) {
-        // Fallback to company code validation
-        setIsValidatingToken(false);
-        verificarEmpresa(codEmpresa);
-      } else {
-        setIsValidatingToken(false);
-      }
-    };
-
-    validateToken();
-  }, [token, codEmpresa, setValue]);
-
-  // Verify company when code changes (only if not using token)
-  useEffect(() => {
-    if (!token && codigoEmpresa) {
+    if (codigoEmpresa) {
       verificarEmpresa(codigoEmpresa);
     }
-  }, [codigoEmpresa, token]);
+  }, [codigoEmpresa]);
 
-  // Check CPF when field loses focus
+  // Verificar CPF quando perder o foco
   const handleCPFBlur = async () => {
     if (cpf && cpf.length >= 11 && !cpfChecked) {
       const cpfLimpo = cleanCPF(cpf);
-
+      
       try {
-        const { data, error } = await supabase.rpc('find_user_by_cpf', {
-          cpf_plain: cpfLimpo,
-        });
+        const { data, error } = await supabase
+          .rpc('find_user_by_cpf', { cpf_plain: cpfLimpo });
 
         if (error) throw error;
 
@@ -119,13 +65,14 @@ export default function NovoCadastro() {
           setValue('nome', usuario.nome);
           setValue('email', usuario.email);
           if (usuario.telefone) setValue('telefone', usuario.telefone);
-          if (usuario.id_empresa && !token) {
+          if (usuario.id_empresa) {
+            // Buscar código da empresa
             const { data: empresaData } = await supabase
               .from('empresas')
               .select('codigo_empresa')
               .eq('id', usuario.id_empresa)
               .single();
-
+            
             if (empresaData) {
               setValue('codigo_empresa', empresaData.codigo_empresa);
             }
@@ -135,7 +82,7 @@ export default function NovoCadastro() {
       } catch (error) {
         console.error('Error checking CPF:', error);
       }
-
+      
       setCpfChecked(true);
     }
   };
@@ -143,27 +90,24 @@ export default function NovoCadastro() {
   const verificarEmpresa = async (codigo: string) => {
     try {
       const { data, error } = await supabase.functions.invoke('validate-company-code', {
-        body: { codigo_empresa: codigo },
+        body: { codigo_empresa: codigo }
       });
 
       if (error || !data?.valid) {
         setEmpresaNome('');
-        setEmpresaId('');
         toast.error('Código de empresa inválido');
         return;
       }
 
       setEmpresaNome(data.empresa_nome);
-      setEmpresaId(data.empresa_id);
     } catch (error) {
       console.error('Error checking empresa:', error);
       setEmpresaNome('');
-      setEmpresaId('');
     }
   };
 
   const onSubmit = async (data: CadastroForm) => {
-    if (!empresaNome || !empresaId) {
+    if (!empresaNome) {
       toast.error('Código de empresa inválido');
       return;
     }
@@ -186,38 +130,40 @@ export default function NovoCadastro() {
       if (authError) throw authError;
       if (!authData.user) throw new Error('Erro ao criar usuário');
 
-      // 2. Encrypt CPF before storage
-      const { data: cpfCriptografado, error: cpfError } = await supabase.rpc('encrypt_cpf', {
-        cpf_plain: cpfLimpo,
+      // 2. Get empresa ID via secure edge function
+      const { data: empresaData, error: empresaError } = await supabase.functions.invoke('validate-company-code', {
+        body: { codigo_empresa: data.codigo_empresa }
       });
+
+      if (empresaError || !empresaData?.valid) throw new Error('Empresa não encontrada');
+      const empresaId = empresaData.empresa_id;
+
+      // 3. Encrypt CPF before storage
+      const { data: cpfCriptografado, error: cpfError } = await supabase
+        .rpc('encrypt_cpf', { cpf_plain: cpfLimpo });
 
       if (cpfError || !cpfCriptografado) throw new Error('Erro ao processar CPF');
 
-      // 3. Create usuario record
-      const { error: usuarioError } = await supabase.from('usuarios').insert({
-        id_auth: authData.user.id,
-        cpf_criptografado: cpfCriptografado,
-        nome: data.nome,
-        email: data.email,
-        telefone: data.telefone ? cleanPhone(data.telefone) : null,
-        tipo_usuario: 'principal',
-        id_empresa: empresaId,
-      } as any);
+      // 4. Create usuario record
+      const { error: usuarioError } = await supabase
+        .from('usuarios')
+        .insert({
+          id_auth: authData.user.id,
+          cpf_criptografado: cpfCriptografado,
+          nome: data.nome,
+          email: data.email,
+          telefone: data.telefone ? cleanPhone(data.telefone) : null,
+          tipo_usuario: 'principal',
+          id_empresa: empresaId,
+        } as any);
 
       if (usuarioError) throw usuarioError;
-
-      // 4. Increment invitation token usage if using token
-      if (token && tokenValidation?.valid) {
-        await supabase.functions.invoke('validate-invitation-token', {
-          body: { token, increment_usage: true },
-        });
-      }
 
       toast.success('Cadastro realizado com sucesso!');
       navigate('/login');
     } catch (error: any) {
       console.error('Signup error:', error);
-
+      
       if (error.message?.includes('already registered')) {
         toast.error('Este e-mail já está cadastrado');
       } else if (error.message?.includes('duplicate key')) {
@@ -230,48 +176,6 @@ export default function NovoCadastro() {
     }
   };
 
-  // Show loading while validating token
-  if (isValidatingToken) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Validando link de convite...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error if token is invalid
-  if (token && tokenValidation && !tokenValidation.valid) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
-        <div className="flex-grow flex items-center justify-center p-4">
-          <Card className="max-w-md w-full">
-            <CardContent className="pt-6">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Link inválido</AlertTitle>
-                <AlertDescription>
-                  {tokenValidation.error || 'Este link de convite não é válido ou expirou.'}
-                </AlertDescription>
-              </Alert>
-              <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Entre em contato com o RH da sua empresa para obter um novo link de convite.
-                </p>
-                <Button asChild variant="outline">
-                  <Link to="/">Voltar para o início</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex flex-col">
       {/* Header */}
@@ -280,8 +184,7 @@ export default function NovoCadastro() {
           <span className="text-primary">Queremos</span> conhecer você
         </h1>
         <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
-          Para garantir o seu acesso, preencha suas informações nos campos abaixo e complete o seu
-          cadastro.
+          Para garantir o seu acesso, preencha suas informações nos campos abaixo e complete o seu cadastro.
         </p>
       </div>
 
@@ -308,7 +211,9 @@ export default function NovoCadastro() {
                     maxLength={14}
                     disabled={isLoading}
                   />
-                  {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message}</p>}
+                  {errors.cpf && (
+                    <p className="text-sm text-destructive">{errors.cpf.message}</p>
+                  )}
                 </div>
 
                 {/* Nome */}
@@ -320,7 +225,9 @@ export default function NovoCadastro() {
                     placeholder="Seu nome completo"
                     disabled={isLoading}
                   />
-                  {errors.nome && <p className="text-sm text-destructive">{errors.nome.message}</p>}
+                  {errors.nome && (
+                    <p className="text-sm text-destructive">{errors.nome.message}</p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -364,13 +271,17 @@ export default function NovoCadastro() {
                     id="codigo_empresa"
                     {...register('codigo_empresa')}
                     placeholder="Digite o código da empresa"
-                    disabled={isLoading || !!token}
+                    disabled={isLoading}
                   />
                   {empresaNome && (
-                    <p className="text-sm text-primary font-medium">Empresa: {empresaNome}</p>
+                    <p className="text-sm text-primary font-medium">
+                      Empresa: {empresaNome}
+                    </p>
                   )}
                   {errors.codigo_empresa && (
-                    <p className="text-sm text-destructive">{errors.codigo_empresa.message}</p>
+                    <p className="text-sm text-destructive">
+                      {errors.codigo_empresa.message}
+                    </p>
                   )}
                 </div>
 
@@ -400,7 +311,9 @@ export default function NovoCadastro() {
                     disabled={isLoading}
                   />
                   {errors.confirmar_senha && (
-                    <p className="text-sm text-destructive">{errors.confirmar_senha.message}</p>
+                    <p className="text-sm text-destructive">
+                      {errors.confirmar_senha.message}
+                    </p>
                   )}
                 </div>
 
@@ -429,7 +342,11 @@ export default function NovoCadastro() {
 
           {/* Carteirinha Juripass */}
           <div className="lg:sticky lg:top-8">
-            <JuripassCard cpf={cpfValue} nome={nomeValue} organizacao={empresaNome} />
+            <JuripassCard 
+              cpf={cpfValue}
+              nome={nomeValue}
+              organizacao={empresaNome}
+            />
           </div>
         </div>
       </div>

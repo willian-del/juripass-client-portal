@@ -104,16 +104,16 @@ export default function Login() {
                 'Entrar'
               )}
             </Button>
-          </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              É seu primeiro acesso?{' '}
-              <Link to="/primeiro-acesso" className="text-primary font-medium hover:underline">
-                Crie sua senha aqui
+            <div className="text-center space-y-2">
+              <Link
+                to="/novo-cadastro"
+                className="text-sm text-primary hover:underline block"
+              >
+                Primeiro acesso? Cadastre-se aqui
               </Link>
-            </p>
-          </div>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>
