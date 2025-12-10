@@ -834,6 +834,19 @@ export default function Dependentes() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Botão Voltar ao Dashboard */}
+        <div className="flex justify-center pt-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/dashboard')}
+            className="text-muted-foreground hover:text-juripass-primary"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar ao Dashboard
+          </Button>
+        </div>
       </div>
     </DashboardLayout>
   );
