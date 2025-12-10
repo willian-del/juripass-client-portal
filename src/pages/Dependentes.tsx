@@ -389,10 +389,11 @@ export default function Dependentes() {
 
                     {/* Header compacto */}
                     <div className="flex items-center justify-between relative z-10">
-                      <div className="flex items-center gap-1.5">
-                        <img src="/images/branding/juripass-icon.svg" className="h-5 w-5" alt="" />
-                        <span className="font-bold text-[10px] sm:text-xs tracking-wider">JURIPASS</span>
-                      </div>
+                      <img 
+                        src="/images/branding/juripass-logo-card.png" 
+                        alt="Juripass" 
+                        className="h-5 sm:h-6" 
+                      />
                       <Badge 
                         className={`text-[9px] sm:text-[10px] px-1.5 py-0 h-4 sm:h-5 ${dep.ativo ? 'bg-green-500/20 text-green-100 border border-green-400/30' : 'bg-red-500/20 text-red-100 border border-red-400/30'}`}
                       >
