@@ -3,11 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Button } from '@/components/ui/button';
 
-interface HomeHeaderProps {
-  onLoginClick: () => void;
-}
-
-export function HomeHeader({ onLoginClick }: HomeHeaderProps) {
+export function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
@@ -53,16 +49,8 @@ export function HomeHeader({ onLoginClick }: HomeHeaderProps) {
             </button>
           </nav>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onLoginClick}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Área do Cliente
-            </Button>
+          {/* CTA Button */}
+          <div className="hidden md:flex items-center">
             <Button
               size="sm"
               onClick={() => scrollToSection('contato')}
@@ -113,18 +101,11 @@ export function HomeHeader({ onLoginClick }: HomeHeaderProps) {
               >
                 Blog
               </button>
-              <div className="pt-2 border-t border-border flex flex-col gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onLoginClick}
-                  className="justify-start"
-                >
-                  Área do Cliente
-                </Button>
+              <div className="pt-2 border-t border-border">
                 <Button
                   size="sm"
                   onClick={() => scrollToSection('contato')}
+                  className="w-full"
                 >
                   Solicitar Proposta
                 </Button>
