@@ -7,6 +7,7 @@ import { EmployeeBenefitsSection } from '@/components/home/EmployeeBenefitsSecti
 import { CoverageSection } from '@/components/home/CoverageSection';
 import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { BlogSection } from '@/components/home/BlogSection';
+import { FAQSection } from '@/components/home/FAQSection';
 import { CTASection } from '@/components/home/CTASection';
 import { Footer } from '@/components/ui/Footer';
 
@@ -22,6 +23,7 @@ const Index = () => {
       <CoverageSection />
       <TestimonialsSection />
       <BlogSection />
+      <FAQSection />
       <CTASection />
       <Footer />
     </div>
