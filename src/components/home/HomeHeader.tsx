@@ -47,6 +47,12 @@ export function HomeHeader() {
             >
               Blog
             </button>
+            <button
+              onClick={() => scrollToSection('faq')}
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Dúvidas
+            </button>
           </nav>
 
           {/* CTA Button */}
@@ -100,6 +106,12 @@ export function HomeHeader() {
                 className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
               >
                 Blog
+              </button>
+              <button
+                onClick={() => scrollToSection('faq')}
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
+              >
+                Dúvidas
               </button>
               <div className="pt-2 border-t border-border">
                 <Button
