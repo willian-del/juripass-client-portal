@@ -26,6 +26,15 @@ export function HeroSection() {
       });
     }
   };
+  const scrollToVantagens = () => {
+    const element = document.getElementById('beneficios');
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
   return <section className="relative bg-background py-12 md:py-20 lg:py-24">
       {/* Decorative background elements with parallax */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -75,6 +84,9 @@ export function HeroSection() {
               </Button>
               <Button size="lg" variant="outline" onClick={scrollToPrograma} className="text-base px-8 py-6 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:scale-105 hover:border-primary/60 transition-all duration-300">
                 Conheça o Programa
+              </Button>
+              <Button size="lg" variant="outline" onClick={scrollToVantagens} className="text-base px-8 py-6 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:scale-105 hover:border-primary/60 transition-all duration-300">
+                Vantagens
               </Button>
             </div>
           </div>
