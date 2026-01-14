@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Users, Sparkles, ArrowDown } from 'lucide-react';
+import { Sparkles, ArrowDown } from 'lucide-react';
 import { useScrollParallax } from '@/hooks/useScrollParallax';
 import { JuripassCardVisual } from '@/components/home/JuripassCardVisual';
 export function HeroSection() {
@@ -68,23 +67,6 @@ export function HeroSection() {
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto lg:mx-0">Oferecemos um canal de atendimento jurídico rápido, humano e descomplicado para ajudar seus colaboradores a resolver questões do dia a dia.</p>
             </div>
 
-            {/* Animated Badges */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-              <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{
-              animationDelay: '0.4s',
-              opacity: 0
-            }}>
-                <MessageSquare className="w-4 h-4 mr-2 text-primary" />
-                Atendimento Humanizado
-              </Badge>
-              <Badge variant="outline" className="text-sm py-2 px-4 bg-white/80 backdrop-blur-sm border-primary/30 shadow-sm hover:bg-primary/5 hover:border-primary/50 transition-all animate-fade-in-up" style={{
-              animationDelay: '0.5s',
-              opacity: 0
-            }}>
-                <Users className="w-4 h-4 mr-2 text-primary" />
-                Cobertura Familiar
-              </Badge>
-            </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-6">
