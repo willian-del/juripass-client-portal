@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ExternalLink } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Button } from '@/components/ui/button';
 
@@ -55,8 +55,18 @@ export function HomeHeader() {
             </button>
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center">
+          {/* CTA Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <Button
+              size="sm"
+              variant="outline"
+              asChild
+            >
+              <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-4 w-4 mr-1" />
+                Área do Cliente
+              </a>
+            </Button>
             <Button
               size="sm"
               onClick={() => scrollToSection('contato')}
@@ -113,7 +123,18 @@ export function HomeHeader() {
               >
                 Dúvidas
               </button>
-              <div className="pt-2 border-t border-border">
+              <div className="pt-2 border-t border-border flex flex-col gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  asChild
+                  className="w-full"
+                >
+                  <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-4 w-4 mr-1" />
+                    Área do Cliente
+                  </a>
+                </Button>
                 <Button
                   size="sm"
                   onClick={() => scrollToSection('contato')}
