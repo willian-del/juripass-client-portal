@@ -5,8 +5,11 @@ import { OrganizationalProblemSection } from '@/components/new-home/Organization
 import { WhatIsJuripassSection } from '@/components/new-home/WhatIsJuripassSection';
 import { HowItWorksSection } from '@/components/new-home/HowItWorksSection';
 import { ImpactSection } from '@/components/new-home/ImpactSection';
+import { MidCTASection } from '@/components/new-home/MidCTASection';
+import { SegmentationSection } from '@/components/new-home/SegmentationSection';
+import { HomeFAQSection } from '@/components/new-home/HomeFAQSection';
+import { FinalCTASection } from '@/components/new-home/FinalCTASection';
 import { Footer } from '@/components/ui/Footer';
-
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -18,6 +21,10 @@ const Index = () => {
         <WhatIsJuripassSection />
         <HowItWorksSection />
         <ImpactSection />
+        <MidCTASection />
+        <SegmentationSection />
+        <HomeFAQSection />
+        <FinalCTASection />
       </main>
       <Footer />
     </div>
