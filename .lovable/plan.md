@@ -1,92 +1,130 @@
 
-## Plano: Adicionar Botão "Área do Cliente" no Header
+# Reposicionamento Completo do Site Juripass
 
-### Objetivo
-Adicionar um botão no header que redireciona para o portal do cliente Juripass em uma nova aba, permitindo acesso rápido à área do cliente.
+## Resumo
 
----
-
-### Arquivo a modificar
-
-**`src/components/home/HomeHeader.tsx`**
+Recriacao total do conteudo e arquitetura do site Juripass, passando de "beneficio juridico corporativo" para "canal externo de encaminhamento de situacoes pessoais sensiveis dos colaboradores". Manter cores, header, footer e logo. Criar 5 paginas novas e preservar a versao atual em rota oculta.
 
 ---
 
-### Alterações
+## Estrutura de Paginas
 
-#### 1. Importar ícone (opcional, mas recomendado)
-Adicionar o ícone `ExternalLink` ou `User` do lucide-react para indicar visualmente que é um link externo ou área de usuário:
-
-```tsx
-import { Menu, X, ExternalLink } from 'lucide-react';
-```
-
-#### 2. Atualizar área de botões no Desktop (linhas 58-66)
-Modificar a div de CTA para incluir dois botões lado a lado:
-
-```tsx
-{/* CTA Buttons */}
-<div className="hidden md:flex items-center gap-3">
-  <Button
-    size="sm"
-    variant="outline"
-    asChild
-  >
-    <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
-      <ExternalLink className="h-4 w-4 mr-1" />
-      Área do Cliente
-    </a>
-  </Button>
-  <Button
-    size="sm"
-    onClick={() => scrollToSection('contato')}
-  >
-    Solicitar Proposta
-  </Button>
-</div>
-```
-
-#### 3. Atualizar Menu Mobile (linhas 116-124)
-Adicionar o botão "Área do Cliente" no menu mobile antes do "Solicitar Proposta":
-
-```tsx
-<div className="pt-2 border-t border-border flex flex-col gap-2">
-  <Button
-    size="sm"
-    variant="outline"
-    asChild
-    className="w-full"
-  >
-    <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
-      <ExternalLink className="h-4 w-4 mr-1" />
-      Área do Cliente
-    </a>
-  </Button>
-  <Button
-    size="sm"
-    onClick={() => scrollToSection('contato')}
-    className="w-full"
-  >
-    Solicitar Proposta
-  </Button>
-</div>
-```
+| Rota | Pagina |
+|------|--------|
+| `/` | Home (nova) |
+| `/como-funciona` | Como funciona |
+| `/para-quem` | Segmentacao por ICP |
+| `/faq` | FAQ completo |
+| `/avaliacao` | Pagina oculta de fechamento |
+| `/site-anterior` | Versao atual preservada |
 
 ---
 
-### Resultado Visual
+## Etapa 1 -- Preservar versao atual
 
-| Elemento | Antes | Depois |
-|----------|-------|--------|
-| Desktop | 1 botão CTA | 2 botões: "Área do Cliente" (outline) + "Solicitar Proposta" (primary) |
-| Mobile | 1 botão CTA | 2 botões empilhados |
+- Renomear `Index.tsx` para `LegacyHome.tsx`
+- Criar rota `/site-anterior` apontando para `LegacyHome`
+- Manter todos os componentes antigos intactos em `src/components/home/`
+
+## Etapa 2 -- Atualizar roteamento
+
+Atualizar `App.tsx` com as novas rotas:
+- `/` -> nova Home
+- `/como-funciona` -> ComoFunciona
+- `/para-quem` -> ParaQuem
+- `/faq` -> FAQ
+- `/avaliacao` -> Avaliacao
+- `/site-anterior` -> LegacyHome
+
+## Etapa 3 -- Atualizar Header
+
+Alterar navegacao do `HomeHeader.tsx`:
+- Links: "Como Funciona", "Para Quem", "FAQ"
+- CTA principal: "Conversar rapidamente" (link WhatsApp ou formulario)
+- Manter botao "Area do Cliente"
+- Adaptar para funcionar tanto com scroll (Home) quanto com rotas (outras paginas)
+
+## Etapa 4 -- Nova Home (`src/pages/Index.tsx`)
+
+Criar com as seguintes secoes (novos componentes em `src/components/new-home/`):
+
+1. **HeroSection** -- Titulo: "Alguns problemas pessoais dos colaboradores nao sao da empresa. Mas acabam chegando ate ela." + subtitulo + CTA "Conversar rapidamente" + imagem gerada por IA (gestor sendo abordado por colaborador preocupado)
+
+2. **RecognitionSection** -- "O que costuma chegar ao RH -- mesmo nao sendo tema do RH" com bullets (dividas, separacao, moradia, plano de saude, conflitos familiares, decisoes financeiras)
+
+3. **OrganizationalProblemSection** -- "O RH nao tem um problema juridico. Tem um problema de encaminhamento." + fluxo visual (colaborador -> gestor -> RH -> desgaste)
+
+4. **WhatIsJuripassSection** -- Canal externo e confidencial + bullets de esclarecimento + frase destaque
+
+5. **HowItWorksSection** -- 3 passos simples com diagrama visual
+
+6. **ImpactSection** -- 3 colunas: Para o RH / Para gestores / Para colaboradores
+
+7. **MidCTASection** -- "Se hoje essas situacoes chegam ate voce, vale uma conversa."
+
+8. **SegmentationSection** -- Blocos para Industria, Varejo, Call center
+
+9. **HomeFAQSection** -- 5 perguntas resumidas com respostas curtas
+
+10. **FinalCTASection** -- Texto de fechamento + CTA principal + CTA secundario para `/avaliacao`
+
+## Etapa 5 -- Pagina `/como-funciona`
+
+Pagina dedicada com detalhamento dos 3 passos, diagrama de fluxo visual, e explicacao do modelo de atendimento.
+
+## Etapa 6 -- Pagina `/para-quem`
+
+Segmentacao por ICP com blocos expandidos:
+- Industria: "Quando a vida pessoal impacta o turno"
+- Varejo: "O cliente percebe primeiro"
+- Call center: "O supervisor nao deveria ser apoio emocional"
+
+Cada bloco com 3 linhas explicativas e contexto.
+
+## Etapa 7 -- Pagina `/faq`
+
+FAQ completo com as perguntas especificadas + perguntas adicionais. Tom tranquilizador, respostas curtas.
+
+## Etapa 8 -- Pagina `/avaliacao`
+
+Pagina oculta para compartilhamento interno:
+- Resumo do problema
+- Como funciona
+- Impacto organizacional
+- FAQ completo
+- Investimento (~R$5 mil/mes)
+- Botoes: "Baixar resumo" e "Ver apresentacao comercial"
+
+## Etapa 9 -- Apresentacao navegavel
+
+Componente de slides navegavel dentro do site (nao PDF) com 8-12 slides cobrindo: fenomeno, impacto, falha atual, Juripass, funcionamento, reducao de risco, piloto.
+
+## Etapa 10 -- One-pager
+
+Pagina de resumo de 1 tela com: problema, o que a Juripass faz, como funciona, piloto, investimento. Com botao para download/impressao.
+
+## Etapa 11 -- Atualizar Footer e constantes
+
+- Atualizar tagline em `constants.ts`
+- Atualizar meta description
+- Footer permanece igual
 
 ---
 
-### Detalhes Técnicos
+## Detalhes Tecnicos
 
-- **`asChild`**: Permite que o `Button` renderize como `<a>` mantendo os estilos
-- **`target="_blank"`**: Abre em nova aba
-- **`rel="noopener noreferrer"`**: Segurança para links externos
-- **Ícone `ExternalLink`**: Indica visualmente que é um link externo
-- **`variant="outline"`**: Diferencia visualmente do botão principal de proposta
+- **Novos arquivos**: ~15-20 componentes em `src/components/new-home/` + 4 novas paginas em `src/pages/`
+- **Componentes reutilizados**: Header (adaptado), Footer, Button, Card, Accordion, LogoJuripass
+- **Imagem IA**: Gerar imagem do hero usando Lovable AI (google/gemini-2.5-flash-image)
+- **Design system**: Manter padroes existentes (cores, tipografia, espacamento, hover effects)
+- **Navegacao**: react-router-dom para paginas, scroll suave para secoes dentro da Home
+- **Tom de voz**: Humano, operacional, sem linguagem juridica tecnica
+- **Responsividade**: Mobile-first como o site atual
+
+### Ordem de implementacao sugerida
+
+Dado o tamanho, recomendo implementar em 3-4 rodadas:
+1. Preservar site antigo + nova Home (secoes 1-6)
+2. Home (secoes 7-10) + Header atualizado
+3. Paginas /como-funciona, /para-quem, /faq
+4. Pagina /avaliacao + apresentacao + one-pager
