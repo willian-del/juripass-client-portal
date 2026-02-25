@@ -1,112 +1,72 @@
 
-# Rodada 4 -- Pagina /avaliacao
+# Melhorias de Performance e Navegacao
 
-## Resumo
+## Problema 1: Navegacao -- Sem link "Inicio"
 
-Criar a pagina oculta `/avaliacao` para compartilhamento interno dentro da empresa cliente. Esta pagina consolida o pitch da Juripass em formato executivo, pensado para diretoria, financeiro e juridico avaliarem sem necessidade de reuniao.
+Adicionar "Inicio" como primeiro item no menu de navegacao do `HomeHeader.tsx`, tanto no desktop quanto no mobile.
 
-Tambem inclui uma apresentacao navegavel (slides) e um one-pager para impressao/download.
-
----
-
-## Arquivos a criar
-
-### 1. `src/pages/Avaliacao.tsx`
-
-Pagina principal com layout `HomeHeader + Footer`. Estrutura em blocos:
-
-**Hero compacto**
-- Titulo: "Um resumo para compartilhar internamente"
-- Subtitulo: "Criamos esta pagina para facilitar a avaliacao com diretoria, financeiro e juridico — sem necessidade de nova reuniao."
-
-**Bloco 1 -- O problema**
-- Card com titulo "O que acontece hoje"
-- Resumo: situacoes pessoais chegam ao RH/gestores sem canal adequado
-- 3-4 bullets curtos
-
-**Bloco 2 -- A solucao**
-- Card com titulo "O que a Juripass faz"
-- Canal externo, confidencial, sem envolvimento da empresa
-- 3-4 bullets
-
-**Bloco 3 -- Como funciona**
-- 3 passos visuais (reutiliza conceito do HowItWorksSection)
-
-**Bloco 4 -- Impacto organizacional**
-- 3 colunas: RH, Gestores, Colaboradores (reutiliza conceito do ImpactSection)
-
-**Bloco 5 -- FAQ resumido**
-- 5 perguntas mais relevantes para decisores (risco, custo, implementacao)
-
-**Bloco 6 -- Piloto**
-- Card destacado com informacoes sobre o piloto
-- Duracao: 90 dias
-- Sem compromisso de continuidade
-- Relatorio de utilizacao ao final
-
-**Bloco 7 -- Investimento**
-- Card com fundo destacado
-- "Para o porte da sua empresa: aproximadamente R$5 mil mensais"
-- "Valor fixo, sem cobranca por colaborador ou utilizacao."
-
-**Bloco 8 -- CTAs finais**
-- Botao: "Ver apresentacao completa" (abre componente de slides)
-- Botao: "Baixar resumo em uma pagina" (abre one-pager para impressao)
-- Botao: "Conversar rapidamente" (WhatsApp)
+**Alteracao em `src/components/home/HomeHeader.tsx`:**
+- Adicionar `{ label: 'Inicio', target: '/' }` como primeiro item do array `navItems`
+- Quando o usuario esta na Home, o link rola para o topo da pagina
+- Quando esta em outra pagina, navega de volta para `/`
 
 ---
 
-### 2. `src/components/avaliacao/SlidesPresentation.tsx`
+## Problema 2: Site lento -- Otimizacoes de performance
 
-Componente de apresentacao navegavel com 8 slides:
+### 2a. Reduzir pesos da fonte Montserrat
 
-1. Capa -- "Juripass: Canal externo para situacoes pessoais dos colaboradores"
-2. O fenomeno -- Situacoes pessoais que chegam ao RH
-3. O impacto -- Desgaste em RH e gestores
-4. Por que acontece -- Falta de canal adequado
-5. A falha atual -- Tentativas informais de resolver
-6. A Juripass -- O que e e como funciona
-7. Reducao de risco -- Beneficios organizacionais
-8. Piloto -- Proposta de teste de 90 dias
+Atualmente carrega 7 pesos (300-900). O site usa apenas 400, 500, 600 e 700.
 
-Navegacao: botoes Anterior/Proximo + indicadores de slide. Estilo minimalista e profissional.
+**Alteracao em `index.html`:**
+- Reduzir de `wght@300;400;500;600;700;800;900` para `wght@400;500;600;700`
+- Adicionar `&display=swap` (ja esta, confirmar)
+
+### 2b. Lazy loading das secoes da Home com React.lazy
+
+A pagina Index importa 10 componentes de forma sincrona. Converter as secoes abaixo do fold para carregamento dinamico.
+
+**Alteracao em `src/pages/Index.tsx`:**
+- Manter HeroSection e RecognitionSection como import sincrono (acima do fold)
+- Converter as secoes 3-10 para `React.lazy()` com `Suspense`
+
+### 2c. Otimizar imagem hero
+
+**Alteracao em `src/components/new-home/HeroSection.tsx`:**
+- Trocar `import heroImage from '@/assets/hero-rh-situation.jpg'` por referencia direta `/images/hero-rh-situation.jpg` no public folder
+- Mover o arquivo `src/assets/hero-rh-situation.jpg` para `public/images/hero-rh-situation.jpg`
+- Adicionar atributos `width`, `height` e `fetchpriority="high"` na tag img
+
+### 2d. Reduzir uso de backdrop-blur
+
+Os cards com `backdrop-blur-sm` causam repaint custoso durante scroll, especialmente em dispositivos moveis.
+
+**Alteracao nos componentes de secao:**
+- Substituir `bg-card/80 backdrop-blur-sm` por `bg-card` nos cards que nao estao sobre imagens ou gradientes (a maioria deles)
+- Manter `backdrop-blur` apenas no header (onde realmente faz diferenca visual)
+
+Componentes afetados:
+- `RecognitionSection.tsx`
+- `ImpactSection.tsx`
+- `SegmentationSection.tsx`
+- `WhatIsJuripassSection.tsx` (verificar)
+- `HowItWorksSection.tsx` (verificar)
+- `ComoFunciona.tsx`
+- `ParaQuem.tsx`
+- `FAQ.tsx`
+- `Avaliacao.tsx`
 
 ---
 
-### 3. `src/components/avaliacao/OnePager.tsx`
+## Resumo de arquivos
 
-Pagina unica otimizada para impressao (`@media print`):
+| Arquivo | Tipo de alteracao |
+|---------|------------------|
+| `src/components/home/HomeHeader.tsx` | Adicionar item "Inicio" no navItems |
+| `index.html` | Reduzir pesos da fonte |
+| `src/pages/Index.tsx` | Lazy load das secoes 3-10 |
+| `src/components/new-home/HeroSection.tsx` | Otimizar imagem |
+| `src/assets/hero-rh-situation.jpg` | Mover para public/images/ |
+| ~9 componentes de secao | Remover backdrop-blur desnecessario |
 
-- Logo Juripass no topo
-- O problema (3 linhas)
-- O que a Juripass faz (3 linhas)
-- Como funciona (3 passos)
-- Piloto (duracao + condicoes)
-- Investimento (~R$5 mil/mes)
-- Contato (WhatsApp)
-
-Botao "Imprimir / Salvar como PDF" que aciona `window.print()`.
-
----
-
-## Arquivo a editar
-
-### `src/App.tsx`
-
-Adicionar rota lazy-loaded:
-```
-const Avaliacao = lazy(() => import("./pages/Avaliacao"));
-// ...
-<Route path="/avaliacao" element={<Avaliacao />} />
-```
-
----
-
-## Detalhes tecnicos
-
-- Design system mantido: glassmorphism cards, `py-12 md:py-20`, tipografia padrao
-- Slides usam estado local (`useState` para slide ativo), sem dependencia externa
-- One-pager usa classes `print:` do Tailwind para ocultar header/footer na impressao
-- WhatsApp placeholder `5511999999999` mantido
-- Sem dependencias novas
-- 3 novos arquivos, 1 arquivo editado
+Nenhuma dependencia nova.
