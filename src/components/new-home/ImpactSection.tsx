@@ -31,7 +31,7 @@ export function ImpactSection() {
             {columns.map((col) => (
               <div
                 key={col.title}
-                className="p-6 rounded-xl bg-card/80 backdrop-blur-sm border border-border hover:-translate-y-1 transition-transform space-y-4"
+                className="p-6 rounded-xl bg-card border border-border hover:-translate-y-1 transition-transform space-y-4"
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                   <col.icon className="h-6 w-6 text-primary-foreground" />

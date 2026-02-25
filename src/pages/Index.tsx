@@ -1,15 +1,18 @@
+import { lazy, Suspense } from 'react';
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroSection } from '@/components/new-home/HeroSection';
 import { RecognitionSection } from '@/components/new-home/RecognitionSection';
-import { OrganizationalProblemSection } from '@/components/new-home/OrganizationalProblemSection';
-import { WhatIsJuripassSection } from '@/components/new-home/WhatIsJuripassSection';
-import { HowItWorksSection } from '@/components/new-home/HowItWorksSection';
-import { ImpactSection } from '@/components/new-home/ImpactSection';
-import { MidCTASection } from '@/components/new-home/MidCTASection';
-import { SegmentationSection } from '@/components/new-home/SegmentationSection';
-import { HomeFAQSection } from '@/components/new-home/HomeFAQSection';
-import { FinalCTASection } from '@/components/new-home/FinalCTASection';
 import { Footer } from '@/components/ui/Footer';
+
+const OrganizationalProblemSection = lazy(() => import('@/components/new-home/OrganizationalProblemSection').then(m => ({ default: m.OrganizationalProblemSection })));
+const WhatIsJuripassSection = lazy(() => import('@/components/new-home/WhatIsJuripassSection').then(m => ({ default: m.WhatIsJuripassSection })));
+const HowItWorksSection = lazy(() => import('@/components/new-home/HowItWorksSection').then(m => ({ default: m.HowItWorksSection })));
+const ImpactSection = lazy(() => import('@/components/new-home/ImpactSection').then(m => ({ default: m.ImpactSection })));
+const MidCTASection = lazy(() => import('@/components/new-home/MidCTASection').then(m => ({ default: m.MidCTASection })));
+const SegmentationSection = lazy(() => import('@/components/new-home/SegmentationSection').then(m => ({ default: m.SegmentationSection })));
+const HomeFAQSection = lazy(() => import('@/components/new-home/HomeFAQSection').then(m => ({ default: m.HomeFAQSection })));
+const FinalCTASection = lazy(() => import('@/components/new-home/FinalCTASection').then(m => ({ default: m.FinalCTASection })));
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -17,14 +20,16 @@ const Index = () => {
       <main>
         <HeroSection />
         <RecognitionSection />
-        <OrganizationalProblemSection />
-        <WhatIsJuripassSection />
-        <HowItWorksSection />
-        <ImpactSection />
-        <MidCTASection />
-        <SegmentationSection />
-        <HomeFAQSection />
-        <FinalCTASection />
+        <Suspense fallback={null}>
+          <OrganizationalProblemSection />
+          <WhatIsJuripassSection />
+          <HowItWorksSection />
+          <ImpactSection />
+          <MidCTASection />
+          <SegmentationSection />
+          <HomeFAQSection />
+          <FinalCTASection />
+        </Suspense>
       </main>
       <Footer />
     </div>

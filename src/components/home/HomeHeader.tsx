@@ -24,6 +24,7 @@ export function HomeHeader() {
   };
 
   const navItems = [
+    { label: 'Início', target: '/' },
     { label: 'Como Funciona', target: '/como-funciona' },
     { label: 'Para Quem', target: '/para-quem' },
     { label: 'FAQ', target: '/faq' },

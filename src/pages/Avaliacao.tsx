@@ -57,7 +57,7 @@ export default function Avaliacao() {
         {/* O problema */}
         <section className="py-12 md:py-20 bg-muted/20">
           <div className="container mx-auto px-4 max-w-3xl">
-            <div className="p-6 md:p-8 rounded-xl bg-card/80 backdrop-blur-sm border border-border space-y-4">
+            <div className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-destructive/80 to-destructive/60 flex items-center justify-center">
                   <AlertTriangle className="h-6 w-6 text-destructive-foreground" />
@@ -77,7 +77,7 @@ export default function Avaliacao() {
         {/* A solução */}
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 max-w-3xl">
-            <div className="p-6 md:p-8 rounded-xl bg-card/80 backdrop-blur-sm border border-border space-y-4">
+            <div className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                   <CheckCircle className="h-6 w-6 text-primary-foreground" />
@@ -104,7 +104,7 @@ export default function Avaliacao() {
                 { icon: Lightbulb, number: '02', title: 'Recebe orientação inicial clara', desc: 'Entende o que está acontecendo e quais caminhos existem.' },
                 { icon: ArrowUpRight, number: '03', title: 'Situação é encaminhada adequadamente', desc: 'Com direcionamento profissional, sem sobrecarregar a empresa.' },
               ].map((step) => (
-                <div key={step.number} className="p-6 rounded-xl bg-card/80 backdrop-blur-sm border border-border hover:-translate-y-1 transition-transform space-y-4">
+                <div key={step.number} className="p-6 rounded-xl bg-card border border-border hover:-translate-y-1 transition-transform space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                       <step.icon className="h-6 w-6 text-primary-foreground" />
@@ -129,7 +129,7 @@ export default function Avaliacao() {
                 { icon: Users, title: 'Para gestores', points: ['Deixam de mediar problemas pessoais', 'Menos desgaste emocional', 'Relação profissional preservada'] },
                 { icon: UserCheck, title: 'Para colaboradores', points: ['Alguém acessível para orientar', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento'] },
               ].map((col) => (
-                <div key={col.title} className="p-6 rounded-xl bg-card/80 backdrop-blur-sm border border-border hover:-translate-y-1 transition-transform space-y-4">
+                <div key={col.title} className="p-6 rounded-xl bg-card border border-border hover:-translate-y-1 transition-transform space-y-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                     <col.icon className="h-6 w-6 text-primary-foreground" />
                   </div>
@@ -153,7 +153,7 @@ export default function Avaliacao() {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">Perguntas frequentes</h2>
             <Accordion type="single" collapsible className="space-y-3">
               {faqItems.map((item, i) => (
-                <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl bg-card/80 backdrop-blur-sm border border-border px-6">
+                <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl bg-card border border-border px-6">
                   <AccordionTrigger className="text-left font-medium text-foreground hover:no-underline">
                     {item.q}
                   </AccordionTrigger>
@@ -169,7 +169,7 @@ export default function Avaliacao() {
         {/* Piloto */}
         <section className="py-12 md:py-20">
           <div className="container mx-auto px-4 max-w-3xl">
-            <div className="p-6 md:p-8 rounded-xl bg-card/80 backdrop-blur-sm border border-border space-y-4">
+            <div className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                   <Clock className="h-6 w-6 text-primary-foreground" />

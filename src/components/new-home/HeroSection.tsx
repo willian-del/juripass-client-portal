@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { MessageCircle } from 'lucide-react';
-import heroImage from '@/assets/hero-rh-situation.jpg';
 
 export function HeroSection() {
   return (
@@ -31,9 +30,12 @@ export function HeroSection() {
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <img
-                src={heroImage}
+                src="/images/hero-rh-situation.jpg"
                 alt="Gestor sendo abordado por colaborador preocupado em ambiente corporativo"
                 className="w-full h-auto object-cover"
+                width={800}
+                height={533}
+                fetchPriority="high"
                 loading="eager"
               />
             </div>
