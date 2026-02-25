@@ -1,72 +1,83 @@
 
-# Melhorias de Performance e Navegacao
+# Corrigir Header Consistente e Logo Lento
 
-## Problema 1: Navegacao -- Sem link "Inicio"
+## Problema
 
-Adicionar "Inicio" como primeiro item no menu de navegacao do `HomeHeader.tsx`, tanto no desktop quanto no mobile.
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-**Alteracao em `src/components/home/HomeHeader.tsx`:**
-- Adicionar `{ label: 'Inicio', target: '/' }` como primeiro item do array `navItems`
-- Quando o usuario esta na Home, o link rola para o topo da pagina
-- Quando esta em outra pagina, navega de volta para `/`
+## Solucao
 
----
-
-## Problema 2: Site lento -- Otimizacoes de performance
-
-### 2a. Reduzir pesos da fonte Montserrat
-
-Atualmente carrega 7 pesos (300-900). O site usa apenas 400, 500, 600 e 700.
-
-**Alteracao em `index.html`:**
-- Reduzir de `wght@300;400;500;600;700;800;900` para `wght@400;500;600;700`
-- Adicionar `&display=swap` (ja esta, confirmar)
-
-### 2b. Lazy loading das secoes da Home com React.lazy
-
-A pagina Index importa 10 componentes de forma sincrona. Converter as secoes abaixo do fold para carregamento dinamico.
-
-**Alteracao em `src/pages/Index.tsx`:**
-- Manter HeroSection e RecognitionSection como import sincrono (acima do fold)
-- Converter as secoes 3-10 para `React.lazy()` com `Suspense`
-
-### 2c. Otimizar imagem hero
-
-**Alteracao em `src/components/new-home/HeroSection.tsx`:**
-- Trocar `import heroImage from '@/assets/hero-rh-situation.jpg'` por referencia direta `/images/hero-rh-situation.jpg` no public folder
-- Mover o arquivo `src/assets/hero-rh-situation.jpg` para `public/images/hero-rh-situation.jpg`
-- Adicionar atributos `width`, `height` e `fetchpriority="high"` na tag img
-
-### 2d. Reduzir uso de backdrop-blur
-
-Os cards com `backdrop-blur-sm` causam repaint custoso durante scroll, especialmente em dispositivos moveis.
-
-**Alteracao nos componentes de secao:**
-- Substituir `bg-card/80 backdrop-blur-sm` por `bg-card` nos cards que nao estao sobre imagens ou gradientes (a maioria deles)
-- Manter `backdrop-blur` apenas no header (onde realmente faz diferenca visual)
-
-Componentes afetados:
-- `RecognitionSection.tsx`
-- `ImpactSection.tsx`
-- `SegmentationSection.tsx`
-- `WhatIsJuripassSection.tsx` (verificar)
-- `HowItWorksSection.tsx` (verificar)
-- `ComoFunciona.tsx`
-- `ParaQuem.tsx`
-- `FAQ.tsx`
-- `Avaliacao.tsx`
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-## Resumo de arquivos
+## Alteracoes
 
-| Arquivo | Tipo de alteracao |
-|---------|------------------|
-| `src/components/home/HomeHeader.tsx` | Adicionar item "Inicio" no navItems |
-| `index.html` | Reduzir pesos da fonte |
-| `src/pages/Index.tsx` | Lazy load das secoes 3-10 |
-| `src/components/new-home/HeroSection.tsx` | Otimizar imagem |
-| `src/assets/hero-rh-situation.jpg` | Mover para public/images/ |
-| ~9 componentes de secao | Remover backdrop-blur desnecessario |
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
 Nenhuma dependencia nova.
