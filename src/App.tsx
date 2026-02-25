@@ -10,6 +10,7 @@ const LegacyHome = lazy(() => import("./pages/LegacyHome"));
 const ComoFunciona = lazy(() => import("./pages/ComoFunciona"));
 const ParaQuem = lazy(() => import("./pages/ParaQuem"));
 const FAQ = lazy(() => import("./pages/FAQ"));
+const Avaliacao = lazy(() => import("./pages/Avaliacao"));
 
 const App = () => (
   <TooltipProvider>
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/como-funciona" element={<ComoFunciona />} />
           <Route path="/para-quem" element={<ParaQuem />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/avaliacao" element={<Avaliacao />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
