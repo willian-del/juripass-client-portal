@@ -23,7 +23,7 @@ export function RecognitionSection() {
             {items.map((item) => (
               <div
                 key={item.label}
-                className="flex items-center gap-3 p-4 rounded-xl bg-card/80 backdrop-blur-sm border border-border hover:-translate-y-1 transition-transform"
+                className="flex items-center gap-3 p-4 rounded-xl bg-card border border-border hover:-translate-y-1 transition-transform"
               >
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <item.icon className="h-5 w-5 text-primary" />

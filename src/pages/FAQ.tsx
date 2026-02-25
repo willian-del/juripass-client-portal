@@ -105,7 +105,7 @@ const FAQPage = () => {
                       <AccordionItem
                         key={idx}
                         value={`${cat.title}-${idx}`}
-                        className="rounded-xl bg-card/80 backdrop-blur-sm border border-border px-5"
+                        className="rounded-xl bg-card border border-border px-5"
                       >
                         <AccordionTrigger className="text-left text-foreground font-medium hover:no-underline">
                           {item.q}

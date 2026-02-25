@@ -79,7 +79,7 @@ const ParaQuem = () => {
               {segments.map((seg) => (
                 <div
                   key={seg.title}
-                  className="p-6 md:p-8 rounded-xl bg-card/80 backdrop-blur-sm border border-border space-y-5"
+                  className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-5"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shrink-0">
@@ -122,7 +122,7 @@ const ParaQuem = () => {
                 {alsoServe.map((item) => (
                   <div
                     key={item.label}
-                    className="p-6 rounded-xl bg-card/80 backdrop-blur-sm border border-border text-center space-y-4"
+                    className="p-6 rounded-xl bg-card border border-border text-center space-y-4"
                   >
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto">
                       <item.icon className="h-6 w-6 text-primary-foreground" />
