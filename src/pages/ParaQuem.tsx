@@ -1,5 +1,3 @@
-import { HomeHeader } from '@/components/home/HomeHeader';
-import { Footer } from '@/components/ui/Footer';
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, MessageCircle } from 'lucide-react';
 
 const segments = [
@@ -12,10 +10,8 @@ const segments = [
       'Gestor de linha absorve problemas pessoais',
       'Absenteísmo e afastamentos aumentam sem causa aparente',
     ],
-    context:
-      'Em operações com turnos, um colaborador desestabilizado representa risco. Mas ninguém sabe como encaminhar sem parecer invasivo.',
-    example:
-      '"Um operador de produção começou a faltar toda segunda-feira. O supervisor tentou conversar, mas não sabia como abordar. Três meses depois, o colaborador pediu demissão."',
+    context: 'Em operações com turnos, um colaborador desestabilizado representa risco. Mas ninguém sabe como encaminhar sem parecer invasivo.',
+    example: '"Um operador de produção começou a faltar toda segunda-feira. O supervisor tentou conversar, mas não sabia como abordar. Três meses depois, o colaborador pediu demissão."',
   },
   {
     icon: ShoppingBag,
@@ -26,10 +22,8 @@ const segments = [
       'Alta rotatividade dificulta qualquer acompanhamento',
       'Gerente de loja vira "psicólogo" da equipe',
     ],
-    context:
-      'A rotatividade já é alta. Quando um colaborador está lidando com algo pessoal grave, a produtividade cai antes de qualquer aviso.',
-    example:
-      '"Uma vendedora top performer começou a ter conflitos com colegas. Descobriu-se depois que estava passando por uma separação difícil. A loja perdeu a melhor do time."',
+    context: 'A rotatividade já é alta. Quando um colaborador está lidando com algo pessoal grave, a produtividade cai antes de qualquer aviso.',
+    example: '"Uma vendedora top performer começou a ter conflitos com colegas. Descobriu-se depois que estava passando por uma separação difícil. A loja perdeu a melhor do time."',
   },
   {
     icon: Headphones,
@@ -40,10 +34,8 @@ const segments = [
       'Pausas e afastamentos crescem sem diagnóstico claro',
       'Supervisor acumula papel que não é dele',
     ],
-    context:
-      'A pressão do atendimento já é intensa. Quando somada a problemas pessoais não resolvidos, o resultado é absenteísmo e turnover.',
-    example:
-      '"Um operador com problemas de guarda dos filhos passou a sair antes do fim do turno. O supervisor não tinha como ajudar e a produtividade da célula inteira caiu."',
+    context: 'A pressão do atendimento já é intensa. Quando somada a problemas pessoais não resolvidos, o resultado é absenteísmo e turnover.',
+    example: '"Um operador com problemas de guarda dos filhos passou a sair antes do fim do turno. O supervisor não tinha como ajudar e a produtividade da célula inteira caiu."',
   },
 ];
 
@@ -55,111 +47,98 @@ const alsoServe = [
 
 const ParaQuem = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <HomeHeader />
-      <main>
-        {/* Hero */}
-        <section className="py-12 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center space-y-4">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
-                Para quem a Juripass faz mais sentido
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                Empresas onde situações pessoais dos colaboradores já impactam a operação — mesmo que ninguém fale sobre isso.
-              </p>
-            </div>
+    <>
+      {/* Hero */}
+      <section className="py-12 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+              Para quem a Juripass faz mais sentido
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Empresas onde situações pessoais dos colaboradores já impactam a operação — mesmo que ninguém fale sobre isso.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Segmentos expandidos */}
-        <section className="py-12 md:py-20 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto space-y-8">
-              {segments.map((seg) => (
-                <div
-                  key={seg.title}
-                  className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-5"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shrink-0">
-                      <seg.icon className="h-7 w-7 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-foreground">{seg.title}</h2>
-                      <p className="text-sm text-primary font-medium">{seg.subtitle}</p>
-                    </div>
+      {/* Segmentos expandidos */}
+      <section className="py-12 md:py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto space-y-8">
+            {segments.map((seg) => (
+              <div key={seg.title} className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shrink-0">
+                    <seg.icon className="h-7 w-7 text-primary-foreground" />
                   </div>
+                  <div>
+                    <h2 className="text-xl md:text-2xl font-bold text-foreground">{seg.title}</h2>
+                    <p className="text-sm text-primary font-medium">{seg.subtitle}</p>
+                  </div>
+                </div>
+                <ul className="space-y-2">
+                  {seg.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-muted-foreground">{seg.context}</p>
+                <blockquote className="border-l-2 border-primary/40 pl-4 text-sm italic text-muted-foreground">
+                  {seg.example}
+                </blockquote>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                  <ul className="space-y-2">
-                    {seg.points.map((point) => (
-                      <li key={point} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p className="text-muted-foreground">{seg.context}</p>
-
-                  <blockquote className="border-l-2 border-primary/40 pl-4 text-sm italic text-muted-foreground">
-                    {seg.example}
-                  </blockquote>
+      {/* Também atendemos */}
+      <section className="py-12 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto space-y-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
+              Também atendemos
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {alsoServe.map((item) => (
+                <div key={item.label} className="p-6 rounded-xl bg-card border border-border text-center space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto">
+                    <item.icon className="h-6 w-6 text-primary-foreground" />
+                  </div>
+                  <p className="font-medium text-foreground">{item.label}</p>
                 </div>
               ))}
             </div>
+            <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+              Qualquer empresa com mais de 200 colaboradores, onde o RH já percebe que situações pessoais impactam o dia a dia.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Também atendemos */}
-        <section className="py-12 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto space-y-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
-                Também atendemos
-              </h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                {alsoServe.map((item) => (
-                  <div
-                    key={item.label}
-                    className="p-6 rounded-xl bg-card border border-border text-center space-y-4"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto">
-                      <item.icon className="h-6 w-6 text-primary-foreground" />
-                    </div>
-                    <p className="font-medium text-foreground">{item.label}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-                Qualquer empresa com mais de 200 colaboradores, onde o RH já percebe que situações pessoais impactam o dia a dia.
-              </p>
-            </div>
+      {/* CTA */}
+      <section className="py-12 md:py-20 bg-gradient-to-br from-primary/90 to-primary">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
+              Sua empresa se encaixa? Vale uma conversa rápida.
+            </h2>
+            <a
+              href="https://wa.me/5511999999999"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
+            >
+              <MessageCircle className="h-5 w-5" />
+              Conversar rapidamente
+            </a>
           </div>
-        </section>
-
-        {/* CTA */}
-        <section className="py-12 md:py-20 bg-gradient-to-br from-primary/90 to-primary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center space-y-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
-                Sua empresa se encaixa? Vale uma conversa rápida.
-              </h2>
-              <a
-                href="https://wa.me/5511999999999"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
-              >
-                <MessageCircle className="h-5 w-5" />
-                Conversar rapidamente
-              </a>
-            </div>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </>
   );
 };
 
