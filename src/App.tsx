@@ -7,6 +7,9 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 const LegacyHome = lazy(() => import("./pages/LegacyHome"));
+const ComoFunciona = lazy(() => import("./pages/ComoFunciona"));
+const ParaQuem = lazy(() => import("./pages/ParaQuem"));
+const FAQ = lazy(() => import("./pages/FAQ"));
 
 const App = () => (
   <TooltipProvider>
@@ -17,6 +20,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/site-anterior" element={<LegacyHome />} />
+          <Route path="/como-funciona" element={<ComoFunciona />} />
+          <Route path="/para-quem" element={<ParaQuem />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
