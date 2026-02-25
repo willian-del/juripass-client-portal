@@ -1,8 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroSection } from '@/components/new-home/HeroSection';
 import { RecognitionSection } from '@/components/new-home/RecognitionSection';
-import { Footer } from '@/components/ui/Footer';
 
 const OrganizationalProblemSection = lazy(() => import('@/components/new-home/OrganizationalProblemSection').then(m => ({ default: m.OrganizationalProblemSection })));
 const WhatIsJuripassSection = lazy(() => import('@/components/new-home/WhatIsJuripassSection').then(m => ({ default: m.WhatIsJuripassSection })));
@@ -15,24 +13,20 @@ const FinalCTASection = lazy(() => import('@/components/new-home/FinalCTASection
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <HomeHeader />
-      <main>
-        <HeroSection />
-        <RecognitionSection />
-        <Suspense fallback={null}>
-          <OrganizationalProblemSection />
-          <WhatIsJuripassSection />
-          <HowItWorksSection />
-          <ImpactSection />
-          <MidCTASection />
-          <SegmentationSection />
-          <HomeFAQSection />
-          <FinalCTASection />
-        </Suspense>
-      </main>
-      <Footer />
-    </div>
+    <>
+      <HeroSection />
+      <RecognitionSection />
+      <Suspense fallback={null}>
+        <OrganizationalProblemSection />
+        <WhatIsJuripassSection />
+        <HowItWorksSection />
+        <ImpactSection />
+        <MidCTASection />
+        <SegmentationSection />
+        <HomeFAQSection />
+        <FinalCTASection />
+      </Suspense>
+    </>
   );
 };
 
