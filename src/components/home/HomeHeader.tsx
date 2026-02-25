@@ -1,77 +1,68 @@
 import { useState } from 'react';
-import { Menu, X, ExternalLink } from 'lucide-react';
+import { Menu, X, ExternalLink, MessageCircle } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Button } from '@/components/ui/button';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setMobileMenuOpen(false);
+  const isHome = location.pathname === '/';
+
+  const handleNav = (target: string) => {
+    setMobileMenuOpen(false);
+    if (target.startsWith('/')) {
+      navigate(target);
+    } else if (isHome) {
+      const element = document.getElementById(target);
+      if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      navigate('/', { state: { scrollTo: target } });
     }
   };
+
+  const navItems = [
+    { label: 'Como Funciona', target: '/como-funciona' },
+    { label: 'Para Quem', target: '/para-quem' },
+    { label: 'FAQ', target: '/faq' },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <LogoJuripass variant="full" size="md" format="png" clickable={false} />
+          <button onClick={() => navigate('/')}>
+            <LogoJuripass variant="full" size="md" format="png" clickable={false} />
+          </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <button
-              onClick={() => scrollToSection('programa')}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
-              O Programa
-            </button>
-            <button
-              onClick={() => scrollToSection('beneficios')}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
-              Benefícios
-            </button>
-            <button
-              onClick={() => scrollToSection('cobertura')}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
-              Cobertura
-            </button>
-            <button
-              onClick={() => scrollToSection('blog')}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
-              Blog
-            </button>
-            <button
-              onClick={() => scrollToSection('faq')}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
-              Dúvidas
-            </button>
+            {navItems.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => handleNav(item.target)}
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+              >
+                {item.label}
+              </button>
+            ))}
           </nav>
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button
-              size="sm"
-              variant="outline"
-              asChild
-            >
+            <Button size="sm" variant="outline" asChild>
               <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-1" />
                 Área do Cliente
               </a>
             </Button>
-            <Button
-              size="sm"
-              onClick={() => scrollToSection('contato')}
-            >
-              Solicitar Proposta
+            <Button size="sm" asChild>
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="h-4 w-4 mr-1" />
+                Conversar rapidamente
+              </a>
             </Button>
           </div>
 
@@ -81,11 +72,7 @@ export function HomeHeader() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
@@ -93,54 +80,27 @@ export function HomeHeader() {
         {mobileMenuOpen && (
           <nav className="md:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-4">
-              <button
-                onClick={() => scrollToSection('programa')}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-              >
-                O Programa
-              </button>
-              <button
-                onClick={() => scrollToSection('beneficios')}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-              >
-                Benefícios
-              </button>
-              <button
-                onClick={() => scrollToSection('cobertura')}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-              >
-                Cobertura
-              </button>
-              <button
-                onClick={() => scrollToSection('blog')}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-              >
-                Blog
-              </button>
-              <button
-                onClick={() => scrollToSection('faq')}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
-              >
-                Dúvidas
-              </button>
-              <div className="pt-2 border-t border-border flex flex-col gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  asChild
-                  className="w-full"
+              {navItems.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => handleNav(item.target)}
+                  className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
                 >
+                  {item.label}
+                </button>
+              ))}
+              <div className="pt-2 border-t border-border flex flex-col gap-2">
+                <Button size="sm" variant="outline" asChild className="w-full">
                   <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="h-4 w-4 mr-1" />
                     Área do Cliente
                   </a>
                 </Button>
-                <Button
-                  size="sm"
-                  onClick={() => scrollToSection('contato')}
-                  className="w-full"
-                >
-                  Solicitar Proposta
+                <Button size="sm" asChild className="w-full">
+                  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="h-4 w-4 mr-1" />
+                    Conversar rapidamente
+                  </a>
                 </Button>
               </div>
             </div>

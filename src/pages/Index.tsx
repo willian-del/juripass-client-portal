@@ -1,30 +1,24 @@
 import { HomeHeader } from '@/components/home/HomeHeader';
-import { HeroSection } from '@/components/home/HeroSection';
-import { ProblemSection } from '@/components/home/ProblemSection';
-import { SolutionSection } from '@/components/home/SolutionSection';
-import { BenefitsSection } from '@/components/home/BenefitsSection';
-import { EmployeeBenefitsSection } from '@/components/home/EmployeeBenefitsSection';
-import { CoverageSection } from '@/components/home/CoverageSection';
-import { TestimonialsSection } from '@/components/home/TestimonialsSection';
-import { BlogSection } from '@/components/home/BlogSection';
-import { FAQSection } from '@/components/home/FAQSection';
-import { CTASection } from '@/components/home/CTASection';
+import { HeroSection } from '@/components/new-home/HeroSection';
+import { RecognitionSection } from '@/components/new-home/RecognitionSection';
+import { OrganizationalProblemSection } from '@/components/new-home/OrganizationalProblemSection';
+import { WhatIsJuripassSection } from '@/components/new-home/WhatIsJuripassSection';
+import { HowItWorksSection } from '@/components/new-home/HowItWorksSection';
+import { ImpactSection } from '@/components/new-home/ImpactSection';
 import { Footer } from '@/components/ui/Footer';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <HomeHeader />
-      <HeroSection />
-      <ProblemSection />
-      <SolutionSection />
-      <BenefitsSection />
-      <EmployeeBenefitsSection />
-      <CoverageSection />
-      <TestimonialsSection />
-      <BlogSection />
-      <FAQSection />
-      <CTASection />
+      <main>
+        <HeroSection />
+        <RecognitionSection />
+        <OrganizationalProblemSection />
+        <WhatIsJuripassSection />
+        <HowItWorksSection />
+        <ImpactSection />
+      </main>
       <Footer />
     </div>
   );
