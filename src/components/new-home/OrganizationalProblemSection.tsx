@@ -32,7 +32,7 @@ export function OrganizationalProblemSection() {
 
                 {/* Card */}
                 <div
-                  className={`flex flex-col items-center gap-3 px-6 py-5 rounded-2xl border min-w-[140px] shadow-sm transition-all duration-200 ${
+                  className={`flex flex-col items-center justify-center gap-3 px-6 py-5 rounded-2xl border w-[180px] md:w-[150px] h-[140px] shadow-sm transition-all duration-200 ${
                     step.highlight
                       ? 'bg-destructive/10 border-destructive/30 shadow-destructive/10'
                       : 'bg-card border-border hover:shadow-md'
