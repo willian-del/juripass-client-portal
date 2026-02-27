@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { HeroSection } from '@/components/new-home/HeroSection';
 import { RecognitionSection } from '@/components/new-home/RecognitionSection';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const OrganizationalProblemSection = lazy(() => import('@/components/new-home/OrganizationalProblemSection').then(m => ({ default: m.OrganizationalProblemSection })));
 const WhatIsJuripassSection = lazy(() => import('@/components/new-home/WhatIsJuripassSection').then(m => ({ default: m.WhatIsJuripassSection })));
@@ -15,16 +16,34 @@ const Index = () => {
   return (
     <>
       <HeroSection />
-      <RecognitionSection />
+      <ScrollReveal>
+        <RecognitionSection />
+      </ScrollReveal>
       <Suspense fallback={null}>
-        <OrganizationalProblemSection />
-        <WhatIsJuripassSection />
-        <HowItWorksSection />
-        <ImpactSection />
-        <MidCTASection />
-        <SegmentationSection />
-        <HomeFAQSection />
-        <FinalCTASection />
+        <ScrollReveal>
+          <OrganizationalProblemSection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <WhatIsJuripassSection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <HowItWorksSection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <ImpactSection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <MidCTASection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <SegmentationSection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <HomeFAQSection />
+        </ScrollReveal>
+        <ScrollReveal>
+          <FinalCTASection />
+        </ScrollReveal>
       </Suspense>
     </>
   );
