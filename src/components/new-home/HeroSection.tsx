@@ -12,12 +12,9 @@ export function HeroSection() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center space-y-8">
-          <h1 className="text-5xl md:text-6xl lg:text-[4rem] font-bold tracking-tight leading-tight text-foreground">
-            Alguns problemas pessoais dos<br />
-            colaboradores não são da<br />
-            empresa.{' '}
-            <span className="text-primary">Mas acabam<br />
-            chegando até ela.</span>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight text-foreground lg:text-5xl">
+            Alguns problemas pessoais dos colaboradores não são da empresa.{' '}
+            <span className="text-primary">Mas acabam chegando até ela.</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             A Juripass cria um canal externo e confidencial para orientar essas situações
