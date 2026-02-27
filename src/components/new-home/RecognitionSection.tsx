@@ -1,13 +1,15 @@
-import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText } from 'lucide-react';
+import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, ShoppingBag } from 'lucide-react';
 
 const items = [
   { icon: Wallet, label: 'Endividamento e negativação' },
   { icon: Heart, label: 'Conflitos familiares' },
-  { icon: Home, label: 'Problemas com aluguel ou moradia' },
-  { icon: Shield, label: 'Golpes digitais' },
-  { icon: FileText, label: 'Inventários e organização documental' },
-  { icon: CreditCard, label: 'Relações de consumo e garantias' },
+  { icon: Home, label: 'Problemas com moradia' },
+  { icon: Shield, label: 'Golpes e fraudes digitais' },
+  { icon: FileText, label: 'Inventários e documentos' },
+  { icon: CreditCard, label: 'Direitos do consumidor' },
   { icon: Users, label: 'Separação e guarda' },
+  { icon: Scale, label: 'Pensão alimentícia' },
+  { icon: ShoppingBag, label: 'Cobranças indevidas' },
 ];
 
 export function RecognitionSection() {
@@ -24,7 +26,7 @@ export function RecognitionSection() {
             {items.map((item) => (
               <div
                 key={item.label}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 min-h-[72px]"
               >
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <item.icon className="h-5 w-5 text-primary" />
