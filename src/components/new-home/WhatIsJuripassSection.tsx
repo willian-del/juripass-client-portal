@@ -1,18 +1,10 @@
-import { Check, ShieldCheck } from 'lucide-react';
-
-const clarifications = [
-  'Orientação inicial de caráter informativo',
-  'Não substitui consulta jurídica formal',
-  'A empresa não participa nem recebe conteúdo',
-  'Não inclui representação judicial ou administrativa',
-  'Dados pertencem ao colaborador, protegidos pela LGPD',
-];
+import { ShieldCheck } from 'lucide-react';
 
 export function WhatIsJuripassSection() {
   return (
     <section className="py-16 md:py-24 bg-accent/30">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto space-y-10">
+        <div className="max-w-3xl mx-auto space-y-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             O que é a Juripass
           </h2>
@@ -23,20 +15,6 @@ export function WhatIsJuripassSection() {
             colaboradores obterem orientação informativa sobre direitos e caminhos
             legais possíveis em situações do dia a dia.
           </p>
-
-          <div className="grid sm:grid-cols-2 gap-3">
-            {clarifications.map((item) => (
-              <div
-                key={item}
-                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm"
-              >
-                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-3.5 w-3.5 text-primary" />
-                </div>
-                <span className="text-sm text-foreground">{item}</span>
-              </div>
-            ))}
-          </div>
 
           <div className="bg-gradient-dark rounded-2xl p-10 text-center space-y-4">
             <p className="text-xl md:text-2xl font-semibold text-primary-foreground leading-relaxed italic">
