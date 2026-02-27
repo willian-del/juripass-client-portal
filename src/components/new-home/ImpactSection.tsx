@@ -4,17 +4,32 @@ const columns = [
   {
     icon: ShieldCheck,
     title: 'Para o RH',
-    points: ['Menos relatos delicados no dia a dia', 'Menos aconselhamento informal', 'Foco nas demandas estratégicas'],
+    points: [
+      'Menos relatos delicados no dia a dia',
+      'Apoio à gestão de pessoas e mediação inicial',
+      'Foco nas demandas estratégicas',
+      'Fortalecimento do employer branding',
+    ],
   },
   {
     icon: Users,
     title: 'Para gestores',
-    points: ['Deixam de mediar problemas pessoais', 'Menos desgaste emocional', 'Relação profissional preservada'],
+    points: [
+      'Deixam de mediar problemas pessoais',
+      'Menos desgaste emocional',
+      'Relação profissional preservada',
+      'Aderência à prevenção de riscos psicossociais (NR-1)',
+    ],
   },
   {
     icon: UserCheck,
     title: 'Para colaboradores',
-    points: ['Alguém acessível para orientar', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento'],
+    points: [
+      'Orientação sem custo no atendimento inicial',
+      'Decisões importantes com mais clareza',
+      'Canal confidencial e sem julgamento',
+      'Conteúdos educativos preventivos',
+    ],
   },
 ];
 
