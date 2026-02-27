@@ -1,83 +1,55 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Redesign do fluxo visual na OrganizationalProblemSection
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Problema atual
 
-## Solucao
+A linha conectora (`h-px bg-border`) passa por cima dos cards porque usa `absolute top-1/2` e os cards nao tem z-index suficiente ou background opaco para cobri-la. O card "Desgaste" em especial fica com a linha preta visivel atravessando o texto. O design geral e simples demais.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+## Novo design
 
----
+Substituir o fluxo linear por um design mais sofisticado usando **chevrons/setas estilizadas** entre os cards, sem linha conectora absoluta. Inspirado em pipelines visuais de SaaS.
 
-## Alteracoes
-
-### 1. Criar `src/layouts/MainLayout.tsx`
-
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### Estrutura visual:
 
 ```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+[ Colaborador ]  -->  [ Gestor ]  -->  [ RH ]  -->  [ Desgaste ]
 ```
 
-### 2. Atualizar `src/App.tsx`
+### Detalhes:
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+1. **Remover a linha conectora absoluta** (a causa do bug visual)
+2. **Adicionar setas SVG** (`ChevronRight` do lucide) entre cada card como separadores visuais
+3. **Cards mais elegantes**: padding maior, gradiente sutil no background, icones no topo de cada card (User, Users, Building2, AlertTriangle)
+4. **Card "Desgaste" diferenciado**: fundo com gradiente vermelho sutil, icone de alerta, borda mais marcada
+5. **Mobile**: Stack vertical com setas apontando para baixo (`ChevronDown`)
+6. **Segunda linha de texto**: Destacar "Mas nenhum deles deveria assumir esse papel." em cor primary para mais impacto
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+### Icones por step:
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+| Step | Icone | Estilo |
+|------|-------|--------|
+| Colaborador | User | bg-accent, text-primary |
+| Gestor | Users | bg-accent, text-primary |
+| RH | Building2 | bg-accent, text-primary |
+| Desgaste | AlertTriangle | bg-destructive/10, text-destructive |
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+### Layout do card:
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
+- Icone circular no topo (40x40, rounded-full, bg colorido)
+- Label em font-semibold
+- Sublabel em text-muted-foreground
+- rounded-2xl, shadow-sm, hover:shadow-md
+- min-w-[140px]
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+### Setas entre cards:
 
-### 4. Garantir scroll to top na navegacao
+- Desktop: `ChevronRight` com `text-muted-foreground/40`, tamanho 20px
+- Mobile: `ChevronDown` centralizado entre os cards empilhados
 
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+## Arquivo alterado
 
----
+| Arquivo | Alteracao |
+|---------|-----------|
+| `src/components/new-home/OrganizationalProblemSection.tsx` | Redesign completo do fluxo visual com icones, setas e card diferenciado |
 
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
