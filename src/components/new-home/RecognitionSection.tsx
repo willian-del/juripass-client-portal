@@ -2,14 +2,14 @@ import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, Shoppi
 
 const items = [
   { icon: Wallet, label: 'Endividamento e negativação' },
-  { icon: Heart, label: 'Conflitos familiares' },
-  { icon: Home, label: 'Problemas com moradia' },
+  { icon: Heart, label: 'Conflitos e questões familiares' },
+  { icon: Home, label: 'Problemas com moradia e aluguel' },
   { icon: Shield, label: 'Golpes e fraudes digitais' },
-  { icon: FileText, label: 'Inventários e documentos' },
-  { icon: CreditCard, label: 'Direitos do consumidor' },
-  { icon: Users, label: 'Separação e guarda' },
-  { icon: Scale, label: 'Pensão alimentícia' },
-  { icon: ShoppingBag, label: 'Cobranças indevidas' },
+  { icon: FileText, label: 'Inventários e regularização de documentos' },
+  { icon: CreditCard, label: 'Direitos do consumidor e compras' },
+  { icon: Users, label: 'Separação e guarda de filhos' },
+  { icon: Scale, label: 'Revisão e pagamento de pensão' },
+  { icon: ShoppingBag, label: 'Cobranças e taxas indevidas' },
 ];
 
 export function RecognitionSection() {
