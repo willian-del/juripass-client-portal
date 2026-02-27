@@ -1,4 +1,4 @@
-import { MessageCircle, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare } from 'lucide-react';
+import { MessageCircle, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare, Users, Clock, FileCheck } from 'lucide-react';
 
 const steps = [
   {
@@ -7,19 +7,19 @@ const steps = [
     title: 'Colaborador entra em contato direto',
     description: 'O primeiro passo é simples: o colaborador manda uma mensagem.',
     details: [
-      'Via WhatsApp, sem precisar passar pelo RH',
+      'Via WhatsApp ou aplicativo, sem precisar passar pelo RH',
       'Canal disponível em horário estendido',
-      'Sem cadastro, sem app, sem complicação',
+      'Acesso simples, sem complicação',
     ],
   },
   {
     icon: Lightbulb,
     number: '02',
-    title: 'Recebe orientação inicial clara',
-    description: 'Um profissional analisa a situação e orienta com clareza.',
+    title: 'Equipe treinada acolhe e organiza a demanda',
+    description: 'Profissionais treinados analisam a situação e orientam com linguagem clara e acessível.',
     details: [
       'Entende o que está acontecendo na sua situação',
-      'Recebe informações sobre caminhos possíveis',
+      'Recebe orientação informativa sobre direitos e caminhos possíveis',
       'Sabe o que pode e o que não pode fazer',
     ],
   },
@@ -27,19 +27,20 @@ const steps = [
     icon: ArrowUpRight,
     number: '03',
     title: 'Situação é encaminhada adequadamente',
-    description: 'Se necessário, o colaborador é direcionado ao profissional certo.',
+    description: 'Se necessário, o colaborador é direcionado a advogado habilitado.',
     details: [
-      'Se necessário, é direcionado a um profissional especializado',
+      'Encaminhamento a profissional especializado quando necessário',
       'A empresa não participa e não recebe informações',
       'O colaborador segue com autonomia',
     ],
   },
 ];
 
-const companySteps = [
-  { icon: MessageSquare, text: 'Comunicar o benefício aos colaboradores' },
-  { icon: CheckCircle2, text: 'Nenhuma integração técnica necessária' },
-  { icon: Building2, text: 'Nenhum envolvimento do RH nas conversas' },
+const implantationSteps = [
+  { icon: MessageSquare, title: 'Reunião de kick-off', description: 'Alinhamento inicial com o time de RH para entender o contexto da empresa.' },
+  { icon: FileCheck, title: 'Material de comunicação interna', description: 'Fornecemos todo o material necessário para apresentar o benefício aos colaboradores.' },
+  { icon: Users, title: 'Apoio ao RH e treinamento', description: 'Treinamento da equipe e suporte contínuo para garantir engajamento.' },
+  { icon: CheckCircle2, title: 'Acompanhamento de engajamento', description: 'Monitoramento contínuo de adesão e relatórios agregados.' },
 ];
 
 const ComoFunciona = () => {
@@ -85,24 +86,35 @@ const ComoFunciona = () => {
                 </ul>
               </div>
             ))}
+
+            <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+              <Clock className="h-4 w-4 text-primary" />
+              <span>Prazo estimado de primeiro retorno: até 1 dia útil</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* O que a empresa precisa fazer */}
+      {/* Implantação */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
-              O que a empresa precisa fazer
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {companySteps.map((item) => (
-                <div key={item.text} className="p-6 rounded-xl bg-card border border-border text-center space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto">
+            <div className="text-center space-y-3">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                Implantação simples e rápida
+              </h2>
+              <p className="text-muted-foreground">
+                Prazo médio de ativação: até 15 dias após assinatura. <strong className="text-foreground">Sem taxa de implantação.</strong>
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {implantationSteps.map((item) => (
+                <div key={item.title} className="p-6 rounded-xl bg-card border border-border space-y-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                     <item.icon className="h-6 w-6 text-primary-foreground" />
                   </div>
-                  <p className="font-medium text-foreground">{item.text}</p>
+                  <h3 className="font-semibold text-foreground">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
               ))}
             </div>

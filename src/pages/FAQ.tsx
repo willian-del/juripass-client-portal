@@ -5,8 +5,8 @@ const categories = [
   {
     title: 'Sobre o serviço',
     items: [
-      { q: 'O que exatamente a Juripass faz?', a: 'A Juripass é um canal externo de orientação e encaminhamento para situações pessoais sensíveis dos colaboradores — como questões familiares, financeiras ou jurídicas — que não cabem ao RH resolver.' },
-      { q: 'Isso é assistência jurídica?', a: 'Não. A Juripass oferece orientação e encaminhamento, não representação legal. O colaborador entende sua situação e é direcionado ao profissional adequado, se necessário.' },
+      { q: 'O que exatamente a Juripass faz?', a: 'A Juripass é uma plataforma de acolhimento, organização de demandas e facilitação de acesso a profissionais habilitados. Oferece orientação informativa sobre direitos e caminhos legais possíveis para situações pessoais do dia a dia dos colaboradores.' },
+      { q: 'Isso é assistência jurídica?', a: 'Não. A Juripass oferece orientação inicial de caráter informativo. Não inclui elaboração de peças processuais, análise aprofundada de contratos complexos ou representação judicial ou administrativa. Quando necessário, o colaborador é encaminhado a advogado habilitado.' },
       { q: 'A Juripass substitui o RH?', a: 'Não. O RH continua com seu papel estratégico. A Juripass cuida do que não cabe ao RH: situações pessoais sensíveis que precisam de um canal externo e confidencial.' },
     ],
   },
@@ -15,23 +15,23 @@ const categories = [
     items: [
       { q: 'A empresa assume algum risco?', a: 'Não. A Juripass opera de forma completamente independente. A empresa oferece o benefício, mas não participa das conversas nem tem acesso a nenhuma informação.' },
       { q: 'O colaborador pode processar a empresa por causa da Juripass?', a: 'Não. O canal é externo e confidencial. A empresa está oferecendo um benefício — não assumindo responsabilidade sobre o conteúdo das orientações.' },
-      { q: 'A empresa tem acesso ao conteúdo das conversas?', a: 'Não. Nenhuma informação individual é compartilhada com a empresa. Os relatórios são completamente anonimizados e mostram apenas dados agregados de utilização.' },
+      { q: 'A empresa tem acesso ao conteúdo das conversas?', a: 'Não. O conteúdo dos atendimentos não é compartilhado com a empresa. A empresa recebe apenas dados estatísticos agregados e anonimizados. Os dados pertencem ao colaborador, protegidos pela LGPD, com sigilo profissional e controles de segurança da informação.' },
     ],
   },
   {
     title: 'Sobre implementação',
     items: [
-      { q: 'Como é feita a implementação?', a: 'Simples: a empresa comunica o benefício aos colaboradores e a Juripass cuida de todo o resto. Não há sistemas para instalar, integrações para configurar ou processos para mudar.' },
-      { q: 'Precisa de integração com sistemas internos?', a: 'Não. A Juripass funciona via WhatsApp. Não precisa de nenhuma integração com sistemas de RH, folha de pagamento ou qualquer outro sistema interno.' },
-      { q: 'Quanto tempo leva para começar?', a: 'O piloto pode começar em até 2 semanas após a contratação. A implementação é rápida porque não depende de tecnologia nem de mudanças internas.' },
+      { q: 'Como é feita a implementação?', a: 'Simples: realizamos uma reunião de kick-off, fornecemos material de comunicação interna, apoiamos o RH com treinamento e acompanhamos o engajamento. Prazo médio de ativação: até 15 dias após assinatura. Sem taxa de implantação.' },
+      { q: 'Precisa de integração com sistemas internos?', a: 'Não. A Juripass funciona via WhatsApp ou aplicativo. Não precisa de nenhuma integração com sistemas de RH, folha de pagamento ou qualquer outro sistema interno.' },
+      { q: 'Quanto tempo leva para começar?', a: 'O programa pode ser ativado em até 15 dias após a assinatura. A implementação é rápida porque não depende de tecnologia nem de mudanças internas. Sem taxa de implantação.' },
     ],
   },
   {
     title: 'Sobre resultados',
     items: [
-      { q: 'Os colaboradores realmente usam?', a: 'Sim. A adesão média é de 30% nos primeiros 3 meses. A simplicidade do canal (WhatsApp) e a confidencialidade são os principais fatores de adoção.' },
-      { q: 'Como medir o resultado?', a: 'Através de relatórios anonimizados de utilização. Você vê dados agregados — quantidade de atendimentos, categorias mais frequentes — sem expor nenhum colaborador.' },
-      { q: 'Qual o investimento?', a: 'Valor fixo mensal, sem cobrança por colaborador ou por utilização. O modelo é previsível e simples, sem surpresas no orçamento.' },
+      { q: 'Os colaboradores realmente usam?', a: 'Sim. A adesão média é de 30% nos primeiros 3 meses. A simplicidade do canal (WhatsApp e aplicativo) e a confidencialidade são os principais fatores de adoção.' },
+      { q: 'Como medir o resultado?', a: 'Através de relatórios anonimizados de utilização: adesão ao programa, volume de atendimentos e principais ocorrências em dados agregados — sem expor nenhum colaborador.' },
+      { q: 'Qual o investimento?', a: 'Licença corporativa com valor fixo mensal e acesso irrestrito aos colaboradores, sem limitação de atendimentos. Não há taxa de implantação, custo por atendimento ou custo adicional.' },
     ],
   },
 ];

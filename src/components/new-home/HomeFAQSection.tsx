@@ -8,15 +8,15 @@ import {
 const faqs = [
   {
     q: 'Isso é assistência jurídica?',
-    a: 'Não. A Juripass é um canal de orientação e encaminhamento. O colaborador recebe clareza sobre o que fazer — não uma representação legal.',
+    a: 'Não. A Juripass oferece orientação inicial de caráter informativo. Não inclui elaboração de peças processuais, análise de contratos complexos ou representação judicial. Quando necessário, o colaborador é encaminhado a um advogado habilitado.',
   },
   {
     q: 'A empresa assume algum risco?',
     a: 'Não. A Juripass opera de forma independente. A empresa não participa das conversas nem tem acesso ao conteúdo.',
   },
   {
-    q: 'O colaborador pode processar a empresa por causa da Juripass?',
-    a: 'Não. O canal é externo e confidencial. A Juripass não cria vínculo entre o colaborador e a empresa sobre os temas tratados.',
+    q: 'Como funciona a confidencialidade?',
+    a: 'O conteúdo dos atendimentos não é compartilhado com a empresa. A empresa recebe apenas dados estatísticos agregados e anonimizados. Os dados pertencem ao colaborador, protegidos pela LGPD, com sigilo profissional e controles de segurança da informação.',
   },
   {
     q: 'O RH deixa de apoiar o colaborador?',

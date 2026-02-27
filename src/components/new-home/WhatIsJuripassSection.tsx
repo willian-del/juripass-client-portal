@@ -1,10 +1,11 @@
-import { Check } from 'lucide-react';
+import { Check, ShieldCheck } from 'lucide-react';
 
 const clarifications = [
-  'A empresa não participa da conversa',
-  'A empresa não recebe conteúdo',
-  'Não substitui o RH',
-  'Não é assessoria jurídica corporativa',
+  'Orientação inicial de caráter informativo',
+  'Não substitui consulta jurídica formal',
+  'A empresa não participa nem recebe conteúdo',
+  'Não inclui representação judicial ou administrativa',
+  'Dados pertencem ao colaborador, protegidos pela LGPD',
 ];
 
 export function WhatIsJuripassSection() {
@@ -17,8 +18,10 @@ export function WhatIsJuripassSection() {
           </h2>
 
           <p className="text-lg text-muted-foreground text-center leading-relaxed">
-            A Juripass é um canal externo e confidencial onde o colaborador pode entender
-            o que fazer diante de uma situação pessoal sensível.
+            A Juripass é uma plataforma de acolhimento, organização de demandas e
+            facilitação de acesso a profissionais habilitados, que permite aos
+            colaboradores obterem orientação informativa sobre direitos e caminhos
+            legais possíveis em situações do dia a dia.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-3">
@@ -35,12 +38,16 @@ export function WhatIsJuripassSection() {
             ))}
           </div>
 
-          <div className="bg-gradient-dark rounded-2xl p-8 text-center">
+          <div className="bg-gradient-dark rounded-2xl p-8 text-center space-y-3">
             <p className="text-lg md:text-xl font-semibold text-primary-foreground leading-relaxed">
               "A Juripass não cria demanda.
               <br />
               Ela organiza uma demanda que já existe."
             </p>
+            <div className="flex items-center justify-center gap-2 text-primary-foreground/60 text-sm">
+              <ShieldCheck className="h-4 w-4" />
+              <span>Sigilo profissional e controles de segurança da informação</span>
+            </div>
           </div>
         </div>
       </div>

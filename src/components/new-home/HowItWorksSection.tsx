@@ -1,23 +1,23 @@
-import { MessageCircle, Lightbulb, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, Lightbulb, ArrowUpRight, Clock } from 'lucide-react';
 
 const steps = [
   {
     icon: MessageCircle,
     number: '01',
     title: 'Colaborador entra em contato direto',
-    description: 'Via WhatsApp, de forma simples e confidencial.',
+    description: 'Via WhatsApp ou aplicativo, de forma simples e confidencial.',
   },
   {
     icon: Lightbulb,
     number: '02',
-    title: 'Recebe orientação inicial clara',
-    description: 'Entende o que está acontecendo e quais caminhos existem.',
+    title: 'Equipe treinada acolhe e organiza a demanda',
+    description: 'Recebe orientação informativa em linguagem clara e acessível sobre direitos e caminhos possíveis.',
   },
   {
     icon: ArrowUpRight,
     number: '03',
     title: 'Situação é encaminhada adequadamente',
-    description: 'Com direcionamento profissional, sem sobrecarregar a empresa.',
+    description: 'Quando necessário, é encaminhado a advogado habilitado, sem sobrecarregar a empresa.',
   },
 ];
 
@@ -46,6 +46,11 @@ export function HowItWorksSection() {
                 <p className="text-sm text-muted-foreground">{step.description}</p>
               </div>
             ))}
+          </div>
+
+          <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+            <Clock className="h-4 w-4 text-primary" />
+            <span>Primeiro retorno em até 1 dia útil</span>
           </div>
         </div>
       </div>

@@ -1,12 +1,13 @@
-import { CreditCard, Heart, Home, ShieldX, Users, Wallet } from 'lucide-react';
+import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText } from 'lucide-react';
 
 const items = [
-  { icon: Wallet, label: 'Dívidas e cobranças' },
-  { icon: Heart, label: 'Separação' },
-  { icon: Home, label: 'Problemas de moradia' },
-  { icon: ShieldX, label: 'Negativas de plano de saúde' },
-  { icon: Users, label: 'Conflitos familiares' },
-  { icon: CreditCard, label: 'Decisões financeiras urgentes' },
+  { icon: Wallet, label: 'Endividamento e negativação' },
+  { icon: Heart, label: 'Conflitos familiares' },
+  { icon: Home, label: 'Problemas com aluguel ou moradia' },
+  { icon: Shield, label: 'Golpes digitais' },
+  { icon: FileText, label: 'Inventários e organização documental' },
+  { icon: CreditCard, label: 'Relações de consumo e garantias' },
+  { icon: Users, label: 'Separação e guarda' },
 ];
 
 export function RecognitionSection() {
