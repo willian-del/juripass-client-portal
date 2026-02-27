@@ -1,83 +1,59 @@
 
-# Corrigir Header Consistente e Logo Lento
+# Atualizacao de Conteudo: Proposta Orizon (sem mencao a familiares)
 
-## Problema
+## Diretriz Estrategica
+- **NAO mencionar familiares/dependentes** em nenhuma pagina do site (homepage, Como Funciona, FAQ, etc.)
+- O site e direcionado ao RH — o foco e resolver o problema da empresa
+- Cobertura familiar sera abordada apenas em materiais de engajamento para colaboradores (fora do escopo do site atual)
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Alteracoes por Arquivo
 
-## Solucao
+### 1. WhatIsJuripassSection.tsx
+- Atualizar definicao para: "plataforma de acolhimento, organizacao de demandas e facilitacao de acesso a profissionais habilitados"
+- Foco apenas em "colaboradores" (sem "e seus familiares")
+- Adicionar clarification sobre LGPD: "Dados pertencem ao colaborador, protegidos pela LGPD"
+- Refinar clarifications com linguagem da proposta (orientacao informativa, nao substitui consulta juridica formal)
+- Adicionar natureza do servico como nota: "Orientacao inicial de carater informativo"
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### 2. RecognitionSection.tsx
+- Substituir "Negativas de plano de saude" por **"Golpes digitais"**
+- Substituir "Decisoes financeiras urgentes" por **"Relacoes de consumo e garantias"**
+- Adicionar **"Inventarios e organizacao documental"** (total: 7 itens, grid 2x4 no mobile ou 7 itens com layout ajustado)
 
----
+### 3. ImpactSection.tsx
+- Coluna "Para o RH": adicionar "Apoio a gestao de pessoas e mediacao inicial"
+- Coluna "Para gestores": manter como esta (ja alinhado)
+- Coluna "Para colaboradores": adicionar "Orientacao sem custo no atendimento inicial" e "Conteudos educativos preventivos"
+- Adicionar argumentos fortes da proposta:
+  - "Fortalecimento do employer branding"
+  - "Aderencia a politicas de bem-estar e prevencao de riscos psicossociais (NR-1)"
 
-## Alteracoes
+### 4. HowItWorksSection.tsx (home)
+- Passo 1: mencionar "WhatsApp ou aplicativo" (nao so WhatsApp)
+- Passo 2: adicionar "Equipe treinada para triagem" e "linguagem clara e acessivel"
+- Adicionar nota sobre prazo: "Primeiro retorno em ate 1 dia util"
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+### 5. ComoFunciona.tsx (pagina dedicada)
+- Atualizar passo 1: incluir "WhatsApp ou aplicativo"
+- Enriquecer secao "O que a empresa precisa fazer" com o fluxo de implantacao da proposta:
+  - Reuniao de kick-off
+  - Material de comunicacao interna
+  - Apoio ao RH e treinamento
+  - "Prazo medio de ativacao: ate 15 dias"
+  - "Sem taxa de implantacao"
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### 6. HomeFAQSection.tsx (home)
+- Adicionar FAQ sobre LGPD/dados: "Como funciona a confidencialidade?" com resposta mencionando LGPD, dados agregados e anonimizados, e que dados pertencem ao colaborador
+- Refinar FAQ "Isso e assistencia juridica?" com linguagem mais precisa da proposta (orientacao informativa, nao inclui pecas processuais nem representacao judicial)
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+### 7. FAQ.tsx (pagina dedicada)
+- Categoria "Sobre riscos e confidencialidade": adicionar menção explicita a LGPD e que "os dados pertencem ao colaborador"
+- Categoria "Sobre o servico": refinar com escopo/limitacoes da proposta (nao inclui pecas processuais, analise de contratos complexos, representacao judicial)
+- Categoria "Sobre implementacao": atualizar prazo para "ate 15 dias" e mencionar "sem taxa de implantacao"
+- Adicionar FAQ sobre dependentes? **NAO** — manter fora do discurso de venda para RH
 
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
+## O que NAO muda
+- Nenhuma alteracao estrutural ou de layout
+- Nenhuma mencao a "familiares", "dependentes" ou "familia do colaborador"
+- Nenhuma dependencia nova
+- Secoes HeroSection, OrganizationalProblemSection, SegmentationSection, MidCTASection, FinalCTASection permanecem como estao (conteudo ja alinhado com a proposta)
