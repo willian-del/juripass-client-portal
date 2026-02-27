@@ -1,12 +1,12 @@
 import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, ShoppingBag } from 'lucide-react';
 
 const items = [
-  { icon: Wallet, label: 'Endividamento e negativação' },
+  { icon: Wallet, label: 'Endividamento e nome sujo' },
   { icon: Heart, label: 'Conflitos e questões familiares' },
   { icon: Home, label: 'Problemas com moradia e aluguel' },
   { icon: Shield, label: 'Golpes e fraudes digitais' },
-  { icon: FileText, label: 'Inventários e regularização de documentos' },
-  { icon: CreditCard, label: 'Direitos do consumidor e compras' },
+  { icon: FileText, label: 'Inventário e\nHerança' },
+  { icon: CreditCard, label: 'Problemas com compras e garantia' },
   { icon: Users, label: 'Separação e guarda de filhos' },
   { icon: Scale, label: 'Revisão e pagamento de pensão' },
   { icon: ShoppingBag, label: 'Cobranças e taxas indevidas' },
