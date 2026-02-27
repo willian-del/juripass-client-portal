@@ -1,4 +1,4 @@
-import { motion, type Variant } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { type ReactNode } from 'react';
 
 interface ScrollRevealProps {
@@ -8,12 +8,12 @@ interface ScrollRevealProps {
   className?: string;
 }
 
-const getInitial = (direction: 'up' | 'left' | 'right'): Variant => {
+const getInitial = (direction: 'up' | 'left' | 'right') => {
   const map = {
     up: { opacity: 0, y: 30 },
     left: { opacity: 0, x: -30 },
     right: { opacity: 0, x: 30 },
-  };
+  } as const;
   return map[direction];
 };
 
