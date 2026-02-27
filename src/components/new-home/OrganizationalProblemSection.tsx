@@ -33,10 +33,11 @@ export function OrganizationalProblemSection() {
                 {/* Card */}
                 <div
                   className={`flex flex-col items-center gap-3 px-6 py-5 rounded-2xl border min-w-[140px] shadow-sm transition-all duration-200 ${
-                    step.highlight
+                  step.highlight
                       ? 'bg-destructive/10 border-destructive/30 shadow-destructive/10'
                       : 'bg-card border-border hover:shadow-md'
                   }`}
+                  style={{ width: '180px', height: '140px' }}
                 >
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
