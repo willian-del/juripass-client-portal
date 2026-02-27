@@ -1,83 +1,38 @@
 
-# Corrigir Header Consistente e Logo Lento
+# Cards uniformes + 2 novos cards na RecognitionSection
 
-## Problema
+## O que muda
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+Atualmente sao 7 cards com tamanhos variados (o texto de cada um tem comprimento diferente, causando alturas desiguais). Vamos:
 
-## Solucao
+1. **Adicionar 2 novos cards**: "Pagamento de pensao alimenticia" e "Cobranças indevidas e direitos do consumidor"
+2. **Uniformizar tamanho**: Usar `h-[80px]` fixo nos cards e `items-center` para manter todos com a mesma altura
+3. **Grid 3x3**: Com 9 cards, o grid `md:grid-cols-3` fica perfeitamente equilibrado (3 linhas de 3)
+4. **Texto padronizado**: Ajustar os labels para terem volume de texto similar (2-4 palavras cada)
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+## Alteracao: `src/components/new-home/RecognitionSection.tsx`
 
----
+**Novo array de items (9 itens):**
 
-## Alteracoes
+| Icone | Label |
+|-------|-------|
+| Wallet | Endividamento e negativacao |
+| Heart | Conflitos familiares |
+| Home | Problemas com moradia |
+| Shield | Golpes e fraudes digitais |
+| FileText | Inventarios e documentos |
+| CreditCard | Direitos do consumidor |
+| Users | Separacao e guarda |
+| Scale (novo) | Pensao alimenticia |
+| ShoppingBag (novo) | Cobranças indevidas |
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**Ajustes no card:**
+- Adicionar `min-h-[72px]` para garantir altura uniforme
+- Manter layout `flex items-center gap-3`
+- Importar `Scale` e `ShoppingBag` do lucide-react
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+## Arquivo alterado
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
-
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
+| Arquivo | Alteracao |
+|---------|-----------|
+| `src/components/new-home/RecognitionSection.tsx` | 2 novos cards, altura uniforme, imports |
