@@ -2,14 +2,14 @@ import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, Shoppi
 
 const items = [
   { icon: Wallet, label: 'Endividamento e negativação' },
-  { icon: Heart, label: 'Conflitos familiares' },
-  { icon: Home, label: 'Problemas com moradia' },
+  { icon: Heart, label: 'Conflitos e questões familiares' },
+  { icon: Home, label: 'Problemas com moradia e aluguel' },
   { icon: Shield, label: 'Golpes e fraudes digitais' },
-  { icon: FileText, label: 'Inventários e documentos' },
-  { icon: CreditCard, label: 'Direitos do consumidor' },
-  { icon: Users, label: 'Separação e guarda' },
-  { icon: Scale, label: 'Pensão alimentícia' },
-  { icon: ShoppingBag, label: 'Cobranças indevidas' },
+  { icon: FileText, label: 'Inventários e regularização de documentos' },
+  { icon: CreditCard, label: 'Direitos do consumidor e compras' },
+  { icon: Users, label: 'Separação e guarda de filhos' },
+  { icon: Scale, label: 'Revisão e pagamento de pensão' },
+  { icon: ShoppingBag, label: 'Cobranças e taxas indevidas' },
 ];
 
 export function RecognitionSection() {
@@ -26,12 +26,12 @@ export function RecognitionSection() {
             {items.map((item) => (
               <div
                 key={item.label}
-                className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 min-h-[72px]"
+                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 min-h-[72px]"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                   <item.icon className="h-5 w-5 text-primary" />
                 </div>
-                <span className="text-sm font-medium text-foreground">{item.label}</span>
+                <span className="text-sm font-medium text-foreground text-left min-h-[2.5rem] flex items-center">{item.label}</span>
               </div>
             ))}
           </div>
