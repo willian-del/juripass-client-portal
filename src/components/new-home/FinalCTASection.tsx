@@ -4,9 +4,14 @@ import { Link } from 'react-router-dom';
 
 export function FinalCTASection() {
   return (
-    <section className="py-12 md:py-20 bg-background">
-      <div className="container mx-auto px-4 text-center">
-        <div className="max-w-3xl mx-auto space-y-8">
+    <section className="py-16 md:py-24 bg-background">
+      {/* Top separator */}
+      <div className="container mx-auto px-4">
+        <div className="max-w-xl mx-auto mb-12">
+          <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        </div>
+
+        <div className="max-w-3xl mx-auto text-center space-y-8">
           <p className="text-2xl md:text-3xl font-bold text-foreground leading-relaxed">
             A decisão não é contratar um benefício.
             <br />
@@ -15,7 +20,7 @@ export function FinalCTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" asChild className="font-semibold text-base px-8">
+            <Button size="lg" asChild className="font-semibold text-base px-8 shadow-primary">
               <a
                 href="https://wa.me/5511999999999?text=Olá! Gostaria de entender como a Juripass pode ajudar minha empresa."
                 target="_blank"

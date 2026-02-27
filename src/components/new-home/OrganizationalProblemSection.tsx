@@ -1,5 +1,3 @@
-import { ArrowRight } from 'lucide-react';
-
 const steps = [
   { label: 'Colaborador', sublabel: 'com problema pessoal' },
   { label: 'Gestor', sublabel: 'tenta ajudar' },
@@ -9,24 +7,28 @@ const steps = [
 
 export function OrganizationalProblemSection() {
   return (
-    <section className="py-12 md:py-20">
+    <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
+        <div className="max-w-3xl mx-auto text-center space-y-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
             O RH não tem um problema jurídico.
             <br />
             <span className="text-primary">Tem um problema de encaminhamento.</span>
           </h2>
 
-          {/* Flow visual */}
-          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 py-6">
+          {/* Flow visual with connector line */}
+          <div className="relative flex flex-wrap items-center justify-center gap-3 md:gap-0 py-6">
+            {/* Connector line (desktop only) */}
+            <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-px bg-border -translate-y-1/2 z-0" />
+
             {steps.map((step, i) => (
-              <div key={step.label} className="flex items-center gap-2 md:gap-4">
+              <div key={step.label} className="relative z-10 flex items-center">
+                {i > 0 && <div className="hidden md:block w-8" />}
                 <div
-                  className={`px-5 py-4 rounded-xl border text-center min-w-[120px] ${
+                  className={`px-6 py-5 rounded-2xl border text-center min-w-[130px] shadow-sm transition-all duration-200 ${
                     step.highlight
-                      ? 'bg-destructive/10 border-destructive/30'
-                      : 'bg-card border-border'
+                      ? 'bg-destructive/10 border-destructive/30 shadow-destructive/10'
+                      : 'bg-card border-border hover:shadow-md'
                   }`}
                 >
                   <p className={`font-semibold text-sm ${step.highlight ? 'text-destructive' : 'text-foreground'}`}>
@@ -36,9 +38,6 @@ export function OrganizationalProblemSection() {
                     {step.sublabel}
                   </p>
                 </div>
-                {i < steps.length - 1 && (
-                  <ArrowRight className="h-5 w-5 text-muted-foreground shrink-0" />
-                )}
               </div>
             ))}
           </div>
