@@ -10,9 +10,9 @@ const clarifications = [
 
 export function WhatIsJuripassSection() {
   return (
-    <section className="py-12 md:py-20 bg-muted/20">
+    <section className="py-16 md:py-24 bg-accent/30">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto space-y-8">
+        <div className="max-w-3xl mx-auto space-y-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             O que é a Juripass
           </h2>
@@ -28,7 +28,7 @@ export function WhatIsJuripassSection() {
             {clarifications.map((item) => (
               <div
                 key={item}
-                className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border"
+                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm"
               >
                 <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                   <Check className="h-3.5 w-3.5 text-primary" />
@@ -38,8 +38,8 @@ export function WhatIsJuripassSection() {
             ))}
           </div>
 
-          <div className="bg-gradient-dark rounded-2xl p-8 text-center space-y-3">
-            <p className="text-lg md:text-xl font-semibold text-primary-foreground leading-relaxed">
+          <div className="bg-gradient-dark rounded-2xl p-10 text-center space-y-4">
+            <p className="text-xl md:text-2xl font-semibold text-primary-foreground leading-relaxed italic">
               "A Juripass não cria demanda.
               <br />
               Ela organiza uma demanda que já existe."

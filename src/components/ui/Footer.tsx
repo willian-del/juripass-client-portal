@@ -10,7 +10,7 @@ export function Footer() {
             Juripass Desenvolvimento de Software LTDA - CNPJ 53.971.772/0001-37
           </p>
           <p className="text-xs md:text-sm text-muted-foreground font-medium">
-            © 2024 Juripass. Todos os direitos reservados.
+            © 2025 Juripass. Todos os direitos reservados.
           </p>
         </div>
       </div>
