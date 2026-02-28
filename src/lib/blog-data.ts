@@ -17,6 +17,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Gestão de RH',
     readTime: '6 min',
     publishedAt: '2025-05-10',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'saude-mental-trabalho-papel-rh', 'como-implementar-acolhimento-juridico'],
     sections: [
       {
         heading: 'O que é absenteísmo jurídico?',
