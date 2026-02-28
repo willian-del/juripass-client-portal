@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Menu, X, ExternalLink, Calendar } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
-import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 export function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,6 +27,7 @@ export function HomeHeader() {
     { label: 'Para Quem', target: '/para-quem' },
     { label: 'NR-01', target: '/nr-01' },
     { label: 'FAQ', target: '/faq' },
+    { label: 'Blog', target: '/blog' },
   ];
 
   return (
@@ -51,22 +50,6 @@ export function HomeHeader() {
               </button>
             ))}
           </nav>
-
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <Button size="sm" variant="outline" asChild>
-              <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4 mr-1" />
-                Área do Cliente
-              </a>
-            </Button>
-            <Button size="sm" asChild>
-              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
-                <Calendar className="h-4 w-4 mr-1" />
-                Agende uma conversa
-              </a>
-            </Button>
-          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -91,20 +74,6 @@ export function HomeHeader() {
                   {item.label}
                 </button>
               ))}
-              <div className="pt-2 border-t border-border flex flex-col gap-2">
-                <Button size="sm" variant="outline" asChild className="w-full">
-                  <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4 mr-1" />
-                    Área do Cliente
-                  </a>
-                </Button>
-                <Button size="sm" asChild className="w-full">
-                  <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    Agende uma conversa
-                  </a>
-                </Button>
-              </div>
             </div>
           </nav>
         )}
