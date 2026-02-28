@@ -22,9 +22,9 @@ export function HeroSection() {
           </p>
           <div className="space-y-3 pt-4">
             <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-primary" asChild>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-5 w-5" />
-                Conversar rapidamente
+              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+                <Calendar className="h-5 w-5" />
+                Agende uma conversa
               </a>
             </Button>
             <p className="text-sm text-muted-foreground">

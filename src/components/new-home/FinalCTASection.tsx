@@ -22,12 +22,12 @@ export function FinalCTASection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" asChild className="font-semibold text-base px-8 shadow-primary">
               <a
-                href="https://wa.me/5511999999999?text=Olá! Gostaria de entender como a Juripass pode ajudar minha empresa."
+                href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageCircle className="h-5 w-5" />
-                Conversar rapidamente
+                <Calendar className="h-5 w-5" />
+                Agende uma conversa
               </a>
             </Button>
 

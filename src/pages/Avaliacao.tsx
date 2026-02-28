@@ -212,9 +212,9 @@ export default function Avaliacao() {
               Baixar resumo em uma página
             </Button>
             <Button size="lg" asChild>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-5 w-5 mr-2" />
-                Conversar rapidamente
+              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+                <Calendar className="h-5 w-5 mr-2" />
+                Agende uma conversa
               </a>
             </Button>
           </div>
