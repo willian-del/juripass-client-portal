@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { getArticleBySlug } from '@/lib/blog-data';
+import { getArticleBySlug, blogArticles } from '@/lib/blog-data';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
-import { ArrowLeft, Clock, Tag, Calendar } from 'lucide-react';
+import { ArrowLeft, Clock, Tag, Calendar, ArrowRight, Scale, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BASE_URL = 'https://juripass-client-portal.lovable.app';
@@ -65,6 +65,55 @@ const BlogPost = () => {
                 <p className="text-muted-foreground leading-relaxed text-base">{section.content}</p>
               </section>
             ))}
+          </div>
+
+          {/* Leia também */}
+          {(() => {
+            const relatedArticles = (article.relatedSlugs || [])
+              .map(s => blogArticles.find(a => a.slug === s))
+              .filter((a): a is NonNullable<typeof a> => !!a)
+              .slice(0, 3);
+
+            return relatedArticles.length > 0 ? (
+              <div className="mt-16">
+                <h3 className="text-xl font-bold text-foreground mb-6">Leia também</h3>
+                <div className="grid sm:grid-cols-3 gap-4">
+                  {relatedArticles.map(related => (
+                    <Link key={related.slug} to={`/blog/${related.slug}`} className="group p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+                      <span className="text-xs text-primary font-medium">{related.category}</span>
+                      <h4 className="font-semibold text-foreground mt-1 mb-2 group-hover:text-primary transition-colors text-sm leading-snug">{related.title}</h4>
+                      <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
+                        Ler artigo <ArrowRight className="h-3 w-3" />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null;
+          })()}
+
+          {/* Páginas relacionadas */}
+          <div className="mt-10 grid sm:grid-cols-2 gap-4">
+            <Link to="/nr-01" className="group flex items-center gap-4 p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <Scale className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors">Nova NR-01 e Riscos Psicossociais</h4>
+                <p className="text-xs text-muted-foreground">Entenda as obrigações da nova norma</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-muted-foreground ml-auto shrink-0" />
+            </Link>
+            <Link to="/para-quem" className="group flex items-center gap-4 p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors">Para quem a Juripass faz sentido</h4>
+                <p className="text-xs text-muted-foreground">Segmentos que mais se beneficiam</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-muted-foreground ml-auto shrink-0" />
+            </Link>
           </div>
 
           {/* CTA */}

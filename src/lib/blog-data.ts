@@ -6,6 +6,7 @@ export interface BlogArticle {
   readTime: string;
   publishedAt: string;
   sections: { heading: string; content: string }[];
+  relatedSlugs?: string[];
 }
 
 export const blogArticles: BlogArticle[] = [
@@ -16,6 +17,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Gestão de RH',
     readTime: '6 min',
     publishedAt: '2025-05-10',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'saude-mental-trabalho-papel-rh', 'como-implementar-acolhimento-juridico'],
     sections: [
       {
         heading: 'O que é absenteísmo jurídico?',
@@ -46,6 +48,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Compliance',
     readTime: '8 min',
     publishedAt: '2025-04-22',
+    relatedSlugs: ['absenteismo-juridico-problema-silencioso', 'saude-mental-trabalho-papel-rh', 'como-implementar-acolhimento-juridico'],
     sections: [
       {
         heading: 'O que mudou na NR-01',
@@ -76,6 +79,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Benefícios',
     readTime: '5 min',
     publishedAt: '2025-03-15',
+    relatedSlugs: ['absenteismo-juridico-problema-silencioso', 'como-implementar-acolhimento-juridico', 'saude-mental-trabalho-papel-rh'],
     sections: [
       {
         heading: 'O cenário atual dos benefícios corporativos',
@@ -106,6 +110,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Implementação',
     readTime: '7 min',
     publishedAt: '2025-02-28',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'absenteismo-juridico-problema-silencioso', 'beneficios-corporativos-retencao-talentos'],
     sections: [
       {
         heading: 'O que é um programa de acolhimento jurídico',
@@ -136,6 +141,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Saúde Mental',
     readTime: '6 min',
     publishedAt: '2025-01-20',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'absenteismo-juridico-problema-silencioso', 'beneficios-corporativos-retencao-talentos'],
     sections: [
       {
         heading: 'O panorama da saúde mental no trabalho',

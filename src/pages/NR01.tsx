@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ import {
   Building2,
   Users,
   Brain,
+  ArrowRight,
 } from 'lucide-react';
 
 const articleJsonLd = {
@@ -290,6 +292,49 @@ export default function NR01() {
                 </div>
               </ScrollReveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Conteúdo relacionado */}
+      <section className="py-16 md:py-24 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
+              Conteúdo relacionado
+            </h2>
+            <div className="grid sm:grid-cols-3 gap-6">
+              <Link to="/para-quem" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Users className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Para quem a Juripass faz sentido</h3>
+                <p className="text-sm text-muted-foreground mb-3">Descubra quais segmentos mais se beneficiam do acolhimento jurídico.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Saiba mais <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+              <Link to="/blog/nr-01-riscos-psicossociais-guia-pratico" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Guia Prático: NR-01 para RH</h3>
+                <p className="text-sm text-muted-foreground mb-3">Passo a passo para adequar sua empresa à nova norma.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Ler artigo <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+              <Link to="/blog/saude-mental-trabalho-papel-rh" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Brain className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Saúde Mental e o Papel do RH</h3>
+                <p className="text-sm text-muted-foreground mb-3">Como ir além do discurso e implementar ações concretas.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Ler artigo <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
