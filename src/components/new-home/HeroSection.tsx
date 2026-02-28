@@ -22,11 +22,9 @@ export function HeroSection() {
             antes que se tornem demandas internas ao RH ou aos gestores.
           </p>
           <div className="space-y-3 pt-4">
-            <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-primary" asChild>
-              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-primary" onClick={openScheduling}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
-              </a>
             </Button>
             <p className="text-sm text-muted-foreground">
               15 minutos para entender se faz sentido para sua empresa.
