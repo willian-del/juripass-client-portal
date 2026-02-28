@@ -126,15 +126,9 @@ export default function NR01() {
                 como um programa de acolhimento jurídico ajuda sua organização a estar em
                 conformidade.
               </p>
-              <Button size="lg" variant="secondary" asChild>
-                <a
-                  href={BRAND.calendarUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Calendar className="h-5 w-5" />
-                  Agende uma conversa
-                </a>
+              <Button size="lg" variant="secondary" onClick={openScheduling}>
+                <Calendar className="h-5 w-5" />
+                Agende uma conversa
               </Button>
             </div>
           </ScrollReveal>
