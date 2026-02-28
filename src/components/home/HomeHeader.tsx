@@ -27,6 +27,7 @@ export function HomeHeader() {
     { label: 'Para Quem', target: '/para-quem' },
     { label: 'NR-01', target: '/nr-01' },
     { label: 'FAQ', target: '/faq' },
+    { label: 'Blog', target: '/blog' },
   ];
 
   return (
