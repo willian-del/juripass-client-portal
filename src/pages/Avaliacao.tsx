@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { BRAND } from '@/lib/constants';
+import { openScheduling } from '@/lib/constants';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import {
