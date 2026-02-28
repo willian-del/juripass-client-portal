@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar, ArrowRight, Scale, BookOpen } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
-import { BRAND } from '@/lib/constants';
+import { openScheduling } from '@/lib/constants';
 
 const segments = [
   {
@@ -176,15 +176,13 @@ const ParaQuem = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Sua empresa se encaixa? Vale uma conversa rápida.
             </h2>
-            <a
-              href={BRAND.calendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={openScheduling}
               className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
             >
               <Calendar className="h-5 w-5" />
               Agende uma conversa
-            </a>
+            </button>
           </div>
         </div>
       </section>

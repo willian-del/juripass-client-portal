@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BRAND } from '@/lib/constants';
+import { BRAND, openScheduling } from '@/lib/constants';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -126,15 +126,9 @@ export default function NR01() {
                 como um programa de acolhimento jurídico ajuda sua organização a estar em
                 conformidade.
               </p>
-              <Button size="lg" variant="secondary" asChild>
-                <a
-                  href={BRAND.calendarUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Calendar className="h-5 w-5" />
-                  Agende uma conversa
-                </a>
+              <Button size="lg" variant="secondary" onClick={openScheduling}>
+                <Calendar className="h-5 w-5" />
+                Agende uma conversa
               </Button>
             </div>
           </ScrollReveal>
@@ -353,15 +347,9 @@ export default function NR01() {
                 Entenda como um programa de acolhimento jurídico pode ser a peça que falta na sua
                 estratégia de prevenção de riscos psicossociais.
               </p>
-              <Button size="lg" asChild>
-                <a
-                  href={BRAND.calendarUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Calendar className="h-5 w-5" />
-                  Agende uma conversa
-                </a>
+              <Button size="lg" onClick={openScheduling}>
+                <Calendar className="h-5 w-5" />
+                Agende uma conversa
               </Button>
               <p className="text-xs text-muted-foreground mt-4">
                 15 minutos para entender se faz sentido para sua empresa.

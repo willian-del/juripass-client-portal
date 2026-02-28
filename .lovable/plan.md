@@ -1,74 +1,83 @@
 
-
-# Corrigir CTA de Agendamento com window.open()
+# Corrigir Header Consistente e Logo Lento
 
 ## Problema
-O link com `target="_blank"` nao abre em ambientes de iframe (como o preview do Lovable). Mesmo no site publicado, pode ser bloqueado por pop-up blockers dependendo do navegador.
+
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
 ## Solucao
-Substituir os links `<a href={...} target="_blank">` por botoes que chamam `window.open()` com dimensoes especificas, criando uma janela popup focada no agendamento.
 
-### Vantagens
-- Funciona dentro de iframes e previews
-- Menos chance de ser bloqueado por pop-up blockers (pois e acionado por clique direto do usuario)
-- O usuario nao perde a pagina do site
-- A janela abre centralizada com tamanho adequado para o calendario
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### Implementacao
+---
 
-**Passo 1: Criar funcao utilitaria em `src/lib/constants.ts`**
+## Alteracoes
 
-Adicionar uma funcao `openScheduling()` que centraliza a logica de abrir o calendario:
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-```typescript
-export function openScheduling() {
-  const w = 600;
-  const h = 700;
-  const left = (screen.width - w) / 2;
-  const top = (screen.height - h) / 2;
-  window.open(
-    BRAND.calendarUrl,
-    'juripass-agendamento',
-    `width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no`
-  );
-}
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-**Passo 2: Atualizar todos os CTAs**
+### 2. Atualizar `src/App.tsx`
 
-Em cada arquivo, trocar o `<a>` por um `<button>` chamando `openScheduling()`:
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-| Arquivo | Mudanca |
-|---------|---------|
-| `src/components/new-home/HeroSection.tsx` | Trocar `<a>` por `<Button onClick={openScheduling}>` |
-| `src/components/new-home/MidCTASection.tsx` | Idem |
-| `src/components/new-home/FinalCTASection.tsx` | Idem |
-| `src/pages/NR01.tsx` | 2 ocorrencias |
-| `src/pages/ComoFunciona.tsx` | 2 ocorrencias |
-| `src/pages/ParaQuem.tsx` | 1 ocorrencia |
-| `src/pages/FAQ.tsx` | 1 ocorrencia |
-| `src/pages/BlogPost.tsx` | 1 ocorrencia |
-| `src/pages/Avaliacao.tsx` | 1 ocorrencia |
-
-Cada CTA passa de:
-```tsx
-<Button asChild>
-  <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
-    <Calendar /> Agende uma conversa
-  </a>
-</Button>
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
 ```
 
-Para:
-```tsx
-<Button onClick={openScheduling}>
-  <Calendar /> Agende uma conversa
-</Button>
-```
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-Remove-se o `asChild` e o `<a>` wrapper, simplificando o codigo.
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
-## Detalhes tecnicos
-- Funcao `openScheduling` exportada de `src/lib/constants.ts`
-- Import atualizado em todos os arquivos: `import { BRAND, openScheduling } from '@/lib/constants'`
-- 10 arquivos alterados, 0 arquivos novos
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

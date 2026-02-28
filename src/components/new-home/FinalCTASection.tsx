@@ -1,7 +1,7 @@
 import { Calendar, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { BRAND } from '@/lib/constants';
+import { openScheduling } from '@/lib/constants';
 
 export function FinalCTASection() {
   return (
@@ -21,15 +21,9 @@ export function FinalCTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" asChild className="font-semibold text-base px-8 shadow-primary">
-              <a
-                href={BRAND.calendarUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Calendar className="h-5 w-5" />
-                Agende uma conversa
-              </a>
+            <Button size="lg" onClick={openScheduling} className="font-semibold text-base px-8 shadow-primary">
+              <Calendar className="h-5 w-5" />
+              Agende uma conversa
             </Button>
 
             <Button size="lg" variant="outline" asChild className="font-semibold text-base px-8">
