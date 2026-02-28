@@ -264,11 +264,9 @@ const ComoFunciona = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Quer entender como isso funcionaria na sua empresa?
             </h2>
-            <Button size="lg" variant="secondary" className="rounded-full px-8" asChild>
-              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
-                <Calendar className="h-5 w-5 mr-2" />
-                Agende uma conversa
-              </a>
+            <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openScheduling}>
+              <Calendar className="h-5 w-5 mr-2" />
+              Agende uma conversa
             </Button>
           </div>
         </div>
