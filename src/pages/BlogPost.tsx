@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { getArticleBySlug } from '@/lib/blog-data';
+import { getArticleBySlug, blogArticles } from '@/lib/blog-data';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
-import { ArrowLeft, Clock, Tag, Calendar } from 'lucide-react';
+import { ArrowLeft, Clock, Tag, Calendar, ArrowRight, Scale, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BASE_URL = 'https://juripass-client-portal.lovable.app';
