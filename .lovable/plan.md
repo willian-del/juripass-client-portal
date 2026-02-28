@@ -1,84 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Otimizacao de SEO do site Juripass
+## Problema
 
-## Visao geral
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-O site atualmente tem SEO basico apenas no `index.html` (meta tags estaticas). Como e uma SPA React, os meta tags nao mudam por pagina. A otimizacao incluira: meta tags dinamicas por rota, sitemap.xml, robots.txt aprimorado, dados estruturados (JSON-LD), e conteudo semantico otimizado com palavras-chave estrategicas.
+## Solucao
 
-## 1. Componente SEO dinamico (Helmet-like)
-
-Criar um componente `SEOHead` que atualiza `document.title` e meta tags dinamicamente por pagina usando `useEffect`.
-
-| Pagina | Title | Description (keywords integradas) |
-|--------|-------|------------------------------------|
-| `/` (Home) | Juripass - Programa de Acolhimento Juridico para Empresas / Ferramenta de Gestao de RH | Canal externo e confidencial para acolher colaboradores em questoes pessoais sensiveis. Ferramenta de gestao de RH alinhada a Nova NR-01 para prevencao de riscos psicossociais. |
-| `/como-funciona` | Como Funciona a Juripass / Acolhimento Juridico Corporativo | Entenda como o programa de acolhimento juridico funciona: canal confidencial via WhatsApp, equipe treinada e encaminhamento especializado para colaboradores. |
-| `/para-quem` | Para Quem - Juripass / Beneficio Juridico para Industria, Varejo e Call Center | Empresas com mais de 200 colaboradores onde situacoes pessoais impactam a operacao. Solucao para gestao de pessoas e conformidade com NR-01. |
-| `/faq` | Perguntas Frequentes - Juripass / Duvidas sobre Acolhimento Juridico Corporativo | Respostas sobre acolhimento juridico, confidencialidade LGPD, implantacao e resultados do programa Juripass para RH e gestores. |
-
-## 2. Dados estruturados JSON-LD
-
-Adicionar schema.org markup no `index.html` e no componente SEO:
-
-- **Organization**: nome, logo, descricao, endereco, tipo de servico
-- **FAQPage**: na pagina `/faq` com as perguntas e respostas existentes (melhora chances de rich snippets no Google)
-- **WebSite**: nome, URL, descricao
-
-## 3. Sitemap.xml
-
-Criar `public/sitemap.xml` com as 4 paginas publicas e suas prioridades:
-
-```text
-/           - priority 1.0, weekly
-/como-funciona - priority 0.8, monthly
-/para-quem     - priority 0.8, monthly
-/faq           - priority 0.7, monthly
-```
-
-## 4. Robots.txt aprimorado
-
-Atualizar `public/robots.txt` para:
-- Referenciar o sitemap
-- Bloquear `/site-anterior` e `/avaliacao` (paginas ocultas)
-- Manter permissoes existentes
-
-## 5. Meta tags Open Graph e Twitter por pagina
-
-O componente SEOHead atualizara dinamicamente:
-- `og:title`, `og:description`, `og:url`
-- `twitter:title`, `twitter:description`
-- `canonical` URL por pagina
-
-## 6. Keywords estrategicas no index.html
-
-Atualizar as meta tags do `index.html` com keywords relevantes:
-- acolhimento juridico corporativo
-- ferramenta gestao de RH
-- Nova NR-01 riscos psicossociais
-- beneficio juridico empresas
-- saude mental colaboradores
-- programa de bem-estar corporativo
-- canal confidencial colaboradores
-- prevencao riscos psicossociais
-
-## 7. Atributos semanticos nas paginas
-
-Adicionar `lang="pt-BR"` no HTML e garantir que headings (h1, h2, h3) contenham palavras-chave naturais.
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-## Arquivos criados/alterados
+## Alteracoes
+
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
 
 | Arquivo | Acao |
 |---------|------|
-| `src/components/ui/SEOHead.tsx` | **Criar** - componente que gerencia title, meta description, OG tags, canonical e JSON-LD por pagina |
-| `src/pages/Index.tsx` | Adicionar `<SEOHead>` com meta tags da home |
-| `src/pages/ComoFunciona.tsx` | Adicionar `<SEOHead>` com meta tags |
-| `src/pages/ParaQuem.tsx` | Adicionar `<SEOHead>` com meta tags |
-| `src/pages/FAQ.tsx` | Adicionar `<SEOHead>` com meta tags + JSON-LD FAQPage |
-| `index.html` | Atualizar title, description, keywords com termos estrategicos; mudar `lang="en"` para `lang="pt-BR"` |
-| `public/sitemap.xml` | **Criar** - mapa do site com 4 paginas publicas |
-| `public/robots.txt` | Adicionar referencia ao sitemap e bloquear rotas ocultas |
-| `src/lib/constants.ts` | Atualizar `meta` com keywords e descriptions otimizadas |
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
+Nenhuma dependencia nova.

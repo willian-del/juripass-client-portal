@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { HeroSection } from '@/components/new-home/HeroSection';
 import { RecognitionSection } from '@/components/new-home/RecognitionSection';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { SEOHead, organizationJsonLd, websiteJsonLd } from '@/components/ui/SEOHead';
 
 const OrganizationalProblemSection = lazy(() => import('@/components/new-home/OrganizationalProblemSection').then(m => ({ default: m.OrganizationalProblemSection })));
 const WhatIsJuripassSection = lazy(() => import('@/components/new-home/WhatIsJuripassSection').then(m => ({ default: m.WhatIsJuripassSection })));
@@ -15,6 +16,11 @@ const FinalCTASection = lazy(() => import('@/components/new-home/FinalCTASection
 const Index = () => {
   return (
     <>
+      <SEOHead
+        title="Juripass — Programa de Acolhimento Jurídico para Empresas | Gestão de RH"
+        description="Canal externo e confidencial para acolher colaboradores em questões pessoais sensíveis. Ferramenta de gestão de RH alinhada à Nova NR-01 para prevenção de riscos psicossociais."
+        jsonLd={[organizationJsonLd, websiteJsonLd]}
+      />
       <HeroSection />
       <ScrollReveal>
         <RecognitionSection />

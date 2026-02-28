@@ -1,5 +1,7 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { MessageCircle } from 'lucide-react';
+import { SEOHead } from '@/components/ui/SEOHead';
+import { useMemo } from 'react';
 
 const categories = [
   {
@@ -37,8 +39,28 @@ const categories = [
 ];
 
 const FAQPage = () => {
+  const faqJsonLd = useMemo(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: categories.flatMap((cat) =>
+      cat.items.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a,
+        },
+      }))
+    ),
+  }), []);
+
   return (
     <>
+      <SEOHead
+        title="Perguntas Frequentes — Juripass | Acolhimento Jurídico Corporativo"
+        description="Respostas sobre acolhimento jurídico, confidencialidade LGPD, implantação e resultados do programa Juripass para RH e gestores."
+        jsonLd={faqJsonLd}
+      />
       {/* Hero */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
