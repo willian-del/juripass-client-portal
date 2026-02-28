@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { MessageCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 export function HeroSection() {
   return (
