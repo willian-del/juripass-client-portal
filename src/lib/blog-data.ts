@@ -141,6 +141,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Saúde Mental',
     readTime: '6 min',
     publishedAt: '2025-01-20',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'absenteismo-juridico-problema-silencioso', 'beneficios-corporativos-retencao-talentos'],
     sections: [
       {
         heading: 'O panorama da saúde mental no trabalho',
