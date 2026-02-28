@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Menu, X, ExternalLink, Calendar } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
-import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 export function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
