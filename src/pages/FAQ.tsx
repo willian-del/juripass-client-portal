@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { MessageCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 import { useMemo } from 'react';
 
