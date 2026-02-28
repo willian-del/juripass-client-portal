@@ -12,3 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /site-anterior
+Disallow: /avaliacao
+
+Sitemap: https://juripass-client-portal.lovable.app/sitemap.xml
