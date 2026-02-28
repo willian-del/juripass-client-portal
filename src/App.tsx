@@ -12,6 +12,7 @@ const ComoFunciona = lazy(() => import("./pages/ComoFunciona"));
 const ParaQuem = lazy(() => import("./pages/ParaQuem"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Avaliacao = lazy(() => import("./pages/Avaliacao"));
+const NR01 = lazy(() => import("./pages/NR01"));
 
 const App = () => (
   <TooltipProvider>
