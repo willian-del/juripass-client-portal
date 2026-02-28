@@ -74,20 +74,6 @@ export function HomeHeader() {
                   {item.label}
                 </button>
               ))}
-              <div className="pt-2 border-t border-border flex flex-col gap-2">
-                <Button size="sm" variant="outline" asChild className="w-full">
-                  <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4 mr-1" />
-                    Área do Cliente
-                  </a>
-                </Button>
-                <Button size="sm" asChild className="w-full">
-                  <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    Agende uma conversa
-                  </a>
-                </Button>
-              </div>
             </div>
           </nav>
         )}
