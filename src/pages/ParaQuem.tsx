@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar, ArrowRight, Scale, BookOpen } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
+import { BRAND } from '@/lib/constants';
 
 const segments = [
   {
