@@ -1,4 +1,5 @@
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, MessageCircle } from 'lucide-react';
+import { SEOHead } from '@/components/ui/SEOHead';
 
 const segments = [
   {
