@@ -1,4 +1,4 @@
-import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, MessageCircle } from 'lucide-react';
+import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 
 const segments = [
