@@ -48,6 +48,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Compliance',
     readTime: '8 min',
     publishedAt: '2025-04-22',
+    relatedSlugs: ['absenteismo-juridico-problema-silencioso', 'saude-mental-trabalho-papel-rh', 'como-implementar-acolhimento-juridico'],
     sections: [
       {
         heading: 'O que mudou na NR-01',
