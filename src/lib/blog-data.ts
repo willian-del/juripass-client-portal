@@ -110,6 +110,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Implementação',
     readTime: '7 min',
     publishedAt: '2025-02-28',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'absenteismo-juridico-problema-silencioso', 'beneficios-corporativos-retencao-talentos'],
     sections: [
       {
         heading: 'O que é um programa de acolhimento jurídico',
