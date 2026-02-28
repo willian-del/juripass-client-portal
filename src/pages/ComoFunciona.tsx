@@ -93,11 +93,9 @@ const ComoFunciona = () => {
               Um canal <strong className="text-foreground">simples, externo e confidencial</strong>. Sem burocracia para a empresa, sem exposição para o colaborador.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <Button size="lg" className="rounded-full px-8" asChild>
-                <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
-                  <Calendar className="h-5 w-5 mr-2" />
-                  Agende uma conversa
-                </a>
+              <Button size="lg" className="rounded-full px-8" onClick={openScheduling}>
+                <Calendar className="h-5 w-5 mr-2" />
+                Agende uma conversa
               </Button>
               <Button variant="outline" size="lg" className="rounded-full px-8" asChild>
                 <Link to="/para-quem">
