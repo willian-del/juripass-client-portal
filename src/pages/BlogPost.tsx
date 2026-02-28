@@ -3,6 +3,7 @@ import { getArticleBySlug, blogArticles } from '@/lib/blog-data';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { ArrowLeft, Clock, Tag, Calendar, ArrowRight, Scale, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BRAND } from '@/lib/constants';
 
 const BASE_URL = 'https://juripass-client-portal.lovable.app';
 
@@ -125,7 +126,7 @@ const BlogPost = () => {
               Agende uma conversa rápida e descubra como um programa de acolhimento jurídico transforma indicadores de RH.
             </p>
             <Button size="lg" asChild>
-              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
                 Agende uma conversa
               </a>
             </Button>

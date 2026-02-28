@@ -1,6 +1,7 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Calendar } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
+import { BRAND } from '@/lib/constants';
 import { useMemo } from 'react';
 
 const categories = [
@@ -108,7 +109,7 @@ const FAQPage = () => {
               Ainda tem dúvidas? Vamos conversar.
             </h2>
             <a
-              href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
+              href={BRAND.calendarUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"

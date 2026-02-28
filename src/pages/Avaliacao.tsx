@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { BRAND } from '@/lib/constants';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import {
@@ -212,7 +213,7 @@ export default function Avaliacao() {
               Baixar resumo em uma página
             </Button>
             <Button size="lg" asChild>
-              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
                 <Calendar className="h-5 w-5 mr-2" />
                 Agende uma conversa
               </a>

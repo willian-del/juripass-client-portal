@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar, ArrowRight, Scale, BookOpen } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
+import { BRAND } from '@/lib/constants';
 
 const segments = [
   {
@@ -176,7 +177,7 @@ const ParaQuem = () => {
               Sua empresa se encaixa? Vale uma conversa rápida.
             </h2>
             <a
-              href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
+              href={BRAND.calendarUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"

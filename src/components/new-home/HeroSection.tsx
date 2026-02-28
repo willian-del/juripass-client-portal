@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
+import { BRAND } from '@/lib/constants';
 
 export function HeroSection() {
   return (
@@ -22,7 +23,7 @@ export function HeroSection() {
           </p>
           <div className="space-y-3 pt-4">
             <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-primary" asChild>
-              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </a>
