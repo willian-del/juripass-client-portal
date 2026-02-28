@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function MidCTASection() {
