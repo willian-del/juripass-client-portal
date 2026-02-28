@@ -16,6 +16,7 @@ import {
   Building2,
   Users,
   Brain,
+  ArrowRight,
 } from 'lucide-react';
 
 const articleJsonLd = {

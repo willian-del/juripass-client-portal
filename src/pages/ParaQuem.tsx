@@ -125,6 +125,49 @@ const ParaQuem = () => {
         </div>
       </section>
 
+      {/* Saiba mais */}
+      <section className="py-12 md:py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
+              Saiba mais
+            </h2>
+            <div className="grid sm:grid-cols-3 gap-6">
+              <Link to="/nr-01" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Scale className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Nova NR-01</h3>
+                <p className="text-sm text-muted-foreground mb-3">Entenda as obrigações da nova norma sobre riscos psicossociais.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Saiba mais <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+              <Link to="/blog/absenteismo-juridico-problema-silencioso" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Absenteísmo Jurídico</h3>
+                <p className="text-sm text-muted-foreground mb-3">O problema silencioso que impacta a produtividade da sua equipe.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Ler artigo <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+              <Link to="/blog/como-implementar-acolhimento-juridico" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Guia de Implementação</h3>
+                <p className="text-sm text-muted-foreground mb-3">Passo a passo para implementar um programa de acolhimento jurídico.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Ler artigo <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-primary/90 to-primary">
         <div className="container mx-auto px-4">
