@@ -1,83 +1,45 @@
 
-# Corrigir Header Consistente e Logo Lento
+
+# Corrigir Links de Agendamento (CTA)
 
 ## Problema
-
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+O link atual `https://calendar.app.google/nrQvcnKBc4Fu3FzJA` nao esta funcionando. O usuario forneceu um novo link de agendamento do Google Calendar.
 
 ## Solucao
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+O widget JavaScript fornecido pelo Google nao funciona bem em aplicacoes React (SPA). A abordagem mais simples e confiavel e **substituir a URL antiga pela nova URL de agendamento** em todos os arquivos, mantendo o mesmo padrao de link direto que ja existe.
 
----
-
-## Alteracoes
-
-### 1. Criar `src/layouts/MainLayout.tsx`
-
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+### Nova URL
+```
+https://calendar.google.com/calendar/appointments/schedules/AcZssZ2GyYmhF9M7wyTa-iyORM70ntb_ojyDZ3M9rcr_kGrCnZZV-WZ7FOsl4KH2rTJ4Y4Bn28SgRmV2?gv=true
 ```
 
-### 2. Atualizar `src/App.tsx`
+### Passo 1: Centralizar a URL
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+Adicionar a URL de agendamento em `src/lib/constants.ts` para facilitar manutencao futura:
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
+```typescript
+export const BRAND = {
+  // ... campos existentes
+  calendarUrl: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2GyYmhF9M7wyTa-iyORM70ntb_ojyDZ3M9rcr_kGrCnZZV-WZ7FOsl4KH2rTJ4Y4Bn28SgRmV2?gv=true',
+}
 ```
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+### Passo 2: Atualizar todos os arquivos
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+Substituir o link antigo e importar a constante nos 9 arquivos afetados:
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
+| Arquivo | Ocorrencias |
+|---------|-------------|
+| `src/components/new-home/HeroSection.tsx` | 1 |
+| `src/components/new-home/MidCTASection.tsx` | 1 |
+| `src/components/new-home/FinalCTASection.tsx` | 1 |
+| `src/pages/NR01.tsx` | 2 |
+| `src/pages/ComoFunciona.tsx` | 1 |
+| `src/pages/ParaQuem.tsx` | 1 |
+| `src/pages/FAQ.tsx` | 1 |
+| `src/pages/BlogPost.tsx` | 1 |
+| `src/pages/Avaliacao.tsx` | 1 |
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+Cada arquivo tera o import `import { BRAND } from '@/lib/constants'` e usara `BRAND.calendarUrl` em vez da URL hardcoded. Assim, se precisar trocar a URL novamente no futuro, basta alterar em um unico lugar.
 
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
