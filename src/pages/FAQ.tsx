@@ -1,6 +1,7 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Calendar } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
+import { BRAND } from '@/lib/constants';
 import { useMemo } from 'react';
 
 const categories = [
