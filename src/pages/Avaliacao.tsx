@@ -9,8 +9,9 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  MessageCircle,
+  Calendar,
   Lightbulb,
+  MessageCircle,
   ArrowUpRight,
   ShieldCheck,
   Users,
