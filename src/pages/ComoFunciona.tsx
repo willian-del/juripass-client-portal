@@ -1,5 +1,6 @@
 import { Calendar, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare, Users, Clock, FileCheck, MessageCircle } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
+import { BRAND } from '@/lib/constants';
 
 const steps = [
   {
