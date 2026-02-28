@@ -16,6 +16,11 @@ const FinalCTASection = lazy(() => import('@/components/new-home/FinalCTASection
 const Index = () => {
   return (
     <>
+      <SEOHead
+        title="Juripass — Programa de Acolhimento Jurídico para Empresas | Gestão de RH"
+        description="Canal externo e confidencial para acolher colaboradores em questões pessoais sensíveis. Ferramenta de gestão de RH alinhada à Nova NR-01 para prevenção de riscos psicossociais."
+        jsonLd={[organizationJsonLd, websiteJsonLd]}
+      />
       <HeroSection />
       <ScrollReveal>
         <RecognitionSection />

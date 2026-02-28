@@ -47,6 +47,10 @@ const implantationSteps = [
 const ComoFunciona = () => {
   return (
     <>
+      <SEOHead
+        title="Como Funciona a Juripass — Acolhimento Jurídico Corporativo"
+        description="Entenda como o programa de acolhimento jurídico funciona: canal confidencial via WhatsApp, equipe treinada e encaminhamento especializado para colaboradores."
+      />
       {/* Hero */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">

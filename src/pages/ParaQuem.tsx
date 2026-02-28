@@ -49,6 +49,10 @@ const alsoServe = [
 const ParaQuem = () => {
   return (
     <>
+      <SEOHead
+        title="Para Quem — Juripass | Benefício Jurídico para Indústria, Varejo e Call Center"
+        description="Empresas com mais de 200 colaboradores onde situações pessoais impactam a operação. Solução para gestão de pessoas e conformidade com NR-01."
+      />
       {/* Hero */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
