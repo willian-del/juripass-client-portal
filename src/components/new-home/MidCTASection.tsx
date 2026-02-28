@@ -21,7 +21,7 @@ export function MidCTASection() {
             className="bg-white text-primary hover:bg-white/90 font-semibold text-base px-8 shadow-lg"
           >
             <a
-              href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
+              href={BRAND.calendarUrl}
               target="_blank"
               rel="noopener noreferrer"
             >

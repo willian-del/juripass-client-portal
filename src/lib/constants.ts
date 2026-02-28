@@ -1,5 +1,6 @@
 export const BRAND = {
   name: 'Juripass',
+  calendarUrl: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2GyYmhF9M7wyTa-iyORM70ntb_ojyDZ3M9rcr_kGrCnZZV-WZ7FOsl4KH2rTJ4Y4Bn28SgRmV2?gv=true',
   tagline: 'Segurança jurídica na palma da sua mão',
   colors: {
     primary: '#4A9FD8',

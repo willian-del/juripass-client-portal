@@ -23,7 +23,7 @@ export function FinalCTASection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" asChild className="font-semibold text-base px-8 shadow-primary">
               <a
-                href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
+                href={BRAND.calendarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
