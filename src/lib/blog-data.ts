@@ -6,6 +6,7 @@ export interface BlogArticle {
   readTime: string;
   publishedAt: string;
   sections: { heading: string; content: string }[];
+  relatedSlugs?: string[];
 }
 
 export const blogArticles: BlogArticle[] = [
