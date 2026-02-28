@@ -1,83 +1,84 @@
 
-# Corrigir Header Consistente e Logo Lento
+# Blog / Conteudo Educativo + Limpeza do Header
 
-## Problema
+## Resumo
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
-
-## Solucao
-
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+Duas alteracoes principais:
+1. **Remover os botoes CTA do header** (Area do Cliente e Agende uma conversa) para liberar espaco, mantendo apenas a navegacao e o logo
+2. **Criar uma pagina de blog** (`/blog`) com artigos educativos estaticos focados em SEO, linkada no menu principal
 
 ---
 
-## Alteracoes
+## 1. Limpar o Header
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**Arquivo:** `src/components/home/HomeHeader.tsx`
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
-
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+- Remover o bloco de CTAs do desktop (linhas 55-69: "Area do Cliente" e "Agende uma conversa")
+- Remover os CTAs do menu mobile (linhas 94-107)
+- Remover imports nao utilizados (`ExternalLink`, `Calendar`, `Button`)
+- Resultado: header limpo com apenas logo + navegacao + hamburger mobile
 
 ---
 
-## Resultado esperado
+## 2. Criar pagina de Blog
 
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
+### 2a. Pagina principal do blog (`/blog`)
 
-## Arquivos
+**Arquivo novo:** `src/pages/Blog.tsx`
+
+- SEOHead com title "Conteudo para RH | Juripass - Artigos sobre Gestao de Pessoas e NR-01"
+- Lista de cards de artigos com titulo, resumo, categoria e tempo de leitura
+- Cada card linka para `/blog/:slug`
+- Artigos definidos estaticamente (sem banco de dados), cobrindo temas estrategicos:
+  1. "Absenteismo Juridico: O Problema Silencioso nas Empresas"
+  2. "Nova NR-01 e Riscos Psicossociais: Guia Pratico para RH"
+  3. "Beneficios Corporativos: O Que Realmente Faz Diferenca na Retencao"
+  4. "Como Implementar um Programa de Acolhimento Juridico"
+  5. "Saude Mental no Trabalho: O Papel do RH na Prevencao"
+
+### 2b. Pagina de artigo individual
+
+**Arquivo novo:** `src/pages/BlogPost.tsx`
+
+- Rota: `/blog/:slug`
+- Renderiza o conteudo completo do artigo baseado no slug
+- SEOHead dinamico por artigo (title, description, JSON-LD Article)
+- CTA no final de cada artigo ("Agende uma conversa")
+- Navegacao de volta ao blog
+
+### 2c. Dados dos artigos
+
+**Arquivo novo:** `src/lib/blog-data.ts`
+
+- Array com os artigos (slug, titulo, descricao, categoria, tempo de leitura, conteudo completo em formato de secoes)
+- Conteudo rico e otimizado para SEO com palavras-chave: acolhimento juridico, gestao de RH, NR-01, riscos psicossociais, beneficios corporativos
+
+---
+
+## 3. Integracao
+
+### Roteamento (`src/App.tsx`)
+- Adicionar rotas `/blog` e `/blog/:slug` com lazy loading dentro do MainLayout
+
+### Navegacao (`src/components/home/HomeHeader.tsx`)
+- Adicionar "Blog" ao array `navItems` apos "FAQ"
+
+### Sitemap (`public/sitemap.xml`)
+- Adicionar `/blog` com priority 0.7
+
+### Home (`src/pages/Index.tsx`)
+- Adicionar o `BlogSection` existente (ja criado) antes do `FinalCTASection`, com link para `/blog`
+
+---
+
+## Arquivos criados/alterados
 
 | Arquivo | Acao |
 |---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
+| `src/lib/blog-data.ts` | **Criar** - dados estaticos dos artigos |
+| `src/pages/Blog.tsx` | **Criar** - listagem de artigos |
+| `src/pages/BlogPost.tsx` | **Criar** - artigo individual |
+| `src/components/home/HomeHeader.tsx` | Remover CTAs, adicionar "Blog" ao menu |
+| `src/App.tsx` | Adicionar rotas `/blog` e `/blog/:slug` |
+| `src/pages/Index.tsx` | Adicionar secao de blog na home |
+| `public/sitemap.xml` | Adicionar `/blog` |
