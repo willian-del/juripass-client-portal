@@ -1,34 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Adicionar lista de consequencias a OrganizationalProblemSection
+## Problema
 
-## Objetivo
-Agregar 3 frases de consequencia logo apos o fluxo visual (cards) e antes do paragrafo final, como uma lista estilizada com icones.
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-## Conteudo a adicionar
-- Gestores atuam como conselheiros informais
-- O RH recebe relatos delicados fora do seu escopo
-- Questoes externas passam a impactar clima e operacao
+## Solucao
 
-## Layout
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-As 3 frases serao apresentadas como uma lista vertical centralizada com icones de alerta/check sutis, entre o fluxo de cards e o paragrafo final. Cada item tera um icone pequeno a esquerda e o texto em `text-muted-foreground` com `font-medium`.
+---
+
+## Alteracoes
+
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
 ```text
-+------------------------------------------+
-|  [fluxo de cards existente]              |
-|                                           |
-|  ! Gestores atuam como conselheiros...   |
-|  ! O RH recebe relatos delicados...      |
-|  ! Questoes externas passam a impactar...|
-|                                           |
-|  "Gestores tentam ajudar..."             |
-+------------------------------------------+
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-## Alteracao tecnica
+### 2. Atualizar `src/App.tsx`
 
-| Arquivo | Mudanca |
-|---------|---------|
-| `src/components/new-home/OrganizationalProblemSection.tsx` | Adicionar um bloco `div` com 3 itens de lista entre o fluxo (linha 59) e o paragrafo final (linha 61). Cada item usa `AlertTriangle` ou `ChevronRight` como icone e texto em `text-sm text-muted-foreground`. Container com `max-w-md mx-auto space-y-3 text-left`. |
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
