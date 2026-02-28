@@ -4,7 +4,7 @@ import { SEOHead } from '@/components/ui/SEOHead';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { BRAND } from '@/lib/constants';
+import { BRAND, openScheduling } from '@/lib/constants';
 
 const steps = [
   {
