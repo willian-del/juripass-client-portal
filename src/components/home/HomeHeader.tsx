@@ -51,22 +51,6 @@ export function HomeHeader() {
             ))}
           </nav>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <Button size="sm" variant="outline" asChild>
-              <a href="https://portaljuripass.lovable.app" target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4 mr-1" />
-                Área do Cliente
-              </a>
-            </Button>
-            <Button size="sm" asChild>
-              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
-                <Calendar className="h-4 w-4 mr-1" />
-                Agende uma conversa
-              </a>
-            </Button>
-          </div>
-
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2"
