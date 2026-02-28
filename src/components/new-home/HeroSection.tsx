@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
-import { BRAND } from '@/lib/constants';
+import { openScheduling } from '@/lib/constants';
 
 export function HeroSection() {
   return (
