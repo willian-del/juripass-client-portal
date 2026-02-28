@@ -1,62 +1,83 @@
 
-# Pagina dedicada: Nova NR-01 e Riscos Psicossociais
+# Corrigir Header Consistente e Logo Lento
 
-## Objetivo
-Criar uma pagina `/nr-01` focada em capturar trafego organico de profissionais de RH pesquisando sobre a Nova NR-01, riscos psicossociais e obrigacoes legais das empresas. A pagina educa o leitor e posiciona a Juripass como solucao pratica.
+## Problema
 
-## Estrutura da pagina
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### 1. Hero
-- H1: "Nova NR-01 e Riscos Psicossociais: O Que Muda Para o RH"
-- Subtitulo explicando que a norma agora exige prevencao de riscos psicossociais e que a Juripass ajuda empresas a estarem em conformidade
-- Badge/tag: "Atualizado 2025"
+## Solucao
 
-### 2. O que e a Nova NR-01 (secao educativa)
-- Explicacao clara e acessivel sobre a atualizacao da NR-01
-- O que sao riscos psicossociais no contexto do trabalho
-- Exemplos praticos: estresse, assedio, conflitos pessoais que afetam o trabalho
-- Timeline/destaque: prazo de adequacao e fiscalizacao
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### 3. Quais as obrigacoes da empresa
-- Lista de exigencias: identificar, avaliar e gerenciar riscos psicossociais
-- Canal de acolhimento como parte da estrategia de prevencao
-- Consequencias do nao cumprimento (multas, acoes trabalhistas)
+---
 
-### 4. Como a Juripass ajuda na conformidade
-- Conexao direta entre o programa de acolhimento juridico e os requisitos da NR-01
-- Bullets: canal externo e confidencial, dados anonimizados para o RH, prevencao ativa
-- Diferencial: nao e apenas compliance, e cuidado genuino com o colaborador
+## Alteracoes
 
-### 5. Dados e estatisticas
-- Reutilizar dados ja existentes (69% enfrentam problemas juridicos, 28% impacto na saude mental)
-- Adicionar contexto de riscos psicossociais
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### 6. CTA final
-- "Agende uma conversa" com link para o Google Calendar
-- Texto: "Entenda como adequar sua empresa a Nova NR-01 com um programa de acolhimento juridico"
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-## Alteracoes tecnicas
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
 
 | Arquivo | Acao |
 |---------|------|
-| `src/pages/NR01.tsx` | **Criar** - pagina completa com todas as secoes |
-| `src/App.tsx` | Adicionar rota `/nr-01` com lazy loading dentro do MainLayout |
-| `src/components/home/HomeHeader.tsx` | Adicionar "NR-01" ao menu de navegacao |
-| `src/components/ui/SEOHead.tsx` | Ja existe, sera usado na nova pagina |
-| `public/sitemap.xml` | Adicionar `/nr-01` com priority 0.9 |
-| `public/robots.txt` | Sem alteracao (pagina publica) |
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
-### SEO da pagina
-
-- **Title**: "Nova NR-01 e Riscos Psicossociais — Juripass | Como Adequar Sua Empresa"
-- **Description**: "Entenda o que muda com a Nova NR-01 sobre riscos psicossociais no trabalho. Saiba como um programa de acolhimento juridico ajuda sua empresa na conformidade e prevencao."
-- **JSON-LD**: Article schema com keywords sobre NR-01, riscos psicossociais, saude mental no trabalho
-- **H1-H3**: otimizados com termos de busca como "riscos psicossociais", "NR-01 atualizacao", "obrigacoes do empregador"
-
-### Navegacao
-
-Adicionar item "NR-01" no array `navItems` do header, entre "Para Quem" e "FAQ":
-
-```text
-Inicio | Como Funciona | Para Quem | NR-01 | FAQ
-```
+Nenhuma dependencia nova.
