@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { BRAND } from '@/lib/constants';
+import { openScheduling } from '@/lib/constants';
 
 export function MidCTASection() {
   return (
