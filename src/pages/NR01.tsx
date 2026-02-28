@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
