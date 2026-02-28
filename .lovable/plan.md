@@ -1,83 +1,43 @@
 
-# Corrigir Header Consistente e Logo Lento
+# Links Internos entre NR-01, Para Quem e Blog
 
-## Problema
+## Objetivo
+Adicionar blocos de links internos contextuais entre as paginas NR-01, Para Quem e os artigos do blog para criar uma malha de interligacao que fortalece o SEO (link juice) e melhora a navegacao do usuario.
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Alteracoes por arquivo
 
-## Solucao
+### 1. `src/pages/NR01.tsx`
+Adicionar uma secao "Conteudo relacionado" antes do CTA final com links para:
+- Pagina "Para Quem" (com texto: "Descubra quais segmentos mais se beneficiam")
+- Artigo do blog sobre NR-01 (slug: `nr-01-riscos-psicossociais-guia-pratico`)
+- Artigo sobre saude mental (slug: `saude-mental-trabalho-papel-rh`)
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### 2. `src/pages/ParaQuem.tsx`
+Adicionar uma secao "Saiba mais" entre "Tambem atendemos" e o CTA final com links para:
+- Pagina NR-01 (com texto: "Entenda as obrigacoes da Nova NR-01")
+- Artigo sobre absenteismo juridico (slug: `absenteismo-juridico-problema-silencioso`)
+- Artigo sobre implementacao (slug: `como-implementar-acolhimento-juridico`)
 
----
+### 3. `src/pages/BlogPost.tsx`
+Adicionar uma secao "Leia tambem" entre o conteudo do artigo e o CTA final, mostrando ate 3 artigos relacionados (excluindo o atual). Tambem adicionar links contextuais para as paginas NR-01 e Para Quem dependendo da categoria do artigo.
 
-## Alteracoes
+### 4. `src/lib/blog-data.ts`
+Adicionar um campo opcional `relatedSlugs` a cada artigo para definir quais artigos sao relacionados. Isso permite controle editorial sobre as sugestoes.
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+## Design visual
+Cada bloco de links internos segue o padrao visual do site:
+- Card com borda `border-border`, fundo `bg-card` ou `bg-muted/30`
+- Icone + titulo + descricao curta
+- Seta para indicar navegacao (`ArrowRight`)
+- Estilo consistente com os cards ja existentes no blog
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
-
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
+## Detalhes tecnicos
 
 | Arquivo | Acao |
 |---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+| `src/lib/blog-data.ts` | Adicionar campo `relatedSlugs` aos artigos |
+| `src/pages/NR01.tsx` | Adicionar secao "Conteudo relacionado" com 3 cards de link |
+| `src/pages/ParaQuem.tsx` | Adicionar secao "Saiba mais" com 3 cards de link |
+| `src/pages/BlogPost.tsx` | Adicionar secao "Leia tambem" com artigos relacionados + links para paginas |
 
-Nenhuma dependencia nova.
+Todos os links usam o componente `<Link>` do react-router-dom para navegacao SPA. Import de `ArrowRight` do lucide-react para os icones de seta.
