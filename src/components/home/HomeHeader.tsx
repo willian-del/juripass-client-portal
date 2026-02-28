@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, ExternalLink, MessageCircle } from 'lucide-react';
+import { Menu, X, ExternalLink, Calendar } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
