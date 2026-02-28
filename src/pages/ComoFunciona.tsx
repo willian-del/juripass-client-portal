@@ -1,4 +1,4 @@
-import { MessageCircle, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare, Users, Clock, FileCheck } from 'lucide-react';
+import { Calendar, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare, Users, Clock, FileCheck, MessageCircle } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 
 const steps = [
@@ -135,13 +135,13 @@ const ComoFunciona = () => {
               Quer entender como isso funcionaria na sua empresa?
             </h2>
             <a
-              href="https://wa.me/5511999999999"
+              href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
             >
-              <MessageCircle className="h-5 w-5" />
-              Conversar rapidamente
+              <Calendar className="h-5 w-5" />
+              Agende uma conversa
             </a>
           </div>
         </div>

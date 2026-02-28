@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function MidCTASection() {
@@ -20,12 +20,12 @@ export function MidCTASection() {
             className="bg-white text-primary hover:bg-white/90 font-semibold text-base px-8 shadow-lg"
           >
             <a
-              href="https://wa.me/5511999999999?text=Olá! Gostaria de entender como a Juripass pode ajudar minha empresa."
+              href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MessageCircle className="h-5 w-5" />
-              Conversar rapidamente
+              <Calendar className="h-5 w-5" />
+              Agende uma conversa
             </a>
           </Button>
         </div>

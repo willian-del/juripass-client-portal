@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, ExternalLink, MessageCircle } from 'lucide-react';
+import { Menu, X, ExternalLink, Calendar } from 'lucide-react';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -60,9 +60,9 @@ export function HomeHeader() {
               </a>
             </Button>
             <Button size="sm" asChild>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-4 w-4 mr-1" />
-                Conversar rapidamente
+              <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+                <Calendar className="h-4 w-4 mr-1" />
+                Agende uma conversa
               </a>
             </Button>
           </div>
@@ -98,9 +98,9 @@ export function HomeHeader() {
                   </a>
                 </Button>
                 <Button size="sm" asChild className="w-full">
-                  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="h-4 w-4 mr-1" />
-                    Conversar rapidamente
+                  <a href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA" target="_blank" rel="noopener noreferrer">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    Agende uma conversa
                   </a>
                 </Button>
               </div>
