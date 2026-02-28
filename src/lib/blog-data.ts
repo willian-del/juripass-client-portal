@@ -79,6 +79,7 @@ export const blogArticles: BlogArticle[] = [
     category: 'Benefícios',
     readTime: '5 min',
     publishedAt: '2025-03-15',
+    relatedSlugs: ['absenteismo-juridico-problema-silencioso', 'como-implementar-acolhimento-juridico', 'saude-mental-trabalho-papel-rh'],
     sections: [
       {
         heading: 'O cenário atual dos benefícios corporativos',
