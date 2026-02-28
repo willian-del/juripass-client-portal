@@ -1,83 +1,32 @@
 
-# Corrigir Header Consistente e Logo Lento
+# Alterar CTA "Conversar rapidamente" para "Agende uma conversa"
 
-## Problema
+## Resumo
+Substituir todos os botoes CTA que diziam "Conversar rapidamente" (apontando para WhatsApp) por "Agende uma conversa" apontando para o Google Calendar: `https://calendar.app.google/nrQvcnKBc4Fu3FzJA`
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+Tambem trocar o icone de `MessageCircle` para `Calendar` (lucide-react), ja que o destino agora e um agendamento e nao mais uma conversa no WhatsApp.
 
-## Solucao
+## Arquivos alterados (8 arquivos)
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+| Arquivo | Mudanca |
+|---------|---------|
+| `src/components/new-home/HeroSection.tsx` | Texto, link e icone do CTA principal |
+| `src/components/new-home/MidCTASection.tsx` | Texto, link e icone |
+| `src/components/new-home/FinalCTASection.tsx` | Texto, link e icone do botao primario |
+| `src/components/home/HomeHeader.tsx` | Texto, link e icone nos 2 botoes (desktop e mobile) |
+| `src/pages/FAQ.tsx` | Texto, link e icone do CTA final |
+| `src/pages/ComoFunciona.tsx` | Texto, link e icone do CTA final |
+| `src/pages/ParaQuem.tsx` | Texto, link e icone do CTA final |
+| `src/pages/Avaliacao.tsx` | Texto, link e icone do CTA |
 
----
+## Detalhes tecnicos
 
-## Alteracoes
+Em cada arquivo:
+1. Substituir `href="https://wa.me/5511999999999..."` por `href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"`
+2. Substituir texto "Conversar rapidamente" por "Agende uma conversa"
+3. Substituir import e uso de `MessageCircle` por `Calendar` (de lucide-react)
+4. Manter `target="_blank"` e `rel="noopener noreferrer"`
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**Nota:** O arquivo `src/components/avaliacao/OnePager.tsx` contem uma referencia textual ao WhatsApp no rodape de contato -- essa sera mantida como esta, pois e informacao de contato e nao um CTA.
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
-
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
+**Subtitulo do Hero:** O texto "15 minutos para entender se faz sentido para sua empresa." sera mantido, pois continua fazendo sentido com agendamento.
