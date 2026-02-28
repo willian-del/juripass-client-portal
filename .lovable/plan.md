@@ -1,56 +1,83 @@
 
-# Redesign da Pagina "Como Funciona" com Fluxo Visual
+# Corrigir Header Consistente e Logo Lento
 
-## Objetivo
-Transformar a pagina atual `/como-funciona` de um layout simples de cards empilhados para um fluxo visual conectado e envolvente, mostrando claramente a jornada do colaborador e o processo de implantacao.
+## Problema
 
-## O que muda
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### 1. Hero com mais impacto
-- Adicionar badge "Simples e confidencial" no topo
-- Subtitulo mais descritivo com destaque em bold para termos-chave
-- Dois botoes: CTA primario "Agende uma conversa" e secundario "Ver para quem" (link para /para-quem)
-- Background com gradiente e formas decorativas (mesmo padrao visual da pagina NR-01)
+## Solucao
 
-### 2. Fluxo visual dos 3 passos (jornada do colaborador)
-Substituir os cards empilhados por um layout com **linha conectora vertical** entre os passos, criando uma sensacao de fluxo/timeline:
-- Cada passo tem um circulo numerado conectado por uma linha vertical tracejada
-- Icone grande a esquerda, conteudo a direita
-- Detalhes em bullet points mantidos
-- Animacao de entrada com `ScrollReveal` e delay progressivo
-- Badge de "Primeiro retorno em ate 1 dia util" ao final da timeline
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### 3. Secao "Por que externo e confidencial?"
-Nova secao entre os passos e a implantacao, com 3 cards lado a lado explicando:
-- **Externo**: o colaborador nao precisa se expor internamente
-- **Confidencial**: a empresa nao recebe informacoes individuais
-- **Sem conflito**: o canal nao gera passivo para a empresa
+---
 
-### 4. Implantacao com timeline horizontal
-Transformar o grid 2x2 atual em uma **timeline horizontal** com 4 etapas conectadas por setas:
-- Cada etapa com icone, titulo e descricao
-- Indicador de prazo "Ate 15 dias" com icone de relogio
-- Badge "Sem taxa de implantacao" em destaque
+## Alteracoes
 
-### 5. Secao de links internos
-Adicionar secao "Saiba mais" antes do CTA final, com cards linkando para:
-- Pagina NR-01 ("Entenda a Nova NR-01")
-- Pagina Para Quem ("Descubra se faz sentido para sua empresa")
-- Artigo do blog sobre implementacao
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### 6. CTA final mantido
-Mesmo padrao atual com gradiente primario.
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-## Detalhes tecnicos
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
 
 | Arquivo | Acao |
 |---------|------|
-| `src/pages/ComoFunciona.tsx` | Reescrever com fluxo visual, timeline, nova secao de diferenciais, links internos e ScrollReveal |
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
-- Usa `ScrollReveal` para animacoes de entrada (mesmo padrao de NR01.tsx)
-- Usa `Link` do react-router-dom para links internos
-- Usa `Badge` de shadcn para tags
-- Usa `Button` de shadcn para CTAs
-- Todos os imports de icones do lucide-react
-- URL de agendamento via `BRAND.calendarUrl`
-- Nao cria arquivos novos, apenas reescreve a pagina existente
+Nenhuma dependencia nova.
