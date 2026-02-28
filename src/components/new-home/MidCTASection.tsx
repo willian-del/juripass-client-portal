@@ -17,17 +17,11 @@ export function MidCTASection() {
           </p>
           <Button
             size="lg"
-            asChild
+            onClick={openScheduling}
             className="bg-white text-primary hover:bg-white/90 font-semibold text-base px-8 shadow-lg"
           >
-            <a
-              href={BRAND.calendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Calendar className="h-5 w-5" />
-              Agende uma conversa
-            </a>
+            <Calendar className="h-5 w-5" />
+            Agende uma conversa
           </Button>
         </div>
       </div>

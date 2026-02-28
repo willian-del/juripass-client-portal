@@ -125,10 +125,8 @@ const BlogPost = () => {
             <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
               Agende uma conversa rápida e descubra como um programa de acolhimento jurídico transforma indicadores de RH.
             </p>
-            <Button size="lg" asChild>
-              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
-                Agende uma conversa
-              </a>
+            <Button size="lg" onClick={openScheduling}>
+              Agende uma conversa
             </Button>
           </div>
         </div>

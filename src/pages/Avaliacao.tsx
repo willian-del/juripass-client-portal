@@ -212,11 +212,9 @@ export default function Avaliacao() {
               <FileText className="h-5 w-5 mr-2" />
               Baixar resumo em uma página
             </Button>
-            <Button size="lg" asChild>
-              <a href={BRAND.calendarUrl} target="_blank" rel="noopener noreferrer">
-                <Calendar className="h-5 w-5 mr-2" />
-                Agende uma conversa
-              </a>
+            <Button size="lg" onClick={openScheduling}>
+              <Calendar className="h-5 w-5 mr-2" />
+              Agende uma conversa
             </Button>
           </div>
         </div>
