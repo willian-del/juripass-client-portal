@@ -40,6 +40,8 @@ export function RecognitionSection() {
             Sem um destino claro, essas situações não desaparecem.
             <br />
             Elas apenas passam a ser administradas informalmente pela empresa.
+            <br />
+            O RH vira o ponto de apoio informal para questões pessoais sensíveis.
           </p>
         </div>
       </div>
