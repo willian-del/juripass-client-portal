@@ -3,6 +3,7 @@ import { getArticleBySlug, blogArticles } from '@/lib/blog-data';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { ArrowLeft, Clock, Tag, Calendar, ArrowRight, Scale, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BRAND } from '@/lib/constants';
 
 const BASE_URL = 'https://juripass-client-portal.lovable.app';
 
