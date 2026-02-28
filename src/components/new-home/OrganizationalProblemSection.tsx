@@ -2,9 +2,9 @@ import { User, Users, Building2, AlertTriangle, ChevronRight, ChevronDown } from
 
 const steps = [
   { label: 'Colaborador', sublabel: 'com problema pessoal', icon: User, highlight: false },
-  { label: 'Gestor', sublabel: 'tenta ajudar', icon: Users, highlight: false },
-  { label: 'RH', sublabel: 'tenta orientar', icon: Building2, highlight: false },
-  { label: 'Desgaste', sublabel: 'para todos', icon: AlertTriangle, highlight: true },
+  { label: 'Gestor', sublabel: 'Gestores atuam como conselheiros informais', icon: Users, highlight: false },
+  { label: 'RH', sublabel: 'O RH recebe relatos delicados fora do seu escopo', icon: Building2, highlight: false },
+  { label: 'Desgaste', sublabel: 'Questões externas passam a impactar clima e operação', icon: AlertTriangle, highlight: true },
 ];
 
 export function OrganizationalProblemSection() {
