@@ -19,3 +19,15 @@ export const BRAND = {
     description: 'Segurança jurídica na palma da sua mão. Acesse sua área do cliente para gerenciar atendimentos e cadastro.'
   }
 } as const;
+
+export function openScheduling() {
+  const w = 600;
+  const h = 700;
+  const left = (screen.width - w) / 2;
+  const top = (screen.height - h) / 2;
+  window.open(
+    BRAND.calendarUrl,
+    'juripass-agendamento',
+    `width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no`
+  );
+}
