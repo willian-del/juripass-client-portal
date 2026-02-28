@@ -128,7 +128,7 @@ export default function NR01() {
               </p>
               <Button size="lg" variant="secondary" asChild>
                 <a
-                  href="https://calendar.app.google/nrQvcnKBc4Fu3FzJA"
+                  href={BRAND.calendarUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
