@@ -1,4 +1,5 @@
-import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar, ArrowRight, Scale, BookOpen } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 
 const segments = [
