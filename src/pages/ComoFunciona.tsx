@@ -1,4 +1,4 @@
-import { MessageCircle, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare, Users, Clock, FileCheck } from 'lucide-react';
+import { Calendar, Lightbulb, ArrowUpRight, CheckCircle2, Building2, MessageSquare, Users, Clock, FileCheck, MessageCircle } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 
 const steps = [
