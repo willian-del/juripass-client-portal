@@ -84,6 +84,7 @@ export function OrganizationalProblemSection() {
               <span className="text-primary font-medium">Mas nenhum deles deveria assumir esse papel.</span>
             </p>
           </div>
+        </div>
       </div>
     </section>
   );
