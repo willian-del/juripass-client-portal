@@ -58,6 +58,20 @@ export function OrganizationalProblemSection() {
             ))}
           </div>
 
+          {/* Consequências */}
+          <div className="max-w-md mx-auto space-y-3 text-left py-2">
+            {[
+              'Gestores atuam como conselheiros informais',
+              'O RH recebe relatos delicados fora do seu escopo',
+              'Questões externas passam a impactar clima e operação',
+            ].map((text) => (
+              <div key={text} className="flex items-start gap-3">
+                <AlertTriangle className="text-destructive/60 mt-0.5 shrink-0" size={16} />
+                <p className="text-sm text-muted-foreground font-medium">{text}</p>
+              </div>
+            ))}
+          </div>
+
           <p className="text-muted-foreground leading-relaxed max-w-lg mx-auto">
             Gestores tentam ajudar. O RH tenta orientar.
             <br />
