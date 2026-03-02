@@ -26,12 +26,12 @@ export function RecognitionSection() {
             {items.map((item) => (
               <div
                 key={item.label}
-                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-200 min-h-[72px]"
+                className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-200 h-[100px] md:h-[110px]"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <item.icon className="h-5 w-5 text-primary" />
                 </div>
-                <span className="text-sm font-medium text-foreground text-left min-h-[2.5rem] flex items-center">{item.label}</span>
+                <span className="text-sm font-medium text-foreground text-center leading-tight">{item.label}</span>
               </div>
             ))}
           </div>
