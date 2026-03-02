@@ -1,4 +1,5 @@
-import { Factory, ShoppingBag, Headphones } from 'lucide-react';
+import { Factory, ShoppingBag, Headphones, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const segments = [
   {
