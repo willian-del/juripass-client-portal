@@ -298,7 +298,7 @@ export default function NR01() {
             <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
               Conteúdo relacionado
             </h2>
-            <div className="grid sm:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <Link to="/para-quem" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <Users className="h-5 w-5 text-primary" />
@@ -307,6 +307,16 @@ export default function NR01() {
                 <p className="text-sm text-muted-foreground mb-3">Descubra quais segmentos mais se beneficiam do acolhimento jurídico.</p>
                 <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
                   Saiba mais <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+              <Link to="/para-seus-colaboradores" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <HeartHandshake className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Para seus colaboradores</h3>
+                <p className="text-sm text-muted-foreground mb-3">Canal de apoio confidencial para questões pessoais do time.</p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                  Conhecer <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
               <Link to="/blog/nr-01-riscos-psicossociais-guia-pratico" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">

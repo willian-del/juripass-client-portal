@@ -1,4 +1,5 @@
-import { Factory, ShoppingBag, Headphones } from 'lucide-react';
+import { Factory, ShoppingBag, Headphones, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const segments = [
   {
@@ -65,6 +66,12 @@ export function SegmentationSection() {
                 </ul>
               </div>
             ))}
+          </div>
+
+          <div className="text-center pt-4">
+            <Link to="/para-quem" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
+              Ver mais detalhes <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </div>

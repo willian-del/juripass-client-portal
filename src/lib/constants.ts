@@ -15,8 +15,8 @@ export const BRAND = {
     logoHorizontalWhite: '/images/branding/juripass-logo-horizontal-white.svg'
   },
   meta: {
-    title: 'Juripass - Área do Cliente',
-    description: 'Segurança jurídica na palma da sua mão. Acesse sua área do cliente para gerenciar atendimentos e cadastro.'
+    title: 'Juripass — Acolhimento Jurídico Corporativo',
+    description: 'Canal externo e confidencial de orientação jurídica para colaboradores. Benefício corporativo que fortalece a gestão de pessoas.'
   }
 } as const;
 

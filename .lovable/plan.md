@@ -1,122 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Auditoria Completa: Layout, UX, Navegacao, SEO e CTAs
+## Problema
 
-## 1. SEO e Sitemap
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### Problemas encontrados
+## Solucao
 
-**Sitemap desatualizado** - Falta a pagina `/para-seus-colaboradores` no `sitemap.xml`. Tambem faltam URLs individuais dos artigos do blog (ex: `/blog/absenteismo-juridico-problema-silencioso`).
-
-**Ano desatualizado no footer** - O footer exibe "2025" mas estamos em 2026.
-
-**Meta title do BRAND.meta desatualizado** - Em `constants.ts`, `BRAND.meta.title` ainda diz "Area do Cliente", resquicio do posicionamento anterior.
-
-**Falta `lastmod` no sitemap** - Nenhuma URL tem data de ultima modificacao, o que ajuda crawlers a priorizar paginas atualizadas.
-
-### Acoes
-
-| Arquivo | Mudanca |
-|---------|---------|
-| `public/sitemap.xml` | Adicionar `/para-seus-colaboradores` e URLs dos artigos do blog; adicionar `lastmod` |
-| `src/components/ui/Footer.tsx` | Atualizar ano para 2026 (ou usar `new Date().getFullYear()`) |
-| `src/lib/constants.ts` | Atualizar `BRAND.meta` para refletir posicionamento atual |
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-## 2. Footer - Muito Minimalista
+## Alteracoes
 
-### Problema
-O footer atual contem apenas endereco, CNPJ e copyright. Nao tem links de navegacao, links para redes sociais, nem links para paginas institucionais. Isso e ruim para:
-- SEO (links internos no footer sao valorizados por crawlers)
-- UX (usuario que rola ate o final nao tem como navegar)
-- Credibilidade (footers robustos passam mais confianca)
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### Acao
-Reestruturar o footer com:
-- 3 colunas: Logo + descricao | Links de navegacao | Contato/Legal
-- Links internos para todas as paginas publicas
-- Manter dados institucionais (endereco, CNPJ)
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-| Arquivo | Mudanca |
-|---------|---------|
-| `src/components/ui/Footer.tsx` | Redesign completo com colunas, links internos e ano dinamico |
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
----
+### 2. Atualizar `src/App.tsx`
 
-## 3. Links Internos Faltantes
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-### Problemas
-- **Pagina "Para Colaboradores"** nao tem secao "Saiba mais" com links internos (todas as outras paginas como ComoFunciona, ParaQuem e NR01 tem).
-- **Home (SegmentationSection)** nao tem link para `/para-quem` (seria natural conectar "Quem mais sente isso" com a pagina expandida).
-- **Home (HowItWorksSection)** nao tem link para `/como-funciona`.
-- **NR-01** nao tem link para `/para-seus-colaboradores` na secao de conteudo relacionado.
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
-### Acoes
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-| Arquivo | Mudanca |
-|---------|---------|
-| `src/pages/ParaSeuColaborador.tsx` | Adicionar secao "Saiba mais" antes do CTA final com links para NR-01, Como Funciona e FAQ |
-| `src/components/new-home/SegmentationSection.tsx` | Adicionar link "Ver mais detalhes" para `/para-quem` |
-| `src/components/new-home/HowItWorksSection.tsx` | Adicionar link "Ver fluxo completo" para `/como-funciona` |
-| `src/pages/NR01.tsx` | Adicionar link para `/para-seus-colaboradores` na secao "Conteudo relacionado" |
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
----
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
 
-## 4. Inconsistencias de CTA
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
 
-### Problemas
-- **ParaQuem e FAQ** usam `<button>` nativo para o CTA final em vez de `<Button>` do shadcn. Isso cria inconsistencia visual (padding, font, hover) com as demais paginas.
-- **ComoFunciona CTA final** tem apenas 1 botao, enquanto as demais paginas tem 2 (primario + secundario). Falta opcao secundaria.
+### 4. Garantir scroll to top na navegacao
 
-### Acoes
-
-| Arquivo | Mudanca |
-|---------|---------|
-| `src/pages/ParaQuem.tsx` | Trocar `<button>` por `<Button variant="secondary">` no CTA final |
-| `src/pages/FAQ.tsx` | Trocar `<button>` por `<Button variant="secondary">` no CTA final |
-| `src/pages/ComoFunciona.tsx` | Adicionar CTA secundario "Conheca o beneficio" linkando para `/para-seus-colaboradores` |
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
 
 ---
 
-## 5. Mobile/Responsividade
+## Resultado esperado
 
-### Problema
-O header tem 7 itens de navegacao. No desktop cabe, mas no mobile o menu hamburguer abre uma lista longa. Nao e critico, mas poderia agrupar melhor.
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
 
-### Acao
-Nenhuma acao critica necessaria. O menu mobile atual funciona. Ponto de atencao para futuro.
+## Arquivos
 
----
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
-## 6. Pagina ParaSeuColaborador - Pontos de Melhoria
-
-### Problemas menores
-- Nao tem secao de links internos ("Saiba mais") como as demais paginas (ja mencionado acima).
-- A classe `bg-gradient-dark` usada na secao "Nao e assessoria juridica interna" pode nao estar definida no tailwind config. Verificar se renderiza corretamente.
-
----
-
-## 7. robots.txt
-
-### Ponto de atencao
-O robots.txt referencia o sitemap com URL do Lovable (`juripass-client-portal.lovable.app`). Se um dominio customizado for configurado no futuro, isso precisara ser atualizado.
-
----
-
-## Resumo de Prioridades
-
-| Prioridade | Item | Impacto |
-|------------|------|---------|
-| Alta | Atualizar sitemap com paginas faltantes | SEO |
-| Alta | Redesign do footer com links internos | SEO + UX |
-| Alta | Adicionar secao "Saiba mais" em ParaSeuColaborador | Links internos / SEO |
-| Media | Adicionar links de conexao na Home (Segmentation, HowItWorks) | Links internos |
-| Media | Padronizar CTAs (ParaQuem, FAQ) com componente Button | Consistencia visual |
-| Media | Adicionar link para ParaColaboradores na NR-01 | Links internos |
-| Baixa | Atualizar ano no footer para dinamico | Manutencao |
-| Baixa | Atualizar BRAND.meta em constants.ts | Coerencia |
-
-## Estimativa
-8 arquivos modificados, nenhum novo componente necessario.
-
+Nenhuma dependencia nova.

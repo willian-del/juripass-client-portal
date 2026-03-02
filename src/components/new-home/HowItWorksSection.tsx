@@ -1,4 +1,5 @@
-import { MessageCircle, Lightbulb, ArrowUpRight, Clock } from 'lucide-react';
+import { MessageCircle, Lightbulb, ArrowUpRight, ArrowRight, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const steps = [
   {
@@ -50,9 +51,14 @@ export function HowItWorksSection() {
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
-            <Clock className="h-4 w-4 text-primary" />
-            <span>Primeiro retorno em até 1 dia útil</span>
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center gap-2 text-muted-foreground text-sm">
+              <Clock className="h-4 w-4 text-primary" />
+              <span>Primeiro retorno em até 1 dia útil</span>
+            </div>
+            <Link to="/como-funciona" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
+              Ver fluxo completo <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </div>

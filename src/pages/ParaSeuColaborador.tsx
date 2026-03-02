@@ -291,6 +291,49 @@ export default function ParaSeuColaborador() {
         </div>
       </section>
 
+      {/* Saiba mais */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <ScrollReveal>
+            <div className="max-w-4xl mx-auto space-y-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center">Saiba mais</h2>
+              <div className="grid sm:grid-cols-3 gap-6">
+                <Link to="/nr-01" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <Scale className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Nova NR-01</h3>
+                  <p className="text-sm text-muted-foreground mb-3">Entenda as obrigações da norma sobre riscos psicossociais.</p>
+                  <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                    Saiba mais <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+                <Link to="/como-funciona" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <Lightbulb className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Como funciona</h3>
+                  <p className="text-sm text-muted-foreground mb-3">Veja o fluxo completo do acolhimento, da ativação ao encaminhamento.</p>
+                  <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                    Ver detalhes <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+                <Link to="/faq" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <MessageCircle className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Perguntas frequentes</h3>
+                  <p className="text-sm text-muted-foreground mb-3">Respostas para as dúvidas mais comuns de RHs e gestores.</p>
+                  <span className="inline-flex items-center gap-1 text-sm text-primary font-medium">
+                    Ver FAQ <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* CTA Final */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary/90 to-primary">
         <div className="container mx-auto px-4">
