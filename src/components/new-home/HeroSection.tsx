@@ -17,12 +17,12 @@ export function HeroSection() {
             Alguns problemas pessoais dos colaboradores não são da empresa.{' '}
             <span className="text-primary">Mas acabam chegando até ela.</span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             A Juripass cria um canal externo e confidencial para orientar essas situações
             antes que se tornem demandas internas ao RH ou aos gestores.
           </p>
           <div className="space-y-3 pt-4">
-            <Button size="lg" className="gap-2 text-base px-8 py-6 shadow-primary" onClick={openScheduling}>
+            <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openScheduling}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
             </Button>

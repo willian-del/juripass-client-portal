@@ -22,11 +22,11 @@ export function RecognitionSection() {
             <span className="text-primary">mesmo não sendo tema do RH</span>
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {items.map((item) => (
               <div
                 key={item.label}
-                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 min-h-[72px]"
+                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-200 min-h-[72px]"
               >
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                   <item.icon className="h-5 w-5 text-primary" />

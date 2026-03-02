@@ -13,11 +13,12 @@ export function FinalCTASection() {
         </div>
 
         <div className="max-w-3xl mx-auto text-center space-y-8">
-          <p className="text-2xl md:text-3xl font-bold text-foreground leading-relaxed">
+          <p className="text-xl md:text-2xl font-bold text-foreground leading-relaxed">
             A decisão não é contratar um benefício.
             <br />
             É definir se essas situações continuarão sendo tratadas internamente
-            — ou terão um encaminhamento estruturado.
+            — ou terão um{' '}
+            <span className="text-primary font-semibold">encaminhamento estruturado</span>.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

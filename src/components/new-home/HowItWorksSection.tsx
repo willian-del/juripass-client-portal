@@ -35,7 +35,7 @@ export function HowItWorksSection() {
             {steps.map((step) => (
               <div
                 key={step.number}
-                className="relative p-6 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 space-y-4"
+                className="relative p-6 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200 space-y-4"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">

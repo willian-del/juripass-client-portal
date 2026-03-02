@@ -89,7 +89,7 @@ export function WhatIsJuripassSection() {
             {pillars.map((pillar) => (
               <div
                 key={pillar.title}
-                className="bg-card border border-border rounded-2xl p-6 text-center space-y-4 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+                className="bg-card border border-border rounded-2xl p-6 text-center space-y-4 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
               >
                 <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
                   <pillar.icon className="h-7 w-7 text-primary" />
