@@ -308,7 +308,7 @@ export default function ParaSeuColaborador() {
                   <Calendar className="h-5 w-5" />
                   Levar a Juripass para minha empresa
                 </Button>
-                <Button size="lg" variant="outline" className="rounded-full px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10" asChild>
+                <Button size="lg" variant="outline" className="rounded-full px-8 bg-white/20 border-white/40 text-white hover:bg-white/30" asChild>
                   <Link to="/como-funciona">
                     Como funciona
                     <ChevronRight className="h-4 w-4 ml-1" />
