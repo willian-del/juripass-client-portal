@@ -15,6 +15,7 @@ const Avaliacao = lazy(() => import("./pages/Avaliacao"));
 const NR01 = lazy(() => import("./pages/NR01"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const ParaSeuColaborador = lazy(() => import("./pages/ParaSeuColaborador"));
 
 const App = () => (
   <TooltipProvider>
