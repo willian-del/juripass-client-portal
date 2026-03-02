@@ -1,51 +1,22 @@
 import { Link } from 'react-router-dom';
-import { BRAND } from '@/lib/constants';
-
-const navLinks = [
-  { to: '/como-funciona', label: 'Como Funciona' },
-  { to: '/para-quem', label: 'Para Quem' },
-  { to: '/para-seus-colaboradores', label: 'Para Colaboradores' },
-  { to: '/nr-01', label: 'NR-01' },
-  { to: '/faq', label: 'Perguntas Frequentes' },
-  { to: '/blog', label: 'Blog' },
-];
+import { LogoJuripass } from '@/components/ui/LogoJuripass';
 
 export function Footer() {
   return (
     <footer className="bg-muted/30 border-t border-border py-10 mt-auto">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Coluna 1: Logo + Descrição */}
           <div className="space-y-3">
             <Link to="/" className="inline-block">
-              <img
-                src={BRAND.assets.logoHorizontal}
-                alt={`${BRAND.name} logo`}
-                className="h-8"
-              />
+              <LogoJuripass variant="full" size="md" format="png" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Acolhimento jurídico corporativo. Canal externo e confidencial para colaboradores.
             </p>
           </div>
 
-          {/* Coluna 2: Navegação */}
-          <div>
-            <h3 className="text-sm font-semibold text-foreground mb-3">Navegação</h3>
-            <nav className="flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Coluna 3: Institucional */}
+          {/* Coluna 2: Institucional */}
           <div>
             <h3 className="text-sm font-semibold text-foreground mb-3">Institucional</h3>
             <div className="space-y-2 text-sm text-muted-foreground">
