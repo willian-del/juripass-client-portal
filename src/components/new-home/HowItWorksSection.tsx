@@ -26,7 +26,7 @@ export function HowItWorksSection() {
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto space-y-10">
+        <div className="max-w-4xl mx-auto space-y-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             Como funciona
           </h2>
@@ -35,7 +35,7 @@ export function HowItWorksSection() {
             {steps.map((step) => (
               <div
                 key={step.number}
-                className="relative p-6 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 space-y-4"
+                className="relative p-6 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200 space-y-4"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">

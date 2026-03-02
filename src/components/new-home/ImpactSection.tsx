@@ -35,9 +35,9 @@ const columns = [
 
 export function ImpactSection() {
   return (
-    <section className="py-16 md:py-24 bg-accent/30">
+    <section className="py-20 md:py-28 bg-accent/30">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto space-y-10">
+        <div className="max-w-4xl mx-auto space-y-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             O impacto na organização
           </h2>
@@ -46,7 +46,7 @@ export function ImpactSection() {
             {columns.map((col) => (
               <div
                 key={col.title}
-                className="p-6 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 space-y-4"
+                className="p-6 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200 space-y-4"
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                   <col.icon className="h-6 w-6 text-primary-foreground" />

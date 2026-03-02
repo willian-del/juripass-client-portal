@@ -36,9 +36,9 @@ const segments = [
 
 export function SegmentationSection() {
   return (
-    <section className="py-12 md:py-20 bg-background">
+    <section className="py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto space-y-10">
+        <div className="max-w-4xl mx-auto space-y-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             Quem mais sente isso no dia a dia
           </h2>
@@ -47,7 +47,7 @@ export function SegmentationSection() {
             {segments.map((seg) => (
               <div
                 key={seg.title}
-                className="p-6 rounded-xl bg-card border border-border hover:-translate-y-1 transition-transform space-y-4"
+                className="p-6 rounded-xl bg-card border border-border shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200 space-y-4"
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
                   <seg.icon className="h-6 w-6 text-primary-foreground" />
