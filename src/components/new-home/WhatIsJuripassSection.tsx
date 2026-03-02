@@ -29,7 +29,7 @@ const themes = [
 
 export function WhatIsJuripassSection() {
   return (
-    <section className="py-16 md:py-24 bg-accent/30">
+    <section className="py-20 md:py-28 bg-accent/30">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-12">
           {/* Título */}
