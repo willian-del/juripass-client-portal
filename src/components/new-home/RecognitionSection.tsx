@@ -1,7 +1,7 @@
 import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, ShoppingBag } from 'lucide-react';
 
 const items = [
-  { icon: Wallet, label: 'Endividamento e nome sujo' },
+  { icon: Wallet, label: 'Dívidas e nome sujo' },
   { icon: Heart, label: 'Conflitos e questões familiares' },
   { icon: Home, label: 'Problemas com moradia e aluguel' },
   { icon: Shield, label: 'Golpes e fraudes digitais' },
