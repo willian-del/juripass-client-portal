@@ -264,10 +264,18 @@ const ComoFunciona = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Quer entender como isso funcionaria na sua empresa?
             </h2>
-            <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openScheduling}>
-              <Calendar className="h-5 w-5 mr-2" />
-              Agende uma conversa
-            </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openScheduling}>
+                <Calendar className="h-5 w-5 mr-2" />
+                Agende uma conversa
+              </Button>
+              <Button size="lg" variant="outline" className="rounded-full px-8 bg-white/20 border-white/40 text-white hover:bg-white/30" asChild>
+                <Link to="/para-seus-colaboradores">
+                  Conheça o benefício
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>

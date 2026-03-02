@@ -177,13 +177,10 @@ const ParaQuem = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Sua empresa se encaixa? Vale uma conversa rápida.
             </h2>
-            <button
-              onClick={openScheduling}
-              className="inline-flex items-center gap-2 bg-background text-foreground font-semibold px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
-            >
+            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openScheduling}>
               <Calendar className="h-5 w-5" />
               Agende uma conversa
-            </button>
+            </Button>
           </div>
         </div>
       </section>
