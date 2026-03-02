@@ -1,68 +1,83 @@
 
-# Nova Pagina: "Para seus colaboradores"
+# Corrigir Header Consistente e Logo Lento
 
-## Objetivo
-Criar uma pagina complementar estrategica em `/para-seus-colaboradores` que fala com o **decisor empatico do RH**, mostrando o impacto humano concreto da Juripass sem abandonar o posicionamento B2B.
+## Problema
 
-## Estrutura da pagina (7 secoes)
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### 1. Hero (emocional + estrategico)
-- Titulo: "Um canal de apoio confidencial para o seu time."
-- Subtitulo com destaque em bold para termos-chave
-- Texto de apoio sobre o impacto de problemas pessoais nao resolvidos
-- CTA primario: "Agende uma conversa" (openScheduling)
-- CTA secundario: "Entender como funciona" (link para /como-funciona)
-- Background com gradientes decorativos (mesmo padrao visual das outras paginas)
+## Solucao
 
-### 2. O Problema Invisivel
-- Titulo: "Questoes pessoais nao resolvidas afetam o trabalho."
-- Card unico com texto explicativo sobre endividamento, conflitos familiares, moradia
-- Destaque visual: borda lateral primaria ou icone de alerta sutil
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### 3. O que o colaborador encontra (4 blocos)
-- Titulo: "Um canal externo, estruturado e confidencial."
-- Grid 2x2 com cards:
-  - Atendimento externo e sigiloso
-  - Orientacao informativa sobre direitos
-  - Organizacao da demanda
-  - Encaminhamento quando necessario
-- Cada card com icone, titulo e descricao curta
-- Mesmo estilo visual dos confidentialityCards da pagina Como Funciona
+---
 
-### 4. Temas atendidos
-- Titulo: "Situacoes do dia a dia que impactam o colaborador."
-- Grid de badges/tags tematicos: Endividamento, Direito do consumidor, Moradia, Questoes familiares, Saude, Duvidas trabalhistas, Relacoes contratuais
-- Texto de apoio: "Sempre com orientacao informativa e preventiva."
+## Alteracoes
 
-### 5. Como funciona na pratica (4 passos)
-- Timeline vertical simplificada (mesmo componente visual da pagina Como Funciona)
-- 4 passos: contato, orientacao, caminhos possiveis, encaminhamento formal (quando aplicavel)
-- Nota final: "A empresa nao participa do conteudo das demandas."
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### 6. Impacto para o RH (fechamento estrategico)
-- Titulo: "Cuidado estruturado que fortalece a gestao."
-- Lista com icones de check: reduz demandas informais, diminui desgaste, aumenta percepcao de cuidado, fortalece EVP
-- Card de destaque: "Nao e assessoria juridica interna. E gestao preventiva estruturada."
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-### 7. CTA final
-- Gradiente primario (mesmo padrao das outras paginas)
-- Titulo: "Ofereca um canal de apoio que vai alem do trabalho."
-- Dois botoes: "Levar a Juripass para minha empresa" (openScheduling) e "Como funciona" (link)
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
-## Alteracoes tecnicas
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
 
 | Arquivo | Acao |
 |---------|------|
-| `src/pages/ParaSeuColaborador.tsx` | Criar pagina completa com as 7 secoes |
-| `src/App.tsx` | Adicionar rota `/para-seus-colaboradores` com lazy loading |
-| `src/components/home/HomeHeader.tsx` | Adicionar item de navegacao "Para Colaboradores" no menu |
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
-### Padroes seguidos
-- Importa `ScrollReveal` para animacoes de entrada progressivas
-- Importa `SEOHead` para meta tags
-- Importa `Badge`, `Button` de shadcn
-- Importa icones de `lucide-react`
-- Usa `openScheduling` de `@/lib/constants` para CTAs
-- Usa `Link` de react-router-dom para links internos
-- Segue o mesmo estilo visual: `rounded-2xl`, gradientes sutis, `bg-card border-border`, tipografia consistente
-- Exporta como default para compatibilidade com lazy loading
+Nenhuma dependencia nova.

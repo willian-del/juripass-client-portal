@@ -15,6 +15,7 @@ const Avaliacao = lazy(() => import("./pages/Avaliacao"));
 const NR01 = lazy(() => import("./pages/NR01"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const ParaSeuColaborador = lazy(() => import("./pages/ParaSeuColaborador"));
 
 const App = () => (
   <TooltipProvider>
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/nr-01" element={<NR01 />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/para-seus-colaboradores" element={<ParaSeuColaborador />} />
             <Route path="/avaliacao" element={<Avaliacao />} />
           </Route>
           <Route path="/site-anterior" element={<LegacyHome />} />
