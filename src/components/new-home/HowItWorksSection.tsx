@@ -1,4 +1,5 @@
-import { MessageCircle, Lightbulb, ArrowUpRight, Clock } from 'lucide-react';
+import { MessageCircle, Lightbulb, ArrowUpRight, ArrowRight, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const steps = [
   {
