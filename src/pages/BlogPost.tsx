@@ -105,7 +105,7 @@ const BlogPost = () => {
               </div>
               <ArrowRight className="h-4 w-4 text-muted-foreground ml-auto shrink-0" />
             </Link>
-            <Link to="/para-quem" className="group flex items-center gap-4 p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+            <Link to="/para-quem" className="group flex items-center gap-4 p-5 rounded-2xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <Users className="h-5 w-5 text-primary" />
               </div>
