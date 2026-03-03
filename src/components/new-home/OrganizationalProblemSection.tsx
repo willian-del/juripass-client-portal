@@ -1,4 +1,5 @@
 import { User, Users, Building2, AlertTriangle, ChevronRight, ChevronDown } from 'lucide-react';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const steps = [
   { label: 'Colaborador', sublabel: 'com problema pessoal', icon: User, highlight: false },
