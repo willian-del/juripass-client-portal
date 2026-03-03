@@ -1,32 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Revisao de Conteudo e Padronizacao de Layout
+## Problema
 
-## 1. Conteudo sensivel encontrado
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-**Termos a corrigir:**
+## Solucao
 
-| Arquivo | Linha | Atual | Correcao |
-|---------|-------|-------|----------|
-| `NR01.tsx` | 168 | "Endividamento e problemas jurídicos" | "Dívidas e problemas financeiros" |
-| `ParaSeuColaborador.tsx` | 149 | "Endividamento, conflitos familiares..." | "Dívidas, conflitos familiares..." |
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-Nenhuma mencao a "direito trabalhista", "criminal" ou "relacoes contratuais" nas demais paginas. A NR01.tsx menciona "litígio trabalhista" (linha 60) e "ações trabalhistas" (linha 225), mas no contexto de obrigacoes do empregador perante a norma — nao como servico oferecido ao colaborador. Manter.
+---
 
-## 2. Padronizacao de espaçamentos
+## Alteracoes
 
-Paginas `ParaQuem.tsx` e `FAQ.tsx` usam `py-12 md:py-20`, enquanto `ComoFunciona.tsx` e `ParaSeuColaborador.tsx` usam `py-16 md:py-24`. Padronizar todas para `py-16 md:py-24`.
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-**ParaQuem.tsx** — trocar `py-12 md:py-20` por `py-16 md:py-24` em todas as 5 sections (linhas 60, 74, 107, 131, 174).
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-**FAQ.tsx** — trocar `py-12 md:py-20` por `py-16 md:py-24` nas 3 sections (linhas 67, 81, 106).
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
-## 3. Padronizacao de border-radius dos cards
+### 2. Atualizar `src/App.tsx`
 
-`ParaQuem.tsx` e `FAQ.tsx` usam `rounded-xl` nos cards. Demais paginas usam `rounded-2xl`. Trocar para `rounded-2xl` em:
-- ParaQuem.tsx: cards de segmento (linha 78), cards "também atendemos" (linha 115), cards "saiba mais" (linhas 138, 148, 158)
-- FAQ.tsx: accordion items (linha 89)
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-## Resumo
-4 arquivos, apenas ajustes de classes Tailwind e 2 textos trocados. Nenhuma mudanca estrutural.
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

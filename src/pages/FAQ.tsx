@@ -64,7 +64,7 @@ const FAQPage = () => {
         jsonLd={faqJsonLd}
       />
       {/* Hero */}
-      <section className="py-12 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
@@ -78,7 +78,7 @@ const FAQPage = () => {
       </section>
 
       {/* FAQ por categorias */}
-      <section className="py-12 md:py-20 bg-muted/30">
+      <section className="py-16 md:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto space-y-10">
             {categories.map((cat) => (
@@ -86,7 +86,7 @@ const FAQPage = () => {
                 <h2 className="text-xl md:text-2xl font-bold text-foreground">{cat.title}</h2>
                 <Accordion type="single" collapsible className="space-y-2">
                   {cat.items.map((item, idx) => (
-                    <AccordionItem key={idx} value={`${cat.title}-${idx}`} className="rounded-xl bg-card border border-border px-5">
+                    <AccordionItem key={idx} value={`${cat.title}-${idx}`} className="rounded-2xl bg-card border border-border px-5">
                       <AccordionTrigger className="text-left text-foreground font-medium hover:no-underline">
                         {item.q}
                       </AccordionTrigger>
@@ -103,7 +103,7 @@ const FAQPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-12 md:py-20 bg-gradient-to-br from-primary/90 to-primary">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-primary/90 to-primary">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">

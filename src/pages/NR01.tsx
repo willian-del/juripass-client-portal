@@ -165,7 +165,7 @@ export default function NR01() {
                   { icon: AlertTriangle, text: 'Estresse crônico e burnout' },
                   { icon: AlertTriangle, text: 'Assédio moral e sexual' },
                   { icon: AlertTriangle, text: 'Conflitos familiares e pessoais' },
-                  { icon: AlertTriangle, text: 'Endividamento e problemas jurídicos' },
+                  { icon: AlertTriangle, text: 'Dívidas e problemas financeiros' },
                 ].map((item) => (
                   <div
                     key={item.text}

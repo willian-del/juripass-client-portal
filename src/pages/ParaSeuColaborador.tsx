@@ -146,7 +146,7 @@ export default function ParaSeuColaborador() {
               </h2>
               <div className="p-6 md:p-8 rounded-2xl bg-card border border-border border-l-4 border-l-primary">
                 <p className="text-muted-foreground leading-relaxed">
-                  Endividamento, conflitos familiares, problemas com moradia, consumo ou saúde geram{' '}
+                  Dívidas, conflitos familiares, problemas com moradia, consumo ou saúde geram{' '}
                   <strong className="text-foreground">insegurança e desgaste emocional</strong>.
                   Sem um canal estruturado, essas situações acabam chegando informalmente ao RH ou à liderança
                   — muitas vezes sem preparo adequado para acolher ou orientar.

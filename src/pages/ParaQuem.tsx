@@ -57,7 +57,7 @@ const ParaQuem = () => {
         description="Empresas com mais de 200 colaboradores onde situações pessoais impactam a operação. Solução para gestão de pessoas e conformidade com NR-01."
       />
       {/* Hero */}
-      <section className="py-12 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
@@ -71,11 +71,11 @@ const ParaQuem = () => {
       </section>
 
       {/* Segmentos expandidos */}
-      <section className="py-12 md:py-20 bg-muted/30">
+      <section className="py-16 md:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-8">
             {segments.map((seg) => (
-              <div key={seg.title} className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-5">
+              <div key={seg.title} className="p-6 md:p-8 rounded-2xl bg-card border border-border space-y-5">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shrink-0">
                     <seg.icon className="h-7 w-7 text-primary-foreground" />
@@ -104,7 +104,7 @@ const ParaQuem = () => {
       </section>
 
       {/* Também atendemos */}
-      <section className="py-12 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-10">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
@@ -112,7 +112,7 @@ const ParaQuem = () => {
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               {alsoServe.map((item) => (
-                <div key={item.label} className="p-6 rounded-xl bg-card border border-border text-center space-y-4">
+                <div key={item.label} className="p-6 rounded-2xl bg-card border border-border text-center space-y-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto">
                     <item.icon className="h-6 w-6 text-primary-foreground" />
                   </div>
@@ -128,14 +128,14 @@ const ParaQuem = () => {
       </section>
 
       {/* Saiba mais */}
-      <section className="py-12 md:py-20 bg-muted/30">
+      <section className="py-16 md:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
               Saiba mais
             </h2>
             <div className="grid sm:grid-cols-3 gap-6">
-              <Link to="/nr-01" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Link to="/nr-01" className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <Scale className="h-5 w-5 text-primary" />
                 </div>
@@ -145,7 +145,7 @@ const ParaQuem = () => {
                   Saiba mais <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
-              <Link to="/blog/absenteismo-juridico-problema-silencioso" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Link to="/blog/absenteismo-juridico-problema-silencioso" className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <BookOpen className="h-5 w-5 text-primary" />
                 </div>
@@ -155,7 +155,7 @@ const ParaQuem = () => {
                   Ler artigo <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
-              <Link to="/blog/como-implementar-acolhimento-juridico" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Link to="/blog/como-implementar-acolhimento-juridico" className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <BookOpen className="h-5 w-5 text-primary" />
                 </div>
@@ -171,7 +171,7 @@ const ParaQuem = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-12 md:py-20 bg-gradient-to-br from-primary/90 to-primary">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-primary/90 to-primary">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
