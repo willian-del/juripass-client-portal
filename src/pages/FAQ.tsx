@@ -78,7 +78,7 @@ const FAQPage = () => {
       </section>
 
       {/* FAQ por categorias */}
-      <section className="py-12 md:py-20 bg-muted/30">
+      <section className="py-16 md:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto space-y-10">
             {categories.map((cat) => (
