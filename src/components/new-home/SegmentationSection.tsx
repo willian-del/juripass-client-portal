@@ -67,7 +67,7 @@ export function SegmentationSection() {
                 </div>
                 <div className="flex flex-col gap-2">
                   {seg.points.map((point) => (
-                    <span key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span key={point} className="flex items-center gap-2 text-sm text-muted-foreground whitespace-nowrap">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0" />
                       {point}
                     </span>
