@@ -81,7 +81,7 @@ export const organizationJsonLd = {
   name: 'Juripass',
   url: BASE_URL,
   logo: `${BASE_URL}/images/branding/juripass-logo-full.png`,
-  description: 'Programa de acolhimento jurídico corporativo. Canal externo e confidencial para colaboradores, alinhado à Nova NR-01.',
+  description: 'Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01 para gestão de riscos psicossociais.',
   sameAs: [],
 };
 
@@ -90,5 +90,5 @@ export const websiteJsonLd = {
   '@type': 'WebSite',
   name: 'Juripass',
   url: BASE_URL,
-  description: 'Programa de acolhimento jurídico para empresas. Ferramenta de gestão de RH para prevenção de riscos psicossociais.',
+  description: 'Plataforma de gestão de suporte jurídico para RH. Solução preventiva alinhada à Nova NR-01 para gestão de riscos psicossociais.',
 };

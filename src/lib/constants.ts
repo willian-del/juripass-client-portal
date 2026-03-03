@@ -15,8 +15,8 @@ export const BRAND = {
     logoHorizontalWhite: '/images/branding/juripass-logo-horizontal-white.svg'
   },
   meta: {
-    title: 'Juripass — Acolhimento Jurídico Corporativo',
-    description: 'Canal externo e confidencial de orientação jurídica para colaboradores. Benefício corporativo que fortalece a gestão de pessoas.'
+    title: 'Juripass | Plataforma de Gestão de Suporte Jurídico para RH',
+    description: 'Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01.'
   }
 } as const;
 

@@ -19,8 +19,8 @@ const Index = () => {
   return (
     <>
       <SEOHead
-        title="Juripass — Programa de Acolhimento Jurídico para Empresas | Gestão de RH"
-        description="Canal externo e confidencial para acolher colaboradores em questões pessoais sensíveis. Ferramenta de gestão de RH alinhada à Nova NR-01 para prevenção de riscos psicossociais."
+        title="Juripass | Plataforma de Gestão de Suporte Jurídico para RH"
+        description="Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01 para gestão de riscos psicossociais."
         jsonLd={[organizationJsonLd, websiteJsonLd]}
       />
       <HeroSection />
