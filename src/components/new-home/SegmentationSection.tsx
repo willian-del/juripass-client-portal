@@ -25,7 +25,7 @@ const segments = [
   {
     icon: Headphones,
     title: 'Call center',
-    subtitle: 'O supervisor não deveria ser apoio emocional',
+    subtitle: 'Quando o supervisor vira apoio emocional',
     points: [
       'Operador lida com pressão interna e externa ao mesmo tempo',
       'Pausas e afastamentos crescem sem diagnóstico claro',
