@@ -1,83 +1,56 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Otimizacao SEO — Reposicionar como Plataforma de Gestao
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Diagnostico atual
 
-## Solucao
+O SEO atual posiciona a Juripass como "Programa de Acolhimento Juridico" e "Beneficio corporativo". Isso nao esta alinhado com o posicionamento estrategico desejado: **ferramenta de gestao para RH**, preventiva, estruturada como politica corporativa, em conformidade com a NR-01.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### Problemas encontrados:
 
----
+| Local | Atual | Problema |
+|---|---|---|
+| `index.html` title | "Programa de Acolhimento Juridico para Empresas \| Ferramenta de Gestao de RH" | "Programa de acolhimento" como identidade principal |
+| `index.html` description | "Canal externo e confidencial para acolher colaboradores..." | Foco em acolhimento, nao em gestao |
+| `index.html` keywords | "beneficio juridico empresas, saude mental..." | Termos secundarios no lugar de primarios |
+| `SEOHead` (Index) title | "Programa de Acolhimento Juridico para Empresas \| Gestao de RH" | Mesmo problema |
+| `SEOHead` (Index) description | Idem ao index.html | Idem |
+| H1 (HeroSection) | "Alguns problemas pessoais dos colaboradores..." | Narrativo, nao otimizado para SEO |
+| JSON-LD Organization | "Programa de acolhimento juridico corporativo" | Posicionamento antigo |
+| JSON-LD WebSite | "Ferramenta de gestao de RH para prevencao..." | OK parcialmente |
+| `constants.ts` meta | "Beneficio corporativo que fortalece a gestao de pessoas" | "Beneficio" como categoria principal |
+| OG tags (index.html) | "Programa de Acolhimento Juridico para Empresas" | Idem |
 
-## Alteracoes
+## Plano de alteracoes
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+### 1. `index.html` — Meta tags estaticas (fallback para crawlers que nao executam JS)
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+- **Title**: `Juripass | Plataforma de Gestão de Suporte Jurídico para RH`
+- **Description**: `Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01 para gestão de riscos psicossociais.`
+- **Keywords**: Reordenar priorizando: `plataforma suporte jurídico RH, gestão de riscos psicossociais, Nova NR-01, política corporativa preventiva, gestão de pessoas, suporte jurídico colaboradores, compliance NR-01, juripass`
+- **OG title/description e Twitter title/description**: Alinhar com o mesmo posicionamento
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+### 2. `src/pages/Index.tsx` — SEOHead dinâmico
 
-### 2. Atualizar `src/App.tsx`
+- **title**: `Juripass | Plataforma de Gestão de Suporte Jurídico para RH`
+- **description**: `Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01 para gestão de riscos psicossociais.`
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+### 3. `src/components/new-home/HeroSection.tsx` — H1 e primeiro paragrafo
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+- **H1**: `Plataforma de Suporte Jurídico para Gestão de Pessoas`
+- **Primeiro paragrafo**: Reescrever para deixar claro que e ferramenta estrategica para RH, preventiva, estruturada como politica corporativa, com impacto organizacional, em conformidade com a Nova NR-01 e gestao de riscos psicossociais. Termo "beneficio" pode aparecer secundariamente.
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+### 4. `src/components/ui/SEOHead.tsx` — JSON-LD schemas
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+- **organizationJsonLd.description**: Atualizar para posicionamento como plataforma de gestao
+- **websiteJsonLd.description**: Alinhar
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
+### 5. `src/lib/constants.ts` — BRAND.meta
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+- **title**: `Juripass | Plataforma de Gestão de Suporte Jurídico para RH`
+- **description**: Alinhar com novo posicionamento
 
-### 4. Garantir scroll to top na navegacao
+## Arquivos editados
 
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+5 arquivos: `index.html`, `src/pages/Index.tsx`, `src/components/new-home/HeroSection.tsx`, `src/components/ui/SEOHead.tsx`, `src/lib/constants.ts`
 
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
