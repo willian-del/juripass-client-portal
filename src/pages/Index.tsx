@@ -6,6 +6,7 @@ import { SEOHead, organizationJsonLd, websiteJsonLd } from '@/components/ui/SEOH
 
 const OrganizationalProblemSection = lazy(() => import('@/components/new-home/OrganizationalProblemSection').then(m => ({ default: m.OrganizationalProblemSection })));
 const WhatIsJuripassSection = lazy(() => import('@/components/new-home/WhatIsJuripassSection').then(m => ({ default: m.WhatIsJuripassSection })));
+const RiskOrganizationSection = lazy(() => import('@/components/new-home/RiskOrganizationSection').then(m => ({ default: m.RiskOrganizationSection })));
 const HowItWorksSection = lazy(() => import('@/components/new-home/HowItWorksSection').then(m => ({ default: m.HowItWorksSection })));
 const ImpactSection = lazy(() => import('@/components/new-home/ImpactSection').then(m => ({ default: m.ImpactSection })));
 const MidCTASection = lazy(() => import('@/components/new-home/MidCTASection').then(m => ({ default: m.MidCTASection })));
@@ -34,6 +35,7 @@ const Index = () => {
         <ScrollReveal>
           <WhatIsJuripassSection />
         </ScrollReveal>
+        <RiskOrganizationSection />
         <ScrollReveal>
           <HowItWorksSection />
         </ScrollReveal>
