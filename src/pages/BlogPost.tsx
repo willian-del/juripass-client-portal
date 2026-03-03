@@ -80,7 +80,7 @@ const BlogPost = () => {
                 <h3 className="text-xl font-bold text-foreground mb-6">Leia também</h3>
                 <div className="grid sm:grid-cols-3 gap-4">
                   {relatedArticles.map(related => (
-                    <Link key={related.slug} to={`/blog/${related.slug}`} className="group p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+                    <Link key={related.slug} to={`/blog/${related.slug}`} className="group p-5 rounded-2xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
                       <span className="text-xs text-primary font-medium">{related.category}</span>
                       <h4 className="font-semibold text-foreground mt-1 mb-2 group-hover:text-primary transition-colors text-sm leading-snug">{related.title}</h4>
                       <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
