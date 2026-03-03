@@ -61,13 +61,15 @@ export function OrganizationalProblemSection() {
           </div>
 
 
-          <div className="border-t border-border/50 max-w-lg mx-auto pt-8">
-            <p className="text-muted-foreground leading-relaxed text-center">
-              Gestores tentam ajudar. O RH tenta orientar.
-              <br />
-              <span className="text-primary font-medium">Mas nenhum deles deveria assumir esse papel.</span>
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="border-t border-border/50 max-w-lg mx-auto pt-8">
+              <p className="text-muted-foreground leading-relaxed text-center">
+                Gestores tentam ajudar. O RH tenta orientar.
+                <br />
+                <span className="text-primary font-medium">Mas nenhum deles deveria assumir esse papel.</span>
+              </p>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
