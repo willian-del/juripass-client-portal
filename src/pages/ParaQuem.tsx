@@ -104,7 +104,7 @@ const ParaQuem = () => {
       </section>
 
       {/* Também atendemos */}
-      <section className="py-12 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-10">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
