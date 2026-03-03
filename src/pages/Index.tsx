@@ -37,10 +37,10 @@ const Index = () => {
         </ScrollReveal>
         <RiskOrganizationSection />
         <ScrollReveal>
-          <HowItWorksSection />
+          <ImpactSection />
         </ScrollReveal>
         <ScrollReveal>
-          <ImpactSection />
+          <HowItWorksSection />
         </ScrollReveal>
         <ScrollReveal>
           <MidCTASection />
