@@ -66,7 +66,7 @@ export function OrganizationalProblemSection() {
               <p className="text-muted-foreground leading-relaxed text-center">
                 Gestores tentam ajudar. O RH tenta orientar.
                 <br />
-                <span className="text-primary font-medium">Mas nenhum deles deveria assumir esse papel.</span>
+                Mas nenhum deles deveria assumir esse papel.
               </p>
             </div>
           </ScrollReveal>
