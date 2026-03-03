@@ -46,6 +46,14 @@ export function HomeHeader() {
                 {item.label}
               </button>
             ))}
+            <a
+              href="https://app.juripass.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-md border border-primary bg-transparent px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+            >
+              Portal Cliente
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}
