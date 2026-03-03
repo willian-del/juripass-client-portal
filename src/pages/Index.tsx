@@ -20,7 +20,7 @@ const Index = () => {
     <>
       <SEOHead
         title="Juripass | Plataforma de Gestão de Suporte Jurídico para RH"
-        description="Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01 para gestão de riscos psicossociais."
+        description="Plataforma de gestão preventiva para o RH. Canal jurídico externo, confidencial e estruturado para acolher colaboradores em questões pessoais sensíveis, em conformidade com a Nova NR-01."
         jsonLd={[organizationJsonLd, websiteJsonLd]}
       />
       <HeroSection />
