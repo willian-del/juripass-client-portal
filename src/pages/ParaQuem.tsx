@@ -112,7 +112,7 @@ const ParaQuem = () => {
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               {alsoServe.map((item) => (
-                <div key={item.label} className="p-6 rounded-xl bg-card border border-border text-center space-y-4">
+                <div key={item.label} className="p-6 rounded-2xl bg-card border border-border text-center space-y-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto">
                     <item.icon className="h-6 w-6 text-primary-foreground" />
                   </div>
