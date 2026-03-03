@@ -86,7 +86,7 @@ const FAQPage = () => {
                 <h2 className="text-xl md:text-2xl font-bold text-foreground">{cat.title}</h2>
                 <Accordion type="single" collapsible className="space-y-2">
                   {cat.items.map((item, idx) => (
-                    <AccordionItem key={idx} value={`${cat.title}-${idx}`} className="rounded-xl bg-card border border-border px-5">
+                    <AccordionItem key={idx} value={`${cat.title}-${idx}`} className="rounded-2xl bg-card border border-border px-5">
                       <AccordionTrigger className="text-left text-foreground font-medium hover:no-underline">
                         {item.q}
                       </AccordionTrigger>
