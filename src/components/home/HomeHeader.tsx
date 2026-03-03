@@ -24,11 +24,7 @@ export function HomeHeader() {
   const navItems = [
     { label: 'Início', target: '/' },
     { label: 'Como Funciona', target: '/como-funciona' },
-    { label: 'Para Quem', target: '/para-quem' },
     { label: 'Para Colaboradores', target: '/para-seus-colaboradores' },
-    { label: 'NR-01', target: '/nr-01' },
-    { label: 'FAQ', target: '/faq' },
-    { label: 'Blog', target: '/blog' },
   ];
 
   return (
