@@ -75,7 +75,7 @@ const ParaQuem = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-8">
             {segments.map((seg) => (
-              <div key={seg.title} className="p-6 md:p-8 rounded-xl bg-card border border-border space-y-5">
+              <div key={seg.title} className="p-6 md:p-8 rounded-2xl bg-card border border-border space-y-5">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shrink-0">
                     <seg.icon className="h-7 w-7 text-primary-foreground" />
