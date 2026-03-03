@@ -1,38 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Análise e Proposta: Simplificar "O que é a Juripass"
+## Problema
 
-## Diagnóstico de redundância
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-Analisando o fluxo da página, há sobreposição clara:
+## Solucao
 
-- **Hero** já diz: "canal jurídico externo e confidencial", "gestão preventiva para o RH", "questões pessoais sensíveis"
-- **OrganizationalProblem** já menciona: "conformidade com a nova NR-01", "gestão de riscos psicossociais", "fluxo técnico, preventivo e independente"
-- **WhatIsJuripass** repete tudo isso: NR-01, riscos psicossociais, canal confidencial, demandas absorvidas pelo RH
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-Os 3 pilares (Canal confidencial, Orientação especializada, Ambiente saudável) são genéricos e não adicionam informação nova. O quote card é longo e repete os pilares com outras palavras. Os badges de temas (Finanças, Família, etc.) são o único conteúdo realmente novo.
+---
 
-## Proposta: seção enxuta e objetiva
+## Alteracoes
 
-Reduzir a seção a **3 blocos simples**:
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-1. **Título** — manter "O que é a Juripass"
-2. **Um parágrafo direto** — sem repetir Hero/Problem, focando no *como funciona* (o diferencial mecânico): "Um canal externo de orientação jurídica que o colaborador acessa de forma autônoma. A empresa contrata; o colaborador usa quando precisar — com sigilo total."
-3. **Badges de temas** — manter como estão (são informativos e visuais)
-4. **3 pilares reformulados** — trocar por diferenciais concretos que não foram ditos antes:
-   - **Externo e independente** — Sem vínculo com a empresa, sem conflito de interesse
-   - **Sob demanda** — O colaborador aciona quando quiser, sem intermediários
-   - **Sem custo para o colaborador** — Atendimento inicial gratuito, sem burocracia
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-**Remover**: quote card (redundante) e o segundo parágrafo sobre NR-01 (já coberto antes).
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
-## Mudanças técnicas
+### 2. Atualizar `src/App.tsx`
 
-**Arquivo**: `src/components/new-home/WhatIsJuripassSection.tsx`
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-- Reescrever `pillars` com os 3 novos diferenciais
-- Substituir os 2 parágrafos por 1 parágrafo curto e direto
-- Remover o bloco do quote card (linhas 73-84)
-- Manter badges de temas
-- Manter grid 3 colunas dos pilares com mesmo styling
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
