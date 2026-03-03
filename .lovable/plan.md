@@ -1,40 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Revisao Geral da Hero Section
+## Problema
 
-## Achados
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### Layout e Espaçamento
-1. **Padding vertical excessivo no mobile** -- `py-28 md:py-40` resulta em muito espaço vazio acima e abaixo, especialmente no mobile (py-28 = 7rem = 112px de cada lado). Reduzir para `py-16 md:py-28` para melhor aproveitamento de tela.
-2. **H1 quebra em 3 linhas no desktop** -- O título "Plataforma de Suporte Jurídico para Gestão de Pessoas" quebra de forma deselegante. Ampliar `max-w-3xl` para `max-w-4xl` no container de texto resolve a quebra.
-3. **Parágrafo descritivo** -- `max-w-2xl` está adequado, mas pode ser ajustado para `max-w-[680px]` para evitar quebras indesejadas.
+## Solucao
 
-### Acessibilidade e Semântica
-4. **Falta `aria-label` ou `role` na section** -- Adicionar `aria-labelledby` com id no h1 para melhor acessibilidade.
-5. **Botão CTA** -- Indentação inconsistente (espaços extras nas linhas 27-28). Limpeza de formatação.
-
-### SEO
-6. **Meta description no SEOHead vs Hero** -- A descrição do SEOHead no Index.tsx e o parágrafo da Hero são praticamente idênticos, o que é bom para consistência. Sem problemas aqui.
-7. **Falta de link interno** -- A Hero tem apenas um CTA externo (Google Calendar). Adicionar um link secundário tipo "Saiba mais" apontando para `/como-funciona` ou scroll para a próxima seção fortaleceria a navegação interna e o link juice.
-
-### Discrepancias
-8. **Tagline no BRAND.meta vs H1** -- `BRAND.tagline` diz "Segurança jurídica na palma da sua mão" mas o H1 diz "Plataforma de Suporte Jurídico para Gestão de Pessoas". São mensagens diferentes mas servem propósitos distintos (alt text vs headline), sem conflito real.
-
-### Redundancia
-9. **Duas HeroSections** -- Existe `src/components/home/HeroSection.tsx` (legado) e `src/components/new-home/HeroSection.tsx` (atual). O legado não é usado em Index.tsx, mas pode gerar confusão. Pode ser removido se não estiver em uso em `LegacyHome.tsx`.
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-## Plano de Mudancas
+## Alteracoes
 
-### 1. Ajustar espaçamentos e largura (`new-home/HeroSection.tsx`)
-- Padding: `py-28 md:py-40` → `py-16 md:py-28`
-- Container de texto: `max-w-3xl` → `max-w-4xl`
-- Adicionar `id="hero"` na section e `id="hero-title"` no h1 com `aria-labelledby`
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### 2. Adicionar link interno secundario
-- Incluir um botao/link `variant="ghost"` abaixo do CTA principal, com texto como "Saiba como funciona →" apontando para `/como-funciona`, fortalecendo a interligacao interna
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-### 3. Limpeza de formatacao
-- Corrigir indentacao inconsistente no bloco do Button
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
