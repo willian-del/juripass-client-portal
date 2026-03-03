@@ -25,38 +25,37 @@ export function OrganizationalProblemSection() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0 py-6">
             {steps.map((step, i) => (
               <div key={step.label} className="flex flex-col md:flex-row items-center">
-                {/* Chevron separator */}
                 {i > 0 && (
                   <>
                     <ChevronDown className="block md:hidden text-muted-foreground/40 my-1" size={20} />
                     <ChevronRight className="hidden md:block text-muted-foreground/40 mx-2" size={20} />
                   </>
                 )}
-
-                {/* Card */}
-                <div
-                  className={`flex flex-col items-center justify-center gap-3 px-5 py-5 rounded-2xl border w-full md:w-[200px] min-h-[140px] md:min-h-[160px] shadow-md transition-all duration-200 ${
-                    step.highlight
-                      ? 'bg-destructive/10 border-destructive/30 shadow-destructive/10'
-                      : 'bg-card border-border hover:shadow-md'
-                  }`}
-                >
+                <ScrollReveal delay={i * 0.15}>
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      step.highlight ? 'bg-destructive/10 text-destructive' : 'bg-accent text-primary'
+                    className={`flex flex-col items-center justify-center gap-3 px-5 py-5 rounded-2xl border w-full md:w-[200px] min-h-[140px] md:min-h-[160px] shadow-md transition-all duration-200 ${
+                      step.highlight
+                        ? 'bg-destructive/10 border-destructive/30 shadow-destructive/10'
+                        : 'bg-card border-border hover:shadow-md'
                     }`}
                   >
-                    <step.icon size={20} />
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        step.highlight ? 'bg-destructive/10 text-destructive' : 'bg-accent text-primary'
+                      }`}
+                    >
+                      <step.icon size={20} />
+                    </div>
+                    <div className="text-center">
+                      <p className={`font-semibold text-sm ${step.highlight ? 'text-destructive' : 'text-foreground'}`}>
+                        {step.label}
+                      </p>
+                      <p className={`text-xs mt-1 ${step.highlight ? 'text-destructive/70' : 'text-muted-foreground'}`}>
+                        {step.sublabel}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <p className={`font-semibold text-sm ${step.highlight ? 'text-destructive' : 'text-foreground'}`}>
-                      {step.label}
-                    </p>
-                    <p className={`text-xs mt-1 ${step.highlight ? 'text-destructive/70' : 'text-muted-foreground'}`}>
-                      {step.sublabel}
-                    </p>
-                  </div>
-                </div>
+                </ScrollReveal>
               </div>
             ))}
           </div>
