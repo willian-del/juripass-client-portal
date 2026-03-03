@@ -4,7 +4,7 @@ import React from 'react';
 
 const steps = [
   {
-    title: 'Colaborador entra em contato direto',
+    title: 'O Colaborador entra em contato direto',
     description: 'Via WhatsApp ou aplicativo, de forma simples e confidencial.',
   },
   {
