@@ -13,7 +13,7 @@ const steps = [
   },
   {
     title: 'Situação é encaminhada adequadamente',
-    description: 'Quando necessário, é encaminhado a advogado habilitado, sem sobrecarregar a empresa.',
+    description: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.',
   },
 ];
 
