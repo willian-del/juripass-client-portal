@@ -46,13 +46,12 @@ const serviceCards = [
 ];
 
 const topics = [
-  'Endividamento e finanças pessoais',
-  'Direito do consumidor',
+  'Dívidas e finanças pessoais',
+  'Conflitos e questões familiares',
   'Moradia e propriedade',
-  'Questões familiares',
+  'Golpes e fraudes digitais',
+  'Direito do consumidor',
   'Saúde e acesso a serviços',
-  'Dúvidas trabalhistas pessoais',
-  'Relações contratuais diversas',
 ];
 
 const steps = [
