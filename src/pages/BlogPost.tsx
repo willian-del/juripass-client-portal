@@ -33,7 +33,7 @@ const BlogPost = () => {
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 
-      <article className="py-12 md:py-20">
+      <article className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-3xl">
           {/* Back link */}
           <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
