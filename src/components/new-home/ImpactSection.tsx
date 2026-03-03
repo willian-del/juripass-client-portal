@@ -42,24 +42,26 @@ export function ImpactSection() {
             O impacto na organização
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-6 max-w-3xl mx-auto">
             {columns.map((col) => (
               <div
                 key={col.title}
-                className="p-6 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200 space-y-4"
+                className="p-6 rounded-2xl bg-card border border-border shadow-md space-y-4"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-                  <col.icon className="h-6 w-6 text-primary-foreground" />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shrink-0">
+                    <col.icon className="h-5 w-5 text-primary-foreground" />
+                  </div>
+                  <h3 className="font-semibold text-xl text-foreground">{col.title}</h3>
                 </div>
-                <h3 className="font-semibold text-lg text-foreground">{col.title}</h3>
-                <ul className="space-y-2">
+                <div className="flex flex-wrap gap-x-6 gap-y-2">
                   {col.points.map((point) => (
-                    <li key={point} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                    <span key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0" />
                       {point}
-                    </li>
+                    </span>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
