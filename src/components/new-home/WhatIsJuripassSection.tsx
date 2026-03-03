@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 const pillars = [
   {
     icon: Unplug,
-    title: 'Externo e independente',
+    title: 'Canal Externo e independente',
     description: 'Sem vínculo com a empresa, sem conflito de interesse.',
   },
   {
