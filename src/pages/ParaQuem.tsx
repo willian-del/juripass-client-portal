@@ -155,7 +155,7 @@ const ParaQuem = () => {
                   Ler artigo <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
-              <Link to="/blog/como-implementar-acolhimento-juridico" className="group p-6 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors">
+              <Link to="/blog/como-implementar-acolhimento-juridico" className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-colors">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <BookOpen className="h-5 w-5 text-primary" />
                 </div>
