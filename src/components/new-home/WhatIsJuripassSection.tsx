@@ -1,21 +1,21 @@
-import { Shield, Users, Heart, ShieldCheck, Wallet, Home, ShoppingBag, HeartPulse } from 'lucide-react';
+import { Unplug, MousePointerClick, BadgeCheck, Wallet, Users, Home, ShoppingBag, HeartPulse } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const pillars = [
   {
-    icon: Shield,
-    title: 'Canal confidencial',
-    description: 'Externo à empresa, com sigilo profissional garantido.',
+    icon: Unplug,
+    title: 'Externo e independente',
+    description: 'Sem vínculo com a empresa, sem conflito de interesse.',
   },
   {
-    icon: Users,
-    title: 'Orientação especializada',
-    description: 'Acesso facilitado a profissionais habilitados.',
+    icon: MousePointerClick,
+    title: 'Sob demanda',
+    description: 'O colaborador aciona quando quiser, sem intermediários.',
   },
   {
-    icon: Heart,
-    title: 'Ambiente saudável',
-    description: 'Mais produtividade e segurança para todos.',
+    icon: BadgeCheck,
+    title: 'Sem custo para o colaborador',
+    description: 'Orientação inicial gratuita, sem burocracia.',
   },
 ];
 
@@ -32,30 +32,16 @@ export function WhatIsJuripassSection() {
     <section className="py-20 md:py-28 bg-accent/30">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-12">
-          {/* Título */}
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             O que é a Juripass
           </h2>
 
-          {/* Texto principal com destaques */}
           <div className="max-w-3xl mx-auto space-y-6">
             <p className="text-lg text-muted-foreground text-center leading-relaxed">
-              Por meio de atendimento especializado, orientamos o colaborador sobre seus direitos
-              e possíveis caminhos legais em situações do dia a dia — como{' '}
-              <strong className="text-primary font-semibold">
-                família, consumo, moradia, dívidas ou conflitos
-              </strong>{' '}
-              — evitando que essas demandas sejam absorvidas informalmente pelo RH ou pela liderança.
+              Um canal externo de orientação jurídica que o colaborador acessa de forma autônoma.
+              A empresa contrata; o colaborador usa quando precisar — com sigilo total.
             </p>
 
-            <p className="text-base text-muted-foreground text-center leading-relaxed">
-              A solução se integra à política corporativa de cuidado, fortalece a{' '}
-              <strong className="text-primary font-semibold">gestão de riscos psicossociais</strong>{' '}
-              e apoia a empresa na conformidade com a{' '}
-              <strong className="text-primary font-semibold">Nova NR-01</strong>.
-            </p>
-
-            {/* Badges de temas */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               {themes.map((theme) => (
                 <Badge
@@ -70,20 +56,6 @@ export function WhatIsJuripassSection() {
             </div>
           </div>
 
-          {/* Quote card */}
-          <div className="bg-gradient-dark rounded-2xl p-10 text-center space-y-4">
-            <p className="text-xl md:text-2xl font-semibold text-primary-foreground leading-relaxed italic">
-              "Organiza o encaminhamento das demandas, facilita o acesso a profissionais
-              habilitados e contribui para um ambiente de trabalho mais saudável, produtivo
-              e seguro para todos."
-            </p>
-            <div className="flex items-center justify-center gap-2 text-primary-foreground/60 text-sm">
-              <ShieldCheck className="h-4 w-4" />
-              <span>Sigilo profissional e controles de segurança da informação</span>
-            </div>
-          </div>
-
-          {/* Três pilares */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {pillars.map((pillar) => (
               <div
