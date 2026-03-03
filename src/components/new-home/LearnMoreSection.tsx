@@ -37,16 +37,17 @@ export function LearnMoreSection() {
             <ScrollReveal key={item.to} delay={index * 0.15}>
               <Link
                 to={item.to}
-                className="group rounded-2xl border border-border bg-card p-6 text-center transition-all hover:border-primary hover:shadow-md block h-full"
+                className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 text-left transition-all hover:border-primary hover:shadow-md block h-full"
               >
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <item.icon className="h-6 w-6" />
+                <div className="shrink-0 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                  <item.icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{item.description}</p>
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                  Acessar <ArrowRight className="h-4 w-4" />
-                </span>
+                <div className="min-w-0">
+                  <h3 className="text-base font-semibold text-foreground leading-tight">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-1">
+                    {item.description} <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </p>
+                </div>
               </Link>
             </ScrollReveal>
           ))}
