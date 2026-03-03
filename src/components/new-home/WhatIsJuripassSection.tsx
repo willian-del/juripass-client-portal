@@ -40,20 +40,19 @@ export function WhatIsJuripassSection() {
           {/* Texto principal com destaques */}
           <div className="max-w-3xl mx-auto space-y-6">
             <p className="text-lg text-muted-foreground text-center leading-relaxed">
-              A Juripass é uma plataforma de gestão preventiva que oferece às empresas um{' '}
+              Por meio de atendimento especializado, orientamos o colaborador sobre seus direitos
+              e possíveis caminhos legais em situações do dia a dia — como{' '}
               <strong className="text-primary font-semibold">
-                canal externo, confidencial e estruturado
+                família, consumo, moradia, dívidas ou conflitos
               </strong>{' '}
-              para acolher e orientar colaboradores em questões pessoais sensíveis{' '}
-              <strong className="text-primary font-semibold">
-                antes que se transformem em problemas internos
-              </strong>.
+              — evitando que essas demandas sejam absorvidas informalmente pelo RH ou pela liderança.
             </p>
 
             <p className="text-base text-muted-foreground text-center leading-relaxed">
-              Por meio de um atendimento especializado, os colaboradores recebem orientação
-              informativa sobre seus direitos e possíveis caminhos legais em situações do dia a dia
-              — evitando que essas demandas sejam absorvidas informalmente pelo RH ou pela liderança.
+              A solução se integra à política corporativa de cuidado, fortalece a{' '}
+              <strong className="text-primary font-semibold">gestão de riscos psicossociais</strong>{' '}
+              e apoia a empresa na conformidade com a{' '}
+              <strong className="text-primary font-semibold">Nova NR-01</strong>.
             </p>
 
             {/* Badges de temas */}

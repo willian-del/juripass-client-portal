@@ -18,9 +18,9 @@ export function HeroSection() {
             <span className="text-primary">para Gestão de Pessoas</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            Solução estratégica para o RH que atua de forma preventiva e estruturada como política corporativa.
-            Em conformidade com a Nova NR-01, organiza a gestão de riscos psicossociais e reduz o impacto
-            de questões pessoais dos colaboradores na operação e no clima organizacional.
+            A Juripass é uma plataforma de gestão preventiva para o RH. Oferecemos às empresas um canal
+            jurídico externo, confidencial e estruturado para acolher colaboradores em questões pessoais
+            sensíveis — antes que se transformem em conflitos internos, afastamentos ou passivos trabalhistas.
           </p>
           <div className="space-y-3 pt-4">
             <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openScheduling}>
