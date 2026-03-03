@@ -11,8 +11,6 @@ const HowItWorksSection = lazy(() => import('@/components/new-home/HowItWorksSec
 const ImpactSection = lazy(() => import('@/components/new-home/ImpactSection').then(m => ({ default: m.ImpactSection })));
 const MidCTASection = lazy(() => import('@/components/new-home/MidCTASection').then(m => ({ default: m.MidCTASection })));
 const SegmentationSection = lazy(() => import('@/components/new-home/SegmentationSection').then(m => ({ default: m.SegmentationSection })));
-const HomeFAQSection = lazy(() => import('@/components/new-home/HomeFAQSection').then(m => ({ default: m.HomeFAQSection })));
-const BlogHighlightSection = lazy(() => import('@/components/new-home/BlogHighlightSection').then(m => ({ default: m.BlogHighlightSection })));
 const LearnMoreSection = lazy(() => import('@/components/new-home/LearnMoreSection').then(m => ({ default: m.LearnMoreSection })));
 const FinalCTASection = lazy(() => import('@/components/new-home/FinalCTASection').then(m => ({ default: m.FinalCTASection })));
 
