@@ -53,6 +53,9 @@ const Index = () => {
           <BlogHighlightSection />
         </ScrollReveal>
         <ScrollReveal>
+          <LearnMoreSection />
+        </ScrollReveal>
+        <ScrollReveal>
           <FinalCTASection />
         </ScrollReveal>
       </Suspense>

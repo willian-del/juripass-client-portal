@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="bg-muted/30 border-t border-border py-10 mt-auto">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Coluna 1: Logo + Descrição */}
           <div className="space-y-3">
             <Link to="/" className="inline-block">
@@ -16,17 +16,7 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Coluna 2: Links */}
-          <div>
-            <h3 className="text-sm font-semibold text-foreground mb-3">Navegação</h3>
-            <div className="flex flex-col gap-2 text-sm">
-              <Link to="/nr-01" className="text-muted-foreground hover:text-primary transition-colors">NR-01</Link>
-              <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link>
-              <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">Blog</Link>
-            </div>
-          </div>
-
-          {/* Coluna 3: Institucional */}
+          {/* Coluna 2: Institucional */}
           <div>
             <h3 className="text-sm font-semibold text-foreground mb-3">Institucional</h3>
             <div className="space-y-1 text-sm text-muted-foreground">
