@@ -13,11 +13,13 @@ export function OrganizationalProblemSection() {
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-10">
+        <ScrollReveal>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
             O RH não tem um problema jurídico.
             <br />
             <span className="text-primary">Tem um problema de encaminhamento.</span>
           </h2>
+        </ScrollReveal>
 
           {/* Flow visual */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0 py-6">
