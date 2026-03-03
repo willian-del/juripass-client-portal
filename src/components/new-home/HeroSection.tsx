@@ -18,10 +18,10 @@ export function HeroSection() {
             Plataforma de Suporte Jurídico{' '}
             <span className="text-primary">para Gestão de Pessoas</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-[680px] mx-auto">
-            A Juripass é uma plataforma de gestão preventiva para o RH que estrutura, como política
-            corporativa, um canal jurídico externo e confidencial para acolher questões pessoais sensíveis
-            dos colaboradores — antes que impactem o clima, a produtividade ou evoluam para conflitos internos.
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-[680px] mx-auto">A Juripass é uma plataforma de gestão preventiva para o RH que estrutura, como política corporativa, um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores. Antes que impactem o clima, a produtividade ou evoluam para conflitos internos.
+
+
+
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
             <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openScheduling}>
@@ -40,6 +40,6 @@ export function HeroSection() {
           </p>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
