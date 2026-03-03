@@ -1,22 +1,17 @@
-import { MessageCircle, Lightbulb, ArrowUpRight, ArrowRight, Clock } from 'lucide-react';
+import { ChevronRight, ChevronDown, ArrowRight, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import React from 'react';
 
 const steps = [
   {
-    icon: MessageCircle,
-    number: '01',
     title: 'Colaborador entra em contato direto',
     description: 'Via WhatsApp ou aplicativo, de forma simples e confidencial.',
   },
   {
-    icon: Lightbulb,
-    number: '02',
     title: 'Equipe treinada acolhe e organiza a demanda',
     description: 'Recebe orientação informativa em linguagem clara e acessível sobre direitos e caminhos possíveis.',
   },
   {
-    icon: ArrowUpRight,
-    number: '03',
     title: 'Situação é encaminhada adequadamente',
     description: 'Quando necessário, é encaminhado a advogado habilitado, sem sobrecarregar a empresa.',
   },
@@ -26,28 +21,25 @@ export function HowItWorksSection() {
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto space-y-12">
+        <div className="max-w-5xl mx-auto space-y-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
             Como funciona
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {steps.map((step) => (
-              <div
-                key={step.number}
-                className="relative p-6 rounded-2xl bg-card border border-border shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-200 space-y-4"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-                    <step.icon className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary">{step.number}</span>
-                  </div>
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            {steps.map((step, index) => (
+              <React.Fragment key={index}>
+                <div className="flex-1 p-6 rounded-2xl bg-card border border-border shadow-md space-y-2">
+                  <h3 className="font-semibold text-foreground">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground">{step.description}</p>
                 </div>
-                <h3 className="font-semibold text-foreground">{step.title}</h3>
-                <p className="text-sm text-muted-foreground">{step.description}</p>
-              </div>
+                {index < steps.length - 1 && (
+                  <>
+                    <ChevronRight className="hidden md:block h-8 w-8 text-primary/40 shrink-0" />
+                    <ChevronDown className="md:hidden h-8 w-8 text-primary/40 self-center" />
+                  </>
+                )}
+              </React.Fragment>
             ))}
           </div>
 
