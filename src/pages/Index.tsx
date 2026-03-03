@@ -47,12 +47,6 @@ const Index = () => {
           <SegmentationSection />
         </ScrollReveal>
         <ScrollReveal>
-          <HomeFAQSection />
-        </ScrollReveal>
-        <ScrollReveal>
-          <BlogHighlightSection />
-        </ScrollReveal>
-        <ScrollReveal>
           <LearnMoreSection />
         </ScrollReveal>
         <ScrollReveal>
