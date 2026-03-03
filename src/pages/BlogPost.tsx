@@ -33,7 +33,7 @@ const BlogPost = () => {
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 
-      <article className="py-12 md:py-20">
+      <article className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-3xl">
           {/* Back link */}
           <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
@@ -80,7 +80,7 @@ const BlogPost = () => {
                 <h3 className="text-xl font-bold text-foreground mb-6">Leia também</h3>
                 <div className="grid sm:grid-cols-3 gap-4">
                   {relatedArticles.map(related => (
-                    <Link key={related.slug} to={`/blog/${related.slug}`} className="group p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+                    <Link key={related.slug} to={`/blog/${related.slug}`} className="group p-5 rounded-2xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
                       <span className="text-xs text-primary font-medium">{related.category}</span>
                       <h4 className="font-semibold text-foreground mt-1 mb-2 group-hover:text-primary transition-colors text-sm leading-snug">{related.title}</h4>
                       <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
@@ -95,7 +95,7 @@ const BlogPost = () => {
 
           {/* Páginas relacionadas */}
           <div className="mt-10 grid sm:grid-cols-2 gap-4">
-            <Link to="/nr-01" className="group flex items-center gap-4 p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+            <Link to="/nr-01" className="group flex items-center gap-4 p-5 rounded-2xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <Scale className="h-5 w-5 text-primary" />
               </div>
@@ -105,7 +105,7 @@ const BlogPost = () => {
               </div>
               <ArrowRight className="h-4 w-4 text-muted-foreground ml-auto shrink-0" />
             </Link>
-            <Link to="/para-quem" className="group flex items-center gap-4 p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+            <Link to="/para-quem" className="group flex items-center gap-4 p-5 rounded-2xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <Users className="h-5 w-5 text-primary" />
               </div>
