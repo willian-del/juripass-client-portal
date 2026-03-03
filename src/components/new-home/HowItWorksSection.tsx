@@ -4,7 +4,7 @@ import React from 'react';
 
 const steps = [
   {
-    title: 'Colaborador entra em contato direto',
+    title: 'O Colaborador entra em contato direto',
     description: 'Via WhatsApp ou aplicativo, de forma simples e confidencial.',
   },
   {
@@ -13,7 +13,7 @@ const steps = [
   },
   {
     title: 'Situação é encaminhada adequadamente',
-    description: 'Quando necessário, é encaminhado a advogado habilitado, sem sobrecarregar a empresa.',
+    description: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.',
   },
 ];
 
