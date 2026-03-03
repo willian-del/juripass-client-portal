@@ -95,7 +95,7 @@ const BlogPost = () => {
 
           {/* Páginas relacionadas */}
           <div className="mt-10 grid sm:grid-cols-2 gap-4">
-            <Link to="/nr-01" className="group flex items-center gap-4 p-5 rounded-xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
+            <Link to="/nr-01" className="group flex items-center gap-4 p-5 rounded-2xl bg-muted/30 border border-border hover:border-primary/40 transition-colors">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <Scale className="h-5 w-5 text-primary" />
               </div>
