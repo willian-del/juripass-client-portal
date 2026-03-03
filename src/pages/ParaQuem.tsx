@@ -171,7 +171,7 @@ const ParaQuem = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-12 md:py-20 bg-gradient-to-br from-primary/90 to-primary">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-primary/90 to-primary">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
