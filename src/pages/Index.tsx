@@ -35,6 +35,7 @@ const Index = () => {
         <ScrollReveal>
           <WhatIsJuripassSection />
         </ScrollReveal>
+        <RiskOrganizationSection />
         <ScrollReveal>
           <HowItWorksSection />
         </ScrollReveal>
