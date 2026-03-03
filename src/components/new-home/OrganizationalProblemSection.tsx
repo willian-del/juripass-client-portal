@@ -72,7 +72,7 @@ export function OrganizationalProblemSection() {
           </ScrollReveal>
 
           <ScrollReveal delay={0.2}>
-            <p className="text-lg md:text-xl text-primary font-medium leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-primary font-medium leading-relaxed max-w-3xl mx-auto">
               A Juripass organiza esse fluxo de forma técnica, preventiva e independente, trazendo clareza, proteção institucional e apoio à gestão de riscos psicossociais em conformidade com a nova NR-01.
             </p>
           </ScrollReveal>
