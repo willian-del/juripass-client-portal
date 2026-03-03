@@ -15,7 +15,7 @@ const segments = [
   {
     icon: ShoppingBag,
     title: 'Varejo',
-    subtitle: 'O cliente percebe primeiro',
+    subtitle: 'O cliente é o primeiro a perceber o problema',
     points: [
       'Atendimento cai quando o colaborador está preocupado',
       'Alta rotatividade dificulta qualquer acompanhamento',
