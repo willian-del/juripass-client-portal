@@ -9,7 +9,7 @@ const pillars = [
 },
 {
   icon: MousePointerClick,
-  title: 'Sob demanda',
+  title: 'Sob demanda e confidencial',
   description: 'O colaborador aciona quando quiser, sem intermediários.'
 },
 {
