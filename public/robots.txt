@@ -15,4 +15,4 @@ Allow: /
 Disallow: /site-anterior
 Disallow: /avaliacao
 
-Sitemap: https://juripass-client-portal.lovable.app/sitemap.xml
+Sitemap: https://www.juripass.com.br/sitemap.xml
