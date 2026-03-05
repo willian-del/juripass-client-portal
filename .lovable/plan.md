@@ -1,74 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Novas Páginas SEO e Artigos de Blog
+## Problema
 
-### Resumo
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-Criar 3 landing pages SEO e 3 artigos de blog novos, sem alterar nenhum conteúdo existente. Adicionar rotas, atualizar sitemap e incluir links internos nos novos conteúdos.
+## Solucao
+
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-### 1. Novas Landing Pages (3 arquivos)
+## Alteracoes
 
-Criar páginas seguindo o padrão visual do `NR01.tsx` (SEOHead, ScrollReveal, seções com ícones, CTA final):
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-| Arquivo | Rota | Título H1 |
-|---------|------|-----------|
-| `src/pages/GestaoRiscosPsicossociais.tsx` | `/gestao-riscos-psicossociais-nr01` | Gestão de Riscos Psicossociais na NR-01: Como Empresas Podem Estruturar Esse Processo |
-| `src/pages/NR01RiscosPsicossociais.tsx` | `/nr01-riscos-psicossociais` | NR-01 e Riscos Psicossociais: O que muda para as empresas em 2026 |
-| `src/pages/GestaoRiscosHumanos.tsx` | `/gestao-riscos-humanos-rh` | Gestão de Riscos Humanos: Como o RH pode estruturar prevenção e suporte |
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-Cada página incluirá:
-- `SEOHead` com título, descrição e JSON-LD (Article + Organization)
-- Hierarquia H1/H2 com as seções especificadas no prompt
-- Links internos para `/`, `/como-funciona`, `/para-quem`
-- CTA final com `openScheduling()`
-
-### 2. Novos Artigos de Blog (dados em `blog-data.ts`)
-
-Adicionar 3 novos artigos ao array `blogArticles`:
-
-| Slug | Título | Categoria |
-|------|--------|-----------|
-| `nr01-riscos-psicossociais-2026` | NR-01: empresas terão que gerenciar riscos psicossociais a partir de 2026 | Compliance |
-| `problemas-pessoais-impactam-trabalho` | Problemas pessoais dos colaboradores e seus impactos no trabalho | Gestão de RH |
-| `beneficios-modernos-para-colaboradores` | Benefícios modernos para colaboradores: novas ferramentas de apoio ao RH | Benefícios |
-
-Cada artigo terá 4-5 seções com conteúdo substantivo, `relatedSlugs` cruzando com artigos existentes e as novas landing pages.
-
-> Nota: O slug do blog article será `nr01-riscos-psicossociais-2026` (não `nr01-riscos-psicossociais`) para evitar conflito com a landing page que usa `/nr01-riscos-psicossociais` como rota.
-
-### 3. Rotas (`src/App.tsx`)
-
-Adicionar 3 lazy imports e rotas dentro do `MainLayout`:
-
-```typescript
-const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
-const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
-const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-### 4. Sitemap (`public/sitemap.xml`)
+### 2. Atualizar `src/App.tsx`
 
-Adicionar 6 novas URLs (3 landing pages + 3 blog posts) com prioridades adequadas (0.8 para landing pages, 0.6 para blog posts).
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-### 5. O que NÃO será alterado
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
-- Homepage, header, navigation, footer
-- Páginas existentes (NR01, ComoFunciona, ParaQuem, etc.)
-- Artigos de blog existentes
-- Estrutura de SEO atual
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
 
 ---
 
-### Arquivos criados/editados
+## Resultado esperado
 
-| Ação | Arquivo |
-|------|---------|
-| Criar | `src/pages/GestaoRiscosPsicossociais.tsx` |
-| Criar | `src/pages/NR01RiscosPsicossociais.tsx` |
-| Criar | `src/pages/GestaoRiscosHumanos.tsx` |
-| Editar | `src/lib/blog-data.ts` (adicionar 3 artigos) |
-| Editar | `src/App.tsx` (adicionar 3 rotas) |
-| Editar | `public/sitemap.xml` (adicionar 6 URLs) |
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
 
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

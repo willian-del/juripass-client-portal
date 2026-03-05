@@ -16,6 +16,9 @@ const NR01 = lazy(() => import("./pages/NR01"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ParaSeuColaborador = lazy(() => import("./pages/ParaSeuColaborador"));
+const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
+const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
+const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
 
 const App = () => (
   <TooltipProvider>
@@ -34,6 +37,9 @@ const App = () => (
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/para-seus-colaboradores" element={<ParaSeuColaborador />} />
             <Route path="/avaliacao" element={<Avaliacao />} />
+            <Route path="/gestao-riscos-psicossociais-nr01" element={<GestaoRiscosPsicossociais />} />
+            <Route path="/nr01-riscos-psicossociais" element={<NR01RiscosPsicossociais />} />
+            <Route path="/gestao-riscos-humanos-rh" element={<GestaoRiscosHumanos />} />
           </Route>
           <Route path="/site-anterior" element={<LegacyHome />} />
           <Route path="*" element={<NotFound />} />
