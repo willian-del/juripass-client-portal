@@ -37,6 +37,24 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.juripass.com.br/gestao-riscos-psicossociais-nr01</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.juripass.com.br/nr01-riscos-psicossociais</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.juripass.com.br/gestao-riscos-humanos-rh</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.juripass.com.br/blog</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -69,6 +87,24 @@
   <url>
     <loc>https://www.juripass.com.br/blog/saude-mental-trabalho-papel-rh</loc>
     <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.juripass.com.br/blog/nr01-riscos-psicossociais-2026</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.juripass.com.br/blog/problemas-pessoais-impactam-trabalho</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.juripass.com.br/blog/beneficios-modernos-para-colaboradores</loc>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

@@ -167,6 +167,101 @@ export const blogArticles: BlogArticle[] = [
   },
 ];
 
+  {
+    slug: 'nr01-riscos-psicossociais-2026',
+    title: 'NR-01: Empresas Terão Que Gerenciar Riscos Psicossociais a Partir de 2026',
+    description: 'A NR-01 inclui riscos psicossociais no PGR. Entenda o que muda, quais são as obrigações e como preparar sua empresa para 2026.',
+    category: 'Compliance',
+    readTime: '7 min',
+    publishedAt: '2026-03-01',
+    relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'saude-mental-trabalho-papel-rh', 'absenteismo-juridico-problema-silencioso'],
+    sections: [
+      {
+        heading: 'O que muda com a NR-01 em 2026',
+        content: 'A Norma Regulamentadora nº 01 foi atualizada para incluir explicitamente os riscos psicossociais no escopo do Programa de Gerenciamento de Riscos (PGR). Isso significa que empresas de todos os portes e setores passam a ter a obrigação formal de identificar, avaliar e gerenciar fatores como estresse crônico, assédio, sobrecarga de trabalho e conflitos interpessoais que possam afetar a saúde mental dos colaboradores. A mudança representa uma evolução significativa na legislação trabalhista brasileira, alinhando o país às melhores práticas internacionais de segurança e saúde ocupacional.',
+      },
+      {
+        heading: 'Quais riscos psicossociais as empresas precisam gerenciar',
+        content: 'Os riscos psicossociais abrangem uma ampla gama de fatores: jornadas excessivas, metas irreais, falta de autonomia, assédio moral ou sexual, insegurança no emprego, conflitos com gestores e colegas, isolamento no trabalho remoto, e também fatores externos como problemas jurídicos pessoais, endividamento e conflitos familiares que o colaborador carrega para o ambiente de trabalho. A norma reconhece que a saúde mental do trabalhador é influenciada tanto por fatores internos quanto externos à organização, e que ambos devem ser considerados no PGR.',
+      },
+      {
+        heading: 'Obrigações práticas para as empresas',
+        content: 'Na prática, as empresas precisarão: incluir riscos psicossociais no inventário de riscos do PGR; implementar medidas concretas de prevenção e controle; disponibilizar canais de escuta e acolhimento para os colaboradores; capacitar gestores para identificar sinais de sofrimento mental; monitorar indicadores como absenteísmo, rotatividade e afastamentos por saúde mental; e documentar todas as ações adotadas para demonstrar conformidade em caso de fiscalização. O descumprimento pode resultar em multas administrativas, interdições e ações trabalhistas.',
+      },
+      {
+        heading: 'Como o RH pode se preparar',
+        content: 'O primeiro passo é realizar um diagnóstico organizacional para mapear os fatores de risco psicossocial presentes na empresa. Em seguida, é fundamental criar canais de comunicação seguros e confidenciais. Um programa de acolhimento jurídico funciona como parte dessa estratégia, pois muitos riscos psicossociais têm origem em problemas pessoais não resolvidos. Ao oferecer suporte externo e especializado, a empresa atua na prevenção ativa e demonstra conformidade com a norma.',
+      },
+      {
+        heading: 'O papel do acolhimento jurídico na conformidade',
+        content: 'Programas de acolhimento jurídico como a Juripass oferecem um canal externo e confidencial que ajuda colaboradores a resolverem questões pessoais antes que se tornem fontes de estresse crônico. Para o RH, os dados anonimizados do programa revelam padrões de risco que podem ser endereçados preventivamente. Isso transforma uma obrigação legal em uma oportunidade de cuidado genuíno com os colaboradores — e em vantagem competitiva na atração e retenção de talentos.',
+      },
+    ],
+  },
+  {
+    slug: 'problemas-pessoais-impactam-trabalho',
+    title: 'Problemas Pessoais dos Colaboradores e Seus Impactos no Trabalho',
+    description: 'Entenda como problemas jurídicos, financeiros e familiares dos colaboradores afetam diretamente a produtividade, o absenteísmo e o clima organizacional.',
+    category: 'Gestão de RH',
+    readTime: '6 min',
+    publishedAt: '2026-03-01',
+    relatedSlugs: ['absenteismo-juridico-problema-silencioso', 'saude-mental-trabalho-papel-rh', 'como-implementar-acolhimento-juridico'],
+    sections: [
+      {
+        heading: 'A vida pessoal entra no escritório',
+        content: 'É uma ilusão pensar que o colaborador deixa seus problemas pessoais na porta da empresa. Pesquisas consistentemente mostram que questões como divórcio, dívidas, disputas de guarda e processos judiciais acompanham o trabalhador durante toda a jornada, afetando sua concentração, seu humor e sua capacidade de tomar decisões. O custo invisível desses problemas para as empresas é imenso — e frequentemente subestimado por programas de gestão de pessoas que focam apenas em fatores internos à organização.',
+      },
+      {
+        heading: 'Impacto na produtividade e no absenteísmo',
+        content: 'Colaboradores que enfrentam problemas pessoais graves apresentam queda de até 40% na produtividade, segundo estudos internacionais. No Brasil, 69% da população enfrenta ao menos um problema jurídico relevante ao longo da vida, e 28% reportam impacto direto na saúde mental. Para as empresas, isso se traduz em presenteísmo crônico (o colaborador está presente, mas improdutivo), aumento de faltas, erros operacionais e, eventualmente, afastamentos por saúde mental que podem durar meses.',
+      },
+      {
+        heading: 'Conflitos familiares e financeiros como fatores de risco',
+        content: 'Conflitos familiares — divórcios, disputas de guarda, problemas com pensão alimentícia — são fontes de estresse crônico que podem durar anos. Da mesma forma, o endividamento gera ansiedade constante, comprometendo o sono, a concentração e a saúde física do colaborador. Esses fatores são reconhecidos pela Nova NR-01 como riscos psicossociais que devem ser gerenciados pelas empresas, reforçando a necessidade de canais estruturados de suporte.',
+      },
+      {
+        heading: 'Por que o RH não consegue enxergar esses problemas',
+        content: 'Questões pessoais são, por natureza, confidenciais. O colaborador não se sente confortável para contar ao gestor que está sendo despejado ou que enfrenta uma execução fiscal. Sem um canal externo e confidencial, esses problemas permanecem invisíveis até que se manifestem como sintomas organizacionais: faltas recorrentes, conflitos com colegas, queda de desempenho ou pedidos de demissão. O RH acaba tratando os sintomas sem conhecer a causa raiz.',
+      },
+      {
+        heading: 'Canais de acolhimento como solução estrutural',
+        content: 'A resposta para esse desafio são canais estruturados de acolhimento que ofereçam orientação externa, confidencial e especializada. Programas como a Juripass permitem que o colaborador busque ajuda jurídica sem exposição interna, resolvendo seus problemas mais rapidamente e reduzindo o estresse que carrega para o trabalho. Para o RH, os relatórios anonimizados do programa fornecem dados valiosos sobre as demandas reais dos colaboradores, permitindo ações preventivas baseadas em evidências.',
+      },
+    ],
+  },
+  {
+    slug: 'beneficios-modernos-para-colaboradores',
+    title: 'Benefícios Modernos para Colaboradores: Novas Ferramentas de Apoio ao RH',
+    description: 'Conheça os benefícios corporativos mais inovadores que estão transformando a relação entre empresas e colaboradores em 2026.',
+    category: 'Benefícios',
+    readTime: '5 min',
+    publishedAt: '2026-03-01',
+    relatedSlugs: ['beneficios-corporativos-retencao-talentos', 'como-implementar-acolhimento-juridico', 'absenteismo-juridico-problema-silencioso'],
+    sections: [
+      {
+        heading: 'O novo cenário de benefícios corporativos',
+        content: 'O mercado de benefícios corporativos está passando por uma transformação profunda. Plano de saúde, vale-refeição e vale-transporte continuam sendo a base, mas não são mais suficientes para atrair e reter talentos. Em 2026, as empresas mais competitivas estão investindo em benefícios que atendem às necessidades reais e diversas dos colaboradores — saúde mental, orientação jurídica, educação financeira e bem-estar integral. A personalização e o cuidado genuíno com a pessoa, não apenas com o profissional, são os novos diferenciais.',
+      },
+      {
+        heading: 'Acolhimento jurídico como benefício estratégico',
+        content: 'Entre os benefícios mais inovadores, o acolhimento jurídico se destaca por resolver uma dor real e frequentemente ignorada: os problemas legais que afetam a vida pessoal dos colaboradores. Questões como divórcio, guarda de filhos, dívidas, problemas imobiliários e conflitos de consumo são fontes de estresse crônico que impactam diretamente o trabalho. Um programa de acolhimento jurídico oferece orientação confidencial e especializada, resolvendo problemas antes que se tornem crises — e demonstrando um nível de cuidado que diferencia a empresa como empregadora.',
+      },
+      {
+        heading: 'Saúde mental e apoio psicológico',
+        content: 'Programas de apoio psicológico corporativo evoluíram significativamente. Em vez de apenas oferecer sessões de terapia, as melhores práticas incluem: plataformas de atendimento on-demand, programas de prevenção ao burnout, treinamento de lideranças para saúde mental, e integração com outros serviços de acolhimento (jurídico, financeiro). A Nova NR-01 reforçou a importância desses programas ao incluir riscos psicossociais no PGR, tornando a saúde mental uma questão de compliance além de bem-estar.',
+      },
+      {
+        heading: 'Educação financeira e planejamento',
+        content: 'O estresse financeiro é um dos principais fatores de queda de produtividade no Brasil. Benefícios como consultoria financeira, programas de educação sobre investimentos e planejamento familiar, e acesso a crédito com condições diferenciadas estão se tornando cada vez mais comuns em pacotes de benefícios modernos. Quando combinados com acolhimento jurídico — que frequentemente lida com questões financeiras como dívidas e execuções — esses benefícios criam uma rede de suporte completa para o colaborador.',
+      },
+      {
+        heading: 'Como escolher os benefícios certos para sua empresa',
+        content: 'A escolha dos benefícios deve ser guiada por dados, não por tendências. Comece analisando os indicadores da sua empresa: absenteísmo, turnover, afastamentos por saúde mental, resultados de pesquisas de clima. Esses dados revelam as dores reais dos colaboradores. Em seguida, priorize benefícios que atuem nas causas, não nos sintomas. Um programa de acolhimento jurídico como a Juripass, por exemplo, atua diretamente na causa de muito do estresse que os colaboradores carregam — e ainda fornece dados anonimizados que ajudam o RH a tomar decisões baseadas em evidências.',
+      },
+    ],
+  },
+];
+
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
   return blogArticles.find((a) => a.slug === slug);
 }
