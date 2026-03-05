@@ -9,7 +9,7 @@ interface SEOHeadProps {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const BASE_URL = 'https://juripass-client-portal.lovable.app';
+const BASE_URL = 'https://www.juripass.com.br';
 
 export function SEOHead({ title, description, canonical, ogImage, jsonLd }: SEOHeadProps) {
   const { pathname } = useLocation();
