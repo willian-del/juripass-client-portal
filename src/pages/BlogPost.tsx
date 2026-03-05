@@ -5,7 +5,7 @@ import { ArrowLeft, Clock, Tag, Calendar, ArrowRight, Scale, Users } from 'lucid
 import { Button } from '@/components/ui/button';
 import { BRAND, openScheduling } from '@/lib/constants';
 
-const BASE_URL = 'https://juripass-client-portal.lovable.app';
+const BASE_URL = 'https://www.juripass.com.br';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
