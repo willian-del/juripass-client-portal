@@ -16,6 +16,9 @@ const NR01 = lazy(() => import("./pages/NR01"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ParaSeuColaborador = lazy(() => import("./pages/ParaSeuColaborador"));
+const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
+const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
+const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
 
 const App = () => (
   <TooltipProvider>
