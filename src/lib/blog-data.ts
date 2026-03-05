@@ -165,8 +165,6 @@ export const blogArticles: BlogArticle[] = [
       },
     ],
   },
-];
-
   {
     slug: 'nr01-riscos-psicossociais-2026',
     title: 'NR-01: Empresas Terão Que Gerenciar Riscos Psicossociais a Partir de 2026',
