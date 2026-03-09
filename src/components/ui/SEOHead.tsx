@@ -84,7 +84,7 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd, noinde
       const scripts = document.querySelectorAll('script[data-seo-jsonld]');
       scripts.forEach((s) => s.remove());
     };
-  }, [title, description, url, image, jsonLd]);
+  }, [title, description, url, image, jsonLd, noindex, finalKeywords]);
 
   return null;
 }

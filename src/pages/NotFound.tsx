@@ -18,6 +18,7 @@ const NotFound = () => {
       <SEOHead
         title="Página não encontrada - 404 | Juripass"
         description="A página que você está procurando não foi encontrada. Volte para a página inicial do Juripass para acessar nossa plataforma de suporte jurídico para RH."
+        noindex={true}
       />
       <div className="flex min-h-screen items-center justify-center bg-gradient-primary">
         <div className="text-center space-y-8 p-8">
