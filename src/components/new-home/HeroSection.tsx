@@ -25,7 +25,7 @@ export function HeroSection() {
 
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
-            <Button size="lg" className="gap-2 text-base px-8 shadow-primary" <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openLeadForm}>>
+            <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openLeadForm}>
               <Calendar className="h-5 w-5" />
               Agende uma conversa
             </Button>

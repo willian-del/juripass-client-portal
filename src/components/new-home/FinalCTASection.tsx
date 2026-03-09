@@ -23,7 +23,7 @@ export function FinalCTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" <Button size="lg" onClick={openLeadForm} className="font-semibold text-base px-8 shadow-primary"> className="font-semibold text-base px-8 shadow-primary">
+            <Button size="lg" onClick={openLeadForm} className="font-semibold text-base px-8 shadow-primary">
               <Calendar className="h-5 w-5" />
               Agende uma conversa
             </Button>
