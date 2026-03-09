@@ -7,8 +7,9 @@ import { LeadDetailPanel } from '@/components/admin/LeadDetailPanel';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { LayoutList, Kanban, LogOut, Search, FileText } from 'lucide-react';
+import { LayoutList, Kanban, LogOut, Search, FileText, Sparkles } from 'lucide-react';
 import { FUNNEL_STAGES } from '@/components/admin/FunnelBadge';
+import { AIAssistantPanel } from '@/components/admin/AIAssistantPanel';
 import { useNavigate } from 'react-router-dom';
 
 type Lead = any;
