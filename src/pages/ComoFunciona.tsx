@@ -267,7 +267,7 @@ const ComoFunciona = () => {
               Quer entender como isso funcionaria na sua empresa?
             </h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5 mr-2" />
                 Agende uma conversa
               </Button>
