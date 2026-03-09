@@ -52,6 +52,7 @@ const structureSteps = [
 ];
 
 export default function GestaoRiscosPsicossociais() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
