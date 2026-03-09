@@ -35,7 +35,8 @@ const NotFound = () => {
           Voltar para o Início
         </Button>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

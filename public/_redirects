@@ -1,0 +1,7 @@
+# Redirects for Netlify/Vercel
+/*    /index.html   200
+
+# Specific redirects for old URLs
+/dashboard    /    301
+/admin        /    301
+/old-page     /    301
