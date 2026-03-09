@@ -82,7 +82,7 @@ export default function GestaoRiscosHumanos() {
               <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
                 Problemas pessoais dos colaboradores impactam diretamente o trabalho. Entenda como o RH pode criar canais estruturados de orientação e prevenção.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
