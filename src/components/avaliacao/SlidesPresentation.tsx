@@ -2,122 +2,150 @@ import { useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { 
   ChevronLeft, ChevronRight, X, AlertTriangle, Building2, 
-  MessageCircle, Lightbulb, ArrowRight, Shield, Users, Heart,
-  Scale, Lock, Rocket, Clock, BadgeCheck, Phone, Mail, Globe
+  Lightbulb, ArrowRight, Shield, Users, Heart,
+  Scale, Lock, Rocket, Clock, BadgeCheck, Phone, Mail, Globe,
+  Brain, ShieldAlert, Unplug, MousePointerClick, UserCheck, ShieldCheck,
+  Download, ChevronDown, Wallet, Home, ShoppingBag, HeartPulse
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { Progress } from '@/components/ui/progress';
 
-type SlideVariant = 'dark' | 'light';
-
 interface SlideData {
-  variant: SlideVariant;
   render: () => React.ReactNode;
+  gradient?: string;
 }
 
-function SlideWrapper({ variant, children }: { variant: SlideVariant; children: React.ReactNode }) {
-  const isDark = variant === 'dark';
+function SlideWrapper({ children, gradient }: { children: React.ReactNode; gradient?: string }) {
   return (
-    <div className={`w-full h-full flex items-center justify-center p-8 md:p-16 ${
-      isDark 
-        ? 'bg-[hsl(var(--juripass-primary-dark))] text-white' 
-        : 'bg-white text-[hsl(var(--juripass-primary-dark))]'
-    }`}>
+    <div 
+      className="w-full h-full flex items-center justify-center p-8 md:p-16 text-white"
+      style={{ background: gradient || 'linear-gradient(135deg, #2C3E7D 0%, #1e2d5e 100%)' }}
+    >
       {children}
     </div>
   );
 }
 
-function IconBox({ icon: Icon, dark }: { icon: React.ElementType; dark?: boolean }) {
+function IconBox({ icon: Icon }: { icon: React.ElementType }) {
   return (
-    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
-      dark 
-        ? 'bg-white/10 backdrop-blur-sm border border-white/20' 
-        : 'bg-[hsl(var(--juripass-primary)/0.1)] border border-[hsl(var(--juripass-primary)/0.2)]'
-    }`}>
-      <Icon className={`h-7 w-7 ${dark ? 'text-[hsl(var(--juripass-primary))]' : 'text-[hsl(var(--juripass-primary))]'}`} />
+    <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 bg-white/10 backdrop-blur-sm border border-white/20">
+      <Icon className="h-7 w-7 text-[#4A9FD8]" />
     </div>
   );
 }
 
-function Card({ children, dark, className = '' }: { children: React.ReactNode; dark?: boolean; className?: string }) {
+function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl p-6 ${
-      dark 
-        ? 'bg-white/5 backdrop-blur-sm border border-white/10' 
-        : 'bg-[hsl(var(--juripass-primary-dark)/0.03)] border border-[hsl(var(--juripass-primary-dark)/0.08)]'
-    } ${className}`}>
+    <div className={`rounded-2xl p-6 bg-white/5 backdrop-blur-sm border border-white/10 ${className}`}>
       {children}
     </div>
+  );
+}
+
+function ThemeBadge({ label }: { label: string }) {
+  return (
+    <span className="px-4 py-2 rounded-full text-sm font-medium bg-[#4A9FD8]/15 text-[#4A9FD8] border border-[#4A9FD8]/25">
+      {label}
+    </span>
   );
 }
 
 const slides: SlideData[] = [
   // 1 — Capa
   {
-    variant: 'dark',
+    gradient: 'linear-gradient(160deg, #2C3E7D 0%, #1a2654 60%, #2C3E7D 100%)',
     render: () => (
       <div className="text-center space-y-8 max-w-3xl">
-        <LogoJuripass variant="full" color="white" size="lg" format="png" clickable={false} />
-        <div className="space-y-4">
+        <img 
+          src="/images/branding/juripass-logo-white.png" 
+          alt="Juripass" 
+          className="h-16 md:h-20 object-contain mx-auto"
+        />
+        <div className="space-y-5">
           <h1 className="text-3xl md:text-5xl font-bold leading-tight">
-            Programa de Acolhimento e Orientação Jurídica ao Colaborador
+            Plataforma de Suporte Jurídico{' '}
+            <span className="text-[#4A9FD8]">para Gestão de Pessoas</span>
           </h1>
-          <div className="w-24 h-1 bg-[hsl(var(--juripass-primary))] mx-auto rounded-full" />
-          <p className="text-lg md:text-xl text-white/70">
-            Uma plataforma que ajuda o RH a prevenir conflitos e reduzir passivos
+          <div className="w-24 h-1 bg-[#4A9FD8] mx-auto rounded-full" />
+          <p className="text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto">
+            Gestão preventiva para o RH — um canal jurídico externo e confidencial 
+            para acolher questões pessoais sensíveis dos colaboradores.
           </p>
         </div>
       </div>
     ),
   },
-  // 2 — O desafio do RH
+  // 2 — O problema de encaminhamento
   {
-    variant: 'light',
+    gradient: 'linear-gradient(145deg, #253570 0%, #2C3E7D 50%, #1e2d5e 100%)',
     render: () => (
       <div className="max-w-4xl w-full space-y-8">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Contexto</p>
-          <h2 className="text-3xl md:text-4xl font-bold">O desafio do RH hoje</h2>
+        <div className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Contexto</p>
+          <h2 className="text-3xl md:text-4xl font-bold">
+            O RH não tem um problema jurídico.
+            <br />
+            <span className="text-[#4A9FD8]">Tem um problema de encaminhamento.</span>
+          </h2>
         </div>
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="flex flex-col md:flex-row items-center gap-3 md:gap-0 py-4">
           {[
-            { icon: AlertTriangle, text: 'Conflitos pessoais dos colaboradores impactam diretamente o trabalho' },
-            { icon: MessageCircle, text: 'Falta de orientação jurídica acessível para situações do dia a dia' },
-            { icon: Heart, text: 'Aumento de riscos psicossociais exige gestão preventiva' },
-            { icon: Scale, text: 'A atualização da NR-01 amplia a necessidade de suporte estruturado' },
-          ].map((item, i) => (
-            <Card key={i}>
-              <div className="flex items-start gap-4">
-                <IconBox icon={item.icon} />
-                <p className="text-base leading-relaxed pt-1">{item.text}</p>
+            { icon: UserCheck, label: 'Colaborador', sub: 'com problema pessoal', danger: false },
+            { icon: Users, label: 'Gestor', sub: 'Atua como conselheiro informal', danger: false },
+            { icon: Building2, label: 'RH', sub: 'Recebe relatos fora do seu escopo', danger: false },
+            { icon: AlertTriangle, label: 'Desgaste', sub: 'Impacto em clima e operação', danger: true },
+          ].map((step, i) => (
+            <div key={step.label} className="flex flex-col md:flex-row items-center">
+              {i > 0 && (
+                <>
+                  <ChevronDown className="block md:hidden text-white/30 my-1" size={20} />
+                  <ChevronRight className="hidden md:block text-white/30 mx-2" size={20} />
+                </>
+              )}
+              <div className={`flex flex-col items-center justify-center gap-3 px-4 py-4 rounded-2xl border w-[240px] md:w-[180px] h-[130px] md:h-[160px] ${
+                step.danger 
+                  ? 'bg-red-500/10 border-red-400/30' 
+                  : 'bg-white/5 border-white/10'
+              }`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                  step.danger ? 'bg-red-500/20 text-red-400' : 'bg-[#4A9FD8]/20 text-[#4A9FD8]'
+                }`}>
+                  <step.icon size={20} />
+                </div>
+                <div className="text-center">
+                  <p className={`font-semibold text-sm ${step.danger ? 'text-red-400' : 'text-white'}`}>{step.label}</p>
+                  <p className={`text-xs mt-1 ${step.danger ? 'text-red-400/70' : 'text-white/50'}`}>{step.sub}</p>
+                </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
+        <p className="text-white/50 text-center text-sm">
+          Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles deveria assumir esse papel.
+        </p>
       </div>
     ),
   },
-  // 3 — A lacuna nas empresas
+  // 3 — Onde a Juripass organiza risco
   {
-    variant: 'dark',
+    gradient: 'linear-gradient(150deg, #1e2d5e 0%, #2C3E7D 100%)',
     render: () => (
       <div className="max-w-4xl w-full space-y-8">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">O problema</p>
-          <h2 className="text-3xl md:text-4xl font-bold">A lacuna nas empresas</h2>
-          <p className="text-lg text-white/60">Quando colaboradores enfrentam problemas jurídicos pessoais e não há canal adequado:</p>
+        <div className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Os riscos</p>
+          <h2 className="text-3xl md:text-4xl font-bold">Onde a Juripass organiza risco para o RH</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-5">
           {[
-            { icon: Users, title: 'RH sobrecarregado', desc: 'Vira conselheiro informal, sem preparo ou respaldo para lidar com questões jurídicas.' },
-            { icon: Building2, title: 'Gestores expostos', desc: 'Mediam conflitos pessoais, consumindo tempo estratégico e se desgastando.' },
-            { icon: AlertTriangle, title: 'Risco corporativo', desc: 'A empresa se envolve informalmente em questões pessoais, criando passivos desnecessários.' },
+            { icon: Brain, title: 'Risco psicossocial', desc: 'Demandas pessoais não estruturadas impactam clima, produtividade, absenteísmo e turnover. A Juripass organiza esse fluxo antes que afete a operação.' },
+            { icon: ShieldAlert, title: 'Risco relacional', desc: 'Ao absorver informalmente questões jurídicas pessoais, o RH assume responsabilidades fora de sua função. O canal externo cria clareza de papéis.' },
+            { icon: AlertTriangle, title: 'Risco de escalada', desc: 'Situações sensíveis, quando mal conduzidas, podem evoluir para conflitos formais. A Juripass atua preventivamente.' },
           ].map((item, i) => (
-            <Card key={i} dark>
+            <Card key={i}>
               <div className="space-y-4">
-                <IconBox icon={item.icon} dark />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center">
+                  <item.icon className="h-6 w-6 text-white" />
+                </div>
                 <h3 className="font-semibold text-lg">{item.title}</h3>
                 <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
               </div>
@@ -129,138 +157,74 @@ const slides: SlideData[] = [
   },
   // 4 — O que é a Juripass
   {
-    variant: 'light',
+    gradient: 'linear-gradient(135deg, #2C3E7D 0%, #344785 50%, #1e2d5e 100%)',
     render: () => (
       <div className="max-w-4xl w-full space-y-8">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">A solução</p>
+        <div className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">A solução</p>
           <h2 className="text-3xl md:text-4xl font-bold">O que é a Juripass</h2>
-          <p className="text-lg text-[hsl(var(--muted-foreground))]">
-            Plataforma de acolhimento, triagem e facilitação de acesso a profissionais habilitados para colaboradores e seus familiares.
+          <p className="text-lg text-white/60 leading-relaxed">
+            Um canal externo de orientação jurídica que o colaborador acessa de forma autônoma. 
+            A empresa contrata e o colaborador usa quando precisar, com sigilo total.
           </p>
         </div>
-        <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Temas frequentemente atendidos</p>
-          <div className="flex flex-wrap gap-3">
-            {['Endividamento e negativação', 'Conflitos familiares', 'Problemas com moradia', 'Golpes digitais', 'Inventários', 'Relações de consumo'].map((t) => (
-              <span key={t} className="px-4 py-2 rounded-full text-sm font-medium bg-[hsl(var(--juripass-primary)/0.08)] text-[hsl(var(--juripass-primary))] border border-[hsl(var(--juripass-primary)/0.15)]">
-                {t}
-              </span>
+        <div className="grid md:grid-cols-3 gap-5">
+          {[
+            { icon: Unplug, title: 'Canal externo e independente', desc: 'Sem vínculo com a empresa, sem conflito de interesse.' },
+            { icon: MousePointerClick, title: 'Sob demanda e confidencial', desc: 'O colaborador aciona quando quiser, sem intermediários.' },
+            { icon: BadgeCheck, title: 'Sem custo para o colaborador', desc: 'Orientação inicial gratuita, sem burocracia.' },
+          ].map((item, i) => (
+            <Card key={i} className="text-center space-y-4">
+              <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
+                <item.icon className="h-7 w-7 text-[#4A9FD8]" />
+              </div>
+              <h3 className="font-semibold text-lg">{item.title}</h3>
+              <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+            </Card>
+          ))}
+        </div>
+        <div className="space-y-2 pt-2">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#4A9FD8]">Temas frequentemente atendidos</p>
+          <div className="flex flex-wrap gap-2 justify-center">
+            {['Finanças', 'Família', 'Moradia', 'Consumo', 'Saúde'].map((t) => (
+              <ThemeBadge key={t} label={t} />
             ))}
           </div>
         </div>
       </div>
     ),
   },
-  // 5 — O que o programa oferece
+  // 5 — Impacto positivo (4 colunas)
   {
-    variant: 'dark',
+    gradient: 'linear-gradient(160deg, #1e2d5e 0%, #2C3E7D 60%, #253570 100%)',
     render: () => (
       <div className="max-w-4xl w-full space-y-8">
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">O programa</p>
-          <h2 className="text-3xl md:text-4xl font-bold">O que o programa oferece</h2>
-        </div>
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card dark>
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold flex items-center gap-2">
-                <Users className="h-5 w-5 text-[hsl(var(--juripass-primary))]" /> Para o Colaborador
-              </h3>
-              <ul className="space-y-3 text-white/70 text-sm">
-                {[
-                  'Canal de acolhimento e triagem de demandas',
-                  'Orientação informativa sobre direitos e caminhos legais',
-                  'Esclarecimento de dúvidas iniciais',
-                  'Organização da situação e próximos passos',
-                  'Encaminhamento a advogado habilitado quando necessário',
-                  'Conteúdos educativos preventivos',
-                ].map((t) => (
-                  <li key={t} className="flex items-start gap-2">
-                    <BadgeCheck className="h-4 w-4 text-[hsl(var(--juripass-primary))] mt-0.5 shrink-0" />
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Card>
-          <Card dark>
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-[hsl(var(--juripass-primary))]" /> Para a Empresa
-              </h3>
-              <ul className="space-y-3 text-white/70 text-sm">
-                {[
-                  'Redução de demandas pessoais ao RH e gestores',
-                  'Apoio à gestão de pessoas e mediação de conflitos',
-                  'Menor impacto emocional no ambiente de trabalho',
-                  'Fortalecimento do employer branding',
-                  'Aderência a políticas de bem-estar e NR-01',
-                ].map((t) => (
-                  <li key={t} className="flex items-start gap-2">
-                    <BadgeCheck className="h-4 w-4 text-[hsl(var(--juripass-primary))] mt-0.5 shrink-0" />
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Card>
-        </div>
-      </div>
-    ),
-  },
-  // 6 — Como funciona
-  {
-    variant: 'light',
-    render: () => (
-      <div className="max-w-4xl w-full space-y-8">
-        <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Jornada</p>
-          <h2 className="text-3xl md:text-4xl font-bold">Como funciona</h2>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { icon: Phone, step: '01', title: 'Contato direto', desc: 'Via WhatsApp ou aplicativo, sem passar pelo RH.' },
-            { icon: Heart, step: '02', title: 'Acolhimento', desc: 'Equipe treinada para triagem e organização.' },
-            { icon: Lightbulb, step: '03', title: 'Orientação', desc: 'Informação clara sobre direitos e caminhos.' },
-            { icon: ArrowRight, step: '04', title: 'Encaminhamento', desc: 'Advogado habilitado quando necessário.' },
-          ].map((s) => (
-            <Card key={s.step} className="text-center space-y-3">
-              <span className="text-4xl font-black text-[hsl(var(--juripass-primary)/0.12)]">{s.step}</span>
-              <IconBox icon={s.icon} />
-              <h3 className="font-semibold">{s.title}</h3>
-              <p className="text-sm text-[hsl(var(--muted-foreground))]">{s.desc}</p>
-            </Card>
-          ))}
-        </div>
-        <p className="text-center text-sm text-[hsl(var(--muted-foreground))]">
-          Prazo estimado de primeiro retorno: até 1 dia útil.
-        </p>
-      </div>
-    ),
-  },
-  // 7 — Benefícios para o RH
-  {
-    variant: 'dark',
-    render: () => (
-      <div className="max-w-4xl w-full space-y-8">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Impacto</p>
-          <h2 className="text-3xl md:text-4xl font-bold">Benefícios para o RH</h2>
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">O impacto</p>
+          <h2 className="text-3xl md:text-4xl font-bold">O impacto positivo</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-5">
           {[
-            { icon: Shield, title: 'Apoio estruturado ao colaborador', desc: 'Canal profissional e externo substitui aconselhamento informal.' },
-            { icon: Users, title: 'Prevenção de conflitos internos', desc: 'Problemas pessoais são tratados fora do ambiente corporativo.' },
-            { icon: Heart, title: 'Identificação de riscos psicossociais', desc: 'Relatórios anonimizados revelam padrões e áreas de atenção.' },
-            { icon: BadgeCheck, title: 'Cultura de cuidado', desc: 'Fortalece employer branding e percepção organizacional.' },
-          ].map((item, i) => (
-            <Card key={i} dark>
-              <div className="flex items-start gap-4">
-                <IconBox icon={item.icon} dark />
-                <div>
-                  <h3 className="font-semibold text-lg">{item.title}</h3>
-                  <p className="text-white/60 text-sm mt-1">{item.desc}</p>
+            { icon: ShieldCheck, title: 'Para o RH', points: ['Menos relatos delicados no dia a dia', 'Apoio à gestão de pessoas e mediação inicial', 'Foco nas demandas estratégicas', 'Fortalecimento do employer branding'] },
+            { icon: Users, title: 'Para os Gestores', points: ['Deixam de mediar problemas pessoais', 'Menos desgaste emocional', 'Relação profissional preservada', 'Aderência à prevenção de riscos psicossociais (NR-1)'] },
+            { icon: UserCheck, title: 'Para os Colaboradores', points: ['Orientação sem custo no atendimento inicial', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento', 'Conteúdos educativos preventivos'] },
+            { icon: Building2, title: 'Para a Organização', points: ['Redução de passivos trabalhistas', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
+          ].map((col, i) => (
+            <Card key={i}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center shrink-0">
+                    <col.icon className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-xl">{col.title}</h3>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {col.points.map((p) => (
+                    <span key={p} className="flex items-center gap-2 text-sm text-white/60">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#4A9FD8]/60 shrink-0" />
+                      {p}
+                    </span>
+                  ))}
                 </div>
               </div>
             </Card>
@@ -269,18 +233,57 @@ const slides: SlideData[] = [
       </div>
     ),
   },
-  // 8 — NR-01
+  // 6 — Como funciona (3 passos)
   {
-    variant: 'light',
+    gradient: 'linear-gradient(135deg, #2C3E7D 0%, #1a2654 100%)',
+    render: () => (
+      <div className="max-w-4xl w-full space-y-8">
+        <div className="space-y-2 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Jornada</p>
+          <h2 className="text-3xl md:text-4xl font-bold">Como funciona</h2>
+        </div>
+        <div className="flex flex-col md:flex-row items-stretch gap-4">
+          {[
+            { step: '1', title: 'O Colaborador entra em contato direto', desc: 'Via WhatsApp ou aplicativo, de forma simples e confidencial.' },
+            { step: '2', title: 'Equipe treinada acolhe e organiza a demanda', desc: 'Recebe orientação informativa em linguagem clara e acessível sobre direitos e caminhos possíveis.' },
+            { step: '3', title: 'Situação é encaminhada adequadamente', desc: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.' },
+          ].map((s, i) => (
+            <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-4">
+              <Card className="flex-1 w-full text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
+                  {s.step}
+                </div>
+                <h3 className="font-semibold text-base">{s.title}</h3>
+                <p className="text-sm text-white/60">{s.desc}</p>
+              </Card>
+              {i < 2 && (
+                <>
+                  <ChevronRight className="hidden md:block h-8 w-8 text-white/20 shrink-0" />
+                  <ChevronDown className="md:hidden h-8 w-8 text-white/20" />
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center justify-center gap-2 text-white/50 text-sm">
+          <Clock className="h-4 w-4 text-[#4A9FD8]" />
+          <span>Primeiro retorno em até 1 dia útil</span>
+        </div>
+      </div>
+    ),
+  },
+  // 7 — Alinhamento NR-01
+  {
+    gradient: 'linear-gradient(150deg, #253570 0%, #2C3E7D 100%)',
     render: () => (
       <div className="max-w-3xl w-full space-y-8">
-        <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Conformidade</p>
+        <div className="space-y-3 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Conformidade</p>
           <h2 className="text-3xl md:text-4xl font-bold">Alinhamento com a NR-01</h2>
         </div>
         <Card className="space-y-5">
-          <p className="text-base leading-relaxed text-[hsl(var(--muted-foreground))]">
-            A atualização da NR-01 amplia a necessidade de <strong className="text-[hsl(var(--juripass-primary-dark))]">gestão de riscos psicossociais</strong> no ambiente de trabalho. 
+          <p className="text-base leading-relaxed text-white/70">
+            A atualização da NR-01 amplia a necessidade de <strong className="text-[#4A9FD8]">gestão de riscos psicossociais</strong> no ambiente de trabalho. 
             A Juripass contribui oferecendo suporte preventivo e identificando padrões de risco por meio de dados anonimizados.
           </p>
           <div className="grid md:grid-cols-3 gap-4">
@@ -289,8 +292,8 @@ const slides: SlideData[] = [
               'Identificação de padrões de risco',
               'Aderência a políticas de bem-estar',
             ].map((t) => (
-              <div key={t} className="flex items-center gap-3 p-3 rounded-xl bg-[hsl(var(--juripass-primary)/0.06)]">
-                <BadgeCheck className="h-5 w-5 text-[hsl(var(--juripass-primary))] shrink-0" />
+              <div key={t} className="flex items-center gap-3 p-3 rounded-xl bg-[#4A9FD8]/10 border border-[#4A9FD8]/20">
+                <BadgeCheck className="h-5 w-5 text-[#4A9FD8] shrink-0" />
                 <span className="text-sm font-medium">{t}</span>
               </div>
             ))}
@@ -299,13 +302,13 @@ const slides: SlideData[] = [
       </div>
     ),
   },
-  // 9 — Confidencialidade e LGPD
+  // 8 — Confidencialidade e LGPD
   {
-    variant: 'dark',
+    gradient: 'linear-gradient(140deg, #1e2d5e 0%, #2C3E7D 100%)',
     render: () => (
       <div className="max-w-3xl w-full space-y-8">
         <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Segurança</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Segurança</p>
           <h2 className="text-3xl md:text-4xl font-bold">Confidencialidade e LGPD</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-5">
@@ -315,9 +318,9 @@ const slides: SlideData[] = [
             { icon: Users, text: 'Os dados pertencem ao colaborador' },
             { icon: Scale, text: 'Sigilo profissional e controles de segurança da informação' },
           ].map((item, i) => (
-            <Card key={i} dark>
+            <Card key={i}>
               <div className="flex items-start gap-4">
-                <IconBox icon={item.icon} dark />
+                <IconBox icon={item.icon} />
                 <p className="text-white/70 text-sm leading-relaxed pt-1">{item.text}</p>
               </div>
             </Card>
@@ -326,13 +329,13 @@ const slides: SlideData[] = [
       </div>
     ),
   },
-  // 10 — Implantação
+  // 9 — Implantação
   {
-    variant: 'light',
+    gradient: 'linear-gradient(135deg, #2C3E7D 0%, #344785 100%)',
     render: () => (
       <div className="max-w-4xl w-full space-y-8">
         <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Implementação</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Implementação</p>
           <h2 className="text-3xl md:text-4xl font-bold">Implantação simples</h2>
         </div>
         <div className="flex flex-col md:flex-row items-stretch gap-4">
@@ -341,76 +344,87 @@ const slides: SlideData[] = [
             { step: '2', title: 'Comunicação', desc: 'Material de comunicação interna e treinamento da equipe' },
             { step: '3', title: 'Ativação', desc: 'Acompanhamento de engajamento e suporte contínuo' },
           ].map((s, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center">
+            <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-3">
               <Card className="flex-1 w-full text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-[hsl(var(--juripass-primary))] text-white flex items-center justify-center text-xl font-bold mx-auto">
+                <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
                   {s.step}
                 </div>
                 <h3 className="font-semibold text-lg">{s.title}</h3>
-                <p className="text-sm text-[hsl(var(--muted-foreground))]">{s.desc}</p>
+                <p className="text-sm text-white/60">{s.desc}</p>
               </Card>
               {i < 2 && (
-                <ArrowRight className="h-6 w-6 text-[hsl(var(--juripass-primary)/0.3)] rotate-90 md:rotate-0 my-2 md:hidden" />
+                <>
+                  <ChevronRight className="hidden md:block h-6 w-6 text-white/20 shrink-0" />
+                  <ChevronDown className="md:hidden h-6 w-6 text-white/20" />
+                </>
               )}
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-center gap-6 text-sm text-[hsl(var(--muted-foreground))]">
-          <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-[hsl(var(--juripass-primary))]" /> Até 15 dias para ativação</span>
-          <span className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-[hsl(var(--juripass-primary))]" /> Sem taxa de implantação</span>
+        <div className="flex items-center justify-center gap-6 text-sm text-white/50">
+          <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-[#4A9FD8]" /> Até 15 dias para ativação</span>
+          <span className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-[#4A9FD8]" /> Sem taxa de implantação</span>
         </div>
       </div>
     ),
   },
-  // 11 — Modelo Comercial
+  // 10 — Escopo e Limitações
   {
-    variant: 'dark',
+    gradient: 'linear-gradient(150deg, #1e2d5e 0%, #2C3E7D 50%, #253570 100%)',
     render: () => (
       <div className="max-w-3xl w-full space-y-8">
-        <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[hsl(var(--juripass-primary))]">Investimento</p>
-          <h2 className="text-3xl md:text-4xl font-bold">Modelo comercial</h2>
+        <div className="space-y-3 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Transparência</p>
+          <h2 className="text-3xl md:text-4xl font-bold">Escopo e Limitações</h2>
         </div>
-        <Card dark className="text-center space-y-5">
-          <p className="text-white/60 text-sm">Licença corporativa com acesso irrestrito</p>
-          <div className="space-y-1">
-            <p className="text-white/50 text-sm">Valor mensal</p>
-            <p className="text-4xl md:text-5xl font-bold">R$ 9.990</p>
-            <p className="text-white/40 text-sm">Faixa: 1.501 a 2.500 colaboradores</p>
-          </div>
-          <div className="w-full h-px bg-white/10" />
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(var(--juripass-primary)/0.2)] text-[hsl(var(--juripass-primary))] text-sm font-semibold">
-              🚀 Piloto 90 dias — 50% desconto: R$ 4.995/mês
-            </div>
-            <p className="text-white/40 text-xs">A partir do 4º mês: valor integral. Contrato de 12 meses.</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3 text-xs text-white/50">
-            <span>✓ Sem taxa de implantação</span>
-            <span>✓ Sem custo por atendimento</span>
-            <span>✓ Inclui dependentes</span>
+        <Card className="space-y-5">
+          <p className="text-base leading-relaxed text-white/70">
+            O atendimento consiste em orientação inicial de caráter informativo, não substituindo consulta jurídica formal, parecer jurídico ou atuação profissional.
+          </p>
+          <ul className="space-y-3 text-white/60 text-sm">
+            {[
+              'Não inclui elaboração de peças processuais',
+              'Não inclui análise aprofundada de contratos complexos',
+              'Não inclui representação judicial ou administrativa',
+              'O atendimento inicial não gera custo ao colaborador',
+            ].map((t) => (
+              <li key={t} className="flex items-start gap-3">
+                <Shield className="h-4 w-4 text-[#4A9FD8] mt-0.5 shrink-0" />
+                {t}
+              </li>
+            ))}
+          </ul>
+          <div className="border-t border-white/10 pt-4">
+            <p className="text-xs text-white/40 leading-relaxed">
+              Eventuais serviços advocatícios são contratados diretamente entre colaborador e advogado escolhido, 
+              conforme critérios do profissional e tabela da OAB, sem qualquer custo ou responsabilidade para a empresa.
+            </p>
           </div>
         </Card>
       </div>
     ),
   },
-  // 12 — Encerramento
+  // 11 — Encerramento
   {
-    variant: 'light',
+    gradient: 'linear-gradient(160deg, #2C3E7D 0%, #1a2654 60%, #2C3E7D 100%)',
     render: () => (
       <div className="max-w-3xl w-full space-y-8 text-center">
-        <LogoJuripass variant="full" size="lg" format="png" clickable={false} />
+        <img 
+          src="/images/branding/juripass-logo-white.png" 
+          alt="Juripass" 
+          className="h-14 md:h-16 object-contain mx-auto"
+        />
         <div className="space-y-3">
           <h2 className="text-3xl md:text-4xl font-bold">
-            Uma nova forma de apoiar colaboradores e prevenir riscos
+            Ao oferecer orientação preventiva, a empresa amplia sua política de cuidado com o colaborador
           </h2>
-          <p className="text-[hsl(var(--muted-foreground))] text-lg">
+          <p className="text-white/60 text-lg">
             Permanecemos à disposição para esclarecimentos e eventuais adequações.
           </p>
         </div>
-        <div className="w-24 h-1 bg-[hsl(var(--juripass-primary))] mx-auto rounded-full" />
-        <div className="flex flex-col items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
-          <p className="font-semibold text-[hsl(var(--juripass-primary-dark))]">Frederico Werneck — Diretor</p>
+        <div className="w-24 h-1 bg-[#4A9FD8] mx-auto rounded-full" />
+        <div className="flex flex-col items-center gap-2 text-sm text-white/50">
+          <p className="font-semibold text-white">Frederico Werneck — Diretor</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1"><Mail className="h-4 w-4" /> contato@juripass.com.br</span>
             <span className="flex items-center gap-1"><Globe className="h-4 w-4" /> juripass.com.br</span>
@@ -448,33 +462,64 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
   };
 
   return (
-    <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-white flex flex-col`}>
+    <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#2C3E7D] flex flex-col`}>
+      {/* Print styles */}
+      <style>{`
+        @media print {
+          body * { visibility: hidden !important; }
+          .slides-print-container, .slides-print-container * { visibility: visible !important; }
+          .slides-print-container { 
+            position: absolute; left: 0; top: 0; width: 100%;
+          }
+          .slide-print-page {
+            page-break-after: always;
+            width: 100vw; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+          }
+          .print-hidden { display: none !important; }
+          @page { size: landscape; margin: 0; }
+        }
+      `}</style>
+
       {/* Progress bar */}
-      <div className="h-1 w-full bg-[hsl(var(--juripass-primary-dark)/0.1)]">
+      <div className="h-1 w-full bg-white/5 print-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-[hsl(var(--juripass-primary-dark))] to-[hsl(var(--juripass-primary))]"
+          className="h-full bg-gradient-to-r from-[#4A9FD8] to-[#4A9FD8]/60"
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         />
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[hsl(var(--border))]">
-        <LogoJuripass variant="full" size="sm" format="png" clickable={false} />
+      <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 print-hidden">
+        <img 
+          src="/images/branding/juripass-logo-white.png" 
+          alt="Juripass" 
+          className="h-8 object-contain"
+        />
         <div className="flex items-center gap-4">
-          <span className="text-sm text-[hsl(var(--muted-foreground))] font-medium tabular-nums">
+          <span className="text-sm text-white/50 font-medium tabular-nums">
             {current + 1} / {slides.length}
           </span>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => window.print()}
+            className="text-white/60 hover:text-white hover:bg-white/10"
+          >
+            <Download className="h-4 w-4 mr-1" />
+            Baixar PDF
+          </Button>
           {onClose && (
-            <Button variant="ghost" size="icon" onClick={onClose}>
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-white/60 hover:text-white hover:bg-white/10">
               <X className="h-5 w-5" />
             </Button>
           )}
         </div>
       </div>
 
-      {/* Slide Content */}
-      <div className="flex-1 relative overflow-hidden">
+      {/* Slide Content - Interactive */}
+      <div className="flex-1 relative overflow-hidden print-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={current}
@@ -486,16 +531,27 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
             transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <SlideWrapper variant={slide.variant}>
+            <SlideWrapper gradient={slide.gradient}>
               {slide.render()}
             </SlideWrapper>
           </motion.div>
         </AnimatePresence>
       </div>
 
+      {/* Print-only: all slides */}
+      <div className="hidden slides-print-container">
+        {slides.map((s, i) => (
+          <div key={i} className="slide-print-page">
+            <SlideWrapper gradient={s.gradient}>
+              {s.render()}
+            </SlideWrapper>
+          </div>
+        ))}
+      </div>
+
       {/* Navigation */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-[hsl(var(--border))]">
-        <Button variant="outline" size="sm" onClick={prev} disabled={current === 0}>
+      <div className="flex items-center justify-between px-6 py-3 border-t border-white/10 print-hidden">
+        <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-white/60 hover:text-white hover:bg-white/10 disabled:text-white/20">
           <ChevronLeft className="h-4 w-4 mr-1" />
           Anterior
         </Button>
@@ -507,14 +563,14 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
               onClick={() => go(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === current 
-                  ? 'w-6 bg-[hsl(var(--juripass-primary))]' 
-                  : 'w-2 bg-[hsl(var(--juripass-primary)/0.2)] hover:bg-[hsl(var(--juripass-primary)/0.4)]'
+                  ? 'w-6 bg-[#4A9FD8]' 
+                  : 'w-2 bg-white/20 hover:bg-white/40'
               }`}
             />
           ))}
         </div>
 
-        <Button variant="outline" size="sm" onClick={next} disabled={current === slides.length - 1}>
+        <Button variant="ghost" size="sm" onClick={next} disabled={current === slides.length - 1} className="text-white/60 hover:text-white hover:bg-white/10 disabled:text-white/20">
           Próximo
           <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
