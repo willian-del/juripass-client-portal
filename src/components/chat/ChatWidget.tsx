@@ -34,6 +34,8 @@ export function ChatWidget() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  if (isPrerendering) return null;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
