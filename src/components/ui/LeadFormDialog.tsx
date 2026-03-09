@@ -15,7 +15,15 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Send, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (digits.length <= 2) return digits.length ? `(${digits}` : '';
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
 
 const leadSchema = z.object({
   name: z.string().trim().min(1, 'Nome é obrigatório').max(100),
@@ -41,11 +49,16 @@ export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<LeadFormData>({
     resolver: zodResolver(leadSchema),
     defaultValues: { name: '', email: '', phone: '', company: '', role_title: '', message: '' },
   });
+
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue('phone', formatPhone(e.target.value), { shouldValidate: true });
+  }, [setValue]);
 
   const onSubmit = async (data: LeadFormData) => {
     setIsSubmitting(true);
@@ -99,7 +112,7 @@ export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
 
           <div className="space-y-1.5">
             <Label htmlFor="lead-phone">Telefone *</Label>
-            <Input id="lead-phone" placeholder="(11) 99999-9999" {...register('phone')} />
+            <Input id="lead-phone" placeholder="(11) 99999-9999" {...register('phone')} onChange={handlePhoneChange} />
             {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
           </div>
 
