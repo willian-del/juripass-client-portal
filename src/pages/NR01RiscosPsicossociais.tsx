@@ -91,7 +91,7 @@ export default function NR01RiscosPsicossociais() {
               <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
                 A norma regulamentadora agora exige gestão formal de riscos psicossociais. Entenda as mudanças e como preparar sua empresa.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
