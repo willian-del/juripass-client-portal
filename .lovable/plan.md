@@ -1,83 +1,37 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Alinhar /avaliacao com Homepage e Apresentação Comercial
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Alterações em `src/pages/Avaliacao.tsx`
 
-## Solucao
+### 1. Remover seções com valores/preços
+- **Eliminar** a seção "Investimento" (linhas 187-201) com R$5 mil
+- **Remover** o FAQ item "Quanto custa?" (linha 31) que menciona R$5 mil
+- **Remover** a seção "Piloto de 90 dias" (linhas 167-185) — contém informação comercial
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### 2. Alinhar conteúdo com homepage
 
----
+**Hero** — Manter, mas ajustar subtítulo para tom mais institucional.
 
-## Alteracoes
+**O problema** — Substituir pelo fluxo da `OrganizationalProblemSection`:
+- Título: "O RH não tem um problema jurídico. Tem um problema de encaminhamento."
+- Usar o fluxo visual: Colaborador → Gestor → RH → Desgaste
+- Frase de fechamento: "Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles deveria assumir esse papel."
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**A solução** — Alinhar com `WhatIsJuripassSection`: plataforma de gestão preventiva, canal jurídico externo, confidencial e estruturado como política corporativa.
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+**Como funciona** — Usar os 3 passos exatos da homepage (`HowItWorksSection`):
+1. Colaborador entra em contato direto
+2. Equipe treinada acolhe e organiza a demanda
+3. Situação é encaminhada adequadamente
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+**Impacto** — Expandir para 4 colunas como na homepage (`ImpactSection`): RH, Gestores, Colaboradores, Organização — com os mesmos pontos.
 
-### 2. Atualizar `src/App.tsx`
+**FAQ** — Usar os mesmos 5 itens da `HomeFAQSection` (sem "Quanto custa?").
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+### 3. Remover imports não utilizados
+Remover `DollarSign`, `Clock` do import após eliminar seções de preço/piloto.
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
+### Arquivo modificado
 - `src/pages/Avaliacao.tsx`
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
