@@ -49,11 +49,16 @@ export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<LeadFormData>({
     resolver: zodResolver(leadSchema),
     defaultValues: { name: '', email: '', phone: '', company: '', role_title: '', message: '' },
   });
+
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue('phone', formatPhone(e.target.value), { shouldValidate: true });
+  }, [setValue]);
 
   const onSubmit = async (data: LeadFormData) => {
     setIsSubmitting(true);
