@@ -95,7 +95,7 @@ const ComoFunciona = () => {
               Um canal <strong className="text-foreground">simples, externo e confidencial</strong>. Sem burocracia para a empresa, sem exposição para o colaborador.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <Button size="lg" className="rounded-full px-8" onClick={openScheduling}>
+              <Button size="lg" className="rounded-full px-8" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5 mr-2" />
                 Agende uma conversa
               </Button>
