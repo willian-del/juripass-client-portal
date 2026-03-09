@@ -34,16 +34,27 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd, noinde
     };
 
     setMeta('name', 'description', description);
+    setMeta('name', 'keywords', finalKeywords);
+    setMeta('name', 'author', 'Juripass');
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:url', url);
     setMeta('property', 'og:image', image);
+    setMeta('property', 'og:image:width', '1200');
+    setMeta('property', 'og:image:height', '630');
     setMeta('property', 'og:type', 'website');
     setMeta('property', 'og:site_name', 'Juripass');
+    setMeta('property', 'og:locale', 'pt_BR');
     setMeta('name', 'twitter:card', 'summary_large_image');
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
     setMeta('name', 'twitter:image', image);
+    
+    if (noindex) {
+      setMeta('name', 'robots', 'noindex, nofollow');
+    } else {
+      setMeta('name', 'robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    }
 
     // Canonical
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
