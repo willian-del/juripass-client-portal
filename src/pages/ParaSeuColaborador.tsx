@@ -122,7 +122,7 @@ export default function ParaSeuColaborador() {
               A Juripass cria um espaço seguro e externo onde o colaborador recebe orientação clara sobre seus direitos e caminhos possíveis.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-              <Button size="lg" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+              <Button size="lg" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
