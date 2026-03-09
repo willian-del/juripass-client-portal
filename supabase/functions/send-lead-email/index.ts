@@ -44,10 +44,43 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Send notification email to comercial@juripass.com.br via Resend-compatible fetch
-    // Using Supabase's built-in SMTP or a simple webhook approach
-    // For now, we log the lead and return success - email sending will be configured separately
     console.log("New lead received:", { name, email, phone, company, role_title, message });
+
+    // Send notification email via Resend
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (RESEND_API_KEY) {
+      try {
+        const emailRes = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Juripass <onboarding@resend.dev>",
+            to: ["comercial@juripass.com.br"],
+            subject: `Novo lead: ${name} - ${company}`,
+            html: `<h2>Novo lead recebido</h2>
+              <p><strong>Nome:</strong> ${name}</p>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>Telefone:</strong> ${phone}</p>
+              <p><strong>Empresa:</strong> ${company}</p>
+              <p><strong>Cargo:</strong> ${role_title}</p>
+              <p><strong>Mensagem:</strong> ${message || "—"}</p>`,
+          }),
+        });
+        const emailData = await emailRes.text();
+        if (!emailRes.ok) {
+          console.error("Resend error:", emailRes.status, emailData);
+        } else {
+          console.log("Email sent successfully:", emailData);
+        }
+      } catch (emailError) {
+        console.error("Error sending email:", emailError);
+      }
+    } else {
+      console.warn("RESEND_API_KEY not configured, skipping email");
+    }
 
     return new Response(
       JSON.stringify({ success: true }),
