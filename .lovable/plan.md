@@ -1,32 +1,83 @@
 
-## Análise
+# Corrigir Header Consistente e Logo Lento
 
-Os cards na seção "Organizational Problem" estão com tamanhos desiguais devido aos sublabels terem comprimentos de texto diferentes:
+## Problema
 
-- "Colaborador": "com problema pessoal" (curto)
-- "Gestor": "Gestores atuam como conselheiros informais" (médio) 
-- "RH": "O RH recebe relatos delicados fora do seu escopo" (longo)
-- "Desgaste": "Questões externas passam a impactar clima e operação" (longo)
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-## Solução
+## Solucao
 
-No arquivo `src/components/new-home/OrganizationalProblemSection.tsx`, linha 36, alterar as classes do container dos cards:
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-**Atualmente:**
-```tsx
-className={`flex flex-col items-center justify-center gap-3 px-5 py-5 rounded-2xl border w-full md:w-[200px] min-h-[140px] md:min-h-[160px] shadow-md transition-all duration-200 ${...}`}
+---
+
+## Alteracoes
+
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-**Novo:**
-```tsx
-className={`flex flex-col items-center justify-center gap-3 px-5 py-5 rounded-2xl border w-full md:w-[200px] h-[160px] md:h-[180px] shadow-md transition-all duration-200 ${...}`}
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
 ```
 
-**Mudanças:**
-- Substituir `min-h-[140px] md:min-h-[160px]` por `h-[160px] md:h-[180px]` 
-- Altura fixa garante que todos os cards tenham exatamente o mesmo tamanho
-- Ligeiro aumento da altura para acomodar textos mais longos sem quebra visual
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-## Resultado
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
-Todos os 4 cards terão dimensões idênticas (200px × 180px no desktop), criando um layout visual uniforme independente do comprimento do texto interno.
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

@@ -33,7 +33,7 @@ export function OrganizationalProblemSection() {
                 )}
                 <ScrollReveal delay={i * 0.15}>
                   <div
-                    className={`flex flex-col items-center justify-center gap-3 px-5 py-5 rounded-2xl border w-full md:w-[200px] min-h-[140px] md:min-h-[160px] shadow-md transition-all duration-200 ${
+                    className={`flex flex-col items-center justify-center gap-3 px-5 py-5 rounded-2xl border w-full md:w-[200px] h-[160px] md:h-[180px] shadow-md transition-all duration-200 ${
                       step.highlight
                         ? 'bg-destructive/10 border-destructive/30 shadow-destructive/10'
                         : 'bg-card border-border hover:shadow-md'
