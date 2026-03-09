@@ -168,12 +168,17 @@ export default function AdminLeads() {
           onOpenChange={setDetailOpen}
           onUpdate={() => {
             fetchLeads();
-            // Refresh selected lead
             if (selectedLead) {
               supabase.from('leads').select('*').eq('id', selectedLead.id).single()
                 .then(({ data }) => { if (data) setSelectedLead(data); });
             }
           }}
+        />
+
+        <AIAssistantPanel
+          open={aiOpen}
+          onOpenChange={setAiOpen}
+          lead={selectedLead}
         />
       </div>
     </AdminAuthGuard>
