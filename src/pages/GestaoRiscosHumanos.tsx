@@ -53,6 +53,7 @@ const riskCategories = [
 ];
 
 export default function GestaoRiscosHumanos() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
