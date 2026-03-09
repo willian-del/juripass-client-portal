@@ -9,6 +9,7 @@ import { useLeadForm } from '@/contexts/LeadFormContext';
 const BASE_URL = 'https://www.juripass.com.br';
 
 const BlogPost = () => {
+  const { open: openLeadForm } = useLeadForm();
   const { slug } = useParams<{ slug: string }>();
   const article = slug ? getArticleBySlug(slug) : undefined;
 
