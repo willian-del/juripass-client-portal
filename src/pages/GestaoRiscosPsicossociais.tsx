@@ -299,7 +299,7 @@ export default function GestaoRiscosPsicossociais() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Descubra como um programa de acolhimento jurídico pode ser a peça que falta na sua estratégia de gestão de riscos psicossociais.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

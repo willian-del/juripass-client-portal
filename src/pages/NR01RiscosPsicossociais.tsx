@@ -274,7 +274,7 @@ export default function NR01RiscosPsicossociais() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Entenda como um programa de acolhimento jurídico pode ser parte da sua estratégia de conformidade com a NR-01.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

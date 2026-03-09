@@ -359,7 +359,7 @@ export default function NR01() {
                 Entenda como um programa de acolhimento jurídico pode ser a peça que falta na sua
                 estratégia de prevenção de riscos psicossociais.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

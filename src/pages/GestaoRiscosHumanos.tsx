@@ -256,7 +256,7 @@ export default function GestaoRiscosHumanos() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Conheça como a Juripass pode ser o canal de acolhimento que seus colaboradores precisam — e que o RH precisa para gerenciar riscos humanos.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

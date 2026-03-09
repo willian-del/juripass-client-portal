@@ -347,7 +347,7 @@ export default function ParaSeuColaborador() {
                 A Juripass ajuda sua empresa a estruturar esse cuidado de forma profissional e sustentável.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+                <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
                   <Calendar className="h-5 w-5" />
                   Levar a Juripass para minha empresa
                 </Button>

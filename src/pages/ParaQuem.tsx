@@ -178,7 +178,7 @@ const ParaQuem = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Sua empresa se encaixa? Vale uma conversa rápida.
             </h2>
-            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
               <Calendar className="h-5 w-5" />
               Agende uma conversa
             </Button>
