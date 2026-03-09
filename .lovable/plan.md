@@ -1,83 +1,42 @@
 
-# Corrigir Header Consistente e Logo Lento
+
+# Diagnóstico: Produção não atualiza — react-snap falha no build
 
 ## Problema
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+O código-fonte já está correto — todos os CTAs chamam `openLeadForm()` e não há nenhum link para Google Calendar. O site publicado está desatualizado porque o passo `postbuild: react-snap` falha silenciosamente durante o deploy, impedindo que a nova versão seja publicada.
 
-## Solucao
+O `react-snap` tenta pré-renderizar as páginas em um navegador headless, mas falha ao processar:
+- `react-markdown` v10 (ESM puro, incompatível com o headless renderer)
+- `ChatWidget` com APIs de browser (`sessionStorage`, `fetch` streaming)
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+A correção anterior (lazy loading do ChatWidget) pode não ser suficiente se o build continua falhando.
 
----
+## Solução proposta
 
-## Alteracoes
+### 1. Remover `react-snap` do build de produção
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+O `react-snap` está causando mais problemas do que benefícios. A aplicação é uma SPA com rotas dinâmicas e componentes que dependem de APIs de browser — a pré-renderização não é viável sem adaptações extensas.
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+**Arquivo: `package.json`**
+- Remover a linha `"postbuild": "react-snap"` dos scripts
+- Remover a configuração `"reactSnap": { ... }` inteira
+- Remover `react-snap` das dependências
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+### 2. Manter SEO sem react-snap
 
-### 2. Atualizar `src/App.tsx`
+O projeto já tem:
+- `SEOHead` component com meta tags dinâmicas
+- `sitemap.xml` e `robots.txt` configurados
+- `public/_redirects` para SPA routing
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+Isso é suficiente para SEO em uma SPA moderna. Se pré-renderização for necessária no futuro, pode-se usar uma solução mais robusta (como prerender.io ou similar) que não interfere no build.
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+### Arquivos modificados
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+| Arquivo | Mudança |
+|---------|---------|
+| `package.json` | Remover `postbuild`, config `reactSnap`, e dependência `react-snap` |
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+Após essa mudança, o próximo publish deve funcionar e o site ficará atualizado com os CTAs corretos.
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
