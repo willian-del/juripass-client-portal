@@ -26,7 +26,7 @@ const NotFound = () => {
         </div>
 
         <Button 
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate('/')}
           size="lg"
           className="bg-white text-juripass-primary hover:bg-white/90 shadow-primary"
         >
