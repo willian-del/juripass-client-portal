@@ -90,6 +90,7 @@ const hrBenefits = [
 ];
 
 export default function ParaSeuColaborador() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
