@@ -1,83 +1,54 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Configurar envio de email transacional para comercial@juripass.com.br
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Situação atual
+A edge function `send-lead-email` salva o lead no banco mas **não envia email** — apenas loga no console.
 
-## Solucao
+## Abordagem
+Usar a **API do Resend** para enviar um email de notificação para `comercial@juripass.com.br` sempre que um novo lead for recebido. O Resend é o serviço mais simples para emails transacionais e oferece 100 emails/dia gratuitos.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+## Pré-requisito: API Key do Resend
+1. Criar conta gratuita em [resend.com](https://resend.com)
+2. Gerar uma API Key
+3. Armazenar como secret `RESEND_API_KEY` no projeto
 
----
+**Nota:** Sem verificar um domínio próprio, o remetente será `onboarding@resend.dev`. Para usar um remetente como `noreply@juripass.com.br`, será necessário verificar o domínio no Resend.
 
-## Alteracoes
+## Alteração: `supabase/functions/send-lead-email/index.ts`
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+Após salvar o lead no banco, adicionar chamada à API do Resend:
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+```typescript
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+if (RESEND_API_KEY) {
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Juripass <onboarding@resend.dev>",
+      to: ["comercial@juripass.com.br"],
+      subject: `Novo lead: ${name} - ${company}`,
+      html: `<h2>Novo lead recebido</h2>
+        <p><strong>Nome:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Telefone:</strong> ${phone}</p>
+        <p><strong>Empresa:</strong> ${company}</p>
+        <p><strong>Cargo:</strong> ${role_title}</p>
+        <p><strong>Mensagem:</strong> ${message || "—"}</p>`,
+    }),
+  });
+}
 ```
 
-### 2. Atualizar `src/App.tsx`
+## Resumo
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+| Passo | Ação |
+|---|---|
+| 1 | Solicitar `RESEND_API_KEY` ao usuário |
+| 2 | Atualizar edge function com envio via Resend |
+| 3 | Deploy e teste da edge function |
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
