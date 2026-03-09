@@ -1,63 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Apresentação Comercial e One-Pager Profissionais
+## Problema
 
-## Visão geral
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-Reescrever os dois componentes existentes (`SlidesPresentation.tsx` e `OnePager.tsx`) com conteúdo completo baseado nos documentos enviados e no site, e com design visual profissional usando as cores da marca Juripass (#2C3E7D escuro, #4A9FD8 claro).
+## Solucao
 
-Esses componentes já são usados na página `/avaliacao` e serão também os materiais "builtin" servidos pelo repositório de materiais via `/m/:token`.
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-## 1. Apresentação Comercial (SlidesPresentation.tsx)
+## Alteracoes
 
-Redesign completo com 12 slides, conteúdo extraído dos documentos:
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-| # | Título | Conteúdo |
-|---|--------|----------|
-| 1 | Capa | Logo grande, "Programa de Acolhimento e Orientação Jurídica ao Colaborador", tagline |
-| 2 | O desafio do RH | Problemas pessoais impactando trabalho, falta de canal adequado |
-| 3 | A lacuna nas empresas | O que acontece quando não há canal: RH como conselheiro, gestores mediando, risco |
-| 4 | O que é a Juripass | Plataforma de acolhimento, triagem e facilitação. Temas: dívidas, família, moradia, golpes, consumo |
-| 5 | O que o programa oferece | Dois blocos: Para o Colaborador / Para a Empresa |
-| 6 | Como funciona | 4 passos visuais com ícones (contato → acolhimento → orientação → encaminhamento) |
-| 7 | Benefícios para o RH | Cards com ícones: redução demandas, prevenção conflitos, employer branding, NR-01 |
-| 8 | Alinhamento NR-01 | Gestão de riscos psicossociais, suporte preventivo |
-| 9 | Confidencialidade e LGPD | Dados do colaborador, sigilo, relatórios anonimizados |
-| 10 | Implantação | Timeline: kick-off → comunicação → ativação. 15 dias, sem taxa |
-| 11 | Modelo comercial | Valor fixo, piloto 90 dias com 50% desconto, sem custo por atendimento |
-| 12 | Encerramento | CTA + contato + logo |
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-**Design visual por slide:**
-- Fundo com gradiente sutil azul escuro → azul claro (alternando entre slides claros e escuros)
-- Slides ímpares: fundo escuro (#2C3E7D) com texto branco
-- Slides pares: fundo branco com acentos azuis
-- Cards internos com `backdrop-blur`, bordas sutis, sombras
-- Ícones Lucide para cada ponto
-- Tipografia grande e hierárquica (título 4xl, subtítulo 2xl, corpo lg)
-- Transição suave com framer-motion (fade + slide)
-- Progress bar colorida no topo em vez de dots simples
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
-## 2. One-Pager (OnePager.tsx)
+### 2. Atualizar `src/App.tsx`
 
-Layout profissional A4 otimizado para impressão/PDF:
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-- **Cabeçalho**: Logo + faixa azul escura com "Proposta Comercial" em branco
-- **Seções com ícones**: O Problema | A Solução | Como Funciona (3 colunas com ícones) | O que oferece (2 colunas: Colaborador/Empresa) | Confidencialidade | Implantação | Investimento
-- **Rodapé**: Faixa azul com contato, site, nome do diretor
-- Cores da marca nas divisórias e cabeçalhos de seção
-- Print CSS para renderização perfeita em PDF
-- Temas frequentes como badges visuais (Finanças, Família, Moradia, etc.)
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
-## 3. Integração com MaterialViewer
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-Atualizar `MaterialViewer.tsx` e `serve-material` edge function para suportar materiais "builtin" (tipo `apresentacao-comercial` e `one-pager`). Quando o prospect acessa `/m/:token` de um material builtin, renderiza o componente React diretamente em vez de redirecionar para arquivo.
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
-## Detalhes técnicos
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
 
-- **Arquivos modificados**: `SlidesPresentation.tsx`, `OnePager.tsx`, `MaterialViewer.tsx`, `serve-material/index.ts`
-- **Dependências**: Usa framer-motion (já instalado) para animações dos slides
-- **Sem novos pacotes**
-- Os componentes continuam funcionando standalone na página `/avaliacao` e também via link rastreável `/m/:token`
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
 
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
