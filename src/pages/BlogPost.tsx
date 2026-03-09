@@ -3,7 +3,8 @@ import { getArticleBySlug, blogArticles } from '@/lib/blog-data';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { ArrowLeft, Clock, Tag, Calendar, ArrowRight, Scale, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 const BASE_URL = 'https://www.juripass.com.br';
 
