@@ -126,9 +126,16 @@ Deno.serve(async (req) => {
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (RESEND_API_KEY) {
       try {
+        const safeName = escapeHtml(name);
+        const safeEmail = escapeHtml(email);
+        const safePhone = escapeHtml(phone);
+        const safeCompany = escapeHtml(company);
+        const safeRoleTitle = escapeHtml(role_title || "");
+        const safeMessage = escapeHtml(message || "");
+
         const subject = isHot
-          ? `🔥 LEAD QUENTE: ${name} - ${company} (Score: ${leadScore})`
-          : `Novo lead: ${name} - ${company} (Score: ${leadScore})`;
+          ? `🔥 LEAD QUENTE: ${safeName} - ${safeCompany} (Score: ${leadScore})`
+          : `Novo lead: ${safeName} - ${safeCompany} (Score: ${leadScore})`;
 
         const priorityBadge = {
           hot: "🔥 QUENTE",
@@ -155,11 +162,11 @@ Deno.serve(async (req) => {
                 </div>
                 <div style="border: 1px solid #e5e7eb; border-top: none; padding: 20px; border-radius: 0 0 8px 8px;">
                   <h3 style="margin-top: 0; color: #374151;">Dados de Contato</h3>
-                  <p><strong>Nome:</strong> ${name}</p>
-                  <p><strong>Email:</strong> ${email}</p>
-                  <p><strong>Telefone:</strong> ${phone}</p>
-                  <p><strong>Empresa:</strong> ${company}</p>
-                  <p><strong>Cargo:</strong> ${role_title || "—"}</p>
+                  <p><strong>Nome:</strong> ${safeName}</p>
+                  <p><strong>Email:</strong> ${safeEmail}</p>
+                  <p><strong>Telefone:</strong> ${safePhone}</p>
+                  <p><strong>Empresa:</strong> ${safeCompany}</p>
+                  <p><strong>Cargo:</strong> ${safeRoleTitle || "—"}</p>
                   
                   <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" />
                   
@@ -170,7 +177,7 @@ Deno.serve(async (req) => {
                   <p><strong>Avaliando riscos psicossociais:</strong> ${PSYCHOSOCIAL_LABELS[evaluating_psychosocial] || "—"}</p>
                   <p><strong>Benefício jurídico atual:</strong> ${LEGAL_BENEFIT_LABELS[has_legal_benefit] || "—"}</p>
                   
-                  ${message ? `<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" /><h3 style="color: #374151;">Mensagem</h3><p>${message}</p>` : ''}
+                  ${safeMessage ? `<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" /><h3 style="color: #374151;">Mensagem</h3><p>${safeMessage}</p>` : ''}
                 </div>
               </div>`,
           }),
