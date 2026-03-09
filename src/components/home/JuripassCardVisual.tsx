@@ -17,9 +17,11 @@ export function JuripassCardVisual() {
 
           {/* Logo Area */}
           <div className="absolute top-8 right-8">
-            <img 
+            <OptimizedImage 
               src="/images/branding/juripass-icon-dark.png"
-              alt="Juripass"
+              alt="Ícone Juripass no cartão corporativo de benefício jurídico"
+              width={40}
+              height={40}
               className="h-10 object-contain drop-shadow-lg"
             />
           </div>
