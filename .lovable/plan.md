@@ -1,83 +1,55 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Substituir CTA "Agende uma conversa" por formulário de lead
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Resumo
 
-## Solucao
+Trocar todos os botões "Agende uma conversa" (que abrem o Google Calendar) por um modal/dialog com formulário de captação de lead. Ao enviar, os dados são salvos no banco e um email é disparado para comercial@juripass.com.br.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+## Campos do formulário
+- Nome (obrigatório)
+- Email (obrigatório)
+- Telefone (obrigatório)
+- Empresa (obrigatório)
+- Cargo (obrigatório)
+- Mensagem (opcional)
 
----
+## Arquitetura
 
-## Alteracoes
+### 1. Banco de dados — tabela `leads`
+Criar tabela para persistir os leads:
+- `id`, `name`, `email`, `phone`, `company`, `role_title`, `message`, `created_at`
+- RLS: insert público (anon), select restrito
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+### 2. Edge function `send-lead-email`
+- Recebe os dados do lead
+- Salva na tabela `leads` (via service role)
+- Envia email transacional para comercial@juripass.com.br usando Lovable AI (ou Resend se necessário)
+- Retorna sucesso
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### 3. Componente `LeadFormDialog`
+- Dialog/modal usando Radix Dialog (já instalado)
+- Formulário com validação via zod + react-hook-form
+- Ao submeter: chama a edge function, exibe toast de sucesso, fecha o modal
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
-
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
+### 4. Substituir `openScheduling` globalmente
+- Trocar a função `openScheduling()` em `constants.ts` (ou criar nova) para abrir o dialog
+- Abordagem: criar um componente de contexto (`LeadFormProvider`) que expõe `openLeadForm()` via context, wrappando o App
+- Todos os botões que chamam `openScheduling` passam a chamar `openLeadForm()`
 
 ## Arquivos
 
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+| Arquivo | Ação |
+|---|---|
+| Migration SQL | Criar tabela `leads` |
+| `supabase/functions/send-lead-email/index.ts` | Criar edge function |
+| `src/components/ui/LeadFormDialog.tsx` | Criar componente do formulário modal |
+| `src/contexts/LeadFormContext.tsx` | Criar provider + hook `useLeadForm` |
+| `src/lib/constants.ts` | Remover `openScheduling` e `calendarUrl` |
+| `src/App.tsx` | Wrap com `LeadFormProvider` |
+| 14 arquivos que importam `openScheduling` | Trocar para `useLeadForm().open()` |
 
-Nenhuma dependencia nova.
+## Questão sobre envio de email
+
+Para enviar o email para comercial@juripass.com.br, a melhor opção é usar um conector de email ou a Resend. Vou verificar se há um conector disponível, mas provavelmente será necessário configurar um serviço de envio de email na edge function.
+
