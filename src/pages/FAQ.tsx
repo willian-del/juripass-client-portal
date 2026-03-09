@@ -2,7 +2,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Calendar } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 import { Button } from '@/components/ui/button';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { useMemo } from 'react';
 
 const categories = [
