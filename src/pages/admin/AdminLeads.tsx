@@ -68,7 +68,12 @@ export default function AdminLeads() {
     <AdminAuthGuard>
       <div className="min-h-screen bg-muted/20">
         <header className="border-b bg-card px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-bold">CRM Juripass</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-bold">CRM Juripass</h1>
+            <Button variant="outline" size="sm" onClick={() => navigate('/admin/materiais')}>
+              <FileText className="h-4 w-4 mr-1" /> Materiais
+            </Button>
+          </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-1" /> Sair
           </Button>
