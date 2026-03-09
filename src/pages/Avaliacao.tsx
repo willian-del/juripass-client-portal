@@ -34,6 +34,7 @@ const faqItems = [
 ];
 
 export default function Avaliacao() {
+  const { open: openLeadForm } = useLeadForm();
   const [showSlides, setShowSlides] = useState(false);
   const [showOnePager, setShowOnePager] = useState(false);
 
