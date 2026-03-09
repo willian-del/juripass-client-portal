@@ -43,6 +43,16 @@ const LEGAL_BENEFIT_LABELS: Record<string, string> = {
   nao_sei: "Não sei",
 };
 
+function escapeHtml(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -65,6 +75,22 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Rate limiting: check for recent submissions with the same email (last 5 minutes)
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { data: recentLeads } = await supabase
+      .from("leads")
+      .select("id")
+      .eq("email", email)
+      .gte("created_at", fiveMinutesAgo)
+      .limit(1);
+
+    if (recentLeads && recentLeads.length > 0) {
+      return new Response(
+        JSON.stringify({ error: "Aguarde alguns minutos antes de enviar novamente" }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Save lead to database (scoring trigger will calculate lead_score and lead_priority)
     const { data: insertedLead, error: insertError } = await supabase.from("leads").insert({
@@ -94,15 +120,22 @@ Deno.serve(async (req) => {
     const leadPriority = insertedLead?.lead_priority ?? "normal";
     const isHot = leadPriority === "hot";
 
-    console.log("New lead received:", { name, email, company, leadScore, leadPriority });
+    console.log("New lead received:", { name: escapeHtml(name), email: escapeHtml(email), company: escapeHtml(company), leadScore, leadPriority });
 
     // Send notification email via Resend
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (RESEND_API_KEY) {
       try {
+        const safeName = escapeHtml(name);
+        const safeEmail = escapeHtml(email);
+        const safePhone = escapeHtml(phone);
+        const safeCompany = escapeHtml(company);
+        const safeRoleTitle = escapeHtml(role_title || "");
+        const safeMessage = escapeHtml(message || "");
+
         const subject = isHot
-          ? `🔥 LEAD QUENTE: ${name} - ${company} (Score: ${leadScore})`
-          : `Novo lead: ${name} - ${company} (Score: ${leadScore})`;
+          ? `🔥 LEAD QUENTE: ${safeName} - ${safeCompany} (Score: ${leadScore})`
+          : `Novo lead: ${safeName} - ${safeCompany} (Score: ${leadScore})`;
 
         const priorityBadge = {
           hot: "🔥 QUENTE",
@@ -129,11 +162,11 @@ Deno.serve(async (req) => {
                 </div>
                 <div style="border: 1px solid #e5e7eb; border-top: none; padding: 20px; border-radius: 0 0 8px 8px;">
                   <h3 style="margin-top: 0; color: #374151;">Dados de Contato</h3>
-                  <p><strong>Nome:</strong> ${name}</p>
-                  <p><strong>Email:</strong> ${email}</p>
-                  <p><strong>Telefone:</strong> ${phone}</p>
-                  <p><strong>Empresa:</strong> ${company}</p>
-                  <p><strong>Cargo:</strong> ${role_title || "—"}</p>
+                  <p><strong>Nome:</strong> ${safeName}</p>
+                  <p><strong>Email:</strong> ${safeEmail}</p>
+                  <p><strong>Telefone:</strong> ${safePhone}</p>
+                  <p><strong>Empresa:</strong> ${safeCompany}</p>
+                  <p><strong>Cargo:</strong> ${safeRoleTitle || "—"}</p>
                   
                   <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" />
                   
@@ -144,7 +177,7 @@ Deno.serve(async (req) => {
                   <p><strong>Avaliando riscos psicossociais:</strong> ${PSYCHOSOCIAL_LABELS[evaluating_psychosocial] || "—"}</p>
                   <p><strong>Benefício jurídico atual:</strong> ${LEGAL_BENEFIT_LABELS[has_legal_benefit] || "—"}</p>
                   
-                  ${message ? `<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" /><h3 style="color: #374151;">Mensagem</h3><p>${message}</p>` : ''}
+                  ${safeMessage ? `<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" /><h3 style="color: #374151;">Mensagem</h3><p>${safeMessage}</p>` : ''}
                 </div>
               </div>`,
           }),
