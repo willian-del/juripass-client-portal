@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useLeadForm } from '@/contexts/LeadFormContext';
 
 export function MidCTASection() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <section className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
       {/* Glow effect */}
