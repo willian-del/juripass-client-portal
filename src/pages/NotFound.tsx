@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { LogoJuripass } from "@/components/ui/LogoJuripass";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
+import { SEOHead } from "@/components/ui/SEOHead";
 
 const NotFound = () => {
   const location = useLocation();
