@@ -1,8 +1,9 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { Footer } from '@/components/ui/Footer';
-import { ChatWidget } from '@/components/chat/ChatWidget';
+
+const ChatWidget = lazy(() => import('@/components/chat/ChatWidget').then(m => ({ default: m.ChatWidget })));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -21,7 +22,9 @@ export function MainLayout() {
         <Outlet />
       </main>
       <Footer />
-      <ChatWidget />
+      <Suspense fallback={null}>
+        <ChatWidget />
+      </Suspense>
     </div>
   );
 }

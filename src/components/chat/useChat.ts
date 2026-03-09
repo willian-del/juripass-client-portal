@@ -5,6 +5,7 @@ export type ChatMessage = { role: 'user' | 'assistant'; content: string };
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-commercial`;
 
 function getSessionId() {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return 'ssr';
   let id = sessionStorage.getItem('juripass_chat_session');
   if (!id) {
     id = crypto.randomUUID();

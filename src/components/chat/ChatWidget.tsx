@@ -21,6 +21,9 @@ export function ChatWidget() {
 
   const allMessages = [WELCOME_MESSAGE, ...messages];
 
+  // Skip rendering during react-snap pre-rendering
+  const isPrerendering = typeof navigator !== 'undefined' && navigator.userAgent?.includes('ReactSnap');
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -30,6 +33,8 @@ export function ChatWidget() {
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
+
+  if (isPrerendering) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
