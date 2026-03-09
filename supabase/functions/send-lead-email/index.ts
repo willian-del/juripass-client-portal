@@ -53,6 +53,19 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const VALID_EMPLOYEE_COUNTS = ["up_to_50", "50_200", "200_500", "500_1000", "1000_plus"];
+const VALID_DEPARTMENTS = ["rh", "juridico", "financeiro", "compliance", "diretoria", "outro"];
+const VALID_SENIORITIES = ["analista", "coordenador", "gerente", "diretor", "socio"];
+const VALID_INTERESTS = ["apoio_juridico", "nr01", "beneficio", "passivo_trabalhista", "conhecer"];
+const VALID_PSYCHOSOCIAL = ["sim", "ainda_nao", "pesquisando"];
+const VALID_LEGAL_BENEFIT = ["sim", "nao", "nao_sei"];
+
+function validateEnum(value: string | null | undefined, allowed: string[]): string | null {
+  if (!value) return null;
+  return allowed.includes(value) ? value : null;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -72,6 +85,35 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Server-side input validation
+    const trimmedName = String(name).trim().slice(0, 100);
+    const trimmedEmail = String(email).trim().slice(0, 255);
+    const trimmedPhone = String(phone).trim().slice(0, 30);
+    const trimmedCompany = String(company).trim().slice(0, 150);
+    const trimmedRoleTitle = String(role_title || "").trim().slice(0, 100);
+    const trimmedMessage = String(message || "").trim().slice(0, 1000);
+
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      return new Response(
+        JSON.stringify({ error: "Formato de email inválido" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!trimmedName || !trimmedPhone || !trimmedCompany) {
+      return new Response(
+        JSON.stringify({ error: "Campos obrigatórios faltando" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const validatedEmployeeCount = validateEnum(employee_count, VALID_EMPLOYEE_COUNTS);
+    const validatedDepartment = validateEnum(department, VALID_DEPARTMENTS);
+    const validatedSeniority = validateEnum(seniority, VALID_SENIORITIES);
+    const validatedInterest = validateEnum(interest, VALID_INTERESTS);
+    const validatedPsychosocial = validateEnum(evaluating_psychosocial, VALID_PSYCHOSOCIAL);
+    const validatedLegalBenefit = validateEnum(has_legal_benefit, VALID_LEGAL_BENEFIT);
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -81,7 +123,7 @@ Deno.serve(async (req) => {
     const { data: recentLeads } = await supabase
       .from("leads")
       .select("id")
-      .eq("email", email)
+      .eq("email", trimmedEmail)
       .gte("created_at", fiveMinutesAgo)
       .limit(1);
 
@@ -94,18 +136,18 @@ Deno.serve(async (req) => {
 
     // Save lead to database (scoring trigger will calculate lead_score and lead_priority)
     const { data: insertedLead, error: insertError } = await supabase.from("leads").insert({
-      name,
-      email,
-      phone,
-      company,
-      role_title: role_title || "",
-      message: message || "",
-      employee_count: employee_count || null,
-      department: department || null,
-      seniority: seniority || null,
-      interest: interest || null,
-      evaluating_psychosocial: evaluating_psychosocial || null,
-      has_legal_benefit: has_legal_benefit || null,
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: trimmedPhone,
+      company: trimmedCompany,
+      role_title: trimmedRoleTitle,
+      message: trimmedMessage,
+      employee_count: validatedEmployeeCount,
+      department: validatedDepartment,
+      seniority: validatedSeniority,
+      interest: validatedInterest,
+      evaluating_psychosocial: validatedPsychosocial,
+      has_legal_benefit: validatedLegalBenefit,
     }).select("lead_score, lead_priority").single();
 
     if (insertError) {
@@ -120,18 +162,18 @@ Deno.serve(async (req) => {
     const leadPriority = insertedLead?.lead_priority ?? "normal";
     const isHot = leadPriority === "hot";
 
-    console.log("New lead received:", { name: escapeHtml(name), email: escapeHtml(email), company: escapeHtml(company), leadScore, leadPriority });
+    console.log("New lead received:", { name: trimmedName, email: trimmedEmail, company: trimmedCompany, leadScore, leadPriority });
 
     // Send notification email via Resend
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (RESEND_API_KEY) {
       try {
-        const safeName = escapeHtml(name);
-        const safeEmail = escapeHtml(email);
-        const safePhone = escapeHtml(phone);
-        const safeCompany = escapeHtml(company);
-        const safeRoleTitle = escapeHtml(role_title || "");
-        const safeMessage = escapeHtml(message || "");
+        const safeName = escapeHtml(trimmedName);
+        const safeEmail = escapeHtml(trimmedEmail);
+        const safePhone = escapeHtml(trimmedPhone);
+        const safeCompany = escapeHtml(trimmedCompany);
+        const safeRoleTitle = escapeHtml(trimmedRoleTitle);
+        const safeMessage = escapeHtml(trimmedMessage);
 
         const subject = isHot
           ? `🔥 LEAD QUENTE: ${safeName} - ${safeCompany} (Score: ${leadScore})`
