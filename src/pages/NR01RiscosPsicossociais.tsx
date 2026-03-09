@@ -62,6 +62,7 @@ const rhSteps = [
 ];
 
 export default function NR01RiscosPsicossociais() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
