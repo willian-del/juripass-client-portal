@@ -53,6 +53,19 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const VALID_EMPLOYEE_COUNTS = ["up_to_50", "50_200", "200_500", "500_1000", "1000_plus"];
+const VALID_DEPARTMENTS = ["rh", "juridico", "financeiro", "compliance", "diretoria", "outro"];
+const VALID_SENIORITIES = ["analista", "coordenador", "gerente", "diretor", "socio"];
+const VALID_INTERESTS = ["apoio_juridico", "nr01", "beneficio", "passivo_trabalhista", "conhecer"];
+const VALID_PSYCHOSOCIAL = ["sim", "ainda_nao", "pesquisando"];
+const VALID_LEGAL_BENEFIT = ["sim", "nao", "nao_sei"];
+
+function validateEnum(value: string | null | undefined, allowed: string[]): string | null {
+  if (!value) return null;
+  return allowed.includes(value) ? value : null;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -71,6 +84,35 @@ Deno.serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Server-side input validation
+    const trimmedName = String(name).trim().slice(0, 100);
+    const trimmedEmail = String(email).trim().slice(0, 255);
+    const trimmedPhone = String(phone).trim().slice(0, 30);
+    const trimmedCompany = String(company).trim().slice(0, 150);
+    const trimmedRoleTitle = String(role_title || "").trim().slice(0, 100);
+    const trimmedMessage = String(message || "").trim().slice(0, 1000);
+
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      return new Response(
+        JSON.stringify({ error: "Formato de email inválido" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!trimmedName || !trimmedPhone || !trimmedCompany) {
+      return new Response(
+        JSON.stringify({ error: "Campos obrigatórios faltando" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const validatedEmployeeCount = validateEnum(employee_count, VALID_EMPLOYEE_COUNTS);
+    const validatedDepartment = validateEnum(department, VALID_DEPARTMENTS);
+    const validatedSeniority = validateEnum(seniority, VALID_SENIORITIES);
+    const validatedInterest = validateEnum(interest, VALID_INTERESTS);
+    const validatedPsychosocial = validateEnum(evaluating_psychosocial, VALID_PSYCHOSOCIAL);
+    const validatedLegalBenefit = validateEnum(has_legal_benefit, VALID_LEGAL_BENEFIT);
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
