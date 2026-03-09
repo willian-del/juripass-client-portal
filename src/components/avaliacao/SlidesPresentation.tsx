@@ -141,7 +141,7 @@ const slides: SlideData[] = [
             { icon: ShieldAlert, title: 'Risco relacional', desc: 'Ao absorver informalmente questões jurídicas pessoais, o RH assume responsabilidades fora de sua função. O canal externo cria clareza de papéis.' },
             { icon: AlertTriangle, title: 'Risco de escalada', desc: 'Situações sensíveis, quando mal conduzidas, podem evoluir para conflitos formais. A Juripass atua preventivamente.' },
           ].map((item, i) => (
-            <Card key={i}>
+            <Card key={i} className="h-full">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center">
                   <item.icon className="h-6 w-6 text-white" />
@@ -174,7 +174,7 @@ const slides: SlideData[] = [
             { icon: MousePointerClick, title: 'Sob demanda e confidencial', desc: 'O colaborador aciona quando quiser, sem intermediários.' },
             { icon: BadgeCheck, title: 'Sem custo para o colaborador', desc: 'Orientação inicial gratuita, sem burocracia.' },
           ].map((item, i) => (
-            <Card key={i} className="text-center space-y-4">
+            <Card key={i} className="h-full text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
                 <item.icon className="h-7 w-7 text-[#4A9FD8]" />
               </div>
@@ -210,7 +210,7 @@ const slides: SlideData[] = [
             { icon: UserCheck, title: 'Para os Colaboradores', points: ['Orientação sem custo no atendimento inicial', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento', 'Conteúdos educativos preventivos'] },
             { icon: Building2, title: 'Para a Organização', points: ['Redução de passivos trabalhistas', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
           ].map((col, i) => (
-            <Card key={i}>
+             <Card key={i} className="h-full">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center shrink-0">
@@ -249,7 +249,7 @@ const slides: SlideData[] = [
             { step: '3', title: 'Situação é encaminhada adequadamente', desc: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.' },
           ].map((s, i) => (
             <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-4">
-              <Card className="flex-1 w-full text-center space-y-3">
+               <Card className="h-full flex-1 w-full text-center space-y-3">
                 <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
                   {s.step}
                 </div>
@@ -318,7 +318,7 @@ const slides: SlideData[] = [
             { icon: Users, text: 'Os dados pertencem ao colaborador' },
             { icon: Scale, text: 'Sigilo profissional e controles de segurança da informação' },
           ].map((item, i) => (
-            <Card key={i}>
+            <Card key={i} className="h-full">
               <div className="flex items-start gap-4">
                 <IconBox icon={item.icon} />
                 <p className="text-white/70 text-sm leading-relaxed pt-1">{item.text}</p>
@@ -345,7 +345,7 @@ const slides: SlideData[] = [
             { step: '3', title: 'Ativação', desc: 'Acompanhamento de engajamento e suporte contínuo' },
           ].map((s, i) => (
             <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-3">
-              <Card className="flex-1 w-full text-center space-y-3">
+              <Card className="h-full flex-1 w-full text-center space-y-3">
                 <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
                   {s.step}
                 </div>
