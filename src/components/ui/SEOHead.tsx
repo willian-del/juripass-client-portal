@@ -7,6 +7,8 @@ interface SEOHeadProps {
   canonical?: string;
   ogImage?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+  keywords?: string;
 }
 
 const BASE_URL = 'https://www.juripass.com.br';
