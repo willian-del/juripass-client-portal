@@ -7,8 +7,9 @@ import { LeadDetailPanel } from '@/components/admin/LeadDetailPanel';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { LayoutList, Kanban, LogOut, Search, FileText } from 'lucide-react';
+import { LayoutList, Kanban, LogOut, Search, FileText, Sparkles } from 'lucide-react';
 import { FUNNEL_STAGES } from '@/components/admin/FunnelBadge';
+import { AIAssistantPanel } from '@/components/admin/AIAssistantPanel';
 import { useNavigate } from 'react-router-dom';
 
 type Lead = any;
@@ -20,6 +21,7 @@ export default function AdminLeads() {
   const [view, setView] = useState<'table' | 'kanban'>('table');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -72,6 +74,9 @@ export default function AdminLeads() {
             <h1 className="text-lg font-bold">CRM Juripass</h1>
             <Button variant="outline" size="sm" onClick={() => navigate('/admin/materiais')}>
               <FileText className="h-4 w-4 mr-1" /> Materiais
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setAiOpen(true)} className="border-primary/30 text-primary hover:bg-primary/5">
+              <Sparkles className="h-4 w-4 mr-1" /> AI Assistant
             </Button>
           </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
@@ -163,12 +168,17 @@ export default function AdminLeads() {
           onOpenChange={setDetailOpen}
           onUpdate={() => {
             fetchLeads();
-            // Refresh selected lead
             if (selectedLead) {
               supabase.from('leads').select('*').eq('id', selectedLead.id).single()
                 .then(({ data }) => { if (data) setSelectedLead(data); });
             }
           }}
+        />
+
+        <AIAssistantPanel
+          open={aiOpen}
+          onOpenChange={setAiOpen}
+          lead={selectedLead}
         />
       </div>
     </AdminAuthGuard>

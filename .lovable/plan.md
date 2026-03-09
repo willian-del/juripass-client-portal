@@ -1,122 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-# Agente de AI Comercial Juripass
+## Problema
 
-## Visão Geral
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-Construir um agente de IA com duas interfaces: um **chatbot público** no site para qualificar visitantes e um **assistente interno** no painel admin para o time comercial.
+## Solucao
+
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-## Arquitetura
+## Alteracoes
+
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
 ```text
-┌─────────────────────────────────────────────┐
-│  Frontend                                    │
-│  ┌──────────────┐   ┌────────────────────┐  │
-│  │ Chat Widget  │   │ Admin AI Assistant │  │
-│  │ (público)    │   │ (/admin/leads)     │  │
-│  └──────┬───────┘   └────────┬───────────┘  │
-│         │                    │               │
-└─────────┼────────────────────┼───────────────┘
-          │                    │
-    ┌─────▼────────────────────▼─────┐
-    │  Edge Function: ai-commercial  │
-    │  (Lovable AI Gateway)          │
-    │  - mode: "qualify" ou "assist" │
-    └────────────────────────────────┘
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
----
+### 2. Atualizar `src/App.tsx`
 
-## 1. Edge Function `ai-commercial`
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-Uma única edge function com dois modos:
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
-**Modo "qualify"** (chat público):
-- System prompt com conhecimento completo da Juripass (produto, NR-01, benefícios, preços internos excluídos)
-- Conversa natural para entender perfil do visitante (empresa, cargo, dor, tamanho)
-- Ao coletar dados suficientes, usa tool calling para retornar dados estruturados do lead
-- Lead é salvo automaticamente na tabela `leads` via service role
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-**Modo "assist"** (admin interno, autenticado):
-- Recebe contexto do lead selecionado + histórico de leads da empresa
-- Funcionalidades:
-  - **Gerar proposta**: cria texto de proposta personalizada baseado no perfil
-  - **Sugerir follow-up**: redige mensagens de acompanhamento
-  - **Consultar produto**: responde dúvidas sobre objeções, diferenciais, scripts
-  - **Analisar lead**: sugere abordagem baseada no score e qualificação
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
-Usa `LOVABLE_API_KEY` (já configurado) com modelo `google/gemini-3-flash-preview`.
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
 
----
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
 
-## 2. Chat Widget Público
+### 4. Garantir scroll to top na navegacao
 
-Componente `ChatWidget.tsx` flutuante no canto inferior direito do site:
-- Botão com ícone de chat (estilo Juripass, cor primary)
-- Ao abrir, chat com streaming token-by-token
-- Mensagem inicial: "Olá! Sou a assistente virtual da Juripass. Como posso ajudar?"
-- Quando o agente coleta informações suficientes, oferece CTA para agendar conversa
-- Se o visitante fornecer dados de contato durante o chat, o lead é criado automaticamente
-- Sem autenticação necessária (endpoint público)
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
 
 ---
 
-## 3. Assistente AI no Admin
+## Resultado esperado
 
-Adicionar aba/painel no `AdminLeads.tsx`:
-- Botão "AI Assistant" no header do CRM
-- Drawer/Sheet com chat contextual
-- Ao abrir com lead selecionado, injeta contexto do lead automaticamente
-- Ações rápidas como botões:
-  - "Gerar proposta comercial"
-  - "Sugerir mensagem de follow-up"
-  - "Como abordar este lead?"
-- Respostas com markdown renderizado
-- Requer autenticação admin (JWT validado na edge function)
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
 
----
+## Arquivos
 
-## 4. Tabela de Conversas (opcional mas recomendada)
-
-Nova tabela `chat_conversations` para persistir histórico:
-- `id`, `session_id`, `lead_id` (nullable), `messages` (jsonb), `mode`, `created_at`
-- RLS: insert anon para qualify, select/update admin para assist
-
----
-
-## Arquivos Criados/Modificados
-
-| Arquivo | Ação |
+| Arquivo | Acao |
 |---------|------|
-| `supabase/functions/ai-commercial/index.ts` | Criar edge function |
-| `supabase/config.toml` | Adicionar config da function |
-| `src/components/chat/ChatWidget.tsx` | Widget flutuante público |
-| `src/components/chat/ChatMessage.tsx` | Renderização de mensagens com markdown |
-| `src/components/chat/useChat.ts` | Hook de streaming SSE |
-| `src/components/admin/AIAssistantPanel.tsx` | Painel AI no admin |
-| `src/pages/admin/AdminLeads.tsx` | Adicionar botão AI Assistant |
-| `src/layouts/MainLayout.tsx` | Incluir ChatWidget |
-| Migration SQL | Tabela `chat_conversations` |
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
----
-
-## Fluxo de Qualificação Automática
-
-1. Visitante abre chat → conversa natural
-2. AI identifica: nome, empresa, cargo, interesse, tamanho
-3. AI usa tool calling → retorna JSON estruturado
-4. Edge function insere na tabela `leads` (trigger calcula score)
-5. Se lead hot → dispara email via Resend (reusa lógica existente)
-6. AI confirma ao visitante e sugere agendar conversa
-
----
-
-## Segurança
-
-- Modo "qualify": `verify_jwt = false`, sem auth, rate limit por IP/session
-- Modo "assist": valida JWT + verifica role admin via `has_role()`
-- Input sanitizado, mensagens limitadas a 500 chars por turno
-- Histórico limitado a últimas 20 mensagens por contexto
-
+Nenhuma dependencia nova.
