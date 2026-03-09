@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { FileText, Loader2, AlertCircle } from 'lucide-react';
+import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
+import { OnePager } from '@/components/avaliacao/OnePager';
 
 type MaterialResult = {
   type: 'file' | 'builtin';
@@ -33,7 +35,6 @@ export default function MaterialViewer() {
 
         setMaterial(data as MaterialResult);
 
-        // If it's a file, redirect to the signed URL
         if (data.type === 'file' && data.url) {
           window.location.href = data.url;
         }
@@ -68,7 +69,28 @@ export default function MaterialViewer() {
     );
   }
 
-  // For file-type materials, show a fallback while redirecting
+  // Builtin materials — render React components directly
+  if (material?.type === 'builtin') {
+    if (material.file_type === 'presentation') {
+      return <SlidesPresentation standalone />;
+    }
+    if (material.file_type === 'one-pager') {
+      return <OnePager standalone />;
+    }
+    // Fallback for unknown builtin types
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-8">
+        <LogoJuripass variant="full" size="md" format="png" clickable={false} />
+        <FileText className="h-12 w-12 text-primary" />
+        <h1 className="text-2xl font-bold text-foreground">{material.title}</h1>
+        <p className="text-muted-foreground">
+          Este material está disponível para visualização. Entre em contato para mais informações.
+        </p>
+      </div>
+    );
+  }
+
+  // File-type materials — show fallback while redirecting
   if (material?.type === 'file') {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
@@ -82,15 +104,5 @@ export default function MaterialViewer() {
     );
   }
 
-  // For builtin materials, show inline content
-  return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-8">
-      <LogoJuripass variant="full" size="md" format="png" clickable={false} />
-      <FileText className="h-12 w-12 text-primary" />
-      <h1 className="text-2xl font-bold text-foreground">{material?.title}</h1>
-      <p className="text-muted-foreground">
-        Este material está disponível para visualização. Entre em contato para mais informações.
-      </p>
-    </div>
-  );
+  return null;
 }
