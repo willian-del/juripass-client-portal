@@ -59,7 +59,7 @@ const slides: SlideData[] = [
     variant: 'dark',
     render: () => (
       <div className="text-center space-y-8 max-w-3xl">
-        <LogoJuripass variant="full-white" size="lg" format="png" clickable={false} />
+        <LogoJuripass variant="full" color="white" size="lg" format="png" clickable={false} />
         <div className="space-y-4">
           <h1 className="text-3xl md:text-5xl font-bold leading-tight">
             Programa de Acolhimento e Orientação Jurídica ao Colaborador

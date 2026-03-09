@@ -33,7 +33,7 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
         
         {/* Header band */}
         <div className="bg-[#2C3E7D] px-8 py-6 flex items-center justify-between">
-          <LogoJuripass variant="full-white" size="md" format="png" clickable={false} />
+          <LogoJuripass variant="full" color="white" size="md" format="png" clickable={false} />
           <div className="text-right">
             <p className="text-white text-xl font-bold">Proposta Comercial</p>
             <p className="text-white/60 text-sm">Programa de Acolhimento e Orientação Jurídica</p>
