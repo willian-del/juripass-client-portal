@@ -97,6 +97,7 @@ const stats = [
 ];
 
 export default function NR01() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
