@@ -81,7 +81,7 @@ export default function GestaoRiscosPsicossociais() {
               <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
                 A NR-01 exige que empresas identifiquem e gerenciem riscos psicossociais. Entenda o que isso significa na prática e como estruturar esse processo.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
