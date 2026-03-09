@@ -217,6 +217,32 @@ const SAVE_LEAD_TOOL = {
   },
 };
 
+// Simple in-memory rate limiter (per isolate)
+const rateLimitMap = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 10; // max requests per window per IP
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (rateLimitMap.get(ip) || []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS
+  );
+  if (timestamps.length >= RATE_LIMIT_MAX) {
+    rateLimitMap.set(ip, timestamps);
+    return true;
+  }
+  timestamps.push(now);
+  rateLimitMap.set(ip, timestamps);
+  if (rateLimitMap.size > 1000) {
+    for (const [key, vals] of rateLimitMap) {
+      if (vals.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }
+  return false;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -224,6 +250,17 @@ serve(async (req) => {
 
   try {
     const { messages, mode = "qualify", leadContext, sessionId } = await req.json();
+
+    // Rate limit public qualify mode by IP
+    if (mode === "qualify") {
+      const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+      if (isRateLimited(ip)) {
+        return new Response(
+          JSON.stringify({ error: "Muitas mensagens. Aguarde um momento antes de tentar novamente." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
 
     // Validate input
     if (!messages || !Array.isArray(messages)) {
