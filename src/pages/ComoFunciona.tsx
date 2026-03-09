@@ -4,7 +4,8 @@ import { SEOHead } from '@/components/ui/SEOHead';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 const steps = [
   {
