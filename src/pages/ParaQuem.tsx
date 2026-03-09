@@ -50,6 +50,7 @@ const alsoServe = [
 ];
 
 const ParaQuem = () => {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
