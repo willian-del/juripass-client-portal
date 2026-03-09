@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import {
@@ -34,6 +34,7 @@ const faqItems = [
 ];
 
 export default function Avaliacao() {
+  const { open: openLeadForm } = useLeadForm();
   const [showSlides, setShowSlides] = useState(false);
   const [showOnePager, setShowOnePager] = useState(false);
 
@@ -212,7 +213,7 @@ export default function Avaliacao() {
               <FileText className="h-5 w-5 mr-2" />
               Baixar resumo em uma página
             </Button>
-            <Button size="lg" onClick={openScheduling}>
+            <Button size="lg" onClick={openLeadForm}>
               <Calendar className="h-5 w-5 mr-2" />
               Agende uma conversa
             </Button>

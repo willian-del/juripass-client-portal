@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar, ArrowRight, Scale, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SEOHead } from '@/components/ui/SEOHead';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 const segments = [
   {
@@ -50,6 +50,7 @@ const alsoServe = [
 ];
 
 const ParaQuem = () => {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -177,7 +178,7 @@ const ParaQuem = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Sua empresa se encaixa? Vale uma conversa rápida.
             </h2>
-            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
               <Calendar className="h-5 w-5" />
               Agende uma conversa
             </Button>

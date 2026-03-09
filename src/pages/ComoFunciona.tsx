@@ -4,7 +4,8 @@ import { SEOHead } from '@/components/ui/SEOHead';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 const steps = [
   {
@@ -68,6 +69,7 @@ const implantationSteps = [
 ];
 
 const ComoFunciona = () => {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -93,7 +95,7 @@ const ComoFunciona = () => {
               Um canal <strong className="text-foreground">simples, externo e confidencial</strong>. Sem burocracia para a empresa, sem exposição para o colaborador.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <Button size="lg" className="rounded-full px-8" onClick={openScheduling}>
+              <Button size="lg" className="rounded-full px-8" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5 mr-2" />
                 Agende uma conversa
               </Button>
@@ -265,7 +267,7 @@ const ComoFunciona = () => {
               Quer entender como isso funcionaria na sua empresa?
             </h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" className="rounded-full px-8" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5 mr-2" />
                 Agende uma conversa
               </Button>

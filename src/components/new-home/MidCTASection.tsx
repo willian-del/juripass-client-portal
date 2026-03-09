@@ -1,8 +1,9 @@
 import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 export function MidCTASection() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <section className="py-16 md:py-24 bg-gradient-dark relative overflow-hidden">
       {/* Glow effect */}
@@ -17,7 +18,7 @@ export function MidCTASection() {
           </p>
           <Button
             size="lg"
-            onClick={openScheduling}
+            onClick={openLeadForm}
             className="bg-white text-primary hover:bg-white/90 font-semibold text-base px-8 shadow-lg"
           >
             <Calendar className="h-5 w-5" />

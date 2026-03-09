@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -96,6 +97,7 @@ const stats = [
 ];
 
 export default function NR01() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -126,7 +128,7 @@ export default function NR01() {
                 como um programa de acolhimento jurídico ajuda sua organização a estar em
                 conformidade.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
@@ -357,7 +359,7 @@ export default function NR01() {
                 Entenda como um programa de acolhimento jurídico pode ser a peça que falta na sua
                 estratégia de prevenção de riscos psicossociais.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

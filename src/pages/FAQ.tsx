@@ -2,7 +2,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Calendar } from 'lucide-react';
 import { SEOHead } from '@/components/ui/SEOHead';
 import { Button } from '@/components/ui/button';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { useMemo } from 'react';
 
 const categories = [
@@ -41,6 +41,7 @@ const categories = [
 ];
 
 const FAQPage = () => {
+  const { open: openLeadForm } = useLeadForm();
   const faqJsonLd = useMemo(() => ({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -109,7 +110,7 @@ const FAQPage = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground">
               Ainda tem dúvidas? Vamos conversar.
             </h2>
-            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+            <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
               <Calendar className="h-5 w-5" />
               Agende uma conversa
             </Button>

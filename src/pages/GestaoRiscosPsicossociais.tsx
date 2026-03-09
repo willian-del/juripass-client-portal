@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -51,6 +52,7 @@ const structureSteps = [
 ];
 
 export default function GestaoRiscosPsicossociais() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -79,7 +81,7 @@ export default function GestaoRiscosPsicossociais() {
               <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
                 A NR-01 exige que empresas identifiquem e gerenciem riscos psicossociais. Entenda o que isso significa na prática e como estruturar esse processo.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
@@ -297,7 +299,7 @@ export default function GestaoRiscosPsicossociais() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Descubra como um programa de acolhimento jurídico pode ser a peça que falta na sua estratégia de gestão de riscos psicossociais.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

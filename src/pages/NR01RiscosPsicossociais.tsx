@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -61,6 +62,7 @@ const rhSteps = [
 ];
 
 export default function NR01RiscosPsicossociais() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -89,7 +91,7 @@ export default function NR01RiscosPsicossociais() {
               <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
                 A norma regulamentadora agora exige gestão formal de riscos psicossociais. Entenda as mudanças e como preparar sua empresa.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
@@ -272,7 +274,7 @@ export default function NR01RiscosPsicossociais() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Entenda como um programa de acolhimento jurídico pode ser parte da sua estratégia de conformidade com a NR-01.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

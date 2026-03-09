@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { MainLayout } from "./layouts/MainLayout";
+import { LeadFormProvider } from "./contexts/LeadFormContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -22,30 +23,32 @@ const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
 
 const App = () => (
   <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <BrowserRouter>
-      <Suspense fallback={<div className="min-h-screen bg-background" />}>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/como-funciona" element={<ComoFunciona />} />
-            <Route path="/para-quem" element={<ParaQuem />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/nr-01" element={<NR01 />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/para-seus-colaboradores" element={<ParaSeuColaborador />} />
-            <Route path="/avaliacao" element={<Avaliacao />} />
-            <Route path="/gestao-riscos-psicossociais-nr01" element={<GestaoRiscosPsicossociais />} />
-            <Route path="/nr01-riscos-psicossociais" element={<NR01RiscosPsicossociais />} />
-            <Route path="/gestao-riscos-humanos-rh" element={<GestaoRiscosHumanos />} />
-          </Route>
-          <Route path="/site-anterior" element={<LegacyHome />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <LeadFormProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Suspense fallback={<div className="min-h-screen bg-background" />}>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/como-funciona" element={<ComoFunciona />} />
+              <Route path="/para-quem" element={<ParaQuem />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/nr-01" element={<NR01 />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/para-seus-colaboradores" element={<ParaSeuColaborador />} />
+              <Route path="/avaliacao" element={<Avaliacao />} />
+              <Route path="/gestao-riscos-psicossociais-nr01" element={<GestaoRiscosPsicossociais />} />
+              <Route path="/nr01-riscos-psicossociais" element={<NR01RiscosPsicossociais />} />
+              <Route path="/gestao-riscos-humanos-rh" element={<GestaoRiscosHumanos />} />
+            </Route>
+            <Route path="/site-anterior" element={<LegacyHome />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </LeadFormProvider>
   </TooltipProvider>
 );
 

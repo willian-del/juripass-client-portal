@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { BRAND, openScheduling } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SEOHead, organizationJsonLd } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -52,6 +53,7 @@ const riskCategories = [
 ];
 
 export default function GestaoRiscosHumanos() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -80,7 +82,7 @@ export default function GestaoRiscosHumanos() {
               <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
                 Problemas pessoais dos colaboradores impactam diretamente o trabalho. Entenda como o RH pode criar canais estruturados de orientação e prevenção.
               </p>
-              <Button size="lg" variant="secondary" onClick={openScheduling}>
+              <Button size="lg" variant="secondary" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
@@ -254,7 +256,7 @@ export default function GestaoRiscosHumanos() {
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 Conheça como a Juripass pode ser o canal de acolhimento que seus colaboradores precisam — e que o RH precisa para gerenciar riscos humanos.
               </p>
-              <Button size="lg" onClick={openScheduling}>
+              <Button size="lg" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>

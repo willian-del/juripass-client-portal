@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SEOHead } from '@/components/ui/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -90,6 +90,7 @@ const hrBenefits = [
 ];
 
 export default function ParaSeuColaborador() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
@@ -121,7 +122,7 @@ export default function ParaSeuColaborador() {
               A Juripass cria um espaço seguro e externo onde o colaborador recebe orientação clara sobre seus direitos e caminhos possíveis.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-              <Button size="lg" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+              <Button size="lg" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
                 <Calendar className="h-5 w-5" />
                 Agende uma conversa
               </Button>
@@ -346,7 +347,7 @@ export default function ParaSeuColaborador() {
                 A Juripass ajuda sua empresa a estruturar esse cuidado de forma profissional e sustentável.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openScheduling}>
+                <Button size="lg" variant="secondary" className="rounded-full px-8 gap-2" onClick={openLeadForm}>
                   <Calendar className="h-5 w-5" />
                   Levar a Juripass para minha empresa
                 </Button>

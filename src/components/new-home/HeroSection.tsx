@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 export function HeroSection() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <section id="hero" aria-labelledby="hero-title" className="relative py-16 md:py-28 overflow-hidden">
       {/* Decorative radial gradient */}
@@ -24,7 +25,7 @@ export function HeroSection() {
 
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
-            <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openScheduling}>
+            <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openLeadForm}>
               <Calendar className="h-5 w-5" />
               Agende uma conversa
             </Button>
