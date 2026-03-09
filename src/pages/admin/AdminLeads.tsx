@@ -21,6 +21,7 @@ export default function AdminLeads() {
   const [view, setView] = useState<'table' | 'kanban'>('table');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
