@@ -88,12 +88,14 @@ export default function Avaliacao() {
       {/* Hero */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 text-center max-w-3xl space-y-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-            Um resumo para compartilhar internamente
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Criamos esta página para facilitar a avaliação com diretoria, jurídico e gestão de pessoas — sem necessidade de nova reunião.
-          </p>
+          <ScrollReveal>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+              Um resumo para compartilhar internamente
+            </h1>
+            <p className="text-lg text-muted-foreground mt-4">
+              Criamos esta página para facilitar a avaliação com diretoria, jurídico e gestão de pessoas — sem necessidade de nova reunião.
+            </p>
+          </ScrollReveal>
         </div>
       </section>
 
