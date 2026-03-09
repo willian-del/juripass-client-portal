@@ -112,7 +112,7 @@ export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
 
           <div className="space-y-1.5">
             <Label htmlFor="lead-phone">Telefone *</Label>
-            <Input id="lead-phone" placeholder="(11) 99999-9999" {...register('phone')} />
+            <Input id="lead-phone" placeholder="(11) 99999-9999" {...register('phone')} onChange={handlePhoneChange} />
             {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
           </div>
 
