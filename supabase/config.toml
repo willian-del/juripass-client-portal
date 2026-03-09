@@ -2,3 +2,6 @@ project_id = "qudtsgchwsuoejxxgdza"
 
 [functions.serve-material]
 verify_jwt = false
+
+[functions.send-material-email]
+verify_jwt = false
