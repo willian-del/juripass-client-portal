@@ -1,83 +1,36 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Melhorias no Painel de Materiais Comerciais
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Resumo das mudanças solicitadas
 
-## Solucao
+### 1. Layout em lista (tabela)
+Substituir os cards atuais por uma tabela compacta com colunas: Título, Tipo, Envios, Visualizações, Data, Ações. Mais eficiente para muitos documentos.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### 2. Botão Visualizar abre o material diretamente
+Ao clicar em "Visualizar", abrir o componente `SlidesPresentation` ou `OnePager` diretamente na página (overlay fullscreen), sem redirecionar para `/avaliacao`. Para materiais com arquivo, abrir a URL assinada em nova aba.
 
----
+### 3. Editar e excluir materiais
+- **Editar**: Dialog para alterar título e descrição do material
+- **Excluir**: Botão com confirmação (AlertDialog) que deleta o material, seus shares e views associados, e o arquivo do storage se houver
 
-## Alteracoes
+### 4. Enviar link por email
+Novo botão "Enviar por email" no dialog de compartilhamento. Ao selecionar o lead, gera o link e envia automaticamente por email usando a edge function `send-material-email` (nova) via Resend, com o mesmo padrão visual do `send-lead-email`. Registra o share e rastreia abertura normalmente.
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+### Arquivos modificados
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+| Arquivo / Recurso | Mudança |
+|---|---|
+| `src/pages/admin/AdminMaterials.tsx` | Refatorar para layout tabela, adicionar preview inline, editar, excluir, enviar por email |
+| `supabase/functions/send-material-email/index.ts` | Nova edge function para enviar email com link do material ao lead via Resend |
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+### Detalhes técnicos
 
-### 2. Atualizar `src/App.tsx`
+**Layout tabela**: Usar componentes `Table` existentes. Envios expandem em sub-linhas ou tooltip.
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+**Preview inline**: Renderizar `<SlidesPresentation onClose={...} />` ou `<OnePager onClose={...} />` como overlay dentro do AdminMaterials, sem navegar.
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+**Excluir**: Cascade — deletar `material_views` → `material_shares` → `sales_materials` → arquivo no storage. Usar `supabase.from('material_views').delete().in('share_id', shareIds)` antes de deletar shares e material.
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+**Edge function `send-material-email`**: Recebe `{ materialId, leadId, shareUrl }`, busca dados do lead e material, envia email formatado via Resend com botão para abrir o material. Usa a mesma `RESEND_API_KEY` já configurada.
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
