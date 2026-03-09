@@ -1,83 +1,144 @@
 
-# Corrigir Header Consistente e Logo Lento
+# Plano: Sistema de Prerendering Estático para SEO
 
-## Problema
+## Análise do Problema
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+O site atual é um SPA (Single Page Application) usando React + Vite + React Router, o que causa problemas de indexação no Google porque:
+- Conteúdo é renderizado apenas no cliente via JavaScript
+- Crawlers podem não executar JavaScript completamente
+- Tempo de carregamento inicial impacta First Contentful Paint
+- Problemas de "soft 404" identificados no Search Console
 
-## Solucao
+## Páginas Prioritárias para Prerendering
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### Landing Pages (11 rotas estáticas)
+- `/` - Homepage
+- `/como-funciona`
+- `/para-quem`
+- `/faq`
+- `/nr-01`
+- `/para-seus-colaboradores`
+- `/gestao-riscos-psicossociais-nr01`
+- `/nr01-riscos-psicossociais`
+- `/gestao-riscos-humanos-rh`
+- `/blog` - Página índice do blog
 
----
+### Blog Posts (8 rotas dinâmicas)
+- `/blog/absenteismo-juridico-problema-silencioso`
+- `/blog/nr-01-riscos-psicossociais-guia-pratico`
+- `/blog/beneficios-corporativos-retencao-talentos`
+- `/blog/como-implementar-acolhimento-juridico`
+- `/blog/saude-mental-trabalho-papel-rh`
+- `/blog/nr01-riscos-psicossociais-2026`
+- `/blog/problemas-pessoais-impactam-trabalho`
+- `/blog/beneficios-modernos-para-colaboradores`
 
-## Alteracoes
+**Total: 19 páginas para prerender**
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+## Soluções Propostas
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### Opção 1: react-snap (Recomendada - Mais Simples)
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+**Vantagens:**
+- Zero configuração inicial
+- Funciona automaticamente com React Router
+- Mais testado e estável
+- Instalação simples
+
+**Implementação:**
+1. Instalar `react-snap` como dependência de desenvolvimento
+2. Adicionar script `postbuild` no `package.json`
+3. Configurar `reactSnap` no `package.json` com rotas específicas
+4. Ajustar `src/index.tsx` para compatibilidade com hidratação
+
+### Opção 2: vite-plugin-prerender (Mais Controle)
+
+**Vantagens:**
+- Integração nativa com Vite
+- Mais customizável
+- Melhor performance no build
+- Controle granular sobre o processo
+
+**Implementação:**
+1. Instalar `vite-plugin-prerender`
+2. Configurar plugin no `vite.config.ts`
+3. Criar script para extrair rotas dinamicamente do `blog-data.ts`
+4. Configurar pós-processamento para otimizar HTML gerado
+
+## Implementação Detalhada (react-snap)
+
+### 1. Instalação e Scripts
+```json
+// package.json
+{
+  "scripts": {
+    "build": "vite build",
+    "postbuild": "react-snap"
+  },
+  "reactSnap": {
+    "crawlFrom": "/",
+    "include": [
+      "/",
+      "/como-funciona",
+      "/para-quem", 
+      "/faq",
+      "/nr-01",
+      "/blog",
+      // ... todas as 19 rotas
+    ],
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
+  }
+}
 ```
 
-### 2. Atualizar `src/App.tsx`
+### 2. Ajustes no código
+- Modificar `src/main.tsx` para usar `hydrateRoot` em produção
+- Adicionar `noscript` fallbacks nas páginas críticas
+- Configurar `inlineCss: true` para melhor First Paint
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+### 3. Build Pipeline
+- `npm run build` → Vite build normal
+- `postbuild` → react-snap executa automaticamente
+- Genera HTML estático para cada rota no `dist/`
+- Mantém funcionalidade SPA para navegação
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+## Resultados Esperados
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+### SEO Improvements
+- HTML estático com conteúdo completo para crawlers
+- Meta tags renderizadas no servidor
+- Structured data (JSON-LD) presente no HTML inicial
+- Resolução dos soft 404s
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+### Performance
+- First Contentful Paint mais rápido
+- Melhor Core Web Vitals
+- Fallback funcional sem JavaScript
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
+### Manutenibilidade
+- Build automatizado
+- Rotas atualizadas automaticamente
+- Compatibilidade mantida com SPA
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+## Arquivos Modificados
 
-### 4. Garantir scroll to top na navegacao
+1. `package.json` - Adicionar dependência e scripts
+2. `src/main.tsx` - Ajustar para hydration
+3. `vite.config.ts` - Configurações build (se usar opção 2)
+4. `scripts/generate-routes.js` - Script para extrair rotas do blog (novo)
 
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+## Próximos Passos Após Implementação
 
----
+1. Testar build local: `npm run build`
+2. Verificar HTML estático gerado em `dist/`
+3. Deploy e aguardar reindexação Google (2-4 semanas)
+4. Monitorar Search Console para melhorias
+5. Ajustar rotas conforme novos artigos
 
-## Resultado esperado
+## Considerações Técnicas
 
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
+- **Compatibilidade**: Mantém navegação SPA após hydratação
+- **Dynamic imports**: Lazy loading preservado
+- **Estado**: Não interfere com React state management
+- **Assets**: Vite asset optimization mantido
+- **Bundle size**: Impacto mínimo no JavaScript final
