@@ -1,41 +1,83 @@
 
-
-# Criar imagem OG 1200×630 com o logo real da Juripass
+# Corrigir Header Consistente e Logo Lento
 
 ## Problema
-A imagem OG gerada por IA não ficou boa. O usuário quer usar o logo real da Juripass — o mesmo exibido no header do site.
 
-## Solução
-Criar uma edge function que gera um PNG 1200×630 compondo o logo SVG da Juripass (já existente em `public/images/branding/juripass-logo-full.svg`) centralizado sobre o fundo azul escuro (#2C3E7D) da marca. A edge function vai:
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-1. Embutir o SVG do logo diretamente no código
-2. Criar um SVG wrapper de 1200×630 com fundo azul escuro e o logo centralizado em branco
-3. Converter para PNG usando a lib `resvg-wasm` (compatível com Deno/edge functions)
-4. Retornar o PNG como resposta
+## Solucao
 
-Depois, chamar a função para gerar o arquivo e salvar como `public/images/branding/juripass-og-1200x630.png`, substituindo o atual.
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-## Alternativa mais simples
-Como o projeto já tem `juripass-logo-full-white.png` (logo branco em fundo escuro), podemos simplesmente reverter as meta tags para apontar para esse arquivo. Não terá as dimensões ideais de 1200×630, mas o WhatsApp e redes sociais vão exibir o logo real da marca.
+---
 
-## Plano recomendado (alternativa simples)
+## Alteracoes
 
-### 1. Atualizar `index.html`
-- `og:image` → `juripass-logo-full-white.png`
-- `twitter:image` → `juripass-logo-full-white.png`
-- Remover `og:image:width` e `og:image:height` (dimensões não correspondem a 1200×630)
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### 2. Atualizar `SEOHead.tsx`
-- Atualizar fallback image para `juripass-logo-full-white.png`
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-### 3. Remover `juripass-og-1200x630.png`
-- Deletar a imagem gerada por IA que não ficou boa
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
 
 ## Arquivos
 
-| Arquivo | Ação |
-|---|---|
-| `index.html` | Atualizar meta tags |
-| `src/components/ui/SEOHead.tsx` | Atualizar fallback |
-| `public/images/branding/juripass-og-1200x630.png` | Remover |
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
 
+Nenhuma dependencia nova.
