@@ -46,6 +46,8 @@ const App = () => (
               <Route path="/gestao-riscos-humanos-rh" element={<GestaoRiscosHumanos />} />
             </Route>
             <Route path="/site-anterior" element={<LegacyHome />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/leads" element={<AdminLeads />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
