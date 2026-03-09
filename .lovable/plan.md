@@ -1,83 +1,53 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Templates de Email Personalizáveis para Materiais
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Contexto
+Hoje o email de envio de material usa um template HTML hardcoded na edge function `send-material-email`. O admin não tem como personalizar o conteúdo do email antes de enviar.
 
-## Solucao
+## Solução
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### 1. Tabela `email_templates` no banco
+Criar uma tabela para armazenar templates de email editáveis pelo admin:
+- `id`, `name` (ex: "Envio de material padrão"), `subject_template`, `body_template`, `is_default`, `created_at`, `updated_at`
+- Os templates usam variáveis como `{{lead_name}}`, `{{lead_company}}`, `{{material_title}}`, `{{material_description}}`, `{{share_url}}`
+- RLS: apenas admins podem CRUD
+- Inserir um template padrão (o atual) como seed
 
----
+### 2. Nova página/seção de gestão de templates
+Adicionar uma aba ou seção em `AdminMaterials.tsx` (ou nova rota `/admin/email-templates`) para:
+- Listar templates existentes
+- Criar novo template com campos: nome, assunto (subject), corpo (HTML com variáveis)
+- Editar template existente
+- Preview do email com dados fictícios substituindo as variáveis
+- Marcar um template como padrão
+- Excluir templates (exceto o padrão)
 
-## Alteracoes
+### 3. Seleção de template ao enviar
+No dialog de compartilhamento (`shareOpen`), adicionar um `Select` para escolher o template de email antes de enviar. O template padrão vem pré-selecionado.
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+### 4. Edge function usa template do banco
+Atualizar `send-material-email` para:
+- Receber `templateId` opcional no body
+- Se fornecido, buscar o template do banco; senão, usar o template padrão (`is_default = true`)
+- Substituir as variáveis `{{...}}` pelos dados reais do lead/material
+- Enviar via Resend com o HTML processado
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+## Arquivos modificados
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+| Arquivo / Recurso | Mudança |
+|---|---|
+| Tabela `email_templates` | Criar tabela + seed com template padrão |
+| `src/pages/admin/AdminMaterials.tsx` | Adicionar seção de gestão de templates + seletor no dialog de envio |
+| `supabase/functions/send-material-email/index.ts` | Buscar template do banco e processar variáveis |
 
-### 2. Atualizar `src/App.tsx`
+## Variáveis disponíveis nos templates
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+| Variável | Valor |
+|---|---|
+| `{{lead_name}}` | Nome do lead |
+| `{{lead_company}}` | Empresa do lead |
+| `{{material_title}}` | Título do material |
+| `{{material_description}}` | Descrição do material |
+| `{{share_url}}` | Link de acesso ao material |
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
