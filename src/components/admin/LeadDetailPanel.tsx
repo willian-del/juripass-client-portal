@@ -56,6 +56,20 @@ export function LeadDetailPanel({
   const { toast } = useToast();
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
+  const [materialShares, setMaterialShares] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!lead) return;
+    const fetchShares = async () => {
+      const { data } = await supabase
+        .from('material_shares')
+        .select('id, token, sent_at, sales_materials(title, file_type), material_views(id, viewed_at)')
+        .eq('lead_id', lead.id)
+        .order('sent_at', { ascending: false });
+      setMaterialShares(data || []);
+    };
+    fetchShares();
+  }, [lead]);
 
   const updateField = async (fields: Record<string, unknown>) => {
     if (!lead) return;
