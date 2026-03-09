@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 interface LogoJuripassProps {
   variant?: 'full' | 'icon' | 'horizontal';
@@ -47,15 +48,15 @@ export function LogoJuripass({
     : `/images/branding/juripass-logo-${variant}${color === 'white' ? '-white' : ''}.svg`;
   
   const logoImg = (
-    <img
+    <OptimizedImage
       src={logoSrc}
-      alt="Juripass - Segurança jurídica na palma da sua mão"
+      alt="Juripass — Plataforma de suporte jurídico para gestão de pessoas"
+      priority
       className={cn(
         sizeClasses[variant][size],
         'object-contain',
         className
       )}
-      loading="eager"
     />
   );
 
