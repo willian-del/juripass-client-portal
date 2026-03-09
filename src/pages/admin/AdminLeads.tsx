@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 type Lead = any;
 
 export default function AdminLeads() {
+  const navigate = useNavigate();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'table' | 'kanban'>('table');
