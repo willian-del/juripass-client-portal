@@ -1,83 +1,47 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Fix: Chat Widget não aparece em produção (build failure)
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Diagnóstico
 
-## Solucao
+O build falha no passo `postbuild: react-snap` (pré-renderização). O Vite compila com sucesso, mas o `react-snap` tenta renderizar as páginas em headless browser e provavelmente falha ao encontrar o `ChatWidget` (que usa `sessionStorage`, `crypto.randomUUID`, `fetch` streaming — APIs que não existem no contexto de pré-renderização).
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+A produção está rodando uma versão antiga do código, anterior à adição do ChatWidget.
 
----
+## Solução
 
-## Alteracoes
+### 1. Tornar o ChatWidget compatível com SSR/react-snap
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+No `ChatWidget.tsx`, verificar se está rodando em contexto de pré-renderização (`navigator.userAgent` contém "ReactSnap") e não renderizar nada nesse caso:
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+```tsx
+// No início do componente ChatWidget
+if (typeof navigator !== 'undefined' && navigator.userAgent?.includes('ReactSnap')) {
+  return null;
+}
 ```
 
-### 2. Atualizar `src/App.tsx`
+### 2. Proteger o `useChat.ts` contra SSR
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+No `getSessionId()`, guardar contra `sessionStorage` não disponível:
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
+```tsx
+function getSessionId() {
+  if (typeof window === 'undefined') return 'ssr';
+  // ...resto
+}
 ```
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+### 3. Verificar se react-markdown é compatível
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+`react-markdown` v10 usa ESM puro. Se o react-snap não suportar, pode ser necessário fazer lazy import ou usar dynamic import com `React.lazy`.
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
+## Arquivos modificados
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+| Arquivo | Mudança |
+|---------|---------|
+| `src/components/chat/ChatWidget.tsx` | Guard para react-snap |
+| `src/components/chat/useChat.ts` | Guard SSR no sessionStorage |
 
-### 4. Garantir scroll to top na navegacao
+Nenhuma mudança de lógica, banco ou edge function.
 
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
