@@ -7,7 +7,8 @@ import { PriorityBadge } from './PriorityBadge';
 import { FUNNEL_STAGES } from './FunnelBadge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Phone } from 'lucide-react';
+import { Phone, FileText, Eye } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface Lead {
   id: string;
