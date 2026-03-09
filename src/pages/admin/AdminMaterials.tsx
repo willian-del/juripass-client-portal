@@ -82,7 +82,7 @@ const PREVIEW_DATA: Record<string, string> = {
 function replaceVarsForPreview(text: string): string {
   let result = text;
   for (const [key, value] of Object.entries(PREVIEW_DATA)) {
-    result = result.replaceAll(key, value);
+    result = result.split(key).join(value);
   }
   return result;
 }
