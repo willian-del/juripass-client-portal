@@ -43,6 +43,16 @@ const LEGAL_BENEFIT_LABELS: Record<string, string> = {
   nao_sei: "Não sei",
 };
 
+function escapeHtml(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -65,6 +75,22 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Rate limiting: check for recent submissions with the same email (last 5 minutes)
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { data: recentLeads } = await supabase
+      .from("leads")
+      .select("id")
+      .eq("email", email)
+      .gte("created_at", fiveMinutesAgo)
+      .limit(1);
+
+    if (recentLeads && recentLeads.length > 0) {
+      return new Response(
+        JSON.stringify({ error: "Aguarde alguns minutos antes de enviar novamente" }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Save lead to database (scoring trigger will calculate lead_score and lead_priority)
     const { data: insertedLead, error: insertError } = await supabase.from("leads").insert({
