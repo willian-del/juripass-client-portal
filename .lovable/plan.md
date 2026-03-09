@@ -1,83 +1,37 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Adicionar ScrollReveal à página /avaliacao
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+Import `ScrollReveal` de `@/components/ui/ScrollReveal` e envolver as seções e elementos-chave com animações de entrada, seguindo o mesmo padrão da homepage.
 
-## Solucao
+## Arquivo: `src/pages/Avaliacao.tsx`
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### Alterações:
+1. **Import**: Adicionar `import { ScrollReveal } from '@/components/ui/ScrollReveal';`
 
----
+2. **Hero** (seção ~linha 88): Envolver o bloco de texto com `<ScrollReveal>`
 
-## Alteracoes
+3. **O problema** (~linha 100):
+   - Envolver o `<h2>` com `<ScrollReveal>`
+   - Envolver cada card do `problemSteps` com `<ScrollReveal delay={i * 0.15}>`
+   - Envolver o parágrafo de fechamento com `<ScrollReveal>`
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+4. **O que é a Juripass** (~linha 157):
+   - Envolver o `<h2>` + descrição com `<ScrollReveal>`
+   - Envolver cada pilar card com `<ScrollReveal delay={i * 0.15}>`
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+5. **Como funciona** (~linha 197):
+   - Envolver o `<h2>` com `<ScrollReveal>`
+   - Envolver cada step card com `<ScrollReveal delay={i * 0.15}>`
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+6. **Impacto** (~linha 228):
+   - Envolver o `<h2>` com `<ScrollReveal>`
+   - Envolver cada impact card com `<ScrollReveal delay={i * 0.1}>`
 
-### 2. Atualizar `src/App.tsx`
+7. **FAQ** (~linha 258):
+   - Envolver o `<h2>` com `<ScrollReveal>`
+   - Envolver o `<Accordion>` com `<ScrollReveal delay={0.1}>`
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+8. **CTAs finais** (~linha 277):
+   - Envolver o bloco com `<ScrollReveal>`
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
