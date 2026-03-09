@@ -41,6 +41,7 @@ const categories = [
 ];
 
 const FAQPage = () => {
+  const { open: openLeadForm } = useLeadForm();
   const faqJsonLd = useMemo(() => ({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
