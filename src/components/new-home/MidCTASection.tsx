@@ -18,7 +18,7 @@ export function MidCTASection() {
           </p>
           <Button
             size="lg"
-            onClick={openScheduling}
+            onClick={openLeadForm}
             className="bg-white text-primary hover:bg-white/90 font-semibold text-base px-8 shadow-lg"
           >
             <Calendar className="h-5 w-5" />
