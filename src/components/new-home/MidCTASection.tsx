@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 export function MidCTASection() {
   return (
