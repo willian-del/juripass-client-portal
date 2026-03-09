@@ -1,83 +1,46 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Ajustes na Apresentação Comercial e One-Pager
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## Resumo das 6 alterações solicitadas
 
-## Solucao
+### 1. Apresentação toda em tom dark
+Converter todos os slides para `variant: 'dark'` (fundo #2C3E7D, texto branco). Remover alternância claro/escuro. Usar variações sutis de gradiente entre slides para evitar monotonia (ex: gradiente diagonal levemente diferente, ou fundo com pattern sutil).
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### 2. Logo branco para fundos escuros
+Copiar o logo branco enviado (`Logos_Juripass_1_.ai-3.png`) para `public/images/branding/` e usar na apresentação e no one-pager (cabeçalho). O componente `LogoJuripass` já suporta `color="white"` — validar que está usando o asset correto em todos os slides.
 
----
+### 3. Remover todos os valores monetários
+- **Apresentação**: Eliminar o slide 11 (Modelo Comercial) inteiro. Substituir por um slide sobre "Escopo e Limitações" (conteúdo do documento: não substitui consulta jurídica, não inclui peças processuais, sem custo ao colaborador na orientação inicial). Reduzir para 11 slides.
+- **One-Pager**: Remover a seção "Investimento" com valores R$ 9.990 e piloto. Substituir por seção "Natureza do Serviço" (a Juripass não presta serviços advocatícios, atua como plataforma de acolhimento e facilitação).
 
-## Alteracoes
+### 4. Opção de download em PDF da apresentação
+Adicionar botão "Baixar PDF" no header da apresentação que usa `window.print()` com CSS `@media print` otimizado — mesma abordagem já usada no OnePager. O print CSS renderiza todos os slides em sequência vertical, um por página, em layout A4 landscape.
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+### 5. Conteúdo fiel à homepage
+Alinhar o texto e estrutura dos slides com as seções reais do site:
+- **Slide 2 (Problema)**: Usar o fluxo do `OrganizationalProblemSection` — "O RH não tem um problema jurídico. Tem um problema de encaminhamento."
+- **Slide 3 (Riscos)**: Usar os 3 riscos do `RiskOrganizationSection` — Psicossocial, Relacional, Escalada
+- **Slide 4 (O que é)**: Usar texto do `WhatIsJuripassSection` — canal externo, sob demanda, sem custo ao colaborador + badges de temas
+- **Slide 5 (Oferece)**: Manter estrutura Colaborador/Empresa do `ImpactSection` (4 colunas: RH, Gestores, Colaboradores, Organização)
+- **Slide 6 (Como funciona)**: Usar os 3 passos do `HowItWorksSection` com setas
+- **Slide capa**: Usar o headline da Hero — "Plataforma de Suporte Jurídico para Gestão de Pessoas" + definição institucional
+- Remover menções a "familiares/dependentes" conforme estratégia de vendas RH
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### 6. One-Pager fiel ao modelo do documento
+Reestruturar o OnePager seguindo a estrutura exata do docx enviado:
+1. Sobre a Juripass (definição + temas)
+2. O que o programa oferece (Colaborador + Empresa)
+3. Como funciona (4 passos)
+4. Escopo e limitações
+5. Confidencialidade e LGPD
+6. Natureza do serviço
+7. Encerramento
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+Remover título "Proposta Comercial" do cabeçalho. Manter apenas "Programa de Acolhimento e Orientação Jurídica".
 
-### 2. Atualizar `src/App.tsx`
+## Arquivos modificados
+- `src/components/avaliacao/SlidesPresentation.tsx` — todos os slides dark, conteúdo alinhado, remover slide valores, adicionar botão PDF
+- `src/components/avaliacao/OnePager.tsx` — reestruturar conforme docx, remover valores, remover título "Proposta Comercial"
+- Copiar logo branco para `public/images/branding/`
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
