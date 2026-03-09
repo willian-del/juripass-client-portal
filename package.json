@@ -8,42 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "postbuild": "react-snap"
-  },
-  "reactSnap": {
-    "source": "dist",
-    "crawlFrom": "/",
-    "include": [
-      "/",
-      "/como-funciona",
-      "/para-quem",
-      "/faq",
-      "/nr-01",
-      "/para-seus-colaboradores",
-      "/gestao-riscos-psicossociais-nr01",
-      "/nr01-riscos-psicossociais",
-      "/gestao-riscos-humanos-rh",
-      "/blog",
-      "/blog/absenteismo-juridico-problema-silencioso",
-      "/blog/nr-01-riscos-psicossociais-guia-pratico",
-      "/blog/beneficios-corporativos-retencao-talentos",
-      "/blog/como-implementar-acolhimento-juridico",
-      "/blog/saude-mental-trabalho-papel-rh",
-      "/blog/nr01-riscos-psicossociais-2026",
-      "/blog/problemas-pessoais-impactam-trabalho",
-      "/blog/beneficios-modernos-para-colaboradores"
-    ],
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage"
-    ],
-    "inlineCss": true,
-    "minifyHtml": {
-      "collapseWhitespace": true,
-      "removeComments": true
-    }
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
