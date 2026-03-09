@@ -80,6 +80,110 @@ export type Database = {
         }
         Relationships: []
       }
+      material_shares: {
+        Row: {
+          created_by: string | null
+          id: string
+          lead_id: string
+          material_id: string
+          sent_at: string
+          token: string
+        }
+        Insert: {
+          created_by?: string | null
+          id?: string
+          lead_id: string
+          material_id: string
+          sent_at?: string
+          token?: string
+        }
+        Update: {
+          created_by?: string | null
+          id?: string
+          lead_id?: string
+          material_id?: string
+          sent_at?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_shares_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "material_shares_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "sales_materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      material_views: {
+        Row: {
+          id: string
+          ip_address: string | null
+          share_id: string
+          user_agent: string | null
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          ip_address?: string | null
+          share_id: string
+          user_agent?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          ip_address?: string | null
+          share_id?: string
+          user_agent?: string | null
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_views_share_id_fkey"
+            columns: ["share_id"]
+            isOneToOne: false
+            referencedRelation: "material_shares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_materials: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          file_path: string
+          file_type: string
+          id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_path: string
+          file_type?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_path?: string
+          file_type?: string
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

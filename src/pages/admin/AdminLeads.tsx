@@ -7,12 +7,14 @@ import { LeadDetailPanel } from '@/components/admin/LeadDetailPanel';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { LayoutList, Kanban, LogOut, Search } from 'lucide-react';
+import { LayoutList, Kanban, LogOut, Search, FileText } from 'lucide-react';
 import { FUNNEL_STAGES } from '@/components/admin/FunnelBadge';
+import { useNavigate } from 'react-router-dom';
 
 type Lead = any;
 
 export default function AdminLeads() {
+  const navigate = useNavigate();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'table' | 'kanban'>('table');
@@ -66,7 +68,12 @@ export default function AdminLeads() {
     <AdminAuthGuard>
       <div className="min-h-screen bg-muted/20">
         <header className="border-b bg-card px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-bold">CRM Juripass</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-bold">CRM Juripass</h1>
+            <Button variant="outline" size="sm" onClick={() => navigate('/admin/materiais')}>
+              <FileText className="h-4 w-4 mr-1" /> Materiais
+            </Button>
+          </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-1" /> Sair
           </Button>

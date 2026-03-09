@@ -22,6 +22,8 @@ const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossocia
 const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
+const AdminMaterials = lazy(() => import("./pages/admin/AdminMaterials"));
+const MaterialViewer = lazy(() => import("./pages/MaterialViewer"));
 
 const App = () => (
   <TooltipProvider>
@@ -48,6 +50,8 @@ const App = () => (
             <Route path="/site-anterior" element={<LegacyHome />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
+            <Route path="/admin/materiais" element={<AdminMaterials />} />
+            <Route path="/m/:token" element={<MaterialViewer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
