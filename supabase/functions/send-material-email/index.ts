@@ -16,13 +16,48 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
+function replaceTemplateVars(
+  template: string,
+  vars: Record<string, string>,
+  escapeValues = false
+): string {
+  let result = template;
+  for (const [key, value] of Object.entries(vars)) {
+    const safeValue = escapeValues ? escapeHtml(value) : value;
+    result = result.replaceAll(`{{${key}}}`, safeValue);
+  }
+  return result;
+}
+
+// Fallback template if none found in DB
+const FALLBACK_SUBJECT = "{{material_title}} — Material exclusivo para {{lead_company}}";
+const FALLBACK_BODY = `
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+  <div style="background: linear-gradient(135deg, #2C3E7D 0%, #1e2d5e 100%); color: white; padding: 32px 28px; border-radius: 8px 8px 0 0; text-align: center;">
+    <h1 style="margin: 0; font-size: 22px; font-weight: 600;">Juripass</h1>
+    <p style="margin: 8px 0 0; opacity: 0.85; font-size: 14px;">Material exclusivo para você</p>
+  </div>
+  <div style="border: 1px solid #e5e7eb; border-top: none; padding: 28px; border-radius: 0 0 8px 8px;">
+    <p style="color: #374151; font-size: 15px; line-height: 1.6;">Olá, <strong>{{lead_name}}</strong>!</p>
+    <p style="color: #374151; font-size: 15px; line-height: 1.6;">Preparamos um material especial para você:</p>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+      <h2 style="margin: 0 0 8px; color: #1e293b; font-size: 18px;">{{material_title}}</h2>
+      <p style="margin: 0; color: #64748b; font-size: 14px;">{{material_description}}</p>
+    </div>
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="{{share_url}}" style="display: inline-block; background: #2C3E7D; color: white; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 15px;">Acessar Material →</a>
+    </div>
+    <p style="color: #9ca3af; font-size: 12px; text-align: center; margin-top: 24px;">Este link é exclusivo e rastreável.</p>
+  </div>
+</div>`;
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { materialId, leadId, shareUrl } = await req.json();
+    const { materialId, leadId, shareUrl, templateId } = await req.json();
 
     if (!materialId || !leadId || !shareUrl) {
       return new Response(
@@ -35,9 +70,15 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const [{ data: material }, { data: lead }] = await Promise.all([
+    // Fetch material, lead, and template in parallel
+    const templateQuery = templateId
+      ? supabase.from("email_templates").select("subject_template, body_template").eq("id", templateId).single()
+      : supabase.from("email_templates").select("subject_template, body_template").eq("is_default", true).limit(1).single();
+
+    const [{ data: material }, { data: lead }, { data: template }] = await Promise.all([
       supabase.from("sales_materials").select("title, description").eq("id", materialId).single(),
       supabase.from("leads").select("name, email, company").eq("id", leadId).single(),
+      templateQuery,
     ]);
 
     if (!material || !lead) {
@@ -55,9 +96,19 @@ Deno.serve(async (req) => {
       );
     }
 
-    const safeName = escapeHtml(lead.name);
-    const safeTitle = escapeHtml(material.title);
-    const safeDesc = escapeHtml(material.description || "");
+    const subjectTemplate = template?.subject_template || FALLBACK_SUBJECT;
+    const bodyTemplate = template?.body_template || FALLBACK_BODY;
+
+    const vars: Record<string, string> = {
+      lead_name: lead.name,
+      lead_company: lead.company,
+      material_title: material.title,
+      material_description: material.description || "",
+      share_url: shareUrl,
+    };
+
+    const subject = replaceTemplateVars(subjectTemplate, vars, true);
+    const html = replaceTemplateVars(bodyTemplate, vars, false);
 
     const emailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -68,35 +119,8 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: "Juripass <noreply@contato.juripass.com.br>",
         to: [lead.email],
-        subject: `${safeTitle} — Material exclusivo para ${escapeHtml(lead.company)}`,
-        html: `
-          <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
-            <div style="background: linear-gradient(135deg, #2C3E7D 0%, #1e2d5e 100%); color: white; padding: 32px 28px; border-radius: 8px 8px 0 0; text-align: center;">
-              <h1 style="margin: 0; font-size: 22px; font-weight: 600;">Juripass</h1>
-              <p style="margin: 8px 0 0; opacity: 0.85; font-size: 14px;">Material exclusivo para você</p>
-            </div>
-            <div style="border: 1px solid #e5e7eb; border-top: none; padding: 28px; border-radius: 0 0 8px 8px;">
-              <p style="color: #374151; font-size: 15px; line-height: 1.6;">
-                Olá, <strong>${safeName}</strong>!
-              </p>
-              <p style="color: #374151; font-size: 15px; line-height: 1.6;">
-                Preparamos um material especial para você:
-              </p>
-              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h2 style="margin: 0 0 8px; color: #1e293b; font-size: 18px;">${safeTitle}</h2>
-                ${safeDesc ? `<p style="margin: 0; color: #64748b; font-size: 14px;">${safeDesc}</p>` : ''}
-              </div>
-              <div style="text-align: center; margin: 28px 0;">
-                <a href="${shareUrl}" style="display: inline-block; background: #2C3E7D; color: white; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 15px;">
-                  Acessar Material →
-                </a>
-              </div>
-              <p style="color: #9ca3af; font-size: 12px; text-align: center; margin-top: 24px;">
-                Este link é exclusivo e rastreável. Caso tenha dúvidas, entre em contato conosco.
-              </p>
-            </div>
-          </div>
-        `,
+        subject,
+        html,
       }),
     });
 

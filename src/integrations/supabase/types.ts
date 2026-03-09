@@ -52,6 +52,36 @@ export type Database = {
           },
         ]
       }
+      email_templates: {
+        Row: {
+          body_template: string
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          subject_template: string
+          updated_at: string
+        }
+        Insert: {
+          body_template: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          subject_template: string
+          updated_at?: string
+        }
+        Update: {
+          body_template?: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          subject_template?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           company: string
