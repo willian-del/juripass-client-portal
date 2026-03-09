@@ -174,7 +174,7 @@ const slides: SlideData[] = [
             { icon: MousePointerClick, title: 'Sob demanda e confidencial', desc: 'O colaborador aciona quando quiser, sem intermediários.' },
             { icon: BadgeCheck, title: 'Sem custo para o colaborador', desc: 'Orientação inicial gratuita, sem burocracia.' },
           ].map((item, i) => (
-            <Card key={i} className="text-center space-y-4">
+            <Card key={i} className="h-full text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
                 <item.icon className="h-7 w-7 text-[#4A9FD8]" />
               </div>
