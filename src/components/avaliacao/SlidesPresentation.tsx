@@ -141,7 +141,7 @@ const slides: SlideData[] = [
             { icon: ShieldAlert, title: 'Risco relacional', desc: 'Ao absorver informalmente questões jurídicas pessoais, o RH assume responsabilidades fora de sua função. O canal externo cria clareza de papéis.' },
             { icon: AlertTriangle, title: 'Risco de escalada', desc: 'Situações sensíveis, quando mal conduzidas, podem evoluir para conflitos formais. A Juripass atua preventivamente.' },
           ].map((item, i) => (
-            <Card key={i}>
+            <Card key={i} className="h-full">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center">
                   <item.icon className="h-6 w-6 text-white" />
