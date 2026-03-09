@@ -1,6 +1,5 @@
 export const BRAND = {
   name: 'Juripass',
-  calendarUrl: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2GyYmhF9M7wyTa-iyORM70ntb_ojyDZ3M9rcr_kGrCnZZV-WZ7FOsl4KH2rTJ4Y4Bn28SgRmV2?gv=true',
   tagline: 'Segurança jurídica na palma da sua mão',
   colors: {
     primary: '#4A9FD8',
@@ -19,7 +18,3 @@ export const BRAND = {
     description: 'Plataforma de suporte jurídico para gestão de pessoas. Solução preventiva e estruturada como política corporativa, em conformidade com a Nova NR-01.'
   }
 } as const;
-
-export function openScheduling() {
-  window.open(BRAND.calendarUrl, '_blank', 'noopener,noreferrer');
-}
