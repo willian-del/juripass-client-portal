@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Factory, ShoppingBag, Headphones, Truck, Shield, Cpu, Calendar, ArrowRight, Scale, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SEOHead } from '@/components/ui/SEOHead';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 const segments = [
   {
