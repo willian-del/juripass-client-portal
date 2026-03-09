@@ -14,16 +14,15 @@ const WELCOME_MESSAGE = {
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
-
-  // Skip rendering during react-snap pre-rendering
-  const isPrerendering = typeof navigator !== 'undefined' && navigator.userAgent?.includes('ReactSnap');
-  if (isPrerendering) return null;
   const [input, setInput] = useState('');
   const { messages, isLoading, error, send, reset } = useChat('qualify');
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const allMessages = [WELCOME_MESSAGE, ...messages];
+
+  // Skip rendering during react-snap pre-rendering
+  const isPrerendering = typeof navigator !== 'undefined' && navigator.userAgent?.includes('ReactSnap');
 
   useEffect(() => {
     if (scrollRef.current) {
