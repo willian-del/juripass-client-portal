@@ -110,10 +110,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
     // Fetch material, lead, and template in parallel
     const templateQuery = templateId
       ? supabase.from("email_templates").select("subject_template, body_template").eq("id", templateId).single()
