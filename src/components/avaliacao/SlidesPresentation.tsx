@@ -318,7 +318,7 @@ const slides: SlideData[] = [
             { icon: Users, text: 'Os dados pertencem ao colaborador' },
             { icon: Scale, text: 'Sigilo profissional e controles de segurança da informação' },
           ].map((item, i) => (
-            <Card key={i}>
+            <Card key={i} className="h-full">
               <div className="flex items-start gap-4">
                 <IconBox icon={item.icon} />
                 <p className="text-white/70 text-sm leading-relaxed pt-1">{item.text}</p>
