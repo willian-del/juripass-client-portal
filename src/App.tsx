@@ -22,6 +22,8 @@ const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossocia
 const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
+const AdminMaterials = lazy(() => import("./pages/admin/AdminMaterials"));
+const MaterialViewer = lazy(() => import("./pages/MaterialViewer"));
 
 const App = () => (
   <TooltipProvider>
