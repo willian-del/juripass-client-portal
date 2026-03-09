@@ -69,6 +69,7 @@ const implantationSteps = [
 ];
 
 const ComoFunciona = () => {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <>
       <SEOHead
