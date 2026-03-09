@@ -282,15 +282,37 @@ export default function AdminMaterials() {
                           </div>
                         </div>
                       </div>
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setSharingMaterial(m);
-                          setShareOpen(true);
-                        }}
-                      >
-                        <Link2 className="h-4 w-4 mr-1" /> Enviar para lead
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={async () => {
+                            if (!m.file_path) {
+                              // Builtin material
+                              const route = m.file_type === 'one-pager'
+                                ? '/avaliacao?view=onepager'
+                                : '/avaliacao';
+                              window.open(route, '_blank');
+                            } else {
+                              const { data } = await supabase.storage
+                                .from('sales-materials')
+                                .createSignedUrl(m.file_path, 3600);
+                              if (data?.signedUrl) window.open(data.signedUrl, '_blank');
+                            }
+                          }}
+                        >
+                          <Eye className="h-4 w-4 mr-1" /> Visualizar
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setSharingMaterial(m);
+                            setShareOpen(true);
+                          }}
+                        >
+                          <Link2 className="h-4 w-4 mr-1" /> Enviar para lead
+                        </Button>
+                      </div>
                     </div>
 
                     {/* Shares for this material */}
