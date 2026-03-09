@@ -1,4 +1,4 @@
-
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 export function JuripassCardVisual() {
   return (
