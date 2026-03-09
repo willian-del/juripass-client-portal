@@ -158,6 +158,36 @@ export function LeadDetailPanel({
             )}
           </Section>
 
+          {materialShares.length > 0 && (
+            <Section title="Materiais enviados">
+              <div className="space-y-2">
+                {materialShares.map((s: any) => {
+                  const views = s.material_views?.length || 0;
+                  const material = s.sales_materials;
+                  return (
+                    <div key={s.id} className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4 text-primary shrink-0" />
+                        <span className="font-medium">{material?.title || '—'}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {views > 0 ? (
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                            <Eye className="h-3 w-3" /> {views}x
+                          </span>
+                        ) : (
+                          <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                            Não abriu
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Section>
+          )}
+
           <Section title="Notas internas">
             <Textarea
               value={notes}

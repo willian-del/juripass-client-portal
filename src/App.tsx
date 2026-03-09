@@ -50,6 +50,8 @@ const App = () => (
             <Route path="/site-anterior" element={<LegacyHome />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
+            <Route path="/admin/materiais" element={<AdminMaterials />} />
+            <Route path="/m/:token" element={<MaterialViewer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
