@@ -75,6 +75,9 @@ export default function AdminLeads() {
             <Button variant="outline" size="sm" onClick={() => navigate('/admin/materiais')}>
               <FileText className="h-4 w-4 mr-1" /> Materiais
             </Button>
+            <Button variant="outline" size="sm" onClick={() => setAiOpen(true)} className="border-primary/30 text-primary hover:bg-primary/5">
+              <Sparkles className="h-4 w-4 mr-1" /> AI Assistant
+            </Button>
           </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-1" /> Sair
