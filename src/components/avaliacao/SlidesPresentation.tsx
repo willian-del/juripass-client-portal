@@ -210,7 +210,7 @@ const slides: SlideData[] = [
             { icon: UserCheck, title: 'Para os Colaboradores', points: ['Orientação sem custo no atendimento inicial', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento', 'Conteúdos educativos preventivos'] },
             { icon: Building2, title: 'Para a Organização', points: ['Redução de passivos trabalhistas', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
           ].map((col, i) => (
-            <Card key={i}>
+             <Card key={i} className="h-full">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center shrink-0">
