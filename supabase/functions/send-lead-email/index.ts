@@ -162,18 +162,18 @@ Deno.serve(async (req) => {
     const leadPriority = insertedLead?.lead_priority ?? "normal";
     const isHot = leadPriority === "hot";
 
-    console.log("New lead received:", { name: escapeHtml(name), email: escapeHtml(email), company: escapeHtml(company), leadScore, leadPriority });
+    console.log("New lead received:", { name: trimmedName, email: trimmedEmail, company: trimmedCompany, leadScore, leadPriority });
 
     // Send notification email via Resend
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (RESEND_API_KEY) {
       try {
-        const safeName = escapeHtml(name);
-        const safeEmail = escapeHtml(email);
-        const safePhone = escapeHtml(phone);
-        const safeCompany = escapeHtml(company);
-        const safeRoleTitle = escapeHtml(role_title || "");
-        const safeMessage = escapeHtml(message || "");
+        const safeName = escapeHtml(trimmedName);
+        const safeEmail = escapeHtml(trimmedEmail);
+        const safePhone = escapeHtml(trimmedPhone);
+        const safeCompany = escapeHtml(trimmedCompany);
+        const safeRoleTitle = escapeHtml(trimmedRoleTitle);
+        const safeMessage = escapeHtml(trimmedMessage);
 
         const subject = isHot
           ? `🔥 LEAD QUENTE: ${safeName} - ${safeCompany} (Score: ${leadScore})`
