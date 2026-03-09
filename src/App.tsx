@@ -20,6 +20,8 @@ const ParaSeuColaborador = lazy(() => import("./pages/ParaSeuColaborador"));
 const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
 const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
 const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
 
 const App = () => (
   <TooltipProvider>
@@ -44,6 +46,8 @@ const App = () => (
               <Route path="/gestao-riscos-humanos-rh" element={<GestaoRiscosHumanos />} />
             </Route>
             <Route path="/site-anterior" element={<LegacyHome />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/leads" element={<AdminLeads />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

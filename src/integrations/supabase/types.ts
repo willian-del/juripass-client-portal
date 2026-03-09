@@ -17,33 +17,84 @@ export type Database = {
       leads: {
         Row: {
           company: string
+          contacted_at: string | null
           created_at: string
+          department: string | null
           email: string
+          employee_count: string | null
+          evaluating_psychosocial: string | null
+          funnel_stage: string | null
+          has_legal_benefit: string | null
           id: string
+          interest: string | null
+          lead_priority: string | null
+          lead_score: number | null
           message: string | null
           name: string
+          notes: string | null
           phone: string
           role_title: string
+          seniority: string | null
         }
         Insert: {
           company: string
+          contacted_at?: string | null
           created_at?: string
+          department?: string | null
           email: string
+          employee_count?: string | null
+          evaluating_psychosocial?: string | null
+          funnel_stage?: string | null
+          has_legal_benefit?: string | null
           id?: string
+          interest?: string | null
+          lead_priority?: string | null
+          lead_score?: number | null
           message?: string | null
           name: string
+          notes?: string | null
           phone: string
           role_title: string
+          seniority?: string | null
         }
         Update: {
           company?: string
+          contacted_at?: string | null
           created_at?: string
+          department?: string | null
           email?: string
+          employee_count?: string | null
+          evaluating_psychosocial?: string | null
+          funnel_stage?: string | null
+          has_legal_benefit?: string | null
           id?: string
+          interest?: string | null
+          lead_priority?: string | null
+          lead_score?: number | null
           message?: string | null
           name?: string
+          notes?: string | null
           phone?: string
           role_title?: string
+          seniority?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
         }
         Relationships: []
       }
@@ -52,10 +103,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -182,6 +239,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
