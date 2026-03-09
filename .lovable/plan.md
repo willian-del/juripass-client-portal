@@ -1,83 +1,83 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+# Repositório de Materiais Comerciais
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+## O que será construído
 
-## Solucao
+Um sistema de gestão de materiais comerciais dentro do admin (`/admin/materiais`), onde o admin pode fazer upload de arquivos (PDFs, apresentações) e gerar links rastreáveis para enviar a prospects. Cada acesso do prospect é registrado e visível no CRM.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
-
----
-
-## Alteracoes
-
-### 1. Criar `src/layouts/MainLayout.tsx`
-
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+## Arquitetura
 
 ```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+┌─────────────────┐     ┌──────────────┐     ┌──────────────────┐
+│  Admin Upload    │────▶│  Storage     │     │  sales_materials │
+│  /admin/materiais│     │  (bucket)    │     │  (metadata)      │
+└─────────────────┘     └──────────────┘     └──────────────────┘
+                                                      │
+                              ┌────────────────────────┤
+                              ▼                        ▼
+                     ┌─────────────────┐    ┌────────────────────┐
+                     │ material_shares │    │  material_views    │
+                     │ (link por lead) │    │  (cada acesso)     │
+                     └─────────────────┘    └────────────────────┘
+                              │
+                              ▼
+                     ┌─────────────────┐
+                     │  /m/:token      │  ← Página pública que
+                     │  (view page)    │    registra o acesso
+                     └─────────────────┘
 ```
 
-### 2. Atualizar `src/App.tsx`
+## Etapas
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+### 1. Banco de dados (migration)
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+**Tabela `sales_materials`** -- catálogo de materiais:
+- `id`, `title`, `description`, `file_path` (referência no storage), `file_type`, `created_at`, `created_by`
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+**Tabela `material_shares`** -- link único por lead:
+- `id`, `material_id` (FK), `lead_id` (FK), `token` (uuid único, usado na URL), `sent_at`, `created_by`
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+**Tabela `material_views`** -- tracking de acessos:
+- `id`, `share_id` (FK), `viewed_at`, `ip_address`, `user_agent`
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
+**Storage bucket** `sales-materials` (privado, acesso via signed URLs).
 
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+**RLS**: Admins fazem CRUD; público pode SELECT em `material_shares` por token (para a página de visualização).
 
-### 4. Garantir scroll to top na navegacao
+### 2. Edge Function `serve-material`
 
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+Recebe o `token`, registra o acesso em `material_views`, gera uma signed URL temporária (1h) do arquivo no storage e redireciona o prospect para o PDF/arquivo.
 
----
+### 3. Página pública `/m/:token`
 
-## Resultado esperado
+Rota pública no React que chama a edge function e exibe o material (ou redireciona para o signed URL). Mostra branding Juripass.
 
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
+### 4. Admin: Página de Materiais (`/admin/materiais`)
 
-## Arquivos
+- Lista de materiais com upload de novos arquivos
+- Para cada material: nome, tipo, data de upload
+- Botão "Enviar para lead" que abre um seletor de leads e cria um `material_share` com token único
+- Copia o link rastreável para a área de transferência
 
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+### 5. Integração no CRM (LeadDetailPanel)
 
-Nenhuma dependencia nova.
+- Nova seção "Materiais enviados" no painel de detalhes do lead
+- Lista os materiais compartilhados com aquele lead
+- Para cada um: nome do material, data de envio, quantidade de visualizações, última visualização
+- Indicador visual (badge verde "Visualizado" / cinza "Não abriu")
+
+### 6. Conteúdos iniciais
+
+Dois materiais pré-cadastrados via dados iniciais:
+- **Apresentação Comercial** -- o conteúdo já existe em `SlidesPresentation.tsx`, será exportado como PDF ou renderizado na página de visualização
+- **One Pager** -- o conteúdo já existe em `OnePager.tsx`, mesma abordagem
+
+## Detalhes técnicos
+
+- Storage bucket criado via migration SQL
+- Signed URLs geradas no edge function usando `supabase.storage.from('sales-materials').createSignedUrl()`
+- Token é um UUID v4 gerado no insert do `material_shares`
+- `material_views` não tem RLS restritivo no INSERT (a edge function usa service role)
+- Frontend usa `supabase.functions.invoke('serve-material', { body: { token } })` ou acesso direto via URL
+
