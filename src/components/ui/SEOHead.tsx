@@ -13,10 +13,12 @@ interface SEOHeadProps {
 
 const BASE_URL = 'https://www.juripass.com.br';
 
-export function SEOHead({ title, description, canonical, ogImage, jsonLd }: SEOHeadProps) {
+export function SEOHead({ title, description, canonical, ogImage, jsonLd, noindex, keywords }: SEOHeadProps) {
   const { pathname } = useLocation();
   const url = canonical || `${BASE_URL}${pathname}`;
   const image = ogImage || `${BASE_URL}/images/branding/juripass-logo-card.png`;
+  const defaultKeywords = 'plataforma suporte jurídico RH, gestão de riscos psicossociais, Nova NR-01, política corporativa preventiva, gestão de pessoas, suporte jurídico colaboradores, compliance NR-01, juripass';
+  const finalKeywords = keywords || defaultKeywords;
 
   useEffect(() => {
     document.title = title;
