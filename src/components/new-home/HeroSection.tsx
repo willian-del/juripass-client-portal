@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLeadForm } from '@/contexts/LeadFormContext';
 
 export function HeroSection() {
+  const { open: openLeadForm } = useLeadForm();
   return (
     <section id="hero" aria-labelledby="hero-title" className="relative py-16 md:py-28 overflow-hidden">
       {/* Decorative radial gradient */}
