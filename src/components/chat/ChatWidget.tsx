@@ -63,7 +63,7 @@ export function ChatWidget() {
         {/* Header */}
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse" />
+            <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-sm font-semibold">Juripass AI</span>
           </div>
           <div className="flex items-center gap-1">
