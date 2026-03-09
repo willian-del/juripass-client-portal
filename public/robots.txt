@@ -15,4 +15,7 @@ Allow: /
 Disallow: /site-anterior
 Disallow: /avaliacao
 
+# Improved crawling
+Crawl-delay: 1
+
 Sitemap: https://www.juripass.com.br/sitemap.xml

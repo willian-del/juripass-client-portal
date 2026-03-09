@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { LogoJuripass } from "@/components/ui/LogoJuripass";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
+import { SEOHead } from "@/components/ui/SEOHead";
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,28 +14,35 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-primary">
-      <div className="text-center space-y-8 p-8">
-        <LogoJuripass variant="full" size="xl" color="white" format="png" />
-        
-        <div className="space-y-4">
-          <h1 className="text-8xl font-bold text-white">404</h1>
-          <p className="text-2xl text-white/90 font-medium">Página não encontrada</p>
-          <p className="text-white/70 max-w-md mx-auto">
-            A página que você está procurando não existe ou foi movida.
-          </p>
-        </div>
+    <>
+      <SEOHead
+        title="Página não encontrada - 404 | Juripass"
+        description="A página que você está procurando não foi encontrada. Volte para a página inicial do Juripass para acessar nossa plataforma de suporte jurídico para RH."
+        noindex={true}
+      />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-primary">
+        <div className="text-center space-y-8 p-8">
+          <LogoJuripass variant="full" size="xl" color="white" format="png" />
+          
+          <div className="space-y-4">
+            <h1 className="text-8xl font-bold text-white">404</h1>
+            <p className="text-2xl text-white/90 font-medium">Página não encontrada</p>
+            <p className="text-white/70 max-w-md mx-auto">
+              A página que você está procurando não existe ou foi movida.
+            </p>
+          </div>
 
-        <Button 
-          onClick={() => navigate('/dashboard')}
-          size="lg"
-          className="bg-white text-juripass-primary hover:bg-white/90 shadow-primary"
-        >
-          <Home className="mr-2 h-5 w-5" />
-          Voltar para o Início
-        </Button>
+          <Button 
+            onClick={() => navigate('/')}
+            size="lg"
+            className="bg-white text-juripass-primary hover:bg-white/90 shadow-primary"
+          >
+            <Home className="mr-2 h-5 w-5" />
+            Voltar para o Início
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

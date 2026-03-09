@@ -7,14 +7,18 @@ interface SEOHeadProps {
   canonical?: string;
   ogImage?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+  keywords?: string;
 }
 
 const BASE_URL = 'https://www.juripass.com.br';
 
-export function SEOHead({ title, description, canonical, ogImage, jsonLd }: SEOHeadProps) {
+export function SEOHead({ title, description, canonical, ogImage, jsonLd, noindex, keywords }: SEOHeadProps) {
   const { pathname } = useLocation();
   const url = canonical || `${BASE_URL}${pathname}`;
   const image = ogImage || `${BASE_URL}/images/branding/juripass-logo-card.png`;
+  const defaultKeywords = 'plataforma suporte jurídico RH, gestão de riscos psicossociais, Nova NR-01, política corporativa preventiva, gestão de pessoas, suporte jurídico colaboradores, compliance NR-01, juripass';
+  const finalKeywords = keywords || defaultKeywords;
 
   useEffect(() => {
     document.title = title;
@@ -30,16 +34,27 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd }: SEOH
     };
 
     setMeta('name', 'description', description);
+    setMeta('name', 'keywords', finalKeywords);
+    setMeta('name', 'author', 'Juripass');
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:url', url);
     setMeta('property', 'og:image', image);
+    setMeta('property', 'og:image:width', '1200');
+    setMeta('property', 'og:image:height', '630');
     setMeta('property', 'og:type', 'website');
     setMeta('property', 'og:site_name', 'Juripass');
+    setMeta('property', 'og:locale', 'pt_BR');
     setMeta('name', 'twitter:card', 'summary_large_image');
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
     setMeta('name', 'twitter:image', image);
+    
+    if (noindex) {
+      setMeta('name', 'robots', 'noindex, nofollow');
+    } else {
+      setMeta('name', 'robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    }
 
     // Canonical
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -69,7 +84,7 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd }: SEOH
       const scripts = document.querySelectorAll('script[data-seo-jsonld]');
       scripts.forEach((s) => s.remove());
     };
-  }, [title, description, url, image, jsonLd]);
+  }, [title, description, url, image, jsonLd, noindex, finalKeywords]);
 
   return null;
 }
