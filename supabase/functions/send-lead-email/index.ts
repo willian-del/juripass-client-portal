@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
     const { data: recentLeads } = await supabase
       .from("leads")
       .select("id")
-      .eq("email", email)
+      .eq("email", trimmedEmail)
       .gte("created_at", fiveMinutesAgo)
       .limit(1);
 
@@ -136,18 +136,18 @@ Deno.serve(async (req) => {
 
     // Save lead to database (scoring trigger will calculate lead_score and lead_priority)
     const { data: insertedLead, error: insertError } = await supabase.from("leads").insert({
-      name,
-      email,
-      phone,
-      company,
-      role_title: role_title || "",
-      message: message || "",
-      employee_count: employee_count || null,
-      department: department || null,
-      seniority: seniority || null,
-      interest: interest || null,
-      evaluating_psychosocial: evaluating_psychosocial || null,
-      has_legal_benefit: has_legal_benefit || null,
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: trimmedPhone,
+      company: trimmedCompany,
+      role_title: trimmedRoleTitle,
+      message: trimmedMessage,
+      employee_count: validatedEmployeeCount,
+      department: validatedDepartment,
+      seniority: validatedSeniority,
+      interest: validatedInterest,
+      evaluating_psychosocial: validatedPsychosocial,
+      has_legal_benefit: validatedLegalBenefit,
     }).select("lead_score, lead_priority").single();
 
     if (insertError) {
