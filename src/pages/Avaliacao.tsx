@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLeadForm } from '@/contexts/LeadFormContext';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import {
   Accordion,
