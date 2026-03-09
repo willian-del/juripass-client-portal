@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { openScheduling } from '@/lib/constants';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 
 export function HeroSection() {
   return (
