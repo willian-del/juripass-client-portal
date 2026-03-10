@@ -63,13 +63,13 @@ const slides: SlideData[] = [
         />
         <div className="space-y-5">
           <h1 className="text-3xl md:text-5xl font-bold leading-tight">
-            Plataforma de Suporte Jurídico{' '}
-            <span className="text-[#4A9FD8]">para Gestão de Pessoas</span>
+            Plataforma de prevenção e monitoramento{' '}
+            <span className="text-[#4A9FD8]">de riscos humanos</span>
           </h1>
           <div className="w-24 h-1 bg-[#4A9FD8] mx-auto rounded-full" />
           <p className="text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto">
-            Gestão preventiva para o RH — um canal jurídico externo e confidencial 
-            para acolher questões pessoais sensíveis dos colaboradores.
+            Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais 
+            sensíveis dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade.
           </p>
         </div>
       </div>
