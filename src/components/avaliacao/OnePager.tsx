@@ -38,7 +38,7 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
             className="h-10 object-contain"
           />
           <div className="text-right">
-            <p className="text-white/60 text-sm">Programa de Acolhimento e Orientação Jurídica</p>
+            <p className="text-white/60 text-sm">Plataforma de prevenção e monitoramento de riscos humanos</p>
           </div>
         </div>
 
@@ -48,13 +48,13 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
           <section className="space-y-2">
             <SectionTitle number="1">Sobre a Juripass</SectionTitle>
             <p className="text-sm leading-relaxed text-gray-600">
-              A Juripass é uma plataforma de gestão preventiva para o RH que estrutura, como política corporativa, 
-              um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores. 
-              Antes que impactem o clima, a produtividade ou evoluam para conflitos internos.
+              A Juripass é uma plataforma de prevenção e monitoramento de riscos humanos para o RH. 
+              Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais sensíveis 
+              dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade.
             </p>
             <p className="text-sm leading-relaxed text-gray-600">
-              O programa tem como objetivo reduzir preocupações extra laborais que impactam diretamente o desempenho, 
-              a concentração e o bem-estar do colaborador.
+              Os atendimentos geram indicadores agregados que ajudam o RH a identificar padrões de vulnerabilidade 
+              e antecipar fatores de risco psicossocial na organização.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               {['Finanças', 'Família', 'Moradia', 'Consumo', 'Saúde'].map((t) => (
@@ -97,7 +97,7 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
                     'Menor impacto emocional no ambiente de trabalho',
                     'Fortalecimento do employer branding',
                     'Aderência a políticas de bem-estar e NR-01',
-                    'Estatísticas de uso e mapa de risco psicossocial',
+                    'Indicadores agregados de riscos humanos e psicossociais',
                   ].map((t) => (
                     <li key={t} className="flex items-start gap-1.5">
                       <span className="w-1 h-1 rounded-full bg-[#4A9FD8] mt-1.5 shrink-0" />{t}
@@ -175,8 +175,8 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
           {/* 7. Encerramento */}
           <section className="space-y-2">
             <p className="text-sm leading-relaxed text-gray-600">
-              Ao oferecer orientação preventiva e acesso facilitado à informação jurídica, a empresa amplia sua política de cuidado 
-              com o colaborador, reduz fatores pessoais que impactam produtividade e fortalece o ambiente organizacional.
+              Com prevenção e monitoramento de riscos humanos, a empresa amplia sua política de cuidado 
+              com o colaborador, antecipa fatores que impactam produtividade e fortalece o ambiente organizacional.
             </p>
             <p className="text-xs text-gray-400">
               Permanecemos à disposição para esclarecimentos e eventuais adequações necessárias.

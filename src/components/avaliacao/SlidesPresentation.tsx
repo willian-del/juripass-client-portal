@@ -63,13 +63,13 @@ const slides: SlideData[] = [
         />
         <div className="space-y-5">
           <h1 className="text-3xl md:text-5xl font-bold leading-tight">
-            Plataforma de Suporte Jurídico{' '}
-            <span className="text-[#4A9FD8]">para Gestão de Pessoas</span>
+            Plataforma de prevenção e monitoramento{' '}
+            <span className="text-[#4A9FD8]">de riscos humanos</span>
           </h1>
           <div className="w-24 h-1 bg-[#4A9FD8] mx-auto rounded-full" />
           <p className="text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto">
-            Gestão preventiva para o RH — um canal jurídico externo e confidencial 
-            para acolher questões pessoais sensíveis dos colaboradores.
+            Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais 
+            sensíveis dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade.
           </p>
         </div>
       </div>
@@ -162,17 +162,18 @@ const slides: SlideData[] = [
       <div className="max-w-4xl w-full space-y-8">
         <div className="space-y-3">
           <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">A solução</p>
-          <h2 className="text-3xl md:text-4xl font-bold">O que é a Juripass</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Como a Juripass ajuda o RH a prevenir riscos humanos?</h2>
           <p className="text-lg text-white/60 leading-relaxed">
-            Um canal externo de orientação jurídica que o colaborador acessa de forma autônoma. 
-            A empresa contrata e o colaborador usa quando precisar, com sigilo total.
+            Estruturamos, como política corporativa, um canal jurídico externo e confidencial para acolher 
+            questões pessoais sensíveis dos colaboradores. Os atendimentos geram indicadores agregados que 
+            ajudam o RH a identificar padrões de vulnerabilidade e antecipar fatores de risco psicossocial.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-5">
           {[
-            { icon: Unplug, title: 'Canal externo e independente', desc: 'Sem vínculo com a empresa, sem conflito de interesse.' },
-            { icon: MousePointerClick, title: 'Sob demanda e confidencial', desc: 'O colaborador aciona quando quiser, sem intermediários.' },
-            { icon: BadgeCheck, title: 'Sem custo para o colaborador', desc: 'Orientação inicial gratuita, sem burocracia.' },
+            { icon: Unplug, title: 'Canal externo e independente', desc: 'Sem vínculo com a empresa, sem conflito de interesse. Sigilo total.' },
+            { icon: Heart, title: 'Acolhimento de questões pessoais', desc: 'Triagem, orientação e encaminhamento de demandas sensíveis dos colaboradores.' },
+            { icon: Brain, title: 'Inteligência preventiva para o RH', desc: 'Indicadores agregados e anonimizados que antecipam riscos psicossociais.' },
           ].map((item, i) => (
             <Card key={i} className="h-full text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
@@ -208,7 +209,7 @@ const slides: SlideData[] = [
             { icon: ShieldCheck, title: 'Para o RH', points: ['Menos relatos delicados no dia a dia', 'Apoio à gestão de pessoas e mediação inicial', 'Foco nas demandas estratégicas', 'Fortalecimento do employer branding'] },
             { icon: Users, title: 'Para os Gestores', points: ['Deixam de mediar problemas pessoais', 'Menos desgaste emocional', 'Relação profissional preservada', 'Aderência à prevenção de riscos psicossociais (NR-1)'] },
             { icon: UserCheck, title: 'Para os Colaboradores', points: ['Orientação sem custo no atendimento inicial', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento', 'Conteúdos educativos preventivos'] },
-            { icon: Building2, title: 'Para a Organização', points: ['Redução de passivos trabalhistas', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
+            { icon: Building2, title: 'Para a Organização', points: ['Indicadores agregados de riscos humanos e psicossociais', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
           ].map((col, i) => (
              <Card key={i} className="h-full">
               <div className="space-y-4">
@@ -416,7 +417,7 @@ const slides: SlideData[] = [
         />
         <div className="space-y-3">
           <h2 className="text-3xl md:text-4xl font-bold">
-            Ao oferecer orientação preventiva, a empresa amplia sua política de cuidado com o colaborador
+            Com prevenção e monitoramento de riscos humanos, a empresa amplia sua política de cuidado com o colaborador
           </h2>
           <p className="text-white/60 text-lg">
             Permanecemos à disposição para esclarecimentos e eventuais adequações.
