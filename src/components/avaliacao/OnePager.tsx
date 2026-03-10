@@ -48,13 +48,13 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
           <section className="space-y-2">
             <SectionTitle number="1">Sobre a Juripass</SectionTitle>
             <p className="text-sm leading-relaxed text-gray-600">
-              A Juripass é uma plataforma de gestão preventiva para o RH que estrutura, como política corporativa, 
-              um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores. 
-              Antes que impactem o clima, a produtividade ou evoluam para conflitos internos.
+              A Juripass é uma plataforma de prevenção e monitoramento de riscos humanos para o RH. 
+              Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais sensíveis 
+              dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade.
             </p>
             <p className="text-sm leading-relaxed text-gray-600">
-              O programa tem como objetivo reduzir preocupações extra laborais que impactam diretamente o desempenho, 
-              a concentração e o bem-estar do colaborador.
+              Os atendimentos geram indicadores agregados que ajudam o RH a identificar padrões de vulnerabilidade 
+              e antecipar fatores de risco psicossocial na organização.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               {['Finanças', 'Família', 'Moradia', 'Consumo', 'Saúde'].map((t) => (
