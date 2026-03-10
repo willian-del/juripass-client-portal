@@ -417,7 +417,7 @@ const slides: SlideData[] = [
         />
         <div className="space-y-3">
           <h2 className="text-3xl md:text-4xl font-bold">
-            Ao oferecer orientação preventiva, a empresa amplia sua política de cuidado com o colaborador
+            Com prevenção e monitoramento de riscos humanos, a empresa amplia sua política de cuidado com o colaborador
           </h2>
           <p className="text-white/60 text-lg">
             Permanecemos à disposição para esclarecimentos e eventuais adequações.

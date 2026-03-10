@@ -175,8 +175,8 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
           {/* 7. Encerramento */}
           <section className="space-y-2">
             <p className="text-sm leading-relaxed text-gray-600">
-              Ao oferecer orientação preventiva e acesso facilitado à informação jurídica, a empresa amplia sua política de cuidado 
-              com o colaborador, reduz fatores pessoais que impactam produtividade e fortalece o ambiente organizacional.
+              Com prevenção e monitoramento de riscos humanos, a empresa amplia sua política de cuidado 
+              com o colaborador, antecipa fatores que impactam produtividade e fortalece o ambiente organizacional.
             </p>
             <p className="text-xs text-gray-400">
               Permanecemos à disposição para esclarecimentos e eventuais adequações necessárias.
