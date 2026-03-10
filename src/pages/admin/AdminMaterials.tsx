@@ -311,6 +311,8 @@ export default function AdminMaterials() {
     if (!m.file_path) {
       if (m.file_type === 'one-pager') {
         setPreviewType('onepager');
+      } else if (m.file_type === 'posters') {
+        setPreviewType('posters');
       } else {
         setPreviewType('slides');
       }
