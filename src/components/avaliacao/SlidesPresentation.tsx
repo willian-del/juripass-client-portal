@@ -121,7 +121,7 @@ const slides: SlideData[] = [
           ))}
         </div>
         <p className="text-white/50 text-center text-sm">
-          Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles deveria assumir esse papel.
+          Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles foi estruturado para assumir esse papel.
         </p>
       </div>
     ),
