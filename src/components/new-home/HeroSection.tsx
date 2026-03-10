@@ -16,13 +16,14 @@ export function HeroSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h1 id="hero-title" className="text-4xl md:text-6xl font-bold tracking-tight leading-tight text-foreground">
-            Plataforma de Suporte Jurídico{' '}
-            <span className="text-primary">para Gestão de Pessoas</span>
+            Plataforma de prevenção e monitoramento{' '}
+            <span className="text-primary">de riscos humanos</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-[680px] mx-auto">A Juripass é uma plataforma de gestão preventiva para o RH que estrutura, como política corporativa, um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores. Antes que impactem o clima, a produtividade ou evoluam para conflitos internos.
-
-
-
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-[680px] mx-auto">
+            A Juripass é uma plataforma de prevenção e monitoramento de riscos humanos para o RH. Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade.
+          </p>
+          <p className="text-base md:text-lg text-muted-foreground/80 leading-relaxed max-w-[640px] mx-auto">
+            Os atendimentos geram indicadores agregados que ajudam o RH a identificar padrões de vulnerabilidade e antecipar fatores de risco psicossocial na organização.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
             <Button size="lg" className="gap-2 text-base px-8 shadow-primary" onClick={openLeadForm}>
