@@ -4,18 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChatMessage } from './ChatMessage';
 import { useChat } from './useChat';
+import { useLeadForm } from '@/contexts/LeadFormContext';
 import { cn } from '@/lib/utils';
 
 const WELCOME_MESSAGE = {
   role: 'assistant' as const,
   content:
-    'Olá! 👋 Sou a assistente virtual da **Juripass**. Posso ajudar com informações sobre nossa plataforma de suporte jurídico corporativo, conformidade com a NR-01 e muito mais.\n\nComo posso ajudar você hoje?',
+    'Olá! 👋 Sou a assistente da Juripass.\n\nAjudamos empresas a estruturar o acolhimento de questões pessoais dos colaboradores e apoiar o RH na gestão de riscos psicossociais.\n\nVocê trabalha com RH ou gestão de pessoas?',
 };
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
-  const { messages, isLoading, error, send, reset } = useChat('qualify');
+  const { messages, isLoading, error, send, reset, setOnAction } = useChat('qualify');
+  const { open: openLeadForm } = useLeadForm();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,6 +25,20 @@ export function ChatWidget() {
 
   // Skip rendering during react-snap pre-rendering
   const isPrerendering = typeof navigator !== 'undefined' && navigator.userAgent?.includes('ReactSnap');
+
+  // Handle actions from AI agent
+  useEffect(() => {
+    setOnAction((action) => {
+      if (action.type === 'open_lead_form') {
+        openLeadForm();
+      }
+      if (action.type === 'send_material' && action.material) {
+        // Material info is handled inline by the agent's text response
+        // Could open a viewer in the future
+        console.log('Material requested:', action.material);
+      }
+    });
+  }, [setOnAction, openLeadForm]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -84,7 +100,9 @@ export function ChatWidget() {
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
           {allMessages.map((msg, i) => (
-            <ChatMessage key={i} message={msg} />
+            <ChatMessage key={i} message={msg} onAction={(actionType) => {
+              if (actionType === 'agendar') openLeadForm();
+            }} />
           ))}
           {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
             <div className="flex justify-start">

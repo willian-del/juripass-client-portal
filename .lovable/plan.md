@@ -1,58 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Reescrever o Agente de Qualificação (prompt + fluxo + CTA)
+## Problema
 
-O agente atual é prolixo, repete informações, trava no fluxo e coleta dados manualmente em vez de usar o formulário. As mudanças são em 3 frentes: **system prompt**, **tool calling** (novo tool para abrir CTA), e **ChatWidget** (renderizar botão de CTA inline).
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
----
+## Solucao
 
-### 1. Reescrever o `QUALIFY_SYSTEM_PROMPT` (edge function)
-
-Substituir o prompt atual (~70 linhas) por um prompt mais curto, conversacional e orientado a conversão. Pontos-chave:
-
-- **Formato WhatsApp**: máx. 3 frases curtas por resposta, 1 pergunta por vez
-- **Explicação única**: descrever a Juripass no máx. 1 vez na conversa
-- **Fluxo de qualificação**: (1) boas-vindas curta → (2) identificar perfil (RH? quantos colab?) → (3) qualificar interesse → (4) CTA ou material
-- **Lead quente → CTA**: quando o lead demonstrar interesse ("quero valores", "quero agendar"), usar a tool `open_lead_form` em vez de coletar dados manualmente
-- **Lead quente → Material**: quando solicitado, usar tool `send_material` para enviar apresentação/one-pager
-- **Empatia natural**: evitar jargões de marketing, linguagem direta e humana
-- **Sem repetição**: NR-01, impacto, produtividade etc. mencionados no máx. 1 vez
-- **Fallback**: se não souber, dizer "Boa pergunta. Nosso time pode explicar melhor em uma conversa rápida."
-- **Proibido**: buscar info na web, emitir opiniões, inventar dados, mencionar concorrentes
-- **Base de conhecimento**: apenas conteúdo oficial Juripass
-- **Atualizar posicionamento**: "Plataforma de prevenção e monitoramento de riscos humanos" (alinhado com home)
-
-### 2. Adicionar tool `open_lead_form` (edge function)
-
-Nova tool definition que o modelo pode chamar quando o lead estiver pronto para agendar/preencher formulário. O edge function detecta essa tool call e envia um evento SSE especial `{ action: "open_lead_form" }` para o frontend.
-
-### 3. Adicionar tool `send_material` (edge function)
-
-Nova tool que o modelo chama quando o lead pede material. Parâmetros: `type` (apresentacao | one_pager), `email` (opcional). O edge function:
-- Cria um share link via tabela `material_shares`
-- Retorna o link ao modelo para incluir na resposta
-
-### 4. Atualizar `ChatWidget.tsx` — renderizar ação de CTA
-
-- Importar `useLeadForm` do contexto
-- No stream parser (`useChat.ts`), detectar eventos `{ action: "open_lead_form" }` e emitir callback
-- No `ChatWidget`, quando o evento chegar, abrir automaticamente o `LeadFormDialog`
-- Renderizar botões inline nas mensagens do assistente (quando a mensagem contiver `[AGENDAR]` ou similar, renderizar como botão)
-
-### 5. Atualizar mensagem de boas-vindas
-
-Trocar a welcome message atual (longa e genérica) por:
-
-> "Olá! 👋 Sou a assistente da Juripass.\n\nAjudamos empresas a estruturar o acolhimento de questões pessoais dos colaboradores e apoiar o RH na gestão de riscos psicossociais.\n\nVocê trabalha com RH ou gestão de pessoas?"
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
 ---
 
-### Resumo de arquivos
+## Alteracoes
 
-| Arquivo | Mudança |
-|---------|---------|
-| `supabase/functions/ai-commercial/index.ts` | Reescrever `QUALIFY_SYSTEM_PROMPT`, adicionar tools `open_lead_form` e `send_material`, processar novas tool calls |
-| `src/components/chat/useChat.ts` | Detectar eventos de ação (`open_lead_form`) e expor callback |
-| `src/components/chat/ChatWidget.tsx` | Importar `useLeadForm`, conectar callback para abrir formulário, atualizar welcome message |
-| `src/components/chat/ChatMessage.tsx` | Renderizar botões de ação inline (agendar, material) |
+### 1. Criar `src/layouts/MainLayout.tsx`
 
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

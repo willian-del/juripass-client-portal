@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 
 export type ChatMessage = { role: 'user' | 'assistant'; content: string };
+export type ChatAction = { type: 'open_lead_form' } | { type: 'send_material'; material: any };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-commercial`;
 
@@ -21,6 +22,7 @@ async function streamChat({
   sessionId,
   authToken,
   onDelta,
+  onAction,
   onDone,
   onError,
   signal,
@@ -31,6 +33,7 @@ async function streamChat({
   sessionId: string;
   authToken?: string;
   onDelta: (text: string) => void;
+  onAction: (action: ChatAction) => void;
   onDone: () => void;
   onError: (msg: string) => void;
   signal?: AbortSignal;
@@ -79,12 +82,20 @@ async function streamChat({
         if (jsonStr === '[DONE]') continue;
         try {
           const parsed = JSON.parse(jsonStr);
+          // Handle action events from tool calls
+          if (parsed.action === 'open_lead_form') {
+            onAction({ type: 'open_lead_form' });
+            continue;
+          }
+          if (parsed.action === 'send_material') {
+            onAction({ type: 'send_material', material: parsed.material });
+            continue;
+          }
           // Skip tool_result events
           if (parsed.tool_result) continue;
           const content = parsed.choices?.[0]?.delta?.content;
           if (content) onDelta(content);
         } catch {
-          // partial JSON, put back
           buffer = line + '\n' + buffer;
           break;
         }
@@ -101,6 +112,14 @@ async function streamChat({
         if (jsonStr === '[DONE]') continue;
         try {
           const parsed = JSON.parse(jsonStr);
+          if (parsed.action === 'open_lead_form') {
+            onAction({ type: 'open_lead_form' });
+            continue;
+          }
+          if (parsed.action === 'send_material') {
+            onAction({ type: 'send_material', material: parsed.material });
+            continue;
+          }
           if (parsed.tool_result) continue;
           const content = parsed.choices?.[0]?.delta?.content;
           if (content) onDelta(content);
@@ -117,6 +136,11 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const onActionRef = useRef<((action: ChatAction) => void) | null>(null);
+
+  const setOnAction = useCallback((cb: (action: ChatAction) => void) => {
+    onActionRef.current = cb;
+  }, []);
 
   const send = useCallback(
     async (input: string, opts?: { leadContext?: any; authToken?: string }) => {
@@ -148,6 +172,7 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
           sessionId: getSessionId(),
           authToken: opts?.authToken,
           onDelta: upsertAssistant,
+          onAction: (action) => onActionRef.current?.(action),
           onDone: () => setIsLoading(false),
           onError: (msg) => {
             setError(msg);
@@ -172,5 +197,5 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
     setError(null);
   }, []);
 
-  return { messages, isLoading, error, send, reset };
+  return { messages, isLoading, error, send, reset, setOnAction };
 }
