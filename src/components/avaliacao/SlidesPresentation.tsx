@@ -91,9 +91,9 @@ const slides: SlideData[] = [
         <div className="flex flex-col md:flex-row items-center gap-3 md:gap-0 py-4">
           {[
             { icon: UserCheck, label: 'Colaborador', sub: 'com problema pessoal', danger: false },
-            { icon: Users, label: 'Gestor', sub: 'Atua como conselheiro informal', danger: false },
-            { icon: Building2, label: 'RH', sub: 'Recebe relatos fora do seu escopo', danger: false },
-            { icon: AlertTriangle, label: 'Desgaste', sub: 'Impacto em clima e operação', danger: true },
+            { icon: Users, label: 'Gestor', sub: 'Gestores atuam como conselheiros informais', danger: false },
+            { icon: Building2, label: 'RH', sub: 'O RH recebe relatos delicados fora do seu escopo', danger: false },
+            { icon: AlertTriangle, label: 'Desgaste', sub: 'Questões pessoais começam a afetar clima e operação', danger: true },
           ].map((step, i) => (
             <div key={step.label} className="flex flex-col md:flex-row items-center">
               {i > 0 && (
@@ -121,7 +121,7 @@ const slides: SlideData[] = [
           ))}
         </div>
         <p className="text-white/50 text-center text-sm">
-          Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles deveria assumir esse papel.
+          Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles foi estruturado para assumir esse papel.
         </p>
       </div>
     ),
@@ -184,14 +184,6 @@ const slides: SlideData[] = [
             </Card>
           ))}
         </div>
-        <div className="space-y-2 pt-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#4A9FD8]">Temas frequentemente atendidos</p>
-          <div className="flex flex-wrap gap-2 justify-center">
-            {['Finanças', 'Família', 'Moradia', 'Consumo', 'Saúde'].map((t) => (
-              <ThemeBadge key={t} label={t} />
-            ))}
-          </div>
-        </div>
       </div>
     ),
   },
@@ -250,7 +242,7 @@ const slides: SlideData[] = [
             { step: '3', title: 'Situação é encaminhada adequadamente', desc: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.' },
           ].map((s, i) => (
             <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-4">
-               <Card className="h-full flex-1 w-full text-center space-y-3">
+               <Card className="h-full flex-1 w-full text-center space-y-3 min-h-[220px] flex flex-col items-center justify-center">
                 <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
                   {s.step}
                 </div>
