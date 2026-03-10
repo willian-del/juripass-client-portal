@@ -162,17 +162,18 @@ const slides: SlideData[] = [
       <div className="max-w-4xl w-full space-y-8">
         <div className="space-y-3">
           <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">A solução</p>
-          <h2 className="text-3xl md:text-4xl font-bold">O que é a Juripass</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Como a Juripass ajuda o RH a prevenir riscos humanos?</h2>
           <p className="text-lg text-white/60 leading-relaxed">
-            Um canal externo de orientação jurídica que o colaborador acessa de forma autônoma. 
-            A empresa contrata e o colaborador usa quando precisar, com sigilo total.
+            Estruturamos, como política corporativa, um canal jurídico externo e confidencial para acolher 
+            questões pessoais sensíveis dos colaboradores. Os atendimentos geram indicadores agregados que 
+            ajudam o RH a identificar padrões de vulnerabilidade e antecipar fatores de risco psicossocial.
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-5">
           {[
-            { icon: Unplug, title: 'Canal externo e independente', desc: 'Sem vínculo com a empresa, sem conflito de interesse.' },
-            { icon: MousePointerClick, title: 'Sob demanda e confidencial', desc: 'O colaborador aciona quando quiser, sem intermediários.' },
-            { icon: BadgeCheck, title: 'Sem custo para o colaborador', desc: 'Orientação inicial gratuita, sem burocracia.' },
+            { icon: Unplug, title: 'Canal externo e independente', desc: 'Sem vínculo com a empresa, sem conflito de interesse. Sigilo total.' },
+            { icon: Heart, title: 'Acolhimento de questões pessoais', desc: 'Triagem, orientação e encaminhamento de demandas sensíveis dos colaboradores.' },
+            { icon: Brain, title: 'Inteligência preventiva para o RH', desc: 'Indicadores agregados e anonimizados que antecipam riscos psicossociais.' },
           ].map((item, i) => (
             <Card key={i} className="h-full text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
