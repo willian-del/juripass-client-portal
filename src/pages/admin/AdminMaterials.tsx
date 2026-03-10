@@ -27,6 +27,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
+import { PostersViewer } from '@/components/avaliacao/PostersViewer';
 
 type Material = {
   id: string;
@@ -100,7 +101,7 @@ export default function AdminMaterials() {
   const [shares, setShares] = useState<Record<string, ShareWithViews[]>>({});
 
   // Preview state
-  const [previewType, setPreviewType] = useState<'slides' | 'onepager' | null>(null);
+  const [previewType, setPreviewType] = useState<'slides' | 'onepager' | 'posters' | null>(null);
 
   // Edit state
   const [editOpen, setEditOpen] = useState(false);
@@ -310,6 +311,8 @@ export default function AdminMaterials() {
     if (!m.file_path) {
       if (m.file_type === 'one-pager') {
         setPreviewType('onepager');
+      } else if (m.file_type === 'posters') {
+        setPreviewType('posters');
       } else {
         setPreviewType('slides');
       }
@@ -422,6 +425,8 @@ export default function AdminMaterials() {
         </div>
         {previewType === 'slides' ? (
           <SlidesPresentation onClose={() => setPreviewType(null)} />
+        ) : previewType === 'posters' ? (
+          <PostersViewer onClose={() => setPreviewType(null)} />
         ) : (
           <OnePager onClose={() => setPreviewType(null)} />
         )}

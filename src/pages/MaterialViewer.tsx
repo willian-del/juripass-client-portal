@@ -5,6 +5,7 @@ import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import { FileText, Loader2, AlertCircle } from 'lucide-react';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
+import { PostersViewer } from '@/components/avaliacao/PostersViewer';
 
 type MaterialResult = {
   type: 'file' | 'builtin';
@@ -76,6 +77,9 @@ export default function MaterialViewer() {
     }
     if (material.file_type === 'one-pager') {
       return <OnePager standalone />;
+    }
+    if (material.file_type === 'posters') {
+      return <PostersViewer standalone />;
     }
     // Fallback for unknown builtin types
     return (

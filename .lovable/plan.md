@@ -1,39 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Criar Cartazes Juripass no padrão do PDF
+## Problema
 
-### Contexto
-Converter 5 cartazes do HTML (Genérico, Nome sujo, Banco/cartão, Compra/consumidor, Família) em um componente React seguindo o design do PDF: header branco com logo centralizado, corpo limpo, footer azul escuro com logo + tagline. Footer genérico: "Dúvidas? Procure o RH da empresa." Disponíveis na área de materiais do admin.
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### Arquivos
+## Solucao
 
-| Arquivo | Mudança |
-|---------|---------|
-| `src/components/avaliacao/PostersViewer.tsx` | **Novo** — Componente React com os 5 cartazes em formato A4 printável, seguindo o layout do PDF (header claro com logo, corpo branco, CTA com QR code, footer azul escuro). Cada cartaz é uma "página" com `page-break-after`. Inclui botão de imprimir/salvar PDF. |
-| `src/pages/admin/AdminMaterials.tsx` | Adicionar `PostersViewer` como mais um tipo builtin (`posters`), ao lado de `slides` e `onepager`. Atualizar `handlePreview` para abrir o viewer quando `file_type === 'posters'`. |
-| `supabase/functions/serve-material/index.ts` | Adicionar case para `file_type === 'posters'` retornando `{ type: 'builtin', title: 'Cartazes', file_type: 'posters' }`. |
-| `src/pages/MaterialViewer.tsx` | Importar `PostersViewer` e renderizar quando `file_type === 'posters'`. |
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### Design dos cartazes (padrão PDF)
+---
 
-Cada cartaz segue esta estrutura:
-1. **Header**: fundo claro (`#F5F7FA`), logo Juripass PNG centralizado
-2. **Corpo**: fundo branco, título grande em azul escuro, subtítulo, cards com bullets/steps, badge "gratuito", nota informativa
-3. **CTA**: fundo azul escuro, número WhatsApp `(11) 5039-5554`, botão verde WhatsApp, QR code
-4. **Footer**: fundo azul escuro, logo branco pequeno + tagline "Acolhimento jurídico na palma da sua mão" + texto "Dúvidas? Procure o RH da empresa."
+## Alteracoes
 
-Cores: `#1B3A6B` (azul escuro), `#2563A8` (azul médio), branco. Font: Nunito (já usada no HTML original, importar via Google Fonts ou usar system font).
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### Conteúdo dos 5 cartazes
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-1. **Genérico** — "Seu advogado no WhatsApp" + lista de temas + como funciona (3 passos) + pills (Grátis, Sigiloso, WhatsApp, Família inclusa)
-2. **Nome sujo** — tema laranja → "Está com o nome sujo?" + fatos sobre dívidas + 3 passos
-3. **Banco/cartão** — tema azul → "Problema com banco ou cartão?" + situações comuns + 3 passos
-4. **Compra/consumidor** — tema âmbar → "Comprou algo e deu problema?" + direitos do consumidor + 3 passos
-5. **Família** — tema roxo → "Problema de família?" + pensão, guarda, divórcio + 3 passos
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
-Cada cartaz mantém a cor temática apenas em detalhes sutis (título, badges) mas o layout geral segue o padrão limpo do PDF.
+### 2. Atualizar `src/App.tsx`
 
-### Seed no banco
-Será necessário inserir um registro na tabela `sales_materials` para o tipo builtin `posters`, similar ao que existe para `presentation` e `one-pager`.
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
