@@ -5,7 +5,7 @@ const steps = [
 { label: 'Colaborador', sublabel: 'com problema pessoal', icon: User, highlight: false },
 { label: 'Gestor', sublabel: 'Gestores atuam como conselheiros informais', icon: Users, highlight: false },
 { label: 'RH', sublabel: 'O RH recebe relatos delicados fora do seu escopo', icon: Building2, highlight: false },
-{ label: 'Desgaste', sublabel: 'Questões externas passam a impactar clima e operação', icon: AlertTriangle, highlight: true }];
+{ label: 'Desgaste', sublabel: 'Questões pessoais começam a afetar clima e operação.', icon: AlertTriangle, highlight: true }];
 
 
 export function OrganizationalProblemSection() {
