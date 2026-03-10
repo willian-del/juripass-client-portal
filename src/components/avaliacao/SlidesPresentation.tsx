@@ -91,9 +91,9 @@ const slides: SlideData[] = [
         <div className="flex flex-col md:flex-row items-center gap-3 md:gap-0 py-4">
           {[
             { icon: UserCheck, label: 'Colaborador', sub: 'com problema pessoal', danger: false },
-            { icon: Users, label: 'Gestor', sub: 'Atua como conselheiro informal', danger: false },
-            { icon: Building2, label: 'RH', sub: 'Recebe relatos fora do seu escopo', danger: false },
-            { icon: AlertTriangle, label: 'Desgaste', sub: 'Impacto em clima e operação', danger: true },
+            { icon: Users, label: 'Gestor', sub: 'Gestores atuam como conselheiros informais', danger: false },
+            { icon: Building2, label: 'RH', sub: 'O RH recebe relatos delicados fora do seu escopo', danger: false },
+            { icon: AlertTriangle, label: 'Desgaste', sub: 'Questões pessoais começam a afetar clima e operação', danger: true },
           ].map((step, i) => (
             <div key={step.label} className="flex flex-col md:flex-row items-center">
               {i > 0 && (
