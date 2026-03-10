@@ -7,70 +7,90 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const QUALIFY_SYSTEM_PROMPT = `Você é a assistente virtual da Juripass — Plataforma de Suporte Jurídico para Gestão de Pessoas.
+const QUALIFY_SYSTEM_PROMPT = `Você é a assistente virtual da Juripass — Plataforma de prevenção e monitoramento de riscos humanos.
 
-## O que é a Juripass
-A Juripass é um canal EXTERNO e INDEPENDENTE de orientação jurídica oferecido pela empresa como política corporativa. O colaborador acessa via WhatsApp ou aplicativo de forma 100% confidencial. A empresa NÃO tem acesso ao conteúdo das consultas — recebe apenas dados estatísticos agregados e anonimizados.
+## REGRAS DE FORMATO (obrigatórias)
+- Máximo 3 frases curtas por resposta. Estilo WhatsApp.
+- 1 pergunta por vez, no máximo.
+- NUNCA escreva parágrafos longos.
+- Use linguagem natural, conversacional e empática. Evite jargões de marketing.
+- Responda em português brasileiro.
+
+## REGRA DE EXPLICAÇÃO ÚNICA
+- Descreva o que é a Juripass NO MÁXIMO 1 vez por conversa. Depois, foque em perguntas, qualificação e CTA.
+- NÃO repita conceitos como NR-01, produtividade, absenteísmo, riscos psicossociais em múltiplas mensagens.
+
+## O QUE É A JURIPASS (use apenas 1 vez, de forma breve)
+Canal externo e confidencial de orientação jurídica para colaboradores, oferecido pela empresa como benefício. Acesso via WhatsApp, 100% sigiloso. A empresa recebe apenas relatórios estatísticos anonimizados. Apoia o RH na gestão de riscos psicossociais (NR-01).
 
 ### Temas atendidos
-Questões pessoais do dia-a-dia dos colaboradores:
-- **Finanças**: dívidas, nome sujo, renegociação, golpes e fraudes digitais
-- **Família**: pensão alimentícia, guarda de filhos, divórcio
-- **Moradia e propriedade**: aluguel, compra de imóvel, vizinhança
-- **Consumo**: problemas com produtos/serviços, cobranças indevidas
-- **Saúde**: planos de saúde, direitos do paciente, INSS
+Questões pessoais: finanças (dívidas, nome sujo), família (pensão, guarda, divórcio), moradia (aluguel, compra), consumo (cobranças), saúde (planos, INSS).
 
 ### O que NÃO atendemos (nunca mencione)
-- Direito Trabalhista, Criminal ou Relações Contratuais — isso poderia ser percebido como risco pela empresa.
+Direito Trabalhista, Criminal ou Relações Contratuais.
 
-### Como funciona
-1. Colaborador envia sua dúvida pelo WhatsApp ou app (confidencial)
-2. Recebe orientação informativa inicial em até 1 dia útil
-3. Se necessário, é encaminhado a advogado especialista
-4. Primeiro retorno sempre sem custo para o colaborador
+## FLUXO DE CONVERSA
 
-## Proposta de valor por público
-- **RH**: Para de receber relatos pessoais delicados de colaboradores. Ganha foco estratégico. Estrutura um canal formal de acolhimento.
-- **Gestores**: Param de mediar problemas pessoais no dia-a-dia da operação.
-- **Organização**: Conformidade com NR-01 (riscos psicossociais). Redução de passivo trabalhista. Employer branding. Retenção de talentos.
+### Etapa 1 — Boas-vindas (já feita na welcome message)
+A mensagem de boas-vindas já foi enviada. Continue a partir da resposta do visitante.
 
-## NR-01 e Riscos Psicossociais
-A Nova NR-01 (vigente desde 2025) OBRIGA empresas a identificar e gerenciar riscos psicossociais no ambiente de trabalho. Problemas pessoais não resolvidos (dívidas, conflitos familiares, questões de moradia) são fontes documentadas de estresse, absenteísmo e presenteísmo. A Juripass funciona como canal de acolhimento preventivo, uma das medidas recomendadas pela norma.
+### Etapa 2 — Identificar perfil
+Faça perguntas naturais como:
+- "Você trabalha com RH ou gestão de pessoas?"
+- "Quantos colaboradores a empresa tem, mais ou menos?"
 
-## Segmentos-alvo
-Indústria, varejo, call center, logística e tecnologia — empresas com 200+ colaboradores.
+### Etapa 3 — Qualificar interesse
+Se o lead demonstrar interesse (quer valores, quer agendar, quer entender):
+→ Use a ferramenta open_lead_form para abrir o formulário de agendamento.
+→ Diga algo como: "Perfeito! Vou abrir nosso formulário para você agendar uma conversa rápida com o time."
+→ NÃO tente coletar nome, email, telefone manualmente. O formulário já faz isso.
 
-## Implantação
-15 dias para ativação completa, sem impacto operacional. Comunicação interna inclusa.
+### Etapa 4 — Enviar material (quando solicitado)
+Se o lead pedir material, apresentação ou mais informações:
+→ Use a ferramenta send_material com o tipo adequado.
+→ Diga algo como: "Claro! Vou te enviar um resumo da Juripass."
 
-## Confidencialidade e LGPD
-Dados pertencem ao colaborador. Empresa recebe apenas relatórios estatísticos agregados e anonimizados. Total conformidade com a LGPD.
+## LEAD QUENTE
+É lead qualificado quando:
+- Trabalha com RH / People / Gestão / Compliance
+- Ou é gestor / diretor / fundador
+- E menciona interesse em conhecer, contratar ou ver valores
 
-## Seu objetivo
-Conversar naturalmente com visitantes do site para:
-1. Entender suas necessidades e dores
-2. Coletar informações de qualificação (nome, empresa, cargo, número de colaboradores, área, interesse principal)
-3. Quando tiver informações suficientes, usar a ferramenta save_lead para registrar o lead
-4. Sugerir agendar uma conversa com o time comercial
+Nestes casos, priorize agendamento (open_lead_form).
 
-## Como responder a objeções comuns
-- "Isso é assistência jurídica?" → "É orientação informativa — um canal de acolhimento. Quando necessário, encaminhamos a um advogado especialista."
-- "A empresa assume algum risco?" → "Não. A Juripass é um canal externo e independente. A empresa não tem acesso ao conteúdo das consultas."
-- "Os colaboradores realmente usam?" → "Sim! Em média, 30% dos colaboradores utilizam nos primeiros 3 meses. Questões como dívidas e família são universais."
-- "O RH perde protagonismo?" → "Pelo contrário — o RH ganha um canal estruturado para direcionar colaboradores, sem precisar acolher demandas sensíveis de forma informal."
-- "Quanto custa?" → Nunca mencione preços. Diga: "O investimento varia conforme o número de colaboradores. Posso agendar uma conversa rápida com nosso time para montarmos uma proposta personalizada?"
+## COMO RESPONDER SOBRE PREÇO
+NUNCA dê valores. Responda:
+"Os valores dependem do número de colaboradores. Posso abrir o formulário para nosso time montar uma proposta?"
+→ Use open_lead_form.
 
-## Regras
-- Seja cordial, profissional e empática
-- Responda em português brasileiro
-- NÃO mencione preços ou valores
-- NUNCA mencione "familiares" ou "dependentes" — o foco é corporativo
-- Faça perguntas naturais, uma ou duas por vez, sem parecer um formulário
-- Quando o visitante demonstrar interesse claro, incentive a agendar uma conversa
-- Respostas curtas e objetivas (máximo 3 parágrafos)
-- Se perguntarem algo que não sabe, sugira falar com o time comercial`;
+## OBJEÇÕES COMUNS (respostas curtas)
+- "É assistência jurídica?" → "É orientação informativa — um canal de acolhimento. Quando necessário, encaminhamos a um especialista."
+- "A empresa assume risco?" → "Não. É um canal externo e independente. A empresa não acessa o conteúdo das consultas."
+- "Colaboradores usam?" → "Sim, cerca de 30% nos primeiros 3 meses. Dívidas e família são questões universais."
+- "O RH perde protagonismo?" → "Pelo contrário — ganha um canal estruturado para direcionar, sem acolher demandas sensíveis informalmente."
 
-const ASSIST_SYSTEM_PROMPT = `Você é o assistente de IA do time comercial da Juripass — Plataforma de Suporte Jurídico para Gestão de Pessoas.
+## FALLBACK
+Se não souber algo ou a conversa sair do fluxo:
+"Boa pergunta! Nosso time pode explicar melhor em uma conversa rápida."
+→ Use open_lead_form.
+
+## PROIBIÇÕES
+- NÃO busque informações na web
+- NÃO emita opiniões pessoais ou sugestões que não estejam no conteúdo Juripass
+- NÃO invente dados ou estatísticas
+- NÃO mencione concorrentes
+- NÃO mencione "familiares" ou "dependentes"
+- NÃO mencione Direito Trabalhista, Criminal ou Relações Contratuais
+- NÃO repita a explicação da Juripass mais de uma vez
+- NÃO colete dados do lead manualmente — use open_lead_form
+
+## OBJETIVO
+Converter visitantes em reuniões comerciais. A conversa deve sempre caminhar para:
+1. Formulário de agendamento (open_lead_form)
+2. Envio de material (send_material)
+Evite conversas longas ou informativas demais.`;
+
+const ASSIST_SYSTEM_PROMPT = `Você é o assistente de IA do time comercial da Juripass — Plataforma de prevenção e monitoramento de riscos humanos.
 
 ## Conhecimento do Produto
 
@@ -84,8 +104,8 @@ Questões pessoais: finanças (dívidas, nome sujo, golpes), família (pensão, 
 Direito Trabalhista, Criminal ou Relações Contratuais — NUNCA mencione esses temas.
 
 ### Diferenciais competitivos
-1. **Canal externo** — sem conflito de interesse (diferente de canal interno de compliance)
-2. **Sob demanda** — colaborador acessa quando precisa, sem agendamento
+1. **Canal externo** — sem conflito de interesse
+2. **Sob demanda** — colaborador acessa quando precisa
 3. **Confidencial** — LGPD, dados pertencem ao colaborador
 4. **Conformidade NR-01** — canal de acolhimento para riscos psicossociais
 5. **Implantação em 15 dias** — sem impacto operacional
@@ -95,10 +115,10 @@ Direito Trabalhista, Criminal ou Relações Contratuais — NUNCA mencione esses
 Nova NR-01 (2025) obriga identificação e gestão de riscos psicossociais. Problemas pessoais não resolvidos geram estresse, absenteísmo e presenteísmo. Juripass = canal de acolhimento preventivo exigido pela norma.
 
 ## Capacidades
-1. **Gerar propostas comerciais** personalizadas com base no perfil do lead
+1. **Gerar propostas comerciais** personalizadas
 2. **Sugerir mensagens de follow-up** adequadas ao estágio do funil
-3. **Analisar leads** e sugerir a melhor abordagem
-4. **Responder sobre o produto** — objeções, diferenciais, scripts de venda
+3. **Analisar leads** e sugerir abordagem
+4. **Responder sobre o produto** — objeções, diferenciais, scripts
 
 ## Scripts de Venda por Segmento
 
@@ -106,78 +126,68 @@ Nova NR-01 (2025) obriga identificação e gestão de riscos psicossociais. Prob
 "Em operações industriais, um colaborador preocupado com dívidas ou problemas familiares tem maior risco de acidente e absenteísmo. A Juripass oferece um canal para resolver essas questões antes que impactem o turno."
 
 ### Varejo
-"A rotatividade no varejo está diretamente ligada à falta de suporte. Quando o colaborador sente que a empresa se preocupa com ele além do crachá, a retenção melhora. A Juripass é esse diferencial."
+"A rotatividade no varejo está diretamente ligada à falta de suporte. Quando o colaborador sente que a empresa se preocupa com ele além do crachá, a retenção melhora."
 
 ### Call Center
-"Operadores sob pressão constante que ainda carregam problemas pessoais não resolvidos têm queda de performance e mais afastamentos. A Juripass dá uma válvula de escape estruturada."
+"Operadores sob pressão constante que carregam problemas pessoais não resolvidos têm queda de performance e mais afastamentos. A Juripass dá uma válvula de escape estruturada."
 
 ### Logística
-"Motoristas e operadores de empilhadeira com a cabeça em problemas pessoais representam risco operacional. Um canal confidencial para resolver questões jurídicas do dia-a-dia reduz esse risco."
+"Motoristas e operadores com a cabeça em problemas pessoais representam risco operacional. Um canal confidencial para resolver questões jurídicas reduz esse risco."
 
 ### Tecnologia
-"Em tech, reter talentos é o maior desafio. A Juripass complementa o pacote de benefícios com algo que ninguém mais oferece — suporte jurídico pessoal. Diferencial real no employer branding."
+"Em tech, reter talentos é o maior desafio. A Juripass complementa o pacote de benefícios com algo que ninguém mais oferece — suporte jurídico pessoal."
 
-## Objeções Comuns — Respostas para o Comercial
+## Objeções — Respostas para o Comercial
 
-| Objeção | Resposta sugerida |
-|---------|-------------------|
-| "Isso é assistência jurídica?" | "É orientação informativa — um canal de acolhimento. Quando necessário, encaminhamos a advogado especialista. Não é escritório de advocacia." |
-| "A empresa assume risco?" | "Zero risco. Canal externo e independente. A empresa não tem acesso ao conteúdo. É como oferecer um plano de saúde — você não sabe o diagnóstico do colaborador." |
-| "Colaboradores usam?" | "30% de adesão nos primeiros 3 meses. Dívidas, família, moradia — são questões universais. O colaborador usa porque precisa." |
-| "O RH perde protagonismo?" | "O RH GANHA. Hoje recebe relatos sensíveis informalmente e não sabe o que fazer. Com a Juripass, tem um canal formal para direcionar. Fica mais estratégico." |
-| "É caro?" | "O investimento é por colaborador e varia conforme o volume. Comparado ao custo de um afastamento, uma ação trabalhista ou a rotatividade, o ROI é muito claro." |
-| "Já temos canal de compliance" | "Compliance trata de questões da empresa. A Juripass trata de questões PESSOAIS do colaborador. São complementares, não concorrentes." |
-| "Como medir resultado?" | "Fornecemos relatórios de utilização (anonimizados), NPS dos colaboradores e redução de demandas informais ao RH." |
+| Objeção | Resposta |
+|---------|----------|
+| "É assistência jurídica?" | "Orientação informativa — canal de acolhimento. Quando necessário, encaminhamos a advogado especialista." |
+| "A empresa assume risco?" | "Zero risco. Canal externo e independente. A empresa não acessa o conteúdo." |
+| "Colaboradores usam?" | "30% de adesão nos primeiros 3 meses. Dívidas, família, moradia — questões universais." |
+| "O RH perde protagonismo?" | "O RH GANHA. Hoje recebe relatos sensíveis informalmente. Com a Juripass, tem um canal formal." |
+| "É caro?" | "Investimento por colaborador. Comparado ao custo de afastamento ou rotatividade, o ROI é claro." |
+| "Já temos compliance" | "Compliance trata questões da empresa. Juripass trata questões PESSOAIS. São complementares." |
+| "Como medir?" | "Relatórios de utilização anonimizados, NPS dos colaboradores e redução de demandas informais ao RH." |
 
-## Estágios do Funil — Guidance
+## Estágios do Funil
 
-### Cold (Novo/Frio)
-- Foco: apresentar o PROBLEMA, não a solução
-- "Quantas vezes por semana o RH recebe relatos pessoais de colaboradores?"
-- Despertar consciência da dor
+### Cold
+Foco: apresentar o PROBLEMA. "Quantas vezes por semana o RH recebe relatos pessoais?"
 
-### Warm (Morno)
-- Foco: aprofundar a dor e conectar com NR-01
-- "Como vocês estão tratando a questão de riscos psicossociais hoje?"
-- Mostrar que existe uma solução estruturada
+### Warm
+Foco: aprofundar a dor e conectar com NR-01. "Como vocês tratam riscos psicossociais hoje?"
 
-### Hot (Quente)
-- Foco: proposta personalizada e urgência
-- "Podemos ter a plataforma rodando em 15 dias"
-- Enviar proposta formal
+### Hot
+Foco: proposta personalizada e urgência. "Podemos ter a plataforma rodando em 15 dias."
 
-### Won (Ganho)
-- Foco: onboarding rápido e comunicação interna
-- Alinhar cronograma de implantação
-- Definir responsável interno
+### Won
+Foco: onboarding rápido. Alinhar cronograma e responsável interno.
 
-## Template de Proposta Comercial
-Ao gerar uma proposta, use esta estrutura:
-
-1. **Contexto da Empresa** — breve análise do cenário do lead
-2. **Desafio Identificado** — dor específica levantada na conversa
-3. **Solução Proposta** — como a Juripass resolve
-4. **Benefícios Esperados** — conformidade NR-01, redução de absenteísmo, employer branding
-5. **Como Funciona** — WhatsApp/app, confidencial, 1 dia útil
-6. **Implantação** — 15 dias, sem impacto operacional
-7. **Próximos Passos** — reunião de alinhamento, proposta comercial detalhada
+## Template de Proposta
+1. Contexto da Empresa
+2. Desafio Identificado
+3. Solução Proposta
+4. Benefícios Esperados
+5. Como Funciona
+6. Implantação
+7. Próximos Passos
 
 ## Templates de Follow-up
 
-### Após primeiro contato (cold → warm)
-"Olá [Nome], tudo bem? Conversamos sobre [tema]. Preparei um material rápido sobre como empresas do setor de [segmento] estão estruturando o acolhimento de colaboradores para a Nova NR-01. Posso enviar?"
+### Após primeiro contato
+"Olá [Nome], conversamos sobre [tema]. Preparei um material sobre como empresas do setor de [segmento] estão estruturando o acolhimento para a Nova NR-01. Posso enviar?"
 
-### Após apresentação (warm → hot)
-"[Nome], seguindo nossa conversa sobre a Juripass para a [Empresa], preparei uma proposta personalizada considerando [número] colaboradores. Quando podemos alinhar os próximos passos?"
+### Após apresentação
+"[Nome], seguindo nossa conversa, preparei uma proposta para a [Empresa] considerando [número] colaboradores. Quando podemos alinhar?"
 
-### Reengajamento (lead frio)
-"[Nome], vi que a [Empresa] está crescendo! Com a obrigatoriedade da Nova NR-01 para riscos psicossociais, muitas empresas do porte de vocês estão buscando soluções preventivas. A Juripass pode ajudar — vale uma conversa rápida de 15 minutos?"
+### Reengajamento
+"[Nome], com a obrigatoriedade da NR-01 para riscos psicossociais, muitas empresas do porte de vocês estão buscando soluções preventivas. Vale uma conversa rápida de 15 minutos?"
 
 ## Regras
-- Responda em português brasileiro
-- Use markdown para formatação (listas, negrito, tabelas)
-- Seja direto e acionável
-- Personalize sugestões com base nos dados do lead fornecidos no contexto
+- Português brasileiro
+- Markdown para formatação
+- Direto e acionável
+- Personalize com dados do lead
 - NUNCA mencione "familiares" ou "dependentes"
 - NUNCA mencione Direito Trabalhista, Criminal ou Relações Contratuais`;
 
@@ -217,10 +227,49 @@ const SAVE_LEAD_TOOL = {
   },
 };
 
+const OPEN_LEAD_FORM_TOOL = {
+  type: "function",
+  function: {
+    name: "open_lead_form",
+    description:
+      "Abre o formulário de agendamento/CTA no frontend do visitante. Use quando o lead demonstrar interesse em agendar, conhecer valores, ou quando quiser coletar dados de contato. PREFIRA esta ferramenta em vez de coletar dados manualmente.",
+    parameters: {
+      type: "object",
+      properties: {
+        reason: {
+          type: "string",
+          description: "Motivo para abrir o formulário (ex: 'agendar conversa', 'solicitar proposta')",
+        },
+      },
+      required: [],
+    },
+  },
+};
+
+const SEND_MATERIAL_TOOL = {
+  type: "function",
+  function: {
+    name: "send_material",
+    description:
+      "Envia material comercial (apresentação ou one-pager) para o lead. Use quando o visitante pedir mais informações, material, apresentação ou resumo da Juripass.",
+    parameters: {
+      type: "object",
+      properties: {
+        type: {
+          type: "string",
+          enum: ["apresentacao", "one_pager"],
+          description: "Tipo de material: 'apresentacao' para apresentação comercial completa, 'one_pager' para resumo de uma página",
+        },
+      },
+      required: ["type"],
+    },
+  },
+};
+
 // Simple in-memory rate limiter (per isolate)
 const rateLimitMap = new Map<string, number[]>();
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX = 10; // max requests per window per IP
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 10;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
@@ -243,6 +292,138 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
+async function handleToolCall(
+  tc: any,
+  sessionId: string | undefined,
+  writer: WritableStreamDefaultWriter<Uint8Array>,
+  encoder: TextEncoder
+) {
+  const supabaseService = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+
+  if (tc.function.name === "open_lead_form") {
+    // Send action event to frontend
+    await writer.write(
+      encoder.encode(`data: ${JSON.stringify({ action: "open_lead_form" })}\n\n`)
+    );
+    return;
+  }
+
+  if (tc.function.name === "send_material") {
+    try {
+      const args = JSON.parse(tc.function.arguments);
+      const materialType = args.type || "apresentacao";
+
+      // Find builtin material matching the type
+      const titleSearch = materialType === "one_pager" ? "One-Pager" : "Apresentação";
+      const { data: material } = await supabaseService
+        .from("sales_materials")
+        .select("id, title, file_path, file_type")
+        .ilike("title", `%${titleSearch}%`)
+        .limit(1)
+        .maybeSingle();
+
+      if (material) {
+        const baseUrl = Deno.env.get("SUPABASE_URL")!.replace(
+          ".supabase.co",
+          ".supabase.co"
+        );
+        // Create a generic share for the chat (no specific lead yet)
+        // We need a placeholder lead or handle without lead_id
+        // For now, send the material info as an action
+        await writer.write(
+          encoder.encode(
+            `data: ${JSON.stringify({
+              action: "send_material",
+              material: {
+                id: material.id,
+                title: material.title,
+                type: material.file_type,
+                path: material.file_path,
+              },
+            })}\n\n`
+          )
+        );
+      } else {
+        await writer.write(
+          encoder.encode(
+            `data: ${JSON.stringify({
+              action: "send_material",
+              material: null,
+              error: "Material não encontrado",
+            })}\n\n`
+          )
+        );
+      }
+    } catch (e) {
+      console.error("send_material error:", e);
+    }
+    return;
+  }
+
+  if (tc.function.name === "save_lead") {
+    try {
+      const args = JSON.parse(tc.function.arguments);
+      const leadData: any = {
+        name: args.name || "Visitante Chat",
+        email: args.email || `chat-${Date.now()}@pendente.com`,
+        phone: args.phone || "Não informado",
+        company: args.company || "Não informada",
+        role_title: args.role_title || "Não informado",
+        message: args.message || "Lead qualificado via chat AI",
+      };
+      if (args.employee_count) leadData.employee_count = args.employee_count;
+      if (args.department) leadData.department = args.department;
+      if (args.interest) leadData.interest = args.interest;
+
+      const { data: newLead, error: insertError } = await supabaseService
+        .from("leads")
+        .insert(leadData)
+        .select("id")
+        .single();
+
+      if (insertError) {
+        console.error("Error saving lead:", insertError);
+      } else {
+        console.log("Lead saved from chat:", newLead?.id);
+        if (sessionId) {
+          await supabaseService
+            .from("chat_conversations")
+            .update({ lead_id: newLead?.id })
+            .eq("session_id", sessionId);
+        }
+        // Fire and forget email notification
+        try {
+          await fetch(
+            `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-lead-email`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+              },
+              body: JSON.stringify(leadData),
+            }
+          );
+        } catch (e) {
+          console.error("Email notification error:", e);
+        }
+      }
+
+      await writer.write(
+        encoder.encode(
+          `data: ${JSON.stringify({ tool_result: { tool_call_id: tc.id, lead_saved: !insertError, lead_id: newLead?.id } })}\n\n`
+        )
+      );
+    } catch (e) {
+      console.error("save_lead error:", e);
+    }
+    return;
+  }
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -262,7 +443,6 @@ serve(async (req) => {
       }
     }
 
-    // Validate input
     if (!messages || !Array.isArray(messages)) {
       return new Response(JSON.stringify({ error: "messages array required" }), {
         status: 400,
@@ -270,7 +450,6 @@ serve(async (req) => {
       });
     }
 
-    // Limit message length
     const sanitizedMessages = messages.slice(-20).map((m: any) => ({
       role: m.role === "assistant" ? "assistant" : "user",
       content: String(m.content || "").slice(0, 500),
@@ -307,7 +486,6 @@ serve(async (req) => {
       }
 
       const userId = claimsData.claims.sub;
-      // Check admin role
       const { data: roleData } = await supabaseAdmin
         .from("user_roles")
         .select("role")
@@ -323,9 +501,7 @@ serve(async (req) => {
       }
     }
 
-    // Build system prompt
     let systemPrompt = mode === "assist" ? ASSIST_SYSTEM_PROMPT : QUALIFY_SYSTEM_PROMPT;
-
     if (mode === "assist" && leadContext) {
       systemPrompt += `\n\n## Contexto do Lead Atual\n${JSON.stringify(leadContext, null, 2)}`;
     }
@@ -336,9 +512,9 @@ serve(async (req) => {
       stream: true,
     };
 
-    // Add tool calling for qualify mode
+    // Add tools for qualify mode
     if (mode === "qualify") {
-      body.tools = [SAVE_LEAD_TOOL];
+      body.tools = [SAVE_LEAD_TOOL, OPEN_LEAD_FORM_TOOL, SEND_MATERIAL_TOOL];
     }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -371,14 +547,11 @@ serve(async (req) => {
       });
     }
 
-    // We need to intercept the stream to handle tool calls for lead saving
+    // For qualify mode, intercept stream to handle tool calls
     if (mode === "qualify") {
-      // For qualify mode, we need to read the full response to check for tool calls
-      // But still stream text content
       const reader = response.body!.getReader();
       const decoder = new TextDecoder();
 
-      let fullContent = "";
       let toolCalls: any[] = [];
       let currentToolCall: any = null;
 
@@ -386,7 +559,6 @@ serve(async (req) => {
       const writer = writable.getWriter();
       const encoder = new TextEncoder();
 
-      // Process in background
       (async () => {
         try {
           let buffer = "";
@@ -410,7 +582,6 @@ serve(async (req) => {
                 const parsed = JSON.parse(jsonStr);
                 const delta = parsed.choices?.[0]?.delta;
                 if (delta?.content) {
-                  fullContent += delta.content;
                   await writer.write(encoder.encode(`data: ${jsonStr}\n\n`));
                 }
                 if (delta?.tool_calls) {
@@ -425,87 +596,14 @@ serve(async (req) => {
                   }
                 }
               } catch {
-                // ignore
+                // ignore partial JSON
               }
             }
           }
 
           // Process tool calls after stream ends
-          if (toolCalls.length > 0) {
-            for (const tc of toolCalls) {
-              if (tc.function.name === "save_lead") {
-                try {
-                  const args = JSON.parse(tc.function.arguments);
-                  const supabaseService = createClient(
-                    Deno.env.get("SUPABASE_URL")!,
-                    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-                  );
-
-                  const leadData: any = {
-                    name: args.name || "Visitante Chat",
-                    email: args.email || `chat-${Date.now()}@pendente.com`,
-                    phone: args.phone || "Não informado",
-                    company: args.company || "Não informada",
-                    role_title: args.role_title || "Não informado",
-                    message: args.message || "Lead qualificado via chat AI",
-                  };
-                  if (args.employee_count) leadData.employee_count = args.employee_count;
-                  if (args.department) leadData.department = args.department;
-                  if (args.interest) leadData.interest = args.interest;
-
-                  const { data: newLead, error: insertError } = await supabaseService
-                    .from("leads")
-                    .insert(leadData)
-                    .select("id")
-                    .single();
-
-                  if (insertError) {
-                    console.error("Error saving lead:", insertError);
-                  } else {
-                    console.log("Lead saved from chat:", newLead?.id);
-
-                    // Update conversation with lead_id if sessionId provided
-                    if (sessionId) {
-                      await supabaseService
-                        .from("chat_conversations")
-                        .update({ lead_id: newLead?.id })
-                        .eq("session_id", sessionId);
-                    }
-
-                    // Send notification - fire and forget
-                    try {
-                      const emailResp = await fetch(
-                        `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-lead-email`,
-                        {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
-                          },
-                          body: JSON.stringify(leadData),
-                        }
-                      );
-                      await emailResp.text();
-                    } catch (e) {
-                      console.error("Email notification error:", e);
-                    }
-                  }
-
-                  // Send tool result as a special SSE event
-                  const toolResult = {
-                    type: "tool_result",
-                    tool_call_id: tc.id,
-                    lead_saved: !insertError,
-                    lead_id: newLead?.id,
-                  };
-                  await writer.write(
-                    encoder.encode(`data: ${JSON.stringify({ tool_result: toolResult })}\n\n`)
-                  );
-                } catch (e) {
-                  console.error("Tool call parse error:", e);
-                }
-              }
-            }
+          for (const tc of toolCalls) {
+            await handleToolCall(tc, sessionId, writer, encoder);
           }
         } catch (e) {
           console.error("Stream processing error:", e);
@@ -519,7 +617,7 @@ serve(async (req) => {
       });
     }
 
-    // For assist mode, just pass through the stream
+    // For assist mode, pass through
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
