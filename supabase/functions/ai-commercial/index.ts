@@ -602,8 +602,28 @@ serve(async (req) => {
           }
 
           // Process tool calls after stream ends
+          let hasToolCalls = false;
           for (const tc of toolCalls) {
+            hasToolCalls = true;
             await handleToolCall(tc, sessionId, writer, encoder);
+          }
+
+          // If the model only produced tool calls (no text content), inject a synthetic response
+          // so the chat doesn't appear frozen/empty
+          if (hasToolCalls) {
+            const toolNames = toolCalls.map((tc: any) => tc.function?.name).filter(Boolean);
+            let syntheticText = "";
+            if (toolNames.includes("open_lead_form")) {
+              syntheticText = "Perfeito! Abri o formulário para você. 😊\nÉ só preencher e nosso time entra em contato rapidinho.";
+            } else if (toolNames.includes("send_material")) {
+              syntheticText = "Pronto! Estou preparando o material para você.";
+            }
+            if (syntheticText) {
+              const syntheticChunk = JSON.stringify({
+                choices: [{ delta: { content: syntheticText } }],
+              });
+              await writer.write(encoder.encode(`data: ${syntheticChunk}\n\n`));
+            }
           }
         } catch (e) {
           console.error("Stream processing error:", e);
