@@ -10,7 +10,7 @@ const pillars = [
   },
   {
     icon: HandHeart,
-    title: 'Acolhimento de questões pessoais sensíveis',
+    title: 'Acolhimento de questões pessoais',
     description: 'Colaboradores podem buscar orientação sobre temas como finanças, família, moradia e consumo.'
   },
   {
