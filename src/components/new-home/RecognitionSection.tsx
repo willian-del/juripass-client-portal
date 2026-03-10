@@ -37,7 +37,7 @@ export function RecognitionSection() {
             )}
           </div>
 
-          <p className="text-muted-foreground leading-relaxed max-w-xl mx-auto">Sem um destino claro, essas situações não desaparecem. Elas apenas passam a ser administradas informalmente pela empresa. O RH vira o ponto de apoio informal para questões pessoais sensíveis, gerando sobrecarga, ruído e exposição desnecessária.</p>
+          <p className="text-muted-foreground leading-relaxed max-w-xl mx-auto">Sem um canal adequado, essas situações não desaparecem. Elas acabam sendo absorvidas informalmente pela empresa — muitas vezes pelo RH — gerando sobrecarga, ruído e exposição desnecessária para a organização.</p>
         </div>
       </div>
     </section>);
