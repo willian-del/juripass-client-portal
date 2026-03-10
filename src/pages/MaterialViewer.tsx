@@ -78,6 +78,9 @@ export default function MaterialViewer() {
     if (material.file_type === 'one-pager') {
       return <OnePager standalone />;
     }
+    if (material.file_type === 'posters') {
+      return <PostersViewer standalone />;
+    }
     // Fallback for unknown builtin types
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-8">

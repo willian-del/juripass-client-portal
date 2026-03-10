@@ -425,6 +425,8 @@ export default function AdminMaterials() {
         </div>
         {previewType === 'slides' ? (
           <SlidesPresentation onClose={() => setPreviewType(null)} />
+        ) : previewType === 'posters' ? (
+          <PostersViewer onClose={() => setPreviewType(null)} />
         ) : (
           <OnePager onClose={() => setPreviewType(null)} />
         )}
