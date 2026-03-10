@@ -1,83 +1,45 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plan: Atualizar materiais comerciais com novo posicionamento
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+Os materiais (Slides e One-Pager) ainda usam o posicionamento antigo "Plataforma de Suporte Jurídico para Gestão de Pessoas" / "gestão preventiva". Precisam refletir o novo posicionamento: **"Plataforma de prevenção e monitoramento de riscos humanos"**.
 
-## Solucao
+### Mudanças na Apresentação (SlidesPresentation.tsx)
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+**Slide 1 — Capa (linhas 56-77)**
+- Título: "Plataforma de Suporte Jurídico para Gestão de Pessoas" → **"Plataforma de prevenção e monitoramento de riscos humanos"**
+- Subtítulo: atualizar para refletir a hero: "Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade."
 
----
+**Slide 4 — O que é a Juripass (linhas 158-196)**
+- Título: "O que é a Juripass" → **"Como a Juripass ajuda o RH a prevenir riscos humanos?"**
+- Texto explicativo: atualizar com a nova copy da seção WhatIsJuripass
+- Cards: atualizar para os 3 pilares atuais:
+  1. Canal externo e independente
+  2. Acolhimento de questões pessoais
+  3. Inteligência preventiva para o RH
 
-## Alteracoes
+**Slide 5 — Impacto (linhas 197-235)**
+- Adicionar no card "Para a Empresa" menção a indicadores agregados e monitoramento de riscos
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**Slide 11 — Encerramento (linhas 407-436)**
+- Frase de fechamento: atualizar para refletir "prevenção e monitoramento de riscos humanos" em vez de apenas "orientação preventiva"
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### Mudanças no One-Pager (OnePager.tsx)
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+**Header (linha 41)**
+- "Programa de Acolhimento e Orientação Jurídica" → **"Plataforma de prevenção e monitoramento de riscos humanos"**
 
-### 2. Atualizar `src/App.tsx`
+**Seção 1 — Sobre (linhas 48-66)**
+- Atualizar texto para: "A Juripass é uma plataforma de prevenção e monitoramento de riscos humanos para o RH. Estruturamos um canal jurídico externo e confidencial para acolher questões pessoais sensíveis dos colaboradores — antes que evoluam para conflitos internos ou impactem o clima e a produtividade."
+- Segundo parágrafo: "Os atendimentos geram indicadores agregados que ajudam o RH a identificar padrões de vulnerabilidade e antecipar fatores de risco psicossocial na organização."
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+**Seção 2 — Para a Empresa (linhas 91-107)**
+- Atualizar item "Estatísticas de uso e mapa de risco psicossocial" → **"Indicadores agregados de riscos humanos e psicossociais"**
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+**Seção 7 — Encerramento (linhas 176-184)**
+- Atualizar para refletir novo posicionamento de prevenção e monitoramento
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+### Resumo
+- 2 arquivos editados: `SlidesPresentation.tsx` e `OnePager.tsx`
+- Apenas mudanças de conteúdo textual, sem alteração de layout ou visual
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
