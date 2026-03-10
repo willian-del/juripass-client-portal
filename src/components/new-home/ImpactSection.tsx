@@ -35,7 +35,7 @@ const columns = [
     icon: Building2,
     title: 'Para a Organização',
     points: [
-      'Redução de passivos trabalhistas',
+      'Redução do absenteísmo jurídico',
       'Clima organizacional mais saudável',
       'Conformidade com a Nova NR-01',
       'Diferencial competitivo na atração de talentos',
