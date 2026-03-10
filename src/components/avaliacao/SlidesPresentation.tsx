@@ -184,14 +184,6 @@ const slides: SlideData[] = [
             </Card>
           ))}
         </div>
-        <div className="space-y-2 pt-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#4A9FD8]">Temas frequentemente atendidos</p>
-          <div className="flex flex-wrap gap-2 justify-center">
-            {['Finanças', 'Família', 'Moradia', 'Consumo', 'Saúde'].map((t) => (
-              <ThemeBadge key={t} label={t} />
-            ))}
-          </div>
-        </div>
       </div>
     ),
   },
