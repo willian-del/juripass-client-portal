@@ -242,7 +242,7 @@ const slides: SlideData[] = [
             { step: '3', title: 'Situação é encaminhada adequadamente', desc: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.' },
           ].map((s, i) => (
             <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-4">
-               <Card className="h-full flex-1 w-full text-center space-y-3">
+               <Card className="h-full flex-1 w-full text-center space-y-3 min-h-[220px] flex flex-col items-center justify-center">
                 <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
                   {s.step}
                 </div>
