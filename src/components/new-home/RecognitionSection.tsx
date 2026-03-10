@@ -1,15 +1,16 @@
 import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, ShoppingBag } from 'lucide-react';
 
 const items = [
-{ icon: Wallet, label: 'Endividamento e nome sujo' },
-{ icon: Heart, label: 'Conflitos e questões familiares' },
-{ icon: Home, label: 'Problemas com moradia e aluguel' },
-{ icon: Shield, label: 'Golpes e fraudes digitais' },
-{ icon: FileText, label: 'Familia, inventário e herança' },
-{ icon: CreditCard, label: 'Problemas com compras e garantia' },
-{ icon: Users, label: 'Separação e guarda de filhos' },
-{ icon: Scale, label: 'Revisão e pagamento de pensão' },
-{ icon: ShoppingBag, label: 'Cobranças e taxas indevidas' }];
+  { icon: Wallet, label: 'Endividamento e dívidas pessoais' },
+  { icon: Heart, label: 'Conflitos familiares' },
+  { icon: Home, label: 'Moradia e aluguel' },
+  { icon: Shield, label: 'Golpes e fraudes' },
+  { icon: FileText, label: 'Herança e inventário' },
+  { icon: CreditCard, label: 'Problemas de consumo' },
+  { icon: Users, label: 'Separação e guarda' },
+  { icon: Scale, label: 'Pensão alimentícia' },
+  { icon: ShoppingBag, label: 'Cobranças indevidas' },
+];
 
 
 export function RecognitionSection() {
@@ -36,7 +37,7 @@ export function RecognitionSection() {
             )}
           </div>
 
-          <p className="text-muted-foreground leading-relaxed max-w-xl mx-auto">Sem um destino claro, essas situações não desaparecem. Elas apenas passam a ser administradas informalmente pela empresa. O RH vira o ponto de apoio informal para questões pessoais sensíveis, gerando sobrecarga, ruído e exposição desnecessária.</p>
+          <p className="text-muted-foreground leading-relaxed max-w-xl mx-auto">Sem um canal adequado, essas situações não desaparecem. Elas acabam sendo absorvidas informalmente pela empresa — muitas vezes pelo RH — gerando sobrecarga, ruído e exposição desnecessária para a organização.</p>
         </div>
       </div>
     </section>);
