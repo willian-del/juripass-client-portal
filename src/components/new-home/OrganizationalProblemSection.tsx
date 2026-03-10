@@ -63,8 +63,8 @@ export function OrganizationalProblemSection() {
 
           <ScrollReveal>
             <div className="border-t border-border/50 max-w-lg mx-auto pt-8">
-              <p className="text-muted-foreground leading-relaxed text-center">Gestores tentam ajudar. O RH tenta orientar.
-Mas nenhum deles foi estruturado para assumir esse papel.
+              <p className="text-muted-foreground leading-relaxed text-center">Gestores tentam ajudar. O RH tenta orientar. Mas nenhum deles foi estruturado para assumir esse papel.
+
                 <br />
                 Mas nenhum deles deveria assumir esse papel.
               </p>
