@@ -101,7 +101,7 @@ export default function AdminMaterials() {
   const [shares, setShares] = useState<Record<string, ShareWithViews[]>>({});
 
   // Preview state
-  const [previewType, setPreviewType] = useState<'slides' | 'onepager' | null>(null);
+  const [previewType, setPreviewType] = useState<'slides' | 'onepager' | 'posters' | null>(null);
 
   // Edit state
   const [editOpen, setEditOpen] = useState(false);
