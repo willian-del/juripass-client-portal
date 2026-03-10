@@ -1,41 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Corrigir entrega de materiais no chat e evitar loop de "Preparando material"
+## Problema
 
-### Problema raiz
-Quando o modelo chama `send_material`, o edge function envia um evento de ação ao frontend, mas:
-1. O frontend apenas faz `console.log` — nenhum material é entregue ao usuário
-2. O texto sintético "Pronto! Estou preparando o material" não contém nenhum link
-3. Quando o lead repete o pedido, o mesmo ciclo se repete indefinidamente
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### Correção
+## Solucao
 
-**1. Edge function (`supabase/functions/ai-commercial/index.ts`)**
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-Alterar o texto sintético do `send_material` para incluir um link clicável direto:
-- Apresentação → `/avaliacao` (já renderiza `SlidesPresentation` standalone)
-- One-pager → `/avaliacao` com parâmetro ou rota dedicada
+---
 
-O texto sintético passa a ser algo como:
+## Alteracoes
+
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
-"Aqui está a apresentação da Juripass:\nhttps://juripass-client-portal.lovable.app/avaliacao\n\nSe quiser, posso abrir o formulário para agendar uma conversa com o time."
+
+### 2. Atualizar `src/App.tsx`
+
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
 ```
 
-Construir a URL base usando o header `Origin` ou `Referer` do request para funcionar em preview e produção.
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-**2. ChatMessage (`src/components/chat/ChatMessage.tsx`)**
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
-Adicionar renderização de links como clicáveis no markdown do assistente. O `react-markdown` já converte links automaticamente, mas precisamos garantir que `target="_blank"` seja aplicado para links externos.
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
 
-**3. ChatWidget (`src/components/chat/ChatWidget.tsx`)**
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
 
-Remover o `console.log` do handler de `send_material` — o material agora é entregue inline na mensagem.
+### 4. Garantir scroll to top na navegacao
 
-### Resumo de arquivos
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
 
-| Arquivo | Mudança |
-|---------|---------|
-| `supabase/functions/ai-commercial/index.ts` | Incluir URL real no texto sintético de `send_material` |
-| `src/components/chat/ChatMessage.tsx` | Garantir links clicáveis com `target="_blank"` no markdown |
-| `src/components/chat/ChatWidget.tsx` | Limpar handler de `send_material` (remover console.log) |
+---
 
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

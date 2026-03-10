@@ -26,7 +26,15 @@ export function ChatMessage({ message, onAction }: ChatMessageProps) {
           <p>{message.content}</p>
         ) : (
           <div className="prose prose-sm max-w-none dark:prose-invert [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>ol]:mb-2">
-            <ReactMarkdown>{message.content}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                a: ({ href, children }) => (
+                  <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary underline font-medium">
+                    {children}
+                  </a>
+                ),
+              }}
+            >{message.content}</ReactMarkdown>
             {/* Render inline CTA button if message mentions scheduling */}
             {onAction && message.content && /formulário|agendar uma conversa|abrir.*(formulário|agendamento)/i.test(message.content) && (
               <Button
