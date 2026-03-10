@@ -38,7 +38,7 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
             className="h-10 object-contain"
           />
           <div className="text-right">
-            <p className="text-white/60 text-sm">Programa de Acolhimento e Orientação Jurídica</p>
+            <p className="text-white/60 text-sm">Plataforma de prevenção e monitoramento de riscos humanos</p>
           </div>
         </div>
 
