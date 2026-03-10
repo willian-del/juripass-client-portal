@@ -148,7 +148,7 @@ Deno.serve(async (req) => {
     };
 
     const subject = replaceTemplateVars(subjectTemplate, vars, true);
-    const html = replaceTemplateVars(bodyTemplate, vars, false);
+    const html = replaceTemplateVars(bodyTemplate, vars, true);
 
     const emailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
