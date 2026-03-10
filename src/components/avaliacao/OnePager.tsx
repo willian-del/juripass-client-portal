@@ -97,7 +97,7 @@ export function OnePager({ onClose, standalone = false }: OnePagerProps) {
                     'Menor impacto emocional no ambiente de trabalho',
                     'Fortalecimento do employer branding',
                     'Aderência a políticas de bem-estar e NR-01',
-                    'Estatísticas de uso e mapa de risco psicossocial',
+                    'Indicadores agregados de riscos humanos e psicossociais',
                   ].map((t) => (
                     <li key={t} className="flex items-start gap-1.5">
                       <span className="w-1 h-1 rounded-full bg-[#4A9FD8] mt-1.5 shrink-0" />{t}
