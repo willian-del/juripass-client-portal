@@ -296,11 +296,11 @@ export function PostersViewer({ standalone, onClose }: PostersViewerProps) {
           <span className="text-sm font-semibold text-foreground">Cartazes Informativos</span>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="inline-flex items-center gap-1" onClick={handlePrint}>
+          <Button variant="outline" size="sm" onClick={handlePrint}>
             <Download className="h-4 w-4" /> Imprimir / Salvar PDF
           </Button>
           {onClose && (
-            <Button variant="ghost" size="sm" className="inline-flex items-center gap-1" onClick={onClose}>
+            <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-4 w-4" /> Fechar
             </Button>
           )}
