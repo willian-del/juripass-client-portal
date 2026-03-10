@@ -1,15 +1,16 @@
 import { CreditCard, Heart, Home, Shield, Users, Wallet, FileText, Scale, ShoppingBag } from 'lucide-react';
 
 const items = [
-{ icon: Wallet, label: 'Endividamento e nome sujo' },
-{ icon: Heart, label: 'Conflitos e questões familiares' },
-{ icon: Home, label: 'Problemas com moradia e aluguel' },
-{ icon: Shield, label: 'Golpes e fraudes digitais' },
-{ icon: FileText, label: 'Familia, inventário e herança' },
-{ icon: CreditCard, label: 'Problemas com compras e garantia' },
-{ icon: Users, label: 'Separação e guarda de filhos' },
-{ icon: Scale, label: 'Revisão e pagamento de pensão' },
-{ icon: ShoppingBag, label: 'Cobranças e taxas indevidas' }];
+  { icon: Wallet, label: 'Endividamento e dívidas pessoais' },
+  { icon: Heart, label: 'Conflitos familiares' },
+  { icon: Home, label: 'Moradia e aluguel' },
+  { icon: Shield, label: 'Golpes e fraudes' },
+  { icon: FileText, label: 'Herança e inventário' },
+  { icon: CreditCard, label: 'Problemas de consumo' },
+  { icon: Users, label: 'Separação e guarda' },
+  { icon: Scale, label: 'Pensão alimentícia' },
+  { icon: ShoppingBag, label: 'Cobranças indevidas' },
+];
 
 
 export function RecognitionSection() {
