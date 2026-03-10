@@ -616,7 +616,14 @@ serve(async (req) => {
             if (toolNames.includes("open_lead_form")) {
               syntheticText = "Perfeito! Abri o formulário para você. 😊\nÉ só preencher e nosso time entra em contato rapidinho.";
             } else if (toolNames.includes("send_material")) {
-              syntheticText = "Pronto! Estou preparando o material para você.";
+              // Build base URL from request origin
+              const origin = req.headers.get("origin") || req.headers.get("referer")?.replace(/\/+$/, "") || "https://juripass-client-portal.lovable.app";
+              const materialArgs = toolCalls.find((t: any) => t.function?.name === "send_material");
+              let matType = "apresentacao";
+              try { matType = JSON.parse(materialArgs?.function?.arguments || "{}").type || "apresentacao"; } catch {}
+              const matPath = matType === "one_pager" ? "/avaliacao?view=onepager" : "/avaliacao";
+              const matLabel = matType === "one_pager" ? "One-Pager" : "Apresentação Comercial";
+              syntheticText = `Aqui está a ${matLabel} da Juripass:\n\n👉 [Abrir ${matLabel}](${origin}${matPath})\n\nSe quiser, posso abrir o formulário para agendar uma conversa com o time.`;
             }
             if (syntheticText) {
               const syntheticChunk = JSON.stringify({

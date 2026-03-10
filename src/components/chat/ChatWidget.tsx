@@ -32,11 +32,7 @@ export function ChatWidget() {
       if (action.type === 'open_lead_form') {
         openLeadForm();
       }
-      if (action.type === 'send_material' && action.material) {
-        // Material info is handled inline by the agent's text response
-        // Could open a viewer in the future
-        console.log('Material requested:', action.material);
-      }
+      // send_material is now handled inline via the assistant's message with a clickable link
     });
   }, [setOnAction, openLeadForm]);
 
