@@ -154,7 +154,7 @@ function BulletIcon() {
   );
 }
 
-/* ── Single Poster (PDF style) ── */
+/* ── Single Poster (PDF style, optimised for A4 wall print) ── */
 function Poster({ data }: { data: PosterData }) {
   return (
     <div
@@ -170,28 +170,28 @@ function Poster({ data }: { data: PosterData }) {
       <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${DARK_BLUE}, ${ACCENT_BLUE})` }} />
 
       {/* Body */}
-      <div className="flex-1 px-12 py-8 flex flex-col gap-6">
+      <div className="flex-1 px-12 py-8 flex flex-col gap-7">
         {/* Title block */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
             {data.title}
           </h1>
-          <p className="text-base leading-relaxed" style={{ color: '#64748B' }}>
+          <p className="text-lg leading-relaxed" style={{ color: '#64748B' }}>
             {data.subtitle}
           </p>
         </div>
 
-        {/* Items section — clean white, no colored background */}
-        <div className="space-y-3">
+        {/* Items section */}
+        <div className="space-y-4">
           <h2
-            className="text-xs font-bold tracking-[0.2em] uppercase"
+            className="text-sm font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
           >
             {data.sectionTitle}
           </h2>
-          <ul className="space-y-2 pl-1">
+          <ul className="space-y-3 pl-1">
             {data.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm" style={{ color: '#334155' }}>
+              <li key={i} className="flex items-start gap-3 text-base" style={{ color: '#334155' }}>
                 <BulletIcon />
                 <span>{item.text}</span>
               </li>
@@ -201,11 +201,11 @@ function Poster({ data }: { data: PosterData }) {
 
         {/* Pills (generic poster only) */}
         {data.pills && (
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-3">
             {data.pills.map((label, i) => (
               <span
                 key={i}
-                className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold border"
+                className="inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold border"
                 style={{ borderColor: ACCENT_BLUE, color: MID_BLUE }}
               >
                 {label}
@@ -217,18 +217,18 @@ function Poster({ data }: { data: PosterData }) {
         {/* Steps — icon boxes */}
         <div className="space-y-4">
           <h2
-            className="text-xs font-bold tracking-[0.2em] uppercase"
+            className="text-sm font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
           >
             {data.stepsTitle}
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {data.steps.map((s) => (
               <div key={s.num} className="flex items-start gap-4">
                 <IconBox num={s.num} />
-                <div className="text-sm" style={{ color: '#334155' }}>
-                  <span className="font-bold" style={{ color: DARK_BLUE }}>{s.title}</span>
-                  <span className="block text-xs mt-0.5" style={{ color: '#64748B' }}>{s.desc}</span>
+                <div style={{ color: '#334155' }}>
+                  <span className="text-base font-bold" style={{ color: DARK_BLUE }}>{s.title}</span>
+                  <span className="block text-sm mt-0.5" style={{ color: '#64748B' }}>{s.desc}</span>
                 </div>
               </div>
             ))}
@@ -237,46 +237,46 @@ function Poster({ data }: { data: PosterData }) {
 
         {/* Note */}
         <div
-          className="rounded-lg px-5 py-3 text-xs leading-relaxed border-l-4"
+          className="rounded-lg px-5 py-4 text-sm leading-relaxed border-l-4"
           style={{ borderColor: ACCENT_BLUE, backgroundColor: '#F8FAFC', color: '#475569' }}
         >
           {data.note}
         </div>
       </div>
 
-      {/* CTA section — unified blue style */}
+      {/* CTA section — WhatsApp only */}
       <div
-        className="px-12 py-6 flex items-center justify-between gap-8"
+        className="px-12 py-7 flex items-center justify-between gap-8"
         style={{ backgroundColor: DARK_BLUE }}
       >
         <div className="flex-1 space-y-3 text-white">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase opacity-80">FALE CONOSCO</p>
-          <p className="text-lg font-bold">{WHATSAPP_NUMBER}</p>
+          <p className="text-xs font-bold tracking-[0.2em] uppercase opacity-80">FALE CONOSCO VIA WHATSAPP</p>
+          <p className="text-2xl font-bold">📱 {WHATSAPP_NUMBER}</p>
           <a
             href={WHATSAPP_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold text-white no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-bold text-white no-underline transition-opacity hover:opacity-90"
             style={{ backgroundColor: MID_BLUE }}
           >
-            Iniciar novo atendimento →
+            Abrir conversa no WhatsApp →
           </a>
         </div>
         <div className="flex flex-col items-center gap-2">
           <img src={QR_SRC} alt="QR Code WhatsApp Juripass" className="w-28 h-28 rounded-xl bg-white p-1.5" />
-          <span className="text-[10px] text-white/60 text-center tracking-wide">ESCANEIE E FALE<br />COM A JURIPASS</span>
+          <span className="text-[10px] text-white/60 text-center tracking-wide">ESCANEIE E ABRA<br />NO WHATSAPP</span>
         </div>
       </div>
 
-      {/* Footer — single blue bar */}
+      {/* Footer — single blue bar with stacked logo */}
       <div
-        className="px-12 py-4 flex items-center justify-between"
+        className="px-12 py-5 flex items-center justify-between"
         style={{ backgroundColor: FOOTER_BLUE }}
       >
-        <img src="/images/branding/juripass-logo-full-white.png" alt="Juripass" className="h-7" />
+        <img src="/images/branding/juripass-logo-stacked-white.png" alt="Juripass" className="h-14" />
         <div className="text-right text-white">
-          <p className="text-[11px] font-semibold tracking-wide uppercase">Acolhimento jurídico na palma da sua mão</p>
-          <p className="text-[10px] opacity-70 mt-0.5">Dúvidas? Procure o RH da empresa.</p>
+          <p className="text-xs font-semibold tracking-wide uppercase">Acolhimento jurídico na palma da sua mão</p>
+          <p className="text-[11px] opacity-70 mt-0.5">Dúvidas? Procure o RH da empresa.</p>
         </div>
       </div>
     </div>
