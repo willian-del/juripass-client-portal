@@ -27,6 +27,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
+import { PostersViewer } from '@/components/avaliacao/PostersViewer';
 
 type Material = {
   id: string;
