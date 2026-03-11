@@ -367,9 +367,18 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
       {/* Print styles */}
       <style>{`
         @media print {
+          html, body {
+            overflow: hidden !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
           body > *:not(#root) { display: none !important; }
           .print\\:hidden { display: none !important; }
           nav, header, footer, [data-sidebar], [role="banner"] { display: none !important; }
+
+          /* Hide scrollbars */
+          *::-webkit-scrollbar { display: none !important; }
+          * { scrollbar-width: none !important; }
 
           * {
             -webkit-print-color-adjust: exact !important;
@@ -378,6 +387,7 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
 
           [data-poster-root] {
             box-shadow: none !important;
+            page-break-inside: avoid;
           }
 
           @page { size: A4 portrait; margin: 0; }
