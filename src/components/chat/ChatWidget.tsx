@@ -53,7 +53,7 @@ export function ChatWidget() {
     const trimmed = input.trim();
     if (!trimmed || isLoading) return;
     setInput('');
-    send(trimmed);
+    send(trimmed, { leadFormSubmitted: hasSubmitted });
   };
 
   return (

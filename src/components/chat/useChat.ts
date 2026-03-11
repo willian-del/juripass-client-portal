@@ -46,7 +46,7 @@ async function streamChat({
   const resp = await fetch(CHAT_URL, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ messages, mode, leadContext, sessionId }),
+    body: JSON.stringify({ messages, mode, leadContext, sessionId, leadFormSubmitted }),
     signal,
   });
 
