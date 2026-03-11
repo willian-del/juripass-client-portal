@@ -102,6 +102,7 @@ export default function AdminMaterials() {
 
   // Preview state
   const [previewType, setPreviewType] = useState<'slides' | 'onepager' | 'posters' | null>(null);
+  const [previewPosterId, setPreviewPosterId] = useState<string | undefined>(undefined);
 
   // Edit state
   const [editOpen, setEditOpen] = useState(false);
@@ -311,10 +312,16 @@ export default function AdminMaterials() {
     if (!m.file_path) {
       if (m.file_type === 'one-pager') {
         setPreviewType('onepager');
+        setPreviewPosterId(undefined);
       } else if (m.file_type === 'posters') {
         setPreviewType('posters');
+        setPreviewPosterId(undefined);
+      } else if (m.file_type.startsWith('poster-')) {
+        setPreviewType('posters');
+        setPreviewPosterId(m.file_type.replace('poster-', ''));
       } else {
         setPreviewType('slides');
+        setPreviewPosterId(undefined);
       }
     } else {
       const { data } = await supabase.storage.from('sales-materials').createSignedUrl(m.file_path, 3600);
@@ -426,7 +433,7 @@ export default function AdminMaterials() {
         {previewType === 'slides' ? (
           <SlidesPresentation onClose={() => setPreviewType(null)} />
         ) : previewType === 'posters' ? (
-          <PostersViewer onClose={() => setPreviewType(null)} />
+          <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
         ) : (
           <OnePager onClose={() => setPreviewType(null)} />
         )}

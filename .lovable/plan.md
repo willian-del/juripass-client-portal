@@ -1,49 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Separar cartazes em 5 materiais + polir layout A4
+## Problema
 
-### Diagnóstico
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-1. **Apenas 1 página imprime**: `break-after: page` com múltiplos divs A4 é notoriamente inconsistente entre navegadores. Solução confiável: cada cartaz vira um material independente.
-2. **Conteúdo explode a margem inferior**: O poster atual soma header (py-10) + accent line + body (px-12 py-8 gap-7) + CTA (py-7) + footer (py-5). Isso ultrapassa 297mm. Precisa compactar espaçamentos e fontes.
+## Solucao
 
-### Mudanças
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-#### 1. Separar em 5 materiais individuais (`PostersViewer.tsx`)
+---
 
-- Aceitar um novo prop `posterId?: string` para renderizar apenas um cartaz específico.
-- Quando `posterId` é fornecido, renderizar apenas aquele poster (impressão de página única — funciona sempre).
-- Quando não fornecido, renderizar todos com navegação (comportamento atual para visualização, sem impressão multi-página).
-- O botão "Imprimir" fica disponível em cada cartaz individual.
+## Alteracoes
 
-#### 2. Compactar layout do poster para caber em A4
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-Reduzir espaçamentos internos para que o conteúdo caiba sem cortar:
-- Header: `py-10` → `py-6`, logo `h-16` → `h-12`
-- Body: `py-8 gap-7` → `py-5 gap-4`, título `text-4xl` → `text-3xl`
-- Subtitle: `text-lg` → `text-base`
-- Items: `space-y-3` → `space-y-2`, font `text-base` → `text-sm`
-- Steps: `space-y-4` → `space-y-2.5`
-- CTA section: `py-7 px-12` → `py-4 px-8`, número `text-2xl` → `text-xl`, QR `w-28 h-28` → `w-24 h-24`
-- Footer: `py-5` → `py-3`, logo `h-14` → `h-10`
-- Note: `px-5 py-4` → `px-4 py-3`
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-#### 3. Atualizar `serve-material` edge function
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
+```
 
-Adicionar os 5 cartazes individuais como tipos builtin reconhecidos (`poster-generic`, `poster-debt`, `poster-bank`, `poster-consumer`, `poster-family`), ou usar um parâmetro de query.
+### 2. Atualizar `src/App.tsx`
 
-#### 4. Registrar materiais no admin (`AdminMaterials`)
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-Adicionar os 5 cartazes como materiais builtin separados na seção de materiais, cada um com seu título descritivo:
-- Cartaz Genérico
-- Cartaz Endividamento  
-- Cartaz Bancos
-- Cartaz Consumo
-- Cartaz Família
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
-Cada um linkando para o `PostersViewer` com o `posterId` correspondente.
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
 
-### Abordagem técnica
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
 
-A mudança principal é no `PostersViewer`: filtrar por `posterId` quando fornecido. O print CSS fica simples (1 poster = 1 página A4). Os materiais no admin passam a ter 5 entradas de cartaz em vez de 1.
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
 
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
