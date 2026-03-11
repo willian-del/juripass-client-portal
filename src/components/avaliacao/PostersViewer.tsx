@@ -239,7 +239,7 @@ function Poster({ data }: { data: PosterData }) {
 
         {/* Note */}
         <div
-          className="rounded-md px-4 py-2.5 text-lg leading-relaxed border-l-4"
+          className="rounded-md px-4 py-3 text-lg leading-relaxed border-l-4"
           style={{ borderColor: ACCENT_BLUE, backgroundColor: '#F8FAFC', color: '#475569' }}
         >
           {data.note}
