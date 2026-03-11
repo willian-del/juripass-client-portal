@@ -174,7 +174,7 @@ function Poster({ data }: { data: PosterData }) {
       {/* Body */}
       <div className="flex-1 px-12 py-4 flex flex-col gap-5">
         {/* Title block */}
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-2">
           <h1 className="text-6xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
             {data.title}
           </h1>
