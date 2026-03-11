@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Printer, X, ChevronLeft, ChevronRight, Phone, MessageSquare } from 'lucide-react';
+import { Printer, X, ChevronLeft, ChevronRight, Phone, MessageSquare, Check, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 
 interface PostersViewerProps {
@@ -104,89 +104,23 @@ function Divider() {
   return <div className="border-t border-gray-200" />;
 }
 
-/* ── Single Poster (OnePager pattern — natural flow, no fixed height) ── */
-function Poster({ data }: { data: PosterData }) {
+/* ── Shared header band ── */
+function PosterHeader({ tagline }: { tagline: string }) {
   return (
-    <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
+    <div className="bg-[#2C3E7D] px-8 py-6 flex items-center justify-between">
+      <img src="/images/branding/juripass-logo-white.png" alt="Juripass" className="h-10 object-contain" />
+      <p className="text-white/60 text-sm text-right">{tagline}</p>
+    </div>
+  );
+}
 
-      {/* Header band */}
-      <div className="bg-[#2C3E7D] px-8 py-6 flex items-center justify-between">
-        <img
-          src="/images/branding/juripass-logo-white.png"
-          alt="Juripass"
-          className="h-10 object-contain"
-        />
-        <p className="text-white/60 text-sm text-right">
-          Acolhimento jurídico para colaboradores
-        </p>
-      </div>
-
-      {/* Body */}
-      <div className="flex-1 flex flex-col justify-between px-10 py-8">
-
-        {/* Headline + Subtitle */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
-            {data.title}
-          </h1>
-          <p className="text-lg leading-relaxed text-gray-500">
-            {data.subtitle}
-          </p>
-        </div>
-
-        <Divider />
-
-        {/* Items section */}
-        <section className="space-y-3">
-          <SectionTitle>{data.sectionTitle}</SectionTitle>
-          <ul className="space-y-2 pl-1">
-            {data.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-base text-gray-700">
-                <span className="w-2 h-2 rounded-full bg-[#4A9FD8] mt-2 shrink-0" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <Divider />
-
-        {/* Steps */}
-        <section className="space-y-3">
-          <SectionTitle>COMO PEDIR AJUDA</SectionTitle>
-          <div className="grid grid-cols-3 gap-4">
-            {data.steps.map((s) => (
-              <div key={s.num} className="text-center space-y-1">
-                <div className="w-9 h-9 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-sm font-bold mx-auto print:bg-gray-700">
-                  {s.num}
-                </div>
-                <p className="text-sm font-semibold text-[#2C3E7D]">{s.title}</p>
-                <p className="text-xs text-gray-500 leading-tight">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* Note */}
-        <div className="rounded-md px-5 py-4 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
-          {data.note}
-        </div>
-
-        {/* Confidentiality */}
-        <p className="text-center text-base font-semibold italic text-[#2C3E7D]">
-          Atendimento confidencial e sem julgamentos.
-        </p>
-
-      </div>
-
-      {/* Footer band — Contact + QR */}
+/* ── Shared footer band ── */
+function PosterFooter() {
+  return (
+    <>
       <div className="bg-[#2C3E7D] px-8 py-5 flex items-center justify-between gap-6">
         <div className="flex-1 space-y-2 text-white">
-          <p className="text-xs font-bold tracking-[0.15em] uppercase text-white/70">
-            FALE CONOSCO VIA WHATSAPP
-          </p>
+          <p className="text-xs font-bold tracking-[0.15em] uppercase text-white/70">FALE CONOSCO VIA WHATSAPP</p>
           <p className="text-lg font-bold flex items-center gap-2">
             <Phone className="h-4 w-4" />
             {WHATSAPP_NUMBER}
@@ -205,18 +139,12 @@ function Poster({ data }: { data: PosterData }) {
           </p>
         </div>
         <div className="flex flex-col items-center gap-1.5 shrink-0">
-          <img
-            src={QR_SRC}
-            alt="QR Code WhatsApp Juripass"
-            className="w-20 h-20 rounded-lg bg-white p-1"
-          />
+          <img src={QR_SRC} alt="QR Code WhatsApp Juripass" className="w-20 h-20 rounded-lg bg-white p-1" />
           <span className="text-[10px] text-white/70 text-center tracking-wide font-medium leading-tight">
             ESCANEIE PARA FALAR<br />COM UM ADVOGADO
           </span>
         </div>
       </div>
-
-      {/* Sub-footer */}
       <div className="bg-[#5B8EC9] px-8 py-3 flex items-center justify-between">
         <img src="/images/branding/juripass-logo-stacked-white.png" alt="Juripass" className="h-7" />
         <div className="text-right text-white">
@@ -224,12 +152,209 @@ function Poster({ data }: { data: PosterData }) {
           <p className="text-[10px] opacity-70 mt-0.5">Dúvidas? Procure o RH da empresa.</p>
         </div>
       </div>
+    </>
+  );
+}
+
+/* ── Shared steps section ── */
+function StepsSection({ steps }: { steps: { num: number; title: string; desc: string }[] }) {
+  return (
+    <section className="space-y-3">
+      <SectionTitle>COMO PEDIR AJUDA</SectionTitle>
+      <div className="grid grid-cols-3 gap-4">
+        {steps.map((s) => (
+          <div key={s.num} className="text-center space-y-1">
+            <div className="w-9 h-9 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-sm font-bold mx-auto print:bg-gray-700">
+              {s.num}
+            </div>
+            <p className="text-sm font-semibold text-[#2C3E7D]">{s.title}</p>
+            <p className="text-xs text-gray-500 leading-tight">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── Single Thematic Poster ── */
+function Poster({ data }: { data: PosterData }) {
+  return (
+    <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
+      <PosterHeader tagline="Acolhimento jurídico para colaboradores" />
+
+      <div className="flex-1 flex flex-col justify-between px-10 py-8">
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">{data.title}</h1>
+          <p className="text-lg leading-relaxed text-gray-500">{data.subtitle}</p>
+        </div>
+
+        <Divider />
+
+        <section className="space-y-3">
+          <SectionTitle>{data.sectionTitle}</SectionTitle>
+          <ul className="space-y-2 pl-1">
+            {data.items.map((item, i) => (
+              <li key={i} className="flex items-start gap-2 text-base text-gray-700">
+                <span className="w-2 h-2 rounded-full bg-[#4A9FD8] mt-2 shrink-0" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <Divider />
+
+        <StepsSection steps={data.steps} />
+
+        <Divider />
+
+        <div className="rounded-md px-5 py-4 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
+          {data.note}
+        </div>
+
+        <p className="text-center text-base font-semibold italic text-[#2C3E7D]">
+          Atendimento confidencial e sem julgamentos.
+        </p>
+      </div>
+
+      <PosterFooter />
+    </div>
+  );
+}
+
+/* ── Institutional Poster ── */
+function InstitutionalPoster() {
+  const situations = [
+    { label: 'Problemas de família', detail: 'pensão, separação, guarda dos filhos' },
+    { label: 'Dívidas e cobranças', detail: 'nome negativado, renegociação de dívidas' },
+    { label: 'Problemas com compras ou serviços', detail: 'produto com defeito, cobrança indevida' },
+    { label: 'Questões relacionadas a aluguel ou moradia', detail: '' },
+    { label: 'Dúvidas jurídicas sobre situações do cotidiano', detail: '' },
+  ];
+
+  const included = [
+    'Orientação jurídica com advogado',
+    'Esclarecimento de dúvidas',
+    'Explicação dos seus direitos',
+    'Avaliação inicial da situação',
+  ];
+
+  const excluded = [
+    'Direito trabalhista',
+    'Direito criminal ou penal',
+    'Denúncias ou situações ligadas ao Código de Ética da empresa',
+  ];
+
+  const steps = [
+    { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
+    { num: 2, title: 'Conte brevemente o que está acontecendo', desc: 'O atendimento é confidencial' },
+    { num: 3, title: 'Receba orientação de um advogado', desc: 'De forma simples e acolhedora' },
+  ];
+
+  return (
+    <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
+      <PosterHeader tagline="Benefício jurídico disponível para colaboradores desta empresa" />
+
+      <div className="flex-1 flex flex-col justify-between px-10 py-6 gap-3">
+        {/* Headline */}
+        <div className="text-center space-y-1.5">
+          <h1 className="text-3xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
+            Tem dúvidas ou problemas jurídicos<br />no seu dia a dia?
+          </h1>
+          <p className="text-base leading-relaxed text-gray-500">
+            A Juripass pode orientar você. Converse com um advogado para entender seus direitos e saber quais são suas opções.
+          </p>
+        </div>
+
+        <Divider />
+
+        {/* O que é */}
+        <section className="space-y-1.5">
+          <SectionTitle>O QUE É A JURIPASS</SectionTitle>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            A Juripass é um canal de orientação jurídica oferecido pela empresa para ajudar colaboradores e seus familiares em situações jurídicas do dia a dia.
+          </p>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            Você pode conversar com um advogado e receber orientação clara, segura e confidencial.
+          </p>
+        </section>
+
+        <Divider />
+
+        {/* Situações */}
+        <section className="space-y-2">
+          <SectionTitle>EM QUAIS SITUAÇÕES PODEMOS AJUDAR</SectionTitle>
+          <ul className="space-y-1.5 pl-1">
+            {situations.map((s, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                <span className="w-2 h-2 rounded-full bg-[#4A9FD8] mt-1.5 shrink-0" />
+                <span>
+                  <strong>{s.label}</strong>
+                  {s.detail && <span className="text-gray-500"> ({s.detail})</span>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <Divider />
+
+        {/* Incluído / Não incluído — side by side */}
+        <div className="grid grid-cols-2 gap-6">
+          <section className="space-y-2">
+            <SectionTitle>O QUE ESTÁ INCLUÍDO</SectionTitle>
+            <ul className="space-y-1.5">
+              {included.map((item, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <Check className="h-4 w-4 text-[#4A9FD8] mt-0.5 shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs font-semibold text-[#2C3E7D] mt-1">
+              Primeiro atendimento gratuito e confidencial.
+            </p>
+          </section>
+
+          <section className="space-y-2">
+            <SectionTitle>O QUE NÃO ESTÁ INCLUÍDO</SectionTitle>
+            <ul className="space-y-1.5">
+              {excluded.map((item, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-gray-500 mt-1">
+              Esses temas devem ser tratados pelos canais internos da empresa ou pelas autoridades competentes.
+            </p>
+          </section>
+        </div>
+
+        <Divider />
+
+        {/* Passos */}
+        <StepsSection steps={steps} />
+
+        {/* Nota de acolhimento */}
+        <div className="rounded-md px-5 py-3 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
+          Problemas jurídicos fazem parte da vida. Ter orientação adequada ajuda você a tomar decisões com mais segurança.
+        </div>
+
+        <p className="text-center text-base font-semibold italic text-[#2C3E7D]">
+          Atendimento confidencial e sem julgamentos.
+        </p>
+      </div>
+
+      <PosterFooter />
     </div>
   );
 }
 
 /* ── Poster ID to label map ── */
 const POSTER_LABELS: Record<string, string> = {
+  institutional: 'Cartaz Institucional',
   family: 'Família',
   debt: 'Endividamento',
   work: 'Trabalho',
@@ -237,19 +362,25 @@ const POSTER_LABELS: Record<string, string> = {
   consumer: 'Consumo',
 };
 
+/* ── All poster IDs in display order ── */
+const ALL_POSTER_IDS = ['institutional', ...posters.map((p) => p.id)];
+
 /* ── Main component ── */
 export function PostersViewer({ standalone, onClose, posterId }: PostersViewerProps) {
-  const visiblePosters = posterId
-    ? posters.filter((p) => p.id === posterId)
-    : posters;
-
+  const visibleIds = posterId ? [posterId] : ALL_POSTER_IDS;
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isSingle = visiblePosters.length === 1;
-  const showingPoster = isSingle ? visiblePosters[0] : visiblePosters[currentIndex];
+  const isSingle = visibleIds.length === 1;
+  const currentId = visibleIds[isSingle ? 0 : currentIndex];
 
   const label = posterId
     ? `Cartaz — ${POSTER_LABELS[posterId] || posterId}`
     : 'Cartazes Informativos';
+
+  const renderPoster = (id: string) => {
+    if (id === 'institutional') return <InstitutionalPoster />;
+    const data = posters.find((p) => p.id === id);
+    return data ? <Poster data={data} /> : null;
+  };
 
   return (
     <div className={standalone ? 'min-h-screen bg-muted/40' : 'h-full overflow-auto bg-muted/40'}>
@@ -263,9 +394,9 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               <span className="text-xs text-muted-foreground min-w-[60px] text-center">
-                {currentIndex + 1} / {visiblePosters.length}
+                {currentIndex + 1} / {visibleIds.length}
               </span>
-              <Button variant="ghost" size="sm" disabled={currentIndex === visiblePosters.length - 1} onClick={() => setCurrentIndex((i) => i + 1)}>
+              <Button variant="ghost" size="sm" disabled={currentIndex === visibleIds.length - 1} onClick={() => setCurrentIndex((i) => i + 1)}>
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
@@ -287,7 +418,7 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
 
       {/* Poster */}
       <div className="py-8 print:py-0">
-        {showingPoster && <Poster data={showingPoster} />}
+        {renderPoster(currentId)}
       </div>
 
       {/* Print styles */}
