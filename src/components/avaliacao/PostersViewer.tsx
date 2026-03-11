@@ -217,7 +217,7 @@ function Poster({ data }: { data: PosterData }) {
         )}
 
         {/* Steps */}
-        <div className="space-y-1.5">
+        <div className="space-y-2.5">
           <h2
             className="text-lg font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
