@@ -1,83 +1,31 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plano: Corrigir top bar e otimizar impressão A4
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+### Problema 1: Botão Fechar sobrepondo Imprimir
 
-## Solucao
+Na top bar (linha 257), o label fica à esquerda e todos os botões (paginação + Imprimir + Fechar) ficam à direita empilhados. O botão Fechar está ao lado do Imprimir sem espaço adequado.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+**Solução:** Mover o botão Fechar para a extrema direita com separador visual, e garantir `gap-3` entre Imprimir e Fechar. Padrão igual ao OnePager (linha 14-27) onde Imprimir e Fechar têm espaçamento claro.
 
----
+### Problema 2: Conteúdo achatado no PDF / não ocupa A4 inteiro
 
-## Alteracoes
+O poster usa `max-w-[210mm]` mas sem altura mínima, então o conteúdo fica comprimido no topo da página. Para ocupar a página A4 inteira:
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**Solução:**
+- Adicionar `min-h-[297mm]` ao poster root com `flex flex-col`
+- O body (seção central) recebe `flex-1` para expandir e distribuir o conteúdo verticalmente
+- Body usa `justify-between` em vez de `space-y-5` fixo, para que as seções se distribuam uniformemente na página
+- Aumentar padding do body: `px-8 py-6` → `px-10 py-8`
+- Header e footer mantêm tamanho fixo, body expande para preencher
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+### Mudanças em `PostersViewer.tsx`
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+1. **Top bar** — adicionar `gap-3` e separador entre Imprimir e Fechar
+2. **Poster root** — adicionar `min-h-[297mm] flex flex-col`
+3. **Body** — `flex-1 flex flex-col justify-between px-10 py-8` (distribui seções verticalmente)
+4. **Print styles** — adicionar `min-height: 297mm` e `width: 210mm` ao `[data-poster-root]`
 
-### 2. Atualizar `src/App.tsx`
+### Arquivo afetado
+- `src/components/avaliacao/PostersViewer.tsx`
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
