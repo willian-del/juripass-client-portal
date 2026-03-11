@@ -1,40 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Corrigir impressão (cores e múltiplas páginas)
+## Problema
 
-### Problemas identificados
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-1. **Apenas 1 página**: O CSS `body * { visibility: hidden }` esconde tudo, e `[data-poster-root] { position: relative }` não é suficiente — os posters ficam empilhados fora do fluxo visível. O container pai dos posters também precisa estar visível.
+## Solucao
 
-2. **Sem cores**: O CSS de impressão usa `visibility: hidden` em tudo e depois restaura apenas nos posters. Mas os backgrounds aplicados via `style={{ backgroundColor }}` e `className` podem ser perdidos. Precisamos de `-webkit-print-color-adjust: exact; print-color-adjust: exact;` para forçar cores na impressão.
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### Correção em `src/components/avaliacao/PostersViewer.tsx`
+---
 
-Reescrever o bloco `<style>` de impressão (linhas 317-326):
+## Alteracoes
 
-```css
-@media print {
-  /* Hide everything except posters */
-  body > *:not(#root) { display: none !important; }
-  .print\\:hidden { display: none !important; }
-  
-  /* Make poster containers visible and in flow */
-  [data-poster-root] {
-    position: relative;
-    break-after: page;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  
-  @page { size: A4 portrait; margin: 0; }
-}
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-Também adicionar um `id="posters-container"` ao wrapper div e usar uma abordagem mais robusta: em vez de `visibility: hidden` em tudo (que quebra o layout), usar `display: none` apenas nos elementos que não são posters.
+### 2. Atualizar `src/App.tsx`
 
-**Abordagem final simplificada**: Remover a estratégia `visibility: hidden` e usar apenas classes `print:hidden` nos elementos que devem sumir, mantendo o fluxo normal do documento na impressão. Os posters já têm `pageBreakAfter: 'always'` no inline style.
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-Mudanças:
-1. **Linha 291** (container principal): remover `bg-muted/40` na impressão
-2. **Linhas 317-326**: reescrever CSS de print para não usar `visibility: hidden`, e sim esconder apenas navbar/sidebar/etc via seletores mais específicos, forçar cores, e garantir page breaks entre posters.
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
