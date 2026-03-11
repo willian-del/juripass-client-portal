@@ -519,7 +519,7 @@ export default function AdminMaterials() {
                         <TableHead className="w-[80px] text-center">Envios</TableHead>
                         <TableHead className="w-[80px] text-center">Views</TableHead>
                         <TableHead className="w-[110px]">Data</TableHead>
-                        <TableHead className="w-[220px] text-right">Ações</TableHead>
+                        <TableHead className="w-[260px] text-right">Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
