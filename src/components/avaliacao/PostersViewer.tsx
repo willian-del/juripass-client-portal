@@ -28,7 +28,6 @@ type PosterData = {
   stepsTitle: string;
   steps: { num: number; title: string; desc: string }[];
   note: string;
-  pills?: string[];
 };
 
 const posters: PosterData[] = [
