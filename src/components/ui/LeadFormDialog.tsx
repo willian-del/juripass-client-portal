@@ -62,7 +62,7 @@ const STEP_FIELDS: Record<number, (keyof LeadFormData)[]> = {
   3: ['message'],
 };
 
-export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
+export function LeadFormDialog({ open, onOpenChange, onSuccess }: LeadFormDialogProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState(1);
