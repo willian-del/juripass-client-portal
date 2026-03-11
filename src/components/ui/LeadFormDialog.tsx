@@ -53,6 +53,7 @@ const SENIORITY_LABELS: Record<string, string> = {
 interface LeadFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
 const STEP_FIELDS: Record<number, (keyof LeadFormData)[]> = {
@@ -61,7 +62,7 @@ const STEP_FIELDS: Record<number, (keyof LeadFormData)[]> = {
   3: ['message'],
 };
 
-export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
+export function LeadFormDialog({ open, onOpenChange, onSuccess }: LeadFormDialogProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState(1);
@@ -117,6 +118,7 @@ export function LeadFormDialog({ open, onOpenChange }: LeadFormDialogProps) {
       reset();
       setStep(1);
       onOpenChange(false);
+      onSuccess?.();
     } catch (err) {
       console.error('Lead submission error:', err);
       toast({ title: 'Erro ao enviar', description: 'Tente novamente em alguns instantes.', variant: 'destructive' });

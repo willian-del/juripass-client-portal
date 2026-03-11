@@ -17,7 +17,7 @@ export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const { messages, isLoading, error, send, reset, setOnAction } = useChat('qualify');
-  const { open: openLeadForm } = useLeadForm();
+  const { open: openLeadForm, hasSubmitted } = useLeadForm();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -53,7 +53,7 @@ export function ChatWidget() {
     const trimmed = input.trim();
     if (!trimmed || isLoading) return;
     setInput('');
-    send(trimmed);
+    send(trimmed, { leadFormSubmitted: hasSubmitted });
   };
 
   return (

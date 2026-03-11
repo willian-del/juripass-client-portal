@@ -430,7 +430,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, mode = "qualify", leadContext, sessionId } = await req.json();
+    const { messages, mode = "qualify", leadContext, sessionId, leadFormSubmitted } = await req.json();
 
     // Rate limit public qualify mode by IP
     if (mode === "qualify") {
@@ -504,6 +504,9 @@ serve(async (req) => {
     let systemPrompt = mode === "assist" ? ASSIST_SYSTEM_PROMPT : QUALIFY_SYSTEM_PROMPT;
     if (mode === "assist" && leadContext) {
       systemPrompt += `\n\n## Contexto do Lead Atual\n${JSON.stringify(leadContext, null, 2)}`;
+    }
+    if (mode === "qualify" && leadFormSubmitted) {
+      systemPrompt += `\n\n## IMPORTANTE: FORMULÁRIO JÁ PREENCHIDO\nO visitante JÁ preencheu o formulário de agendamento. NÃO ofereça o formulário novamente. NÃO use a ferramenta open_lead_form. Agradeça, confirme que o time comercial entrará em contato em breve e ofereça materiais ou tire dúvidas sobre a Juripass.`;
     }
 
     const body: any = {

@@ -19,6 +19,7 @@ async function streamChat({
   messages,
   mode,
   leadContext,
+  leadFormSubmitted,
   sessionId,
   authToken,
   onDelta,
@@ -30,6 +31,7 @@ async function streamChat({
   messages: ChatMessage[];
   mode: 'qualify' | 'assist';
   leadContext?: any;
+  leadFormSubmitted?: boolean;
   sessionId: string;
   authToken?: string;
   onDelta: (text: string) => void;
@@ -46,7 +48,7 @@ async function streamChat({
   const resp = await fetch(CHAT_URL, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ messages, mode, leadContext, sessionId }),
+    body: JSON.stringify({ messages, mode, leadContext, sessionId, leadFormSubmitted }),
     signal,
   });
 
@@ -143,7 +145,7 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
   }, []);
 
   const send = useCallback(
-    async (input: string, opts?: { leadContext?: any; authToken?: string }) => {
+    async (input: string, opts?: { leadContext?: any; authToken?: string; leadFormSubmitted?: boolean }) => {
       const userMsg: ChatMessage = { role: 'user', content: input.slice(0, 500) };
       setMessages((prev) => [...prev, userMsg]);
       setIsLoading(true);
@@ -169,6 +171,7 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
           messages: [...messages, userMsg],
           mode,
           leadContext: opts?.leadContext,
+          leadFormSubmitted: opts?.leadFormSubmitted,
           sessionId: getSessionId(),
           authToken: opts?.authToken,
           onDelta: upsertAssistant,

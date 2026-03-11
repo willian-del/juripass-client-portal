@@ -3,6 +3,7 @@ import { LeadFormDialog } from '@/components/ui/LeadFormDialog';
 
 interface LeadFormContextType {
   open: () => void;
+  hasSubmitted: boolean;
 }
 
 const LeadFormContext = createContext<LeadFormContextType | null>(null);
@@ -15,12 +16,17 @@ export function useLeadForm() {
 
 export function LeadFormProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const open = useCallback(() => setIsOpen(true), []);
 
+  const handleSuccess = useCallback(() => {
+    setHasSubmitted(true);
+  }, []);
+
   return (
-    <LeadFormContext.Provider value={{ open }}>
+    <LeadFormContext.Provider value={{ open, hasSubmitted }}>
       {children}
-      <LeadFormDialog open={isOpen} onOpenChange={setIsOpen} />
+      <LeadFormDialog open={isOpen} onOpenChange={setIsOpen} onSuccess={handleSuccess} />
     </LeadFormContext.Provider>
   );
 }
