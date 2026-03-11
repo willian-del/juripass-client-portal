@@ -1,83 +1,29 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plano: Corrigir impressão em branco dos cartazes
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+### Problema
+O CSS de impressão esconde tudo com `body * { visibility: hidden }` e tenta mostrar apenas elementos com `[data-poster-root]`, mas nenhum elemento no JSX tem esse atributo. Resultado: página em branco.
 
-## Solucao
+### Correção
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+**`src/components/avaliacao/PostersViewer.tsx`** — duas mudanças mínimas:
 
----
+1. **Linha ~143** (componente `Poster`, div raiz): adicionar `data-poster-root` ao container do poster:
+   ```tsx
+   <div data-poster-root className="w-[210mm] min-h-[297mm] ...">
+   ```
 
-## Alteracoes
+2. **Linha ~319-324** (print CSS): também garantir que o container pai dos posters fique visível, adicionando posição absoluta para que os posters apareçam no fluxo de impressão:
+   ```css
+   @media print {
+     body * { visibility: hidden; }
+     .print\\:hidden { display: none !important; }
+     [data-poster-root], [data-poster-root] * { visibility: visible; }
+     [data-poster-root] { position: relative; }
+     @page { size: A4 portrait; margin: 0; }
+   }
+   ```
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+Mudança mínima: adicionar 1 atributo ao JSX do poster + ajuste no CSS.
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
-
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
-
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
