@@ -107,7 +107,7 @@ function Divider() {
 /* ── Single Poster (OnePager pattern — natural flow, no fixed height) ── */
 function Poster({ data }: { data: PosterData }) {
   return (
-    <div className="max-w-[210mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0" data-poster-root>
+    <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
 
       {/* Header band */}
       <div className="bg-[#2C3E7D] px-8 py-6 flex items-center justify-between">
@@ -122,7 +122,7 @@ function Poster({ data }: { data: PosterData }) {
       </div>
 
       {/* Body */}
-      <div className="px-8 py-6 space-y-5">
+      <div className="flex-1 flex flex-col justify-between px-10 py-8">
 
         {/* Headline + Subtitle */}
         <div className="text-center space-y-2">
@@ -256,7 +256,7 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
       {/* Top bar */}
       <div className="print:hidden sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-6 py-3 flex items-center justify-between">
         <span className="text-sm text-gray-500">{label}</span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {!isSingle && (
             <div className="flex items-center gap-1 mr-2">
               <Button variant="ghost" size="sm" disabled={currentIndex === 0} onClick={() => setCurrentIndex((i) => i - 1)}>
@@ -275,9 +275,12 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
             Imprimir / Salvar como PDF
           </Button>
           {onClose && (
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-5 w-5" />
-            </Button>
+            <>
+              <div className="w-px h-6 bg-gray-200" />
+              <Button variant="ghost" size="icon" onClick={onClose}>
+                <X className="h-5 w-5" />
+              </Button>
+            </>
           )}
         </div>
       </div>
@@ -297,7 +300,7 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
           *::-webkit-scrollbar { display: none !important; }
           * { scrollbar-width: none !important; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          [data-poster-root] { box-shadow: none !important; page-break-inside: avoid; }
+          [data-poster-root] { box-shadow: none !important; page-break-inside: avoid; min-height: 297mm; width: 210mm; }
           @page { size: A4 portrait; margin: 0; }
         }
       `}</style>
