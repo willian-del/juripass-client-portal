@@ -203,20 +203,10 @@ function Poster({ data }: { data: PosterData }) {
           </ul>
         </div>
 
-        {/* Pills (generic poster only) */}
-        {data.pills && (
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {data.pills.map((label, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center px-5 py-1.5 rounded-full text-lg font-semibold border"
-                style={{ borderColor: ACCENT_BLUE, color: MID_BLUE }}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Confidentiality statement */}
+        <p className="text-center text-lg font-semibold italic" style={{ color: MID_BLUE }}>
+          Atendimento confidencial e sem julgamentos.
+        </p>
 
         {/* Separator */}
         <div className="h-px w-full" style={{ backgroundColor: `${ACCENT_BLUE}33` }} />
