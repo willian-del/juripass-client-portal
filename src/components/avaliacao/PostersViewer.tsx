@@ -122,7 +122,7 @@ function Poster({ data }: { data: PosterData }) {
       </div>
 
       {/* Body */}
-      <div className="px-8 py-6 space-y-5">
+      <div className="flex-1 flex flex-col justify-between px-10 py-8">
 
         {/* Headline + Subtitle */}
         <div className="text-center space-y-2">
