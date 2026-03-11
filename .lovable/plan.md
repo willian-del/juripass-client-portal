@@ -1,83 +1,51 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plano: Redesign do cartaz para impressão profissional
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+### Problemas identificados no código atual
 
-## Solucao
+1. **Botão "Fechar"** — aparece quando `onClose` é passado; na rota standalone não aparece, mas no admin sim
+2. **Barra de rolagem** — o container usa `overflow-hidden` mas o viewer externo pode mostrar scroll
+3. **Margens insuficientes** — `px-12` (~12mm) é pouco para impressão profissional (padrão: 20-25mm)
+4. **Espaçamento entre seções** — já aumentamos mas ainda está denso para poster de parede
+5. **Hierarquia visual** — falta separação visual mais clara entre blocos
+6. **Rodapé comprimido** — `py-1.5` é muito apertado
+7. **CTA pouco destacado** — bloco escuro funciona mas pode ser mais impactante
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### Mudanças em `PostersViewer.tsx`
 
----
+**1. Margens de impressão (20mm = ~px-[20mm])**
+- Body: `px-12` → `px-[20mm]`
+- Garantir que nenhum elemento toque as bordas
 
-## Alteracoes
+**2. Espaçamento entre seções (mais respiro)**
+- Body gap: `gap-5` → `gap-7`
+- Title block: `space-y-2` → `space-y-3`
+- Items section: `space-y-2.5` → `space-y-3`
+- Items list: `space-y-2` → `space-y-3`
+- Steps container: `space-y-2.5` → `space-y-3`
+- Steps items: `space-y-3` → `space-y-4`
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**3. Hierarquia visual melhorada**
+- Adicionar linha separadora sutil entre seções (Items e Steps)
+- Note box: aumentar padding `px-4 py-3` → `px-5 py-4`
+- Section titles: adicionar `border-b` sutil ou `pb-1` para ancorar
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+**4. Rodapé e CTA mais profissionais**
+- CTA: `py-2` → `py-3`, mais respiro interno
+- Footer: `py-1.5` → `py-2.5`, logo `h-6` → `h-7`
+- QR Code label: aumentar legibilidade
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+**5. Print styles reforçados**
+- Adicionar `overflow: hidden` no body durante print
+- Esconder scrollbars com CSS explícito
+- Garantir que o poster ocupe exatamente 1 página A4
 
-### 2. Atualizar `src/App.tsx`
+**6. Top bar (viewer)**
+- Já é `print:hidden` — OK para impressão
+- O botão "Fechar" só aparece com `onClose` — comportamento correto
+- Adicionar nota visual "Este material é otimizado para impressão" na barra
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+### Resultado esperado
+Cartaz institucional com margens seguras, hierarquia clara, blocos bem separados e aspecto profissional de material impresso — não de screenshot web.
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
