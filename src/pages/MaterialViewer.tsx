@@ -81,6 +81,17 @@ export default function MaterialViewer() {
     if (material.file_type === 'posters') {
       return <PostersViewer standalone />;
     }
+    // Individual poster types
+    const posterMap: Record<string, string> = {
+      'poster-generic': 'generic',
+      'poster-debt': 'debt',
+      'poster-bank': 'bank',
+      'poster-consumer': 'consumer',
+      'poster-family': 'family',
+    };
+    if (posterMap[material.file_type]) {
+      return <PostersViewer standalone posterId={posterMap[material.file_type]} />;
+    }
     // Fallback for unknown builtin types
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-8">

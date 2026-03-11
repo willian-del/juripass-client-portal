@@ -102,6 +102,7 @@ export default function AdminMaterials() {
 
   // Preview state
   const [previewType, setPreviewType] = useState<'slides' | 'onepager' | 'posters' | null>(null);
+  const [previewPosterId, setPreviewPosterId] = useState<string | undefined>(undefined);
 
   // Edit state
   const [editOpen, setEditOpen] = useState(false);
