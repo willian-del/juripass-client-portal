@@ -172,9 +172,9 @@ function Poster({ data }: { data: PosterData }) {
       <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${DARK_BLUE}, ${ACCENT_BLUE})` }} />
 
       {/* Body */}
-      <div className="flex-1 px-12 py-4 flex flex-col gap-3">
+      <div className="flex-1 px-12 py-4 flex flex-col gap-5">
         {/* Title block */}
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-2">
           <h1 className="text-6xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
             {data.title}
           </h1>
@@ -184,14 +184,14 @@ function Poster({ data }: { data: PosterData }) {
         </div>
 
         {/* Items section */}
-        <div className="space-y-1.5">
+        <div className="space-y-2.5">
           <h2
             className="text-lg font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
           >
             {data.sectionTitle}
           </h2>
-          <ul className="space-y-1 pl-1">
+          <ul className="space-y-2 pl-1">
             {data.items.map((item, i) => (
               <li key={i} className="flex items-start gap-2.5 text-2xl" style={{ color: '#334155' }}>
                 <BulletIcon />
@@ -217,20 +217,20 @@ function Poster({ data }: { data: PosterData }) {
         )}
 
         {/* Steps */}
-        <div className="space-y-1.5">
+        <div className="space-y-2.5">
           <h2
             className="text-lg font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
           >
             {data.stepsTitle}
           </h2>
-          <div className="space-y-1.5">
+          <div className="space-y-3">
             {data.steps.map((s) => (
               <div key={s.num} className="flex items-start gap-3">
                 <IconBox num={s.num} />
                 <div style={{ color: '#334155' }}>
                   <span className="text-2xl font-bold" style={{ color: DARK_BLUE }}>{s.title}</span>
-                  <span className="block text-lg mt-0.5" style={{ color: '#64748B' }}>{s.desc}</span>
+                  <span className="block text-lg mt-1" style={{ color: '#64748B' }}>{s.desc}</span>
                 </div>
               </div>
             ))}
@@ -239,7 +239,7 @@ function Poster({ data }: { data: PosterData }) {
 
         {/* Note */}
         <div
-          className="rounded-md px-4 py-2.5 text-lg leading-relaxed border-l-4"
+          className="rounded-md px-4 py-3 text-lg leading-relaxed border-l-4"
           style={{ borderColor: ACCENT_BLUE, backgroundColor: '#F8FAFC', color: '#475569' }}
         >
           {data.note}
