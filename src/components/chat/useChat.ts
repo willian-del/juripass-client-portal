@@ -143,7 +143,7 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
   }, []);
 
   const send = useCallback(
-    async (input: string, opts?: { leadContext?: any; authToken?: string }) => {
+    async (input: string, opts?: { leadContext?: any; authToken?: string; leadFormSubmitted?: boolean }) => {
       const userMsg: ChatMessage = { role: 'user', content: input.slice(0, 500) };
       setMessages((prev) => [...prev, userMsg]);
       setIsLoading(true);
