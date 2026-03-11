@@ -191,7 +191,7 @@ function Poster({ data }: { data: PosterData }) {
           >
             {data.sectionTitle}
           </h2>
-          <ul className="space-y-1 pl-1">
+          <ul className="space-y-2 pl-1">
             {data.items.map((item, i) => (
               <li key={i} className="flex items-start gap-2.5 text-2xl" style={{ color: '#334155' }}>
                 <BulletIcon />
