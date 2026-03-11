@@ -230,7 +230,7 @@ function Poster({ data }: { data: PosterData }) {
                 <IconBox num={s.num} />
                 <div style={{ color: '#334155' }}>
                   <span className="text-2xl font-bold" style={{ color: DARK_BLUE }}>{s.title}</span>
-                  <span className="block text-lg mt-0.5" style={{ color: '#64748B' }}>{s.desc}</span>
+                  <span className="block text-lg mt-1" style={{ color: '#64748B' }}>{s.desc}</span>
                 </div>
               </div>
             ))}
