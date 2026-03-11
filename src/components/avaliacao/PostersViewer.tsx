@@ -157,7 +157,7 @@ function BulletIcon() {
 /* ── Single Poster (PDF style, optimised for A4 wall print) ── */
 function Poster({ data }: { data: PosterData }) {
   return (
-    <div
+    <div data-poster-root
       className="w-[210mm] min-h-[297mm] mx-auto bg-white flex flex-col overflow-hidden shadow-lg"
       style={{ pageBreakAfter: 'always', fontFamily: "'Nunito', 'Inter', system-ui, sans-serif" }}
     >
