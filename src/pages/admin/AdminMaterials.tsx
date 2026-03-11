@@ -544,9 +544,14 @@ export default function AdminMaterials() {
                                 </div>
                               </TableCell>
                               <TableCell>
-                                <span className="text-xs bg-muted px-2 py-0.5 rounded font-medium">
-                                  {m.file_type.toUpperCase()}
-                                </span>
+                                {(() => {
+                                  const cat = getTypeCategory(m.file_type);
+                                  return (
+                                    <Badge variant="outline" className={`text-xs ${cat.className}`}>
+                                      {cat.label}
+                                    </Badge>
+                                  );
+                                })()}
                               </TableCell>
                               <TableCell className="text-center">
                                 <span className="flex items-center justify-center gap-1 text-sm">
