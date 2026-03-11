@@ -1,83 +1,56 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plano: Refazer layout dos cartazes seguindo padrão do OnePager
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+### Problema principal
 
-## Solucao
+O cartaz usa `h-[297mm]` fixo com `overflow-hidden`, o que **corta o conteúdo** quando não cabe. O OnePager usa `max-w-[210mm]` sem altura fixa — o conteúdo flui naturalmente e cabe perfeitamente ao imprimir/salvar como PDF.
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+Além disso, o banco de dados ainda tem registros antigos (`poster-bank`, `poster-generic`) que não correspondem aos novos IDs (`work`, `housing`).
 
----
+### Mudanças em `PostersViewer.tsx`
 
-## Alteracoes
+**1. Remover altura fixa — adotar padrão OnePager**
+- `w-[210mm] h-[297mm]` → `max-w-[210mm]` (sem altura fixa)
+- Remover `overflow-hidden` do poster root
+- O conteúdo vai fluir naturalmente e o `@page { size: A4 }` garante a paginação correta na impressão
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**2. Reestruturar o Poster como o OnePager**
+- Container externo: `max-w-[210mm] mx-auto bg-white shadow-lg my-4 print:my-0 print:shadow-none`
+- Header band: fundo `DARK_BLUE`, logo branca à esquerda, tagline à direita (igual OnePager)
+- Body: `px-8 py-6 space-y-5` (mesmo padrão do OnePager)
+- Usar `<Divider />` entre seções (linha `border-t` simples)
+- Footer band: fundo `DARK_BLUE` com WhatsApp, telefone, QR Code — tudo visível e bem espaçado
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+**3. Seções do cartaz (estrutura final)**
+1. Header band (logo branca + tagline)
+2. Headline + Subtitle
+3. Divider
+4. "Podemos ajudar com" — lista com bullets
+5. Divider
+6. "Como pedir ajuda" — 3 passos com números em círculos (igual OnePager)
+7. Divider
+8. Nota de acolhimento (box com borda lateral)
+9. "Atendimento confidencial e sem julgamentos" — destaque
+10. Footer band (WhatsApp + telefone + QR Code)
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+**4. Footer com contato completo (sempre visível)**
+- Lado esquerdo: "Fale conosco via WhatsApp" + telefone `(11) 5039-5554` + botão "Abrir conversa no WhatsApp"
+- Lado direito: QR Code com label "Escaneie para falar com um advogado"
 
-### 2. Atualizar `src/App.tsx`
+**5. Top bar (viewer) — mesmo padrão OnePager**
+- Barra sticky com label + botão Imprimir/Salvar PDF + botão Fechar
+- `print:hidden`
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+### Atualizar registros no banco de dados
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+Será necessário:
+- Deletar os registros antigos `poster-bank` e `poster-generic` da tabela `sales_materials`
+- Inserir os novos registros `poster-work` e `poster-housing`
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+Isso pode ser feito via migration SQL ou manualmente.
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+### Arquivos afetados
+- `src/components/avaliacao/PostersViewer.tsx` — refatoração completa do layout
+- Migration SQL — limpar/atualizar registros de `sales_materials`
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
