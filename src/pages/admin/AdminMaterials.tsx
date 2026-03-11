@@ -425,11 +425,6 @@ export default function AdminMaterials() {
   if (previewType) {
     return (
       <div className="fixed inset-0 z-50 bg-background">
-        <div className="absolute top-4 right-4 z-[60]">
-          <Button variant="outline" size="sm" onClick={() => setPreviewType(null)}>
-            <X className="h-4 w-4 mr-1" /> Fechar
-          </Button>
-        </div>
         {previewType === 'slides' ? (
           <SlidesPresentation onClose={() => setPreviewType(null)} />
         ) : previewType === 'posters' ? (
