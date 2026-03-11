@@ -19,6 +19,7 @@ async function streamChat({
   messages,
   mode,
   leadContext,
+  leadFormSubmitted,
   sessionId,
   authToken,
   onDelta,
@@ -30,6 +31,7 @@ async function streamChat({
   messages: ChatMessage[];
   mode: 'qualify' | 'assist';
   leadContext?: any;
+  leadFormSubmitted?: boolean;
   sessionId: string;
   authToken?: string;
   onDelta: (text: string) => void;
