@@ -139,7 +139,7 @@ const posters: PosterData[] = [
 function IconBox({ num }: { num: number }) {
   return (
     <div
-      className="flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center text-white text-xs font-bold"
+      className="flex-shrink-0 w-9 h-9 rounded-md flex items-center justify-center text-white text-sm font-bold"
       style={{ backgroundColor: MID_BLUE }}
     >
       {num}
@@ -150,7 +150,7 @@ function IconBox({ num }: { num: number }) {
 function BulletIcon() {
   return (
     <div
-      className="flex-shrink-0 w-1.5 h-1.5 rounded-full mt-1.5"
+      className="flex-shrink-0 w-2.5 h-2.5 rounded-full mt-2"
       style={{ backgroundColor: ACCENT_BLUE }}
     />
   );
