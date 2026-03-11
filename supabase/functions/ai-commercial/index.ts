@@ -621,7 +621,7 @@ serve(async (req) => {
               const materialArgs = toolCalls.find((t: any) => t.function?.name === "send_material");
               let matType = "apresentacao";
               try { matType = JSON.parse(materialArgs?.function?.arguments || "{}").type || "apresentacao"; } catch {}
-              const matPath = matType === "one_pager" ? "/avaliacao?view=onepager" : "/avaliacao";
+              const matPath = matType === "one_pager" ? "/materiais/one-pager" : "/materiais/apresentacao";
               const matLabel = matType === "one_pager" ? "One-Pager" : "Apresentação Comercial";
               syntheticText = `Aqui está a ${matLabel} da Juripass:\n\n👉 [Abrir ${matLabel}](${origin}${matPath})\n\nSe quiser, posso abrir o formulário para agendar uma conversa com o time.`;
             }
