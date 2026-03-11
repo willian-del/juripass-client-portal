@@ -53,6 +53,7 @@ const SENIORITY_LABELS: Record<string, string> = {
 interface LeadFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
 const STEP_FIELDS: Record<number, (keyof LeadFormData)[]> = {
