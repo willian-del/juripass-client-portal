@@ -256,7 +256,7 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
       {/* Top bar */}
       <div className="print:hidden sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-6 py-3 flex items-center justify-between">
         <span className="text-sm text-gray-500">{label}</span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {!isSingle && (
             <div className="flex items-center gap-1 mr-2">
               <Button variant="ghost" size="sm" disabled={currentIndex === 0} onClick={() => setCurrentIndex((i) => i - 1)}>
@@ -275,9 +275,12 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
             Imprimir / Salvar como PDF
           </Button>
           {onClose && (
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-5 w-5" />
-            </Button>
+            <>
+              <div className="w-px h-6 bg-gray-200" />
+              <Button variant="ghost" size="icon" onClick={onClose}>
+                <X className="h-5 w-5" />
+              </Button>
+            </>
           )}
         </div>
       </div>
