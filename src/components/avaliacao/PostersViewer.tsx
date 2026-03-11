@@ -320,6 +320,7 @@ export function PostersViewer({ standalone, onClose }: PostersViewerProps) {
           body * { visibility: hidden; }
           .print\\:hidden { display: none !important; }
           [data-poster-root], [data-poster-root] * { visibility: visible; }
+          [data-poster-root] { position: relative; }
           @page { size: A4 portrait; margin: 0; }
         }
       `}</style>
