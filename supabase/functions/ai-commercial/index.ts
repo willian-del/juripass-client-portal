@@ -430,7 +430,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, mode = "qualify", leadContext, sessionId } = await req.json();
+    const { messages, mode = "qualify", leadContext, sessionId, leadFormSubmitted } = await req.json();
 
     // Rate limit public qualify mode by IP
     if (mode === "qualify") {
