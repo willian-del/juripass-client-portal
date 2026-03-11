@@ -317,10 +317,23 @@ export function PostersViewer({ standalone, onClose }: PostersViewerProps) {
       {/* Print styles */}
       <style>{`
         @media print {
-          body * { visibility: hidden; }
+          /* Hide nav, sidebar, header bar, chat — anything not a poster */
+          body > *:not(#root) { display: none !important; }
           .print\\:hidden { display: none !important; }
-          [data-poster-root], [data-poster-root] * { visibility: visible; }
-          [data-poster-root] { position: relative; }
+          nav, header, footer, [data-sidebar], [role="banner"] { display: none !important; }
+
+          /* Force background colors to print */
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* Each poster = one A4 page */
+          [data-poster-root] {
+            break-after: page;
+            box-shadow: none !important;
+          }
+
           @page { size: A4 portrait; margin: 0; }
         }
       `}</style>
