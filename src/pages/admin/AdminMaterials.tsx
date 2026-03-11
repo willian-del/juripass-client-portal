@@ -22,8 +22,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   LogOut, Plus, Upload, Link2, FileText, Eye, Copy, Send, ArrowLeft,
-  Pencil, Trash2, Mail, X, Star, Code,
+  Pencil, Trash2, Mail, X, Star, Code, Download,
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
@@ -86,6 +87,14 @@ function replaceVarsForPreview(text: string): string {
     result = result.split(key).join(value);
   }
   return result;
+}
+
+function getTypeCategory(fileType: string): { label: string; className: string } {
+  if (fileType === 'presentation') return { label: 'Apresentação', className: 'bg-primary/15 text-primary border-primary/30' };
+  if (fileType === 'one-pager') return { label: 'One-Pager', className: 'bg-accent text-accent-foreground border-accent' };
+  if (fileType === 'posters' || fileType.startsWith('poster-')) return { label: 'Cartaz', className: 'bg-secondary text-secondary-foreground border-secondary' };
+  if (fileType === 'pdf') return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
+  return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
 }
 
 export default function AdminMaterials() {
@@ -510,7 +519,7 @@ export default function AdminMaterials() {
                         <TableHead className="w-[80px] text-center">Envios</TableHead>
                         <TableHead className="w-[80px] text-center">Views</TableHead>
                         <TableHead className="w-[110px]">Data</TableHead>
-                        <TableHead className="w-[220px] text-right">Ações</TableHead>
+                        <TableHead className="w-[260px] text-right">Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -535,9 +544,14 @@ export default function AdminMaterials() {
                                 </div>
                               </TableCell>
                               <TableCell>
-                                <span className="text-xs bg-muted px-2 py-0.5 rounded font-medium">
-                                  {m.file_type.toUpperCase()}
-                                </span>
+                                {(() => {
+                                  const cat = getTypeCategory(m.file_type);
+                                  return (
+                                    <Badge variant="outline" className={`text-xs ${cat.className}`}>
+                                      {cat.label}
+                                    </Badge>
+                                  );
+                                })()}
                               </TableCell>
                               <TableCell className="text-center">
                                 <span className="flex items-center justify-center gap-1 text-sm">
@@ -556,6 +570,9 @@ export default function AdminMaterials() {
                                 <div className="flex items-center justify-end gap-1">
                                   <Button variant="ghost" size="icon" title="Visualizar" onClick={() => handlePreview(m)}>
                                     <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button variant="ghost" size="icon" title="Download / Imprimir" onClick={() => handlePreview(m)}>
+                                    <Download className="h-4 w-4" />
                                   </Button>
                                   <Button
                                     variant="ghost" size="icon" title="Editar"
