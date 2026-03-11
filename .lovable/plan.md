@@ -1,83 +1,39 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plano: Cartaz Institucional Juripass
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+### Abordagem
 
-## Solucao
+O cartaz institucional tem uma estrutura diferente dos temáticos (tem seções extras como "O que é", "O que está incluído", "O que não está incluído"). Vou criar um componente `InstitutionalPoster` dedicado dentro do mesmo arquivo, reutilizando os helpers existentes (`SectionTitle`, `Divider`, header/footer bands).
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### Estrutura do cartaz institucional
 
----
+1. **Header band** — logo branca + "Benefício jurídico disponível para colaboradores desta empresa"
+2. **Headline** — "Tem dúvidas ou problemas jurídicos no seu dia a dia?" + subheadline
+3. **Divider**
+4. **O que é a Juripass** — 2 parágrafos explicativos
+5. **Divider**
+6. **Em quais situações pode ajudar** — lista com bullets (família, dívidas, consumo, aluguel, cotidiano)
+7. **Divider**
+8. **O que está incluído** — lista com checkmarks (✔)
+9. **O que não está incluído** — lista com itens excluídos + nota sobre canais internos
+10. **Divider**
+11. **Como pedir ajuda** — 3 passos numerados (mesmo padrão)
+12. **Nota de acolhimento** — box com borda lateral
+13. **Footer band** — WhatsApp + telefone + QR Code
+14. **Sub-footer** — logo + tagline
 
-## Alteracoes
+### Mudanças
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+**`src/components/avaliacao/PostersViewer.tsx`**
+- Adicionar componente `InstitutionalPoster` com layout dedicado (mesmo padrão visual, seções diferentes)
+- Adicionar `'institutional'` ao `POSTER_LABELS`
+- Ajustar lógica do viewer: quando `posterId === 'institutional'`, renderizar `InstitutionalPoster`; quando sem filtro, incluir o institucional na lista navegável (total: 6 cartazes)
+- Texto menor nas seções para caber em A4 (text-sm nos parágrafos, text-base nos items)
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+**Migration SQL** — inserir registro `poster-institutional` na tabela `sales_materials`
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
-```
+### Arquivo afetado
+- `src/components/avaliacao/PostersViewer.tsx`
+- Migration SQL para `sales_materials`
 
-### 2. Atualizar `src/App.tsx`
-
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
-
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
-
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
-
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
-
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
