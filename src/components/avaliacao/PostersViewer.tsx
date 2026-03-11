@@ -156,7 +156,7 @@ function BulletIcon() {
   );
 }
 
-/* ── Single Poster (compact A4 — fits 297mm) ── */
+/* ── Single Poster (wall poster A4 — large readable type) ── */
 function Poster({ data }: { data: PosterData }) {
   return (
     <div data-poster-root
@@ -172,13 +172,13 @@ function Poster({ data }: { data: PosterData }) {
       <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${DARK_BLUE}, ${ACCENT_BLUE})` }} />
 
       {/* Body */}
-      <div className="flex-1 px-10 py-4 flex flex-col gap-3">
+      <div className="flex-1 px-12 py-5 flex flex-col gap-4">
         {/* Title block */}
         <div className="text-center space-y-1.5">
-          <h1 className="text-2xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
+          <h1 className="text-5xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
             {data.title}
           </h1>
-          <p className="text-sm leading-relaxed" style={{ color: '#64748B' }}>
+          <p className="text-lg leading-relaxed" style={{ color: '#64748B' }}>
             {data.subtitle}
           </p>
         </div>
@@ -186,14 +186,14 @@ function Poster({ data }: { data: PosterData }) {
         {/* Items section */}
         <div className="space-y-2">
           <h2
-            className="text-xs font-bold tracking-[0.2em] uppercase"
+            className="text-sm font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
           >
             {data.sectionTitle}
           </h2>
-          <ul className="space-y-1.5 pl-1">
+          <ul className="space-y-2 pl-1">
             {data.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: '#334155' }}>
+              <li key={i} className="flex items-start gap-2.5 text-lg" style={{ color: '#334155' }}>
                 <BulletIcon />
                 <span>{item.text}</span>
               </li>
@@ -203,11 +203,11 @@ function Poster({ data }: { data: PosterData }) {
 
         {/* Pills (generic poster only) */}
         {data.pills && (
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2.5">
             {data.pills.map((label, i) => (
               <span
                 key={i}
-                className="inline-flex items-center px-4 py-1 rounded-full text-xs font-semibold border"
+                className="inline-flex items-center px-5 py-1.5 rounded-full text-sm font-semibold border"
                 style={{ borderColor: ACCENT_BLUE, color: MID_BLUE }}
               >
                 {label}
@@ -217,20 +217,20 @@ function Poster({ data }: { data: PosterData }) {
         )}
 
         {/* Steps */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <h2
-            className="text-xs font-bold tracking-[0.2em] uppercase"
+            className="text-sm font-bold tracking-[0.2em] uppercase"
             style={{ color: MID_BLUE }}
           >
             {data.stepsTitle}
           </h2>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {data.steps.map((s) => (
               <div key={s.num} className="flex items-start gap-3">
                 <IconBox num={s.num} />
                 <div style={{ color: '#334155' }}>
-                  <span className="text-sm font-bold" style={{ color: DARK_BLUE }}>{s.title}</span>
-                  <span className="block text-xs mt-0.5" style={{ color: '#64748B' }}>{s.desc}</span>
+                  <span className="text-lg font-bold" style={{ color: DARK_BLUE }}>{s.title}</span>
+                  <span className="block text-sm mt-0.5" style={{ color: '#64748B' }}>{s.desc}</span>
                 </div>
               </div>
             ))}
@@ -239,7 +239,7 @@ function Poster({ data }: { data: PosterData }) {
 
         {/* Note */}
         <div
-          className="rounded-md px-4 py-2.5 text-xs leading-relaxed border-l-4"
+          className="rounded-md px-4 py-2.5 text-sm leading-relaxed border-l-4"
           style={{ borderColor: ACCENT_BLUE, backgroundColor: '#F8FAFC', color: '#475569' }}
         >
           {data.note}
@@ -248,37 +248,37 @@ function Poster({ data }: { data: PosterData }) {
 
       {/* CTA section */}
       <div
-        className="px-8 py-4 flex items-center justify-between gap-6"
+        className="px-8 py-3 flex items-center justify-between gap-6"
         style={{ backgroundColor: DARK_BLUE }}
       >
-        <div className="flex-1 space-y-2 text-white">
+        <div className="flex-1 space-y-1.5 text-white">
           <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-80">FALE CONOSCO VIA WHATSAPP</p>
-          <p className="text-lg font-bold">📱 {WHATSAPP_NUMBER}</p>
+          <p className="text-base font-bold">📱 {WHATSAPP_NUMBER}</p>
           <a
             href={WHATSAPP_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-bold text-white no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 px-5 py-1.5 rounded-lg text-sm font-bold text-white no-underline transition-opacity hover:opacity-90"
             style={{ backgroundColor: MID_BLUE }}
           >
             Abrir conversa no WhatsApp →
           </a>
         </div>
-        <div className="flex flex-col items-center gap-1.5">
-          <img src={QR_SRC} alt="QR Code WhatsApp Juripass" className="w-22 h-22 rounded-lg bg-white p-1" />
+        <div className="flex flex-col items-center gap-1">
+          <img src={QR_SRC} alt="QR Code WhatsApp Juripass" className="w-20 h-20 rounded-lg bg-white p-1" />
           <span className="text-[9px] text-white/60 text-center tracking-wide">ESCANEIE E ABRA<br />NO WHATSAPP</span>
         </div>
       </div>
 
       {/* Footer */}
       <div
-        className="px-10 py-3 flex items-center justify-between"
+        className="px-10 py-2 flex items-center justify-between"
         style={{ backgroundColor: FOOTER_BLUE }}
       >
-        <img src="/images/branding/juripass-logo-stacked-white.png" alt="Juripass" className="h-10" />
+        <img src="/images/branding/juripass-logo-stacked-white.png" alt="Juripass" className="h-8" />
         <div className="text-right text-white">
-          <p className="text-[10px] font-semibold tracking-wide uppercase">Acolhimento jurídico na palma da sua mão</p>
-          <p className="text-[9px] opacity-70 mt-0.5">Dúvidas? Procure o RH da empresa.</p>
+          <p className="text-[9px] font-semibold tracking-wide uppercase">Acolhimento jurídico na palma da sua mão</p>
+          <p className="text-[8px] opacity-70 mt-0.5">Dúvidas? Procure o RH da empresa.</p>
         </div>
       </div>
     </div>
