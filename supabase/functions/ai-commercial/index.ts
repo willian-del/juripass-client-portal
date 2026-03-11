@@ -505,6 +505,9 @@ serve(async (req) => {
     if (mode === "assist" && leadContext) {
       systemPrompt += `\n\n## Contexto do Lead Atual\n${JSON.stringify(leadContext, null, 2)}`;
     }
+    if (mode === "qualify" && leadFormSubmitted) {
+      systemPrompt += `\n\n## IMPORTANTE: FORMULÁRIO JÁ PREENCHIDO\nO visitante JÁ preencheu o formulário de agendamento. NÃO ofereça o formulário novamente. NÃO use a ferramenta open_lead_form. Agradeça, confirme que o time comercial entrará em contato em breve e ofereça materiais ou tire dúvidas sobre a Juripass.`;
+    }
 
     const body: any = {
       model: "google/gemini-3-flash-preview",

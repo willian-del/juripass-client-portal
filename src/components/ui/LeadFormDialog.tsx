@@ -118,6 +118,7 @@ export function LeadFormDialog({ open, onOpenChange, onSuccess }: LeadFormDialog
       reset();
       setStep(1);
       onOpenChange(false);
+      onSuccess?.();
     } catch (err) {
       console.error('Lead submission error:', err);
       toast({ title: 'Erro ao enviar', description: 'Tente novamente em alguns instantes.', variant: 'destructive' });
