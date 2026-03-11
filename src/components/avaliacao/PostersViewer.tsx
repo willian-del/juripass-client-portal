@@ -224,7 +224,7 @@ function Poster({ data }: { data: PosterData }) {
           >
             {data.stepsTitle}
           </h2>
-          <div className="space-y-1.5">
+          <div className="space-y-3">
             {data.steps.map((s) => (
               <div key={s.num} className="flex items-start gap-3">
                 <IconBox num={s.num} />
