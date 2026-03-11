@@ -282,11 +282,11 @@ function Poster({ data }: { data: PosterData }) {
 
 /* ── Poster ID to label map ── */
 const POSTER_LABELS: Record<string, string> = {
-  generic: 'Genérico',
-  debt: 'Endividamento',
-  bank: 'Bancos',
-  consumer: 'Consumo',
   family: 'Família',
+  debt: 'Endividamento',
+  work: 'Trabalho',
+  housing: 'Aluguel e Imóvel',
+  consumer: 'Consumo',
 };
 
 /* ── Main component ── */
