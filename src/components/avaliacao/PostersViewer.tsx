@@ -28,95 +28,13 @@ type PosterData = {
   stepsTitle: string;
   steps: { num: number; title: string; desc: string }[];
   note: string;
-  pills?: string[];
 };
 
 const posters: PosterData[] = [
   {
-    id: 'generic',
-    title: 'Seu advogado no WhatsApp.',
-    subtitle: 'Um benefício gratuito da empresa para você e sua família.',
-    sectionTitle: 'PODE PEDIR AJUDA PARA',
-    items: [
-      { text: 'Problemas com banco ou cartão' },
-      { text: 'Dívidas ou nome sujo' },
-      { text: 'Compra com defeito ou que não chegou' },
-      { text: 'Dúvidas sobre trabalho e seus direitos' },
-      { text: 'Pensão, guarda de filhos ou separação' },
-      { text: 'Problemas com aluguel ou moradia' },
-    ],
-    stepsTitle: 'COMO FUNCIONA',
-    steps: [
-      { num: 1, title: 'Salve o contato', desc: 'Escaneie o QR Code ou salve o número abaixo' },
-      { num: 2, title: 'Acesse o WhatsApp', desc: 'Abra nosso canal de atendimento' },
-      { num: 3, title: 'Mande uma mensagem', desc: 'Conte o que aconteceu e receba orientação' },
-    ],
-    note: 'Se precisar entrar na Justiça, o advogado explica tudo antes — inclusive os custos.',
-    pills: ['Grátis', 'Sigiloso', 'WhatsApp', 'Família inclusa'],
-  },
-  {
-    id: 'debt',
-    title: 'Está com o nome sujo?',
-    subtitle: 'Antes de desistir, fale com um advogado. Pode ser que você tenha mais direitos do que imagina.',
-    sectionTitle: 'VOCÊ SABIA QUE',
-    items: [
-      { text: 'O banco pode estar cobrando valor errado' },
-      { text: 'Dívidas antigas podem ter prescrição' },
-      { text: 'Podem estar cobrando juros abusivos' },
-      { text: 'Você tem direito de negociar e entender a dívida' },
-    ],
-    stepsTitle: 'COMO PEDIR AJUDA',
-    steps: [
-      { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
-      { num: 2, title: 'Conte o problema', desc: 'Qual é a dívida? Com qual empresa? Qual o valor?' },
-      { num: 3, title: 'Receba orientação', desc: 'Um advogado vai orientar você sobre o que fazer' },
-    ],
-    note: 'Não tome decisão sozinho. Fale primeiro com um advogado — é grátis e sigiloso.',
-  },
-  {
-    id: 'bank',
-    title: 'Problema com banco ou cartão?',
-    subtitle: 'Sabia que muita gente paga juros abusivos no banco sem saber? Um advogado pode analisar seu caso.',
-    sectionTitle: 'ISSO JÁ ACONTECEU COM VOCÊ?',
-    items: [
-      { text: 'Cobrança no cartão que você não fez' },
-      { text: 'Empréstimo com juros muito altos' },
-      { text: 'Desconto no salário que não autorizou' },
-      { text: 'Caiu em golpe do Pix ou boleto falso' },
-      { text: 'Tarifa ou cobrança que não entende' },
-    ],
-    stepsTitle: 'COMO USAR',
-    steps: [
-      { num: 1, title: 'Abra o WhatsApp', desc: 'Fale com a Juripass' },
-      { num: 2, title: 'Explique o problema', desc: 'Se tiver extrato ou comprovante, pode enviar a foto' },
-      { num: 3, title: 'Receba análise', desc: 'Um advogado vai analisar e orientar você' },
-    ],
-    note: 'Consulte um advogado antes de assinar qualquer contrato ou renegociar uma dívida.',
-  },
-  {
-    id: 'consumer',
-    title: 'Comprou algo e deu problema?',
-    subtitle: 'Produto com defeito, entrega que não chegou, dinheiro que não devolveram — você tem direitos.',
-    sectionTitle: 'ISSO PODE TER ACONTECIDO COM VOCÊ',
-    items: [
-      { text: 'Comprou e não entregaram' },
-      { text: 'Produto veio com defeito' },
-      { text: 'Não querem devolver o dinheiro' },
-      { text: 'Serviço que não foi feito como prometido' },
-      { text: 'Empresa sumiu depois que você pagou' },
-    ],
-    stepsTitle: 'COMO PEDIR AJUDA',
-    steps: [
-      { num: 1, title: 'Abra o WhatsApp', desc: 'Fale com a Juripass' },
-      { num: 2, title: 'Conte o que aconteceu', desc: 'Se tiver nota fiscal ou foto do produto, pode enviar' },
-      { num: 3, title: 'Saiba seus direitos', desc: 'Um advogado vai explicar o que pode fazer' },
-    ],
-    note: 'O Código de Defesa do Consumidor protege você. Não desista sem antes consultar um advogado.',
-  },
-  {
     id: 'family',
-    title: 'Problema de família?',
-    subtitle: 'Pensão, guarda dos filhos, separação... você não precisa enfrentar isso sozinho.',
+    title: 'Problemas de família?',
+    subtitle: 'Pensão, guarda dos filhos ou separação podem ser momentos difíceis. Você não precisa enfrentar isso sozinho.',
     sectionTitle: 'PODEMOS AJUDAR COM',
     items: [
       { text: 'Pensão alimentícia — pagar ou receber' },
@@ -127,11 +45,91 @@ const posters: PosterData[] = [
     ],
     stepsTitle: 'COMO PEDIR AJUDA',
     steps: [
-      { num: 1, title: 'Abra o WhatsApp', desc: 'Pode ser de casa, no intervalo — quando for melhor para você' },
-      { num: 2, title: 'Conte o que acontece', desc: 'O atendimento é completamente confidencial' },
-      { num: 3, title: 'Receba orientação', desc: 'Um advogado vai orientar você com cuidado e respeito' },
+      { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
+      { num: 2, title: 'Conte o que está acontecendo', desc: 'O atendimento é completamente confidencial' },
+      { num: 3, title: 'Receba orientação jurídica', desc: 'Um advogado vai orientar você com cuidado e respeito' },
     ],
-    note: 'Assuntos de família são delicados. Você merece uma orientação de qualidade, sem julgamentos.',
+    note: 'Assuntos de família são delicados. Você merece uma orientação de qualidade, com cuidado e respeito.',
+  },
+  {
+    id: 'debt',
+    title: 'Endividado ou sendo cobrado?',
+    subtitle: 'Nem toda cobrança é justa. Saiba quais são seus direitos.',
+    sectionTitle: 'PODEMOS AJUDAR QUANDO VOCÊ ESTIVER ENFRENTANDO',
+    items: [
+      { text: 'Cobranças abusivas' },
+      { text: 'Nome negativado' },
+      { text: 'Dívidas com banco ou cartão' },
+      { text: 'Juros excessivos' },
+      { text: 'Renegociação de dívidas' },
+    ],
+    stepsTitle: 'COMO PEDIR AJUDA',
+    steps: [
+      { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
+      { num: 2, title: 'Explique sua situação', desc: 'Conte qual é a dívida e o que está acontecendo' },
+      { num: 3, title: 'Receba orientação jurídica', desc: 'Um advogado vai analisar e orientar você' },
+    ],
+    note: 'Antes de pagar ou fazer um acordo, entenda quais são seus direitos.',
+  },
+  {
+    id: 'work',
+    title: 'Problemas no trabalho?',
+    subtitle: 'Situações no ambiente de trabalho podem gerar muitas dúvidas.',
+    sectionTitle: 'PODEMOS ORIENTAR SOBRE',
+    items: [
+      { text: 'Demissão e rescisão' },
+      { text: 'Direitos trabalhistas' },
+      { text: 'Assédio moral' },
+      { text: 'Horas extras' },
+      { text: 'Dúvidas sobre contrato de trabalho' },
+    ],
+    stepsTitle: 'COMO PEDIR AJUDA',
+    steps: [
+      { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
+      { num: 2, title: 'Conte o que aconteceu', desc: 'Explique a situação com tranquilidade' },
+      { num: 3, title: 'Receba orientação jurídica', desc: 'Um advogado vai orientar você sobre o que fazer' },
+    ],
+    note: 'Informação correta ajuda você a tomar decisões com mais segurança.',
+  },
+  {
+    id: 'housing',
+    title: 'Problemas com aluguel ou imóvel?',
+    subtitle: 'Conflitos com proprietário ou inquilino são mais comuns do que parecem.',
+    sectionTitle: 'PODEMOS AJUDAR COM',
+    items: [
+      { text: 'Problemas com contrato de aluguel' },
+      { text: 'Aumento abusivo de aluguel' },
+      { text: 'Despejo' },
+      { text: 'Caução ou garantia' },
+      { text: 'Direitos de inquilino e proprietário' },
+    ],
+    stepsTitle: 'COMO PEDIR AJUDA',
+    steps: [
+      { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
+      { num: 2, title: 'Explique sua situação', desc: 'Conte o que está acontecendo com seu imóvel' },
+      { num: 3, title: 'Receba orientação jurídica', desc: 'Um advogado vai orientar você sobre seus direitos' },
+    ],
+    note: 'Conhecer seus direitos pode evitar muitos problemas.',
+  },
+  {
+    id: 'consumer',
+    title: 'Comprou algo e teve problema?',
+    subtitle: 'Você tem direitos como consumidor.',
+    sectionTitle: 'PODEMOS AJUDAR EM SITUAÇÕES COMO',
+    items: [
+      { text: 'Produto com defeito' },
+      { text: 'Serviço que não foi entregue' },
+      { text: 'Cobrança indevida' },
+      { text: 'Cancelamento de contrato' },
+      { text: 'Problemas com garantia' },
+    ],
+    stepsTitle: 'COMO PEDIR AJUDA',
+    steps: [
+      { num: 1, title: 'Abra o WhatsApp', desc: 'Mande mensagem para a Juripass' },
+      { num: 2, title: 'Conte o que aconteceu', desc: 'Se tiver nota fiscal ou foto, pode enviar' },
+      { num: 3, title: 'Receba orientação jurídica', desc: 'Um advogado vai explicar o que você pode fazer' },
+    ],
+    note: 'Muitas situações podem ser resolvidas quando você conhece seus direitos.',
   },
 ];
 
@@ -204,20 +202,10 @@ function Poster({ data }: { data: PosterData }) {
           </ul>
         </div>
 
-        {/* Pills (generic poster only) */}
-        {data.pills && (
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {data.pills.map((label, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center px-5 py-1.5 rounded-full text-lg font-semibold border"
-                style={{ borderColor: ACCENT_BLUE, color: MID_BLUE }}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Confidentiality statement */}
+        <p className="text-center text-lg font-semibold italic" style={{ color: MID_BLUE }}>
+          Atendimento confidencial e sem julgamentos.
+        </p>
 
         {/* Separator */}
         <div className="h-px w-full" style={{ backgroundColor: `${ACCENT_BLUE}33` }} />
@@ -293,11 +281,11 @@ function Poster({ data }: { data: PosterData }) {
 
 /* ── Poster ID to label map ── */
 const POSTER_LABELS: Record<string, string> = {
-  generic: 'Genérico',
-  debt: 'Endividamento',
-  bank: 'Bancos',
-  consumer: 'Consumo',
   family: 'Família',
+  debt: 'Endividamento',
+  work: 'Trabalho',
+  housing: 'Aluguel e Imóvel',
+  consumer: 'Consumo',
 };
 
 /* ── Main component ── */

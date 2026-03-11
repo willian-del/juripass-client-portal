@@ -1,72 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Atualizar conteúdo dos 5 cartazes Juripass
+## Problema
 
-O componente já possui a estrutura visual correta (layout A4, margens 20mm, print styles, etc). A mudança principal é **atualizar o conteúdo** dos 5 cartazes para corresponder ao briefing fornecido, e adicionar a frase de confidencialidade.
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-### Mudanças no array `posters` em `PostersViewer.tsx`
+## Solucao
 
-**Cartaz 1 — Família** (id: `family`)
-- Headline: "Problemas de família?"
-- Subtitle: "Pensão, guarda dos filhos ou separação podem ser momentos difíceis. Você não precisa enfrentar isso sozinho."
-- sectionTitle: "PODEMOS AJUDAR COM"
-- Items: Pensão alimentícia, Guarda dos filhos, Separação ou divórcio, Reconhecimento de paternidade, Divisão de bens ou herança
-- Steps: Abra o WhatsApp → Conte o que está acontecendo → Receba orientação jurídica
-- Note: "Assuntos de família são delicados. Você merece uma orientação de qualidade, com cuidado e respeito."
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-**Cartaz 2 — Dívidas** (id: `debt`)
-- Headline: "Endividado ou sendo cobrado?"
-- Subtitle: "Nem toda cobrança é justa. Saiba quais são seus direitos."
-- sectionTitle: "PODEMOS AJUDAR QUANDO VOCÊ ESTIVER ENFRENTANDO"
-- Items: Cobranças abusivas, Nome negativado, Dívidas com banco ou cartão, Juros excessivos, Renegociação de dívidas
-- Steps: Abra o WhatsApp → Explique sua situação → Receba orientação jurídica
-- Note: "Antes de pagar ou fazer um acordo, entenda quais são seus direitos."
+---
 
-**Cartaz 3 — Trabalho** (novo, substituindo `bank`)
-- id: `work`
-- Headline: "Problemas no trabalho?"
-- Subtitle: "Situações no ambiente de trabalho podem gerar muitas dúvidas."
-- sectionTitle: "PODEMOS ORIENTAR SOBRE"
-- Items: Demissão e rescisão, Direitos trabalhistas, Assédio moral, Horas extras, Dúvidas sobre contrato de trabalho
-- Steps: Abra o WhatsApp → Conte o que aconteceu → Receba orientação jurídica
-- Note: "Informação correta ajuda você a tomar decisões com mais segurança."
+## Alteracoes
 
-**Cartaz 4 — Aluguel/Imóvel** (novo, substituindo `generic`)
-- id: `housing`
-- Headline: "Problemas com aluguel ou imóvel?"
-- Subtitle: "Conflitos com proprietário ou inquilino são mais comuns do que parecem."
-- sectionTitle: "PODEMOS AJUDAR COM"
-- Items: Problemas com contrato de aluguel, Aumento abusivo de aluguel, Despejo, Caução ou garantia, Direitos de inquilino e proprietário
-- Steps: Abra o WhatsApp → Explique sua situação → Receba orientação jurídica
-- Note: "Conhecer seus direitos pode evitar muitos problemas."
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-**Cartaz 5 — Consumo** (id: `consumer`)
-- Headline: "Comprou algo e teve problema?"
-- Subtitle: "Você tem direitos como consumidor."
-- sectionTitle: "PODEMOS AJUDAR EM SITUAÇÕES COMO"
-- Items: Produto com defeito, Serviço que não foi entregue, Cobrança indevida, Cancelamento de contrato, Problemas com garantia
-- Steps: Abra o WhatsApp → Conte o que aconteceu → Receba orientação jurídica
-- Note: "Muitas situações podem ser resolvidas quando você conhece seus direitos."
-
-### Mudança no layout do Poster
-
-- Adicionar frase fixa **"Atendimento confidencial e sem julgamentos."** acima do bloco CTA (dark blue), como texto centralizado em destaque.
-- Remover `pills` (só existiam no cartaz genérico que está sendo substituído).
-
-### Atualizar `POSTER_LABELS`
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
 ```text
-family   → 'Família'
-debt     → 'Endividamento'
-work     → 'Trabalho'
-housing  → 'Aluguel e Imóvel'
-consumer → 'Consumo'
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-### Atualizar referências ao `posterId`
+### 2. Atualizar `src/App.tsx`
 
-- `serve-material` edge function e admin materials: verificar se há referências a `generic` ou `bank` que precisam ser atualizadas para `work` e `housing`.
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-### Arquivo afetado
-- `src/components/avaliacao/PostersViewer.tsx` — conteúdo dos posters + label map + frase de confidencialidade
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

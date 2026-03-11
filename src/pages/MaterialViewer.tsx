@@ -83,11 +83,11 @@ export default function MaterialViewer() {
     }
     // Individual poster types
     const posterMap: Record<string, string> = {
-      'poster-generic': 'generic',
-      'poster-debt': 'debt',
-      'poster-bank': 'bank',
-      'poster-consumer': 'consumer',
       'poster-family': 'family',
+      'poster-debt': 'debt',
+      'poster-work': 'work',
+      'poster-housing': 'housing',
+      'poster-consumer': 'consumer',
     };
     if (posterMap[material.file_type]) {
       return <PostersViewer standalone posterId={posterMap[material.file_type]} />;
