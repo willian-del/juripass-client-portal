@@ -107,7 +107,7 @@ function Divider() {
 /* ── Single Poster (OnePager pattern — natural flow, no fixed height) ── */
 function Poster({ data }: { data: PosterData }) {
   return (
-    <div className="max-w-[210mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0" data-poster-root>
+    <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
 
       {/* Header band */}
       <div className="bg-[#2C3E7D] px-8 py-6 flex items-center justify-between">
