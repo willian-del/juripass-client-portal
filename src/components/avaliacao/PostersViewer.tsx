@@ -172,7 +172,7 @@ function Poster({ data }: { data: PosterData }) {
       <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${DARK_BLUE}, ${ACCENT_BLUE})` }} />
 
       {/* Body */}
-      <div className="flex-1 px-12 py-4 flex flex-col gap-3">
+      <div className="flex-1 px-12 py-4 flex flex-col gap-5">
         {/* Title block */}
         <div className="text-center space-y-1">
           <h1 className="text-6xl font-extrabold leading-tight" style={{ color: DARK_BLUE }}>
