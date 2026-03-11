@@ -571,6 +571,9 @@ export default function AdminMaterials() {
                                   <Button variant="ghost" size="icon" title="Visualizar" onClick={() => handlePreview(m)}>
                                     <Eye className="h-4 w-4" />
                                   </Button>
+                                  <Button variant="ghost" size="icon" title="Download / Imprimir" onClick={() => handlePreview(m)}>
+                                    <Download className="h-4 w-4" />
+                                  </Button>
                                   <Button
                                     variant="ghost" size="icon" title="Editar"
                                     onClick={() => {
