@@ -171,6 +171,7 @@ export function useChat(mode: 'qualify' | 'assist' = 'qualify') {
           messages: [...messages, userMsg],
           mode,
           leadContext: opts?.leadContext,
+          leadFormSubmitted: opts?.leadFormSubmitted,
           sessionId: getSessionId(),
           authToken: opts?.authToken,
           onDelta: upsertAssistant,
