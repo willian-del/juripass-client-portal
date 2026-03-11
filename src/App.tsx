@@ -17,6 +17,8 @@ const NR01 = lazy(() => import("./pages/NR01"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const ParaSeuColaborador = lazy(() => import("./pages/ParaSeuColaborador"));
+const StandalonePresentation = lazy(() => import("./components/avaliacao/SlidesPresentation").then(m => ({ default: () => <m.SlidesPresentation standalone /> })));
+const StandaloneOnePager = lazy(() => import("./components/avaliacao/OnePager").then(m => ({ default: () => <m.OnePager standalone /> })));
 const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
 const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
 const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
