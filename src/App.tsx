@@ -49,6 +49,8 @@ const App = () => (
               <Route path="/nr01-riscos-psicossociais" element={<NR01RiscosPsicossociais />} />
               <Route path="/gestao-riscos-humanos-rh" element={<GestaoRiscosHumanos />} />
             </Route>
+            <Route path="/materiais/apresentacao" element={<StandalonePresentation />} />
+            <Route path="/materiais/one-pager" element={<StandaloneOnePager />} />
             <Route path="/site-anterior" element={<LegacyHome />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
