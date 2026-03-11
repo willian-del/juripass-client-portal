@@ -416,9 +416,17 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
         </div>
       </div>
 
-      {/* Poster */}
+      {/* Poster — screen shows only current; print shows all */}
       <div className="py-8 print:py-0">
-        {renderPoster(currentId)}
+        {visibleIds.map((id, idx) => (
+          <div
+            key={id}
+            className={id !== currentId ? 'hidden print:block' : ''}
+            style={{ pageBreakAfter: idx < visibleIds.length - 1 ? 'always' : 'auto' }}
+          >
+            {renderPoster(id)}
+          </div>
+        ))}
       </div>
 
       {/* Print styles */}
