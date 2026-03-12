@@ -429,8 +429,11 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
         {visibleIds.map((id, idx) => (
           <div
             key={id}
-            className={id !== currentId ? 'hidden print:block' : ''}
-            style={{ pageBreakAfter: idx < visibleIds.length - 1 ? 'always' : 'auto' }}
+            className="poster-print-page"
+            style={{
+              display: id !== currentId ? 'none' : undefined,
+              pageBreakAfter: idx < visibleIds.length - 1 ? 'always' : 'auto',
+            }}
           >
             {renderPoster(id)}
           </div>
