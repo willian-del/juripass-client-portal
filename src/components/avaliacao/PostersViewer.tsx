@@ -255,7 +255,7 @@ function InstitutionalPoster() {
     <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
       <PosterHeader tagline="Benefício jurídico disponível para colaboradores desta empresa" />
 
-      <div className="flex-1 flex flex-col justify-between px-10 py-6 gap-3">
+      <div className="flex-1 flex flex-col justify-between px-10 py-4 gap-1.5">
         {/* Headline */}
         <div className="text-center space-y-1.5">
           <h1 className="text-3xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
