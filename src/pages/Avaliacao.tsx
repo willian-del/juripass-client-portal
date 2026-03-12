@@ -86,6 +86,11 @@ export default function Avaliacao() {
 
   return (
     <>
+      <SEOHead
+        title="Avaliação Executiva | Juripass"
+        description="Material de avaliação executiva do Juripass."
+        noindex={true}
+      />
       {/* Hero */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 text-center max-w-3xl space-y-4">

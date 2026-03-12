@@ -11,6 +11,19 @@ const NotFound = () => {
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+
+    // Signal to prerenderers that this is a 404
+    let meta = document.querySelector('meta[name="prerender-status-code"]') as HTMLMetaElement | null;
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'prerender-status-code');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', '404');
+
+    return () => {
+      meta?.remove();
+    };
   }, [location.pathname]);
 
   return (

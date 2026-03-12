@@ -14,8 +14,10 @@ User-agent: *
 Allow: /
 Disallow: /site-anterior
 Disallow: /avaliacao
+Disallow: /admin
+Disallow: /m/
+Disallow: /materiais/
 
-# Improved crawling
 Crawl-delay: 1
 
 Sitemap: https://www.juripass.com.br/sitemap.xml
