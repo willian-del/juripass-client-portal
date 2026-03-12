@@ -450,7 +450,8 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
           *::-webkit-scrollbar { display: none !important; }
           * { scrollbar-width: none !important; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          [data-poster-root] { box-shadow: none !important; page-break-inside: avoid; min-height: 297mm; width: 210mm; }
+          [data-poster-root] { box-shadow: none !important; page-break-inside: avoid; min-height: 297mm; max-height: 297mm; width: 210mm; overflow: hidden; }
+          .poster-print-page { display: block !important; }
           @page { size: A4 portrait; margin: 0; }
         }
       `}</style>
