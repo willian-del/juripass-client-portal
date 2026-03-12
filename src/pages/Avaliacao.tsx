@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import React from 'react';
+import { SEOHead } from '@/components/ui/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLeadForm } from '@/contexts/LeadFormContext';
