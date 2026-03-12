@@ -52,7 +52,7 @@ export default function MaterialViewer() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+      <><SEOHead title="Carregando material | Juripass" description="Material Juripass" noindex={true} />
         <LogoJuripass variant="full" size="md" format="png" clickable={false} />
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <p className="text-muted-foreground">Carregando material...</p>
