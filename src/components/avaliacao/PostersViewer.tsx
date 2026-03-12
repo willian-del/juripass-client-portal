@@ -255,13 +255,13 @@ function InstitutionalPoster() {
     <div className="max-w-[210mm] min-h-[297mm] mx-auto bg-white print:shadow-none shadow-lg my-4 print:my-0 flex flex-col" data-poster-root>
       <PosterHeader tagline="Benefício jurídico disponível para colaboradores desta empresa" />
 
-      <div className="flex-1 flex flex-col justify-between px-10 py-6 gap-3">
+      <div className="flex-1 flex flex-col justify-between px-10 py-4 gap-1.5">
         {/* Headline */}
         <div className="text-center space-y-1.5">
-          <h1 className="text-3xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
+          <h1 className="text-2xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
             Tem dúvidas ou problemas jurídicos<br />no seu dia a dia?
           </h1>
-          <p className="text-base leading-relaxed text-gray-500">
+          <p className="text-sm leading-relaxed text-gray-500">
             A Juripass pode orientar você. Converse com um advogado para entender seus direitos e saber quais são suas opções.
           </p>
         </div>
@@ -338,11 +338,11 @@ function InstitutionalPoster() {
         <StepsSection steps={steps} />
 
         {/* Nota de acolhimento */}
-        <div className="rounded-md px-5 py-3 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
+        <div className="rounded-md px-5 py-2 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
           Problemas jurídicos fazem parte da vida. Ter orientação adequada ajuda você a tomar decisões com mais segurança.
         </div>
 
-        <p className="text-center text-base font-semibold italic text-[#2C3E7D]">
+        <p className="text-center text-sm font-semibold italic text-[#2C3E7D]">
           Atendimento confidencial e sem julgamentos.
         </p>
       </div>
@@ -401,7 +401,15 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
               </Button>
             </div>
           )}
-          <Button size="sm" onClick={() => window.print()}>
+          <Button size="sm" onClick={() => {
+            const originalTitle = document.title;
+            const pdfTitle = posterId
+              ? `${POSTER_LABELS[posterId] || 'Cartaz'} - Juripass`
+              : 'Cartazes Informativos - Juripass';
+            document.title = pdfTitle;
+            window.print();
+            window.addEventListener('afterprint', () => { document.title = originalTitle; }, { once: true });
+          }}>
             <Printer className="h-4 w-4 mr-1" />
             Imprimir / Salvar como PDF
           </Button>
@@ -421,8 +429,11 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
         {visibleIds.map((id, idx) => (
           <div
             key={id}
-            className={id !== currentId ? 'hidden print:block' : ''}
-            style={{ pageBreakAfter: idx < visibleIds.length - 1 ? 'always' : 'auto' }}
+            className="poster-print-page"
+            style={{
+              display: id !== currentId ? 'none' : undefined,
+              pageBreakAfter: idx < visibleIds.length - 1 ? 'always' : 'auto',
+            }}
           >
             {renderPoster(id)}
           </div>
@@ -439,7 +450,8 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
           *::-webkit-scrollbar { display: none !important; }
           * { scrollbar-width: none !important; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          [data-poster-root] { box-shadow: none !important; page-break-inside: avoid; min-height: 297mm; width: 210mm; }
+          [data-poster-root] { box-shadow: none !important; page-break-inside: avoid; min-height: 297mm; max-height: 297mm; width: 210mm; overflow: hidden; }
+          .poster-print-page { display: block !important; }
           @page { size: A4 portrait; margin: 0; }
         }
       `}</style>
