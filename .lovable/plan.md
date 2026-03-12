@@ -1,83 +1,61 @@
 
-# Corrigir Header Consistente e Logo Lento
 
-## Problema
+## Plano: Corrigir problemas de indexação no Google Search Console
 
-O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
-1. O logo recarrega a cada navegacao (flash/demora)
-2. Os elementos do header "tremem" porque sao destruidos e recriados
+### Análise dos problemas
 
-## Solucao
+| Problema | Qtd | Causa provável |
+|----------|-----|----------------|
+| Erro soft 404 | 9 | SPA retorna HTTP 200 para URLs inexistentes. O NotFound renderiza conteúdo de "404" mas o status HTTP é 200 — Google classifica como "soft 404" |
+| Redirecionamento | 3 | Os 3 redirects 301 em `_redirects` (`/dashboard`, `/admin`, `/old-page`) |
+| Tag noindex | 2 | Páginas que herdaram a meta `noindex` do NotFound (bug do SPA: meta tags via useEffect podem "vazar" entre navegações) |
+| Rastreada não indexada | 26 | Google ainda avaliando — não é erro, é decisão do algoritmo |
 
-Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
+### Correções
 
----
+**1. Adicionar `noindex` a páginas internas/privadas**
 
-## Alteracoes
+Páginas que não devem ser indexadas mas não têm `noindex`:
+- `/avaliacao` — material interno de avaliação
+- `/site-anterior` — versão antiga
+- `/admin/*` — painel administrativo
+- `/materiais/*` — apresentação e one-pager standalone
+- `/m/:token` — visualizador de materiais
 
-### 1. Criar `src/layouts/MainLayout.tsx`
+Adicionar `<SEOHead noindex={true} .../>` a cada uma dessas páginas.
 
-Componente de layout que renderiza:
-- `HomeHeader` (fixo, nunca desmonta)
-- `<Outlet />` (conteudo da rota)
-- `Footer` (fixo, nunca desmonta)
+**2. Melhorar sinalização do NotFound para crawlers**
 
-```text
-HomeHeader
-  Outlet (conteudo muda conforme a rota)
-Footer
+Adicionar um `<meta name="prerender-status-code" content="404">` no componente NotFound. Alguns serviços de prerendering e crawlers respeitam essa tag. Também garantir que o cleanup do `useEffect` no SEOHead remova a meta `robots` ao desmontar, evitando vazamento da tag `noindex` para páginas válidas.
+
+**3. Limpar `_redirects`**
+
+Remover redirects desnecessários (`/dashboard`, `/old-page`) que geram ruído no Search Console. Manter apenas o catch-all `/* /index.html 200`.
+
+**4. Atualizar `robots.txt`**
+
+Adicionar bloqueios explícitos para rotas privadas:
+```
+Disallow: /admin
+Disallow: /m/
+Disallow: /materiais/
+Disallow: /avaliacao
 ```
 
-### 2. Atualizar `src/App.tsx`
+### Arquivos afetados
 
-Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+- `src/pages/Avaliacao.tsx` — adicionar SEOHead com noindex
+- `src/pages/NotFound.tsx` — adicionar meta prerender-status-code
+- `src/components/ui/SEOHead.tsx` — garantir cleanup correto da meta robots
+- `public/_redirects` — limpar redirects obsoletos
+- `public/robots.txt` — adicionar Disallow para rotas internas
 
-```text
-<Route element={<MainLayout />}>
-  <Route path="/" element={<Index />} />
-  <Route path="/como-funciona" element={<ComoFunciona />} />
-  <Route path="/para-quem" element={<ParaQuem />} />
-  <Route path="/faq" element={<FAQ />} />
-  <Route path="/avaliacao" element={<Avaliacao />} />
-</Route>
-```
+### Nota sobre "soft 404"
 
-As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+Em SPAs puras (sem SSR), não é possível retornar HTTP 404 real para URLs inexistentes — o servidor sempre responde 200 com o `index.html`. A melhor mitigação é:
+1. Garantir que o NotFound tenha `noindex`
+2. Bloquear padrões no `robots.txt`
+3. Não incluir URLs inexistentes no sitemap
 
-### 3. Remover `HomeHeader` e `Footer` de cada pagina
+As 26 páginas "rastreadas mas não indexadas" são decisão do Google e tendem a resolver-se com o tempo à medida que o site ganha autoridade.
 
-Remover os imports e uso de `HomeHeader` e `Footer` de:
-- `src/pages/Index.tsx`
-- `src/pages/ComoFunciona.tsx`
-- `src/pages/ParaQuem.tsx`
-- `src/pages/FAQ.tsx`
-- `src/pages/Avaliacao.tsx`
-
-Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
-
-### 4. Garantir scroll to top na navegacao
-
-Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
-
----
-
-## Resultado esperado
-
-- Header e Footer **nunca desmontam** entre navegacoes
-- Logo carrega uma unica vez e permanece visivel
-- Zero "tremor" ou flash ao trocar de pagina
-- Experiencia de navegacao fluida e consistente
-
-## Arquivos
-
-| Arquivo | Acao |
-|---------|------|
-| `src/layouts/MainLayout.tsx` | Criar (novo) |
-| `src/App.tsx` | Editar rotas |
-| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
-| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
-| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
-| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
-
-Nenhuma dependencia nova.
