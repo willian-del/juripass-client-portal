@@ -401,7 +401,15 @@ export function PostersViewer({ standalone, onClose, posterId }: PostersViewerPr
               </Button>
             </div>
           )}
-          <Button size="sm" onClick={() => window.print()}>
+          <Button size="sm" onClick={() => {
+            const originalTitle = document.title;
+            const pdfTitle = posterId
+              ? `${POSTER_LABELS[posterId] || 'Cartaz'} - Juripass`
+              : 'Cartazes Informativos - Juripass';
+            document.title = pdfTitle;
+            window.print();
+            window.addEventListener('afterprint', () => { document.title = originalTitle; }, { once: true });
+          }}>
             <Printer className="h-4 w-4 mr-1" />
             Imprimir / Salvar como PDF
           </Button>
