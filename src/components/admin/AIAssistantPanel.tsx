@@ -74,7 +74,7 @@ export function AIAssistantPanel({ open, onOpenChange, lead }: AIAssistantPanelP
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-lg flex flex-col p-0">
-        <SheetHeader className="px-4 py-3 border-b">
+        <SheetHeader className="px-4 py-3 border-b pr-12">
           <div className="flex items-center justify-between">
             <SheetTitle className="flex items-center gap-2 text-base">
               <Sparkles className="h-5 w-5 text-primary" />
