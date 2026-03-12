@@ -338,7 +338,7 @@ function InstitutionalPoster() {
         <StepsSection steps={steps} />
 
         {/* Nota de acolhimento */}
-        <div className="rounded-md px-5 py-3 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
+        <div className="rounded-md px-5 py-2 text-sm leading-relaxed border-l-4 border-[#4A9FD8] bg-[#F8FAFC] text-gray-600">
           Problemas jurídicos fazem parte da vida. Ter orientação adequada ajuda você a tomar decisões com mais segurança.
         </div>
 
