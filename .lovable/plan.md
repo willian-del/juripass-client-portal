@@ -1,57 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: 3 melhorias no CRM
+## Problema
 
-### 1. Deletar leads (junk/teste)
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-**Problema**: Não existe RLS policy para DELETE na tabela `leads`, nem botão na UI.
+## Solucao
 
-**Solução**:
-- Migração SQL: adicionar RLS policy para admins poderem deletar leads
-- UI: Adicionar botão "Excluir" no `LeadDetailPanel` com confirmação (AlertDialog)
-- Também adicionar seleção múltipla na `LeadTable` com botão "Excluir selecionados" para limpeza em massa
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-### 2. Histórico de chat no card do lead
+---
 
-**Problema**: A tabela `chat_conversations` tem `lead_id` mas o `LeadDetailPanel` não exibe as conversas.
+## Alteracoes
 
-**Solução**:
-- No `LeadDetailPanel`, buscar `chat_conversations` onde `lead_id = lead.id`
-- Exibir seção "Histórico de Chat" com as mensagens (parseando o campo JSONB `messages`)
-- Mostrar data da conversa e resumo das mensagens
-- Os materiais enviados já aparecem com contagem de visualizações — adicionar a data de envio (`sent_at`) que já é buscada mas não exibida
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### 3. Integração de email no CRM
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-**Viabilidade e complexidade**:
-
-Integrar email bidirecional (visualizar inbox + enviar) diretamente no CRM é **complexo e não viável nativamente** no Lovable:
-
-- **Receber emails**: Requer acesso IMAP/API ao inbox da Juripass (ex: Google Workspace API com scopes `gmail.readonly`, `gmail.send`). Não há conector Gmail disponível no Lovable.
-- **Enviar emails**: É possível enviar emails transacionais via a infraestrutura existente (Resend), mas não como um "cliente de email" integrado com thread/reply.
-- **Alternativa recomendada**: Integrar com um CRM externo (HubSpot, Pipedrive) que já tem email nativo, ou usar um link direto para abrir o Gmail/Outlook com o email do lead pré-preenchido (`mailto:` link).
-
-**O que posso implementar agora**: Botão "Enviar email" que abre o cliente de email do usuário com destinatário pré-preenchido (`mailto:`). Para integração completa, seria necessário um serviço externo.
-
-### Mudanças técnicas
-
-**Migração SQL**:
-```sql
-CREATE POLICY "Admins can delete leads"
-ON public.leads FOR DELETE TO authenticated
-USING (public.has_role(auth.uid(), 'admin'));
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-**`src/components/admin/LeadDetailPanel.tsx`**:
-- Buscar `chat_conversations` do lead e exibir seção de histórico
-- Mostrar `sent_at` nos materiais enviados
-- Adicionar botão "Excluir lead" com AlertDialog de confirmação
-- Adicionar link `mailto:` para abrir email
+### 2. Atualizar `src/App.tsx`
 
-**`src/components/admin/LeadTable.tsx`**:
-- Adicionar checkboxes para seleção múltipla
-- Botão "Excluir selecionados" no topo
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
-**`src/pages/admin/AdminLeads.tsx`**:
-- Gerenciar estado de seleção e lógica de exclusão em massa
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
 
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

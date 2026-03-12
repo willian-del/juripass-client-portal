@@ -1,6 +1,7 @@
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 import { PriorityBadge } from './PriorityBadge';
 import { FunnelBadge } from './FunnelBadge';
 
@@ -25,12 +26,39 @@ interface Lead {
   created_at: string;
 }
 
-export function LeadTable({ leads, onSelect }: { leads: Lead[]; onSelect: (lead: Lead) => void }) {
+export function LeadTable({
+  leads, onSelect, selectedIds, onSelectionChange,
+}: {
+  leads: Lead[];
+  onSelect: (lead: Lead) => void;
+  selectedIds: Set<string>;
+  onSelectionChange: (ids: Set<string>) => void;
+}) {
+  const allSelected = leads.length > 0 && leads.every((l) => selectedIds.has(l.id));
+
+  const toggleAll = () => {
+    if (allSelected) {
+      onSelectionChange(new Set());
+    } else {
+      onSelectionChange(new Set(leads.map((l) => l.id)));
+    }
+  };
+
+  const toggleOne = (id: string) => {
+    const next = new Set(selectedIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    onSelectionChange(next);
+  };
+
   return (
     <div className="rounded-lg border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-10">
+              <Checkbox checked={allSelected} onCheckedChange={toggleAll} />
+            </TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>Empresa</TableHead>
             <TableHead className="hidden md:table-cell">Colab.</TableHead>
@@ -45,7 +73,7 @@ export function LeadTable({ leads, onSelect }: { leads: Lead[]; onSelect: (lead:
         <TableBody>
           {leads.length === 0 && (
             <TableRow>
-              <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
                 Nenhum lead encontrado
               </TableCell>
             </TableRow>
@@ -56,6 +84,12 @@ export function LeadTable({ leads, onSelect }: { leads: Lead[]; onSelect: (lead:
               className="cursor-pointer hover:bg-muted/50"
               onClick={() => onSelect(lead)}
             >
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                <Checkbox
+                  checked={selectedIds.has(lead.id)}
+                  onCheckedChange={() => toggleOne(lead.id)}
+                />
+              </TableCell>
               <TableCell className="font-medium">{lead.name}</TableCell>
               <TableCell>{lead.company}</TableCell>
               <TableCell className="hidden md:table-cell">{EMPLOYEE_LABELS[lead.employee_count || ''] || '—'}</TableCell>
