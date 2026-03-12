@@ -342,7 +342,7 @@ function InstitutionalPoster() {
           Problemas jurídicos fazem parte da vida. Ter orientação adequada ajuda você a tomar decisões com mais segurança.
         </div>
 
-        <p className="text-center text-base font-semibold italic text-[#2C3E7D]">
+        <p className="text-center text-sm font-semibold italic text-[#2C3E7D]">
           Atendimento confidencial e sem julgamentos.
         </p>
       </div>
