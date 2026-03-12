@@ -1,61 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Plano: Publicar novo artigo no blog
+## Problema
 
-### Resumo
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-Adicionar o artigo "NR-01 e riscos psicossociais: o que muda para o RH a partir de 2026" ao arquivo `blog-data.ts`. O artigo será automaticamente exibido na listagem do blog e acessível via `/blog/nr-01-riscos-psicossociais-2026-rh`.
+## Solucao
 
-### Mudanças
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-**`src/lib/blog-data.ts`**
+---
 
-Adicionar novo objeto ao array `blogArticles` (após o último artigo existente):
+## Alteracoes
 
-```typescript
-{
-  slug: 'nr-01-riscos-psicossociais-2026-rh',
-  title: 'NR-01 e riscos psicossociais: o que muda para o RH a partir de 2026',
-  description: 'A atualização da NR-01 amplia a responsabilidade das empresas na gestão de riscos psicossociais e coloca o RH no centro da governança organizacional.',
-  category: 'Compliance',
-  readTime: '8 min',
-  publishedAt: '2026-03-12',
-  relatedSlugs: ['nr-01-riscos-psicossociais-guia-pratico', 'saude-mental-trabalho-papel-rh', 'absenteismo-juridico-problema-silencioso'],
-  sections: [
-    {
-      heading: 'Introdução',
-      content: 'A Norma Regulamentadora nº 1 (NR-01), que trata das disposições gerais sobre segurança e saúde no trabalho, passou por atualizações importantes nos últimos anos. Entre as mudanças mais relevantes está o fortalecimento da necessidade de identificação e gestão de riscos psicossociais dentro das organizações. Essa mudança amplia o papel do RH e das áreas de compliance, que passam a atuar de forma mais direta na gestão preventiva de riscos humanos. Mas o que exatamente muda na prática?'
-    },
-    {
-      heading: 'O que são riscos psicossociais',
-      content: 'Riscos psicossociais são fatores relacionados à organização do trabalho que podem afetar a saúde mental, o bem-estar e as relações dentro da empresa. Entre os exemplos mais comuns estão: assédio moral, conflitos entre colaboradores, pressão excessiva por metas, insegurança nas relações de trabalho, ambiente organizacional hostil, falhas de comunicação entre liderança e equipe. Esses fatores podem gerar impactos relevantes, tanto para os colaboradores quanto para a empresa.'
-    },
-    {
-      heading: 'Por que esse tema ganhou importância',
-      content: 'Nos últimos anos, o aumento de processos trabalhistas relacionados a assédio, ambiente de trabalho e saúde mental levou a uma maior atenção regulatória sobre o tema. Com isso, as empresas passaram a ser incentivadas a adotar medidas que vão além da reação a problemas já existentes. A tendência é que as organizações adotem cada vez mais uma abordagem de gestão preventiva de riscos humanos.'
-    },
-    {
-      heading: 'O desafio prático para o RH',
-      content: 'Na prática, muitas empresas possuem ferramentas importantes, como: código de ética, canal de denúncias, treinamentos de compliance, políticas internas. Esses instrumentos são essenciais, mas geralmente atuam quando o problema já aconteceu. O grande desafio está em identificar sinais de risco antes que eles se transformem em conflitos ou passivos trabalhistas.'
-    },
-    {
-      heading: 'O RH como gestor de risco organizacional',
-      content: 'Com esse novo cenário, o RH passa a desempenhar um papel cada vez mais estratégico. Além da gestão de pessoas, o RH também se torna responsável por: identificar riscos psicossociais, monitorar padrões de conflito organizacional, apoiar a governança corporativa, fortalecer a cultura de prevenção. Essa mudança aproxima o RH de áreas como compliance, jurídico e gestão de riscos.'
-    },
-    {
-      heading: 'Conclusão',
-      content: 'A evolução regulatória aponta para uma mudança importante: as empresas precisarão desenvolver mecanismos mais estruturados de gestão de risco humano. Organizações que adotarem uma postura preventiva tendem a reduzir conflitos, melhorar o ambiente de trabalho e fortalecer sua governança.'
-    },
-    {
-      heading: 'Quer entender como identificar riscos humanos dentro da sua organização?',
-      content: 'Conheça o Relatório de Inteligência de Riscos Humanos da Juripass, uma ferramenta que ajuda o RH a transformar dados em prevenção.'
-    }
-  ]
-}
+### 1. Criar `src/layouts/MainLayout.tsx`
+
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
+
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-### Link para publicação no LinkedIn
+### 2. Atualizar `src/App.tsx`
 
-Após a implementação, o artigo estará disponível em:
-`https://juripass-client-portal.lovable.app/blog/nr-01-riscos-psicossociais-2026-rh`
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
 
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.
