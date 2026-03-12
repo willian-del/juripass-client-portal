@@ -258,7 +258,7 @@ function InstitutionalPoster() {
       <div className="flex-1 flex flex-col justify-between px-10 py-4 gap-1.5">
         {/* Headline */}
         <div className="text-center space-y-1.5">
-          <h1 className="text-3xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
+          <h1 className="text-2xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
             Tem dúvidas ou problemas jurídicos<br />no seu dia a dia?
           </h1>
           <p className="text-base leading-relaxed text-gray-500">
