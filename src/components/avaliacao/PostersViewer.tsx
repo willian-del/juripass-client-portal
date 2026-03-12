@@ -261,7 +261,7 @@ function InstitutionalPoster() {
           <h1 className="text-2xl font-extrabold leading-tight text-[#2C3E7D] print:text-black">
             Tem dúvidas ou problemas jurídicos<br />no seu dia a dia?
           </h1>
-          <p className="text-base leading-relaxed text-gray-500">
+          <p className="text-sm leading-relaxed text-gray-500">
             A Juripass pode orientar você. Converse com um advogado para entender seus direitos e saber quais são suas opções.
           </p>
         </div>
