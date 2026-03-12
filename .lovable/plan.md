@@ -1,34 +1,83 @@
 
+# Corrigir Header Consistente e Logo Lento
 
-## Análise: Leads duplicados para Rachel Lima
+## Problema
 
-### Causa
+O `HomeHeader` e o `Footer` sao renderizados **dentro** de cada pagina. Quando o usuario navega entre rotas, o React desmonta a pagina inteira (incluindo header e footer) e remonta a nova. Isso causa:
+1. O logo recarrega a cada navegacao (flash/demora)
+2. Os elementos do header "tremem" porque sao destruidos e recriados
 
-O sistema atual só tem rate limiting de **5 minutos** por email (linhas 121-135 de `send-lead-email/index.ts`). Se a mesma pessoa submeter o formulário com intervalos maiores que 5 minutos, um novo lead é criado a cada vez. Os 3 registros de "Rachel Lima" no screenshot confirmam isso — todos do dia 10/03/2026.
+## Solucao
 
-### Solução proposta
+Criar um layout compartilhado com `<Outlet>` do React Router. O header e footer ficam **fora** das rotas, persistindo entre navegacoes.
 
-Duas ações:
+---
 
-**1. Deduplicação na inserção** — Na edge function `send-lead-email`, ao invés de apenas checar os últimos 5 minutos, verificar se já existe um lead com o mesmo email. Se existir, fazer `UPDATE` (atualizar dados) em vez de `INSERT`, e retornar sucesso sem criar duplicata.
+## Alteracoes
 
-**2. Limpeza dos duplicados existentes** — Migração SQL para remover os leads duplicados, mantendo apenas o mais recente de cada email.
+### 1. Criar `src/layouts/MainLayout.tsx`
 
-### Mudanças
+Componente de layout que renderiza:
+- `HomeHeader` (fixo, nunca desmonta)
+- `<Outlet />` (conteudo da rota)
+- `Footer` (fixo, nunca desmonta)
 
-**`supabase/functions/send-lead-email/index.ts`**
-- Antes do insert, buscar lead existente por email (sem filtro de tempo)
-- Se encontrar, fazer `update` nos campos do lead existente em vez de `insert`
-- Manter o rate limiting de 5 min como proteção contra spam
-
-**Migração SQL** — Remover duplicatas existentes:
-```sql
-DELETE FROM leads a
-USING leads b
-WHERE a.email = b.email
-  AND a.created_at < b.created_at;
+```text
+HomeHeader
+  Outlet (conteudo muda conforme a rota)
+Footer
 ```
 
-### Resultado
-Cada email terá no máximo 1 registro na tabela de leads. Resubmissões atualizarão os dados do lead existente.
+### 2. Atualizar `src/App.tsx`
 
+Agrupar as rotas principais dentro de uma rota pai com `MainLayout`:
+
+```text
+<Route element={<MainLayout />}>
+  <Route path="/" element={<Index />} />
+  <Route path="/como-funciona" element={<ComoFunciona />} />
+  <Route path="/para-quem" element={<ParaQuem />} />
+  <Route path="/faq" element={<FAQ />} />
+  <Route path="/avaliacao" element={<Avaliacao />} />
+</Route>
+```
+
+As rotas `/site-anterior` e `*` (NotFound) ficam fora do layout, pois tem estrutura propria.
+
+### 3. Remover `HomeHeader` e `Footer` de cada pagina
+
+Remover os imports e uso de `HomeHeader` e `Footer` de:
+- `src/pages/Index.tsx`
+- `src/pages/ComoFunciona.tsx`
+- `src/pages/ParaQuem.tsx`
+- `src/pages/FAQ.tsx`
+- `src/pages/Avaliacao.tsx`
+
+Cada pagina passa a renderizar apenas seu conteudo (`<main>`), sem wrapper `<div className="min-h-screen">`.
+
+### 4. Garantir scroll to top na navegacao
+
+Adicionar um componente `ScrollToTop` dentro do `MainLayout` que usa `useLocation` para fazer `window.scrollTo(0, 0)` a cada mudanca de rota, evitando que o usuario chegue no meio da pagina ao navegar.
+
+---
+
+## Resultado esperado
+
+- Header e Footer **nunca desmontam** entre navegacoes
+- Logo carrega uma unica vez e permanece visivel
+- Zero "tremor" ou flash ao trocar de pagina
+- Experiencia de navegacao fluida e consistente
+
+## Arquivos
+
+| Arquivo | Acao |
+|---------|------|
+| `src/layouts/MainLayout.tsx` | Criar (novo) |
+| `src/App.tsx` | Editar rotas |
+| `src/pages/Index.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ComoFunciona.tsx` | Remover HomeHeader/Footer |
+| `src/pages/ParaQuem.tsx` | Remover HomeHeader/Footer |
+| `src/pages/FAQ.tsx` | Remover HomeHeader/Footer |
+| `src/pages/Avaliacao.tsx` | Remover HomeHeader/Footer |
+
+Nenhuma dependencia nova.

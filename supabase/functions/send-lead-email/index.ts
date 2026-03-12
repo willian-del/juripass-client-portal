@@ -134,8 +134,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Save lead to database (scoring trigger will calculate lead_score and lead_priority)
-    const { data: insertedLead, error: insertError } = await supabase.from("leads").insert({
+    const leadData = {
       name: trimmedName,
       email: trimmedEmail,
       phone: trimmedPhone,
@@ -148,10 +147,43 @@ Deno.serve(async (req) => {
       interest: validatedInterest,
       evaluating_psychosocial: validatedPsychosocial,
       has_legal_benefit: validatedLegalBenefit,
-    }).select("lead_score, lead_priority").single();
+    };
+
+    // Check if lead with this email already exists
+    const { data: existingLead } = await supabase
+      .from("leads")
+      .select("id")
+      .eq("email", trimmedEmail)
+      .limit(1)
+      .single();
+
+    let insertedLead;
+    let insertError;
+
+    if (existingLead) {
+      // Update existing lead
+      const result = await supabase
+        .from("leads")
+        .update(leadData)
+        .eq("id", existingLead.id)
+        .select("lead_score, lead_priority")
+        .single();
+      insertedLead = result.data;
+      insertError = result.error;
+      console.log("Updated existing lead:", existingLead.id);
+    } else {
+      // Insert new lead
+      const result = await supabase
+        .from("leads")
+        .insert(leadData)
+        .select("lead_score, lead_priority")
+        .single();
+      insertedLead = result.data;
+      insertError = result.error;
+    }
 
     if (insertError) {
-      console.error("Error inserting lead:", insertError);
+      console.error("Error saving lead:", insertError);
       return new Response(
         JSON.stringify({ error: "Erro ao salvar lead" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
