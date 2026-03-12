@@ -6,6 +6,7 @@ import { FileText, Loader2, AlertCircle } from 'lucide-react';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import { PostersViewer } from '@/components/avaliacao/PostersViewer';
+import { SEOHead } from '@/components/ui/SEOHead';
 
 type MaterialResult = {
   type: 'file' | 'builtin';
@@ -51,11 +52,14 @@ export default function MaterialViewer() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-        <LogoJuripass variant="full" size="md" format="png" clickable={false} />
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Carregando material...</p>
-      </div>
+      <>
+        <SEOHead title="Carregando material | Juripass" description="Material Juripass" noindex={true} />
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+          <LogoJuripass variant="full" size="md" format="png" clickable={false} />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Carregando material...</p>
+        </div>
+      </>
     );
   }
 

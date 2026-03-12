@@ -83,6 +83,9 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd, noinde
     return () => {
       const scripts = document.querySelectorAll('script[data-seo-jsonld]');
       scripts.forEach((s) => s.remove());
+      // Clean up robots meta to prevent noindex leaking to next page
+      const robotsMeta = document.querySelector('meta[name="robots"]');
+      if (robotsMeta) robotsMeta.remove();
     };
   }, [title, description, url, image, jsonLd, noindex, finalKeywords]);
 
