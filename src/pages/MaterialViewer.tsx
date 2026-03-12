@@ -6,6 +6,7 @@ import { FileText, Loader2, AlertCircle } from 'lucide-react';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import { PostersViewer } from '@/components/avaliacao/PostersViewer';
+import { SEOHead } from '@/components/ui/SEOHead';
 
 type MaterialResult = {
   type: 'file' | 'builtin';
