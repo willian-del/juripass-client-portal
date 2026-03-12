@@ -7,21 +7,26 @@ import { LeadDetailPanel } from '@/components/admin/LeadDetailPanel';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { LayoutList, Kanban, LogOut, Search, FileText, Sparkles } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { LayoutList, Kanban, LogOut, Search, FileText, Sparkles, Trash2 } from 'lucide-react';
 import { FUNNEL_STAGES } from '@/components/admin/FunnelBadge';
 import { AIAssistantPanel } from '@/components/admin/AIAssistantPanel';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 type Lead = any;
 
 export default function AdminLeads() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'table' | 'kanban'>('table');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -64,6 +69,21 @@ export default function AdminLeads() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    setBulkDeleting(true);
+    const ids = Array.from(selectedIds);
+    const { error } = await supabase.from('leads').delete().in('id', ids);
+    setBulkDeleting(false);
+    if (error) {
+      toast({ title: 'Erro ao excluir', variant: 'destructive' });
+    } else {
+      toast({ title: `${ids.length} lead(s) excluído(s)` });
+      setSelectedIds(new Set());
+      fetchLeads();
+    }
   };
 
   return (
@@ -147,16 +167,44 @@ export default function AdminLeads() {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="flex gap-4 text-sm text-muted-foreground">
+          {/* Stats + bulk actions */}
+          <div className="flex gap-4 items-center text-sm text-muted-foreground">
             <span>{filtered.length} lead{filtered.length !== 1 ? 's' : ''}</span>
             <span>🔥 {filtered.filter((l: Lead) => l.lead_priority === 'hot').length} quentes</span>
+            {selectedIds.size > 0 && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm" disabled={bulkDeleting}>
+                    <Trash2 className="h-4 w-4 mr-1" /> Excluir {selectedIds.size} selecionado{selectedIds.size > 1 ? 's' : ''}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Excluir {selectedIds.size} lead(s)?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Essa ação é irreversível. Os leads selecionados serão excluídos permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Excluir
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
 
           {loading ? (
             <p className="text-center py-12 text-muted-foreground">Carregando...</p>
           ) : view === 'table' ? (
-            <LeadTable leads={filtered} onSelect={handleSelect} />
+            <LeadTable
+              leads={filtered}
+              onSelect={handleSelect}
+              selectedIds={selectedIds}
+              onSelectionChange={setSelectedIds}
+            />
           ) : (
             <LeadKanban leads={filtered} onSelect={handleSelect} />
           )}
