@@ -1,39 +1,38 @@
 
+Objetivo: corrigir definitivamente o “Baixar PDF” para exportar todos os slides (não só o primeiro).
 
-## Plano: Uniformizar os 3 cards do slide "Como funciona"
+1) Diagnóstico do problema atual
+- O fluxo atual usa `window.print()` + CSS de impressão em `src/components/avaliacao/SlidesPresentation.tsx`.
+- A combinação de container de impressão com `position: absolute` e regras de visibilidade está causando paginação incorreta no Chrome (resultado: apenas 1 página).
 
-### Problema
+2) Abordagem de correção (mais robusta)
+- Substituir o fluxo de impressão por geração direta de PDF no cliente (sem abrir diálogo de impressão), usando captura por seção (1 slide = 1 página).
+- Isso evita inconsistências de CSS print entre navegadores.
 
-Os 3 cards têm tamanhos diferentes porque o conteúdo (títulos e descrições) varia em comprimento, e o layout atual com `flex-1` dentro de wrappers que incluem as setas não garante largura igual.
+3) Implementação
+- Arquivo: `src/components/avaliacao/SlidesPresentation.tsx`
+  - Trocar `onClick={() => window.print()}` por `handleExportPDF`.
+  - Criar estado de exportação (`isExporting`) para desabilitar botão e mostrar feedback visual durante geração.
+  - Adicionar container offscreen de exportação com todos os slides renderizados ao mesmo tempo (não visível ao usuário), com marcador `data-pdf-section` em cada slide.
+  - Capturar cada seção sequencialmente e montar o PDF em múltiplas páginas (landscape), preservando fundo/cores e imagem do logo.
+  - Salvar arquivo com nome consistente (ex.: `Apresentacao_Juripass.pdf`).
+  - Remover o CSS de impressão específico atual (ou deixar apenas fallback mínimo), para eliminar conflito com o novo fluxo.
 
-### Mudanças
+- Dependências:
+  - Adicionar `html2canvas` e `jspdf` ao projeto para suportar captura e composição do PDF.
 
-**`src/components/avaliacao/SlidesPresentation.tsx`** (linhas 238-259)
+4) Detalhes técnicos
+- Captura por slide com escala alta (qualidade) e `useCORS`.
+- Cada slide exportado com dimensão fixa (ratio de apresentação) para evitar corte.
+- Inserção no PDF página a página (`addPage`) garantindo contagem final = número de slides.
+- Preservar a UI atual de navegação; só muda o mecanismo do botão “Baixar PDF”.
 
-1. Separar os cards das setas — usar um grid `grid-cols-3` para os cards e posicionar as setas entre eles via overlay ou separadamente
-2. Dar a cada card dimensões fixas iguais (`min-h-[240px]`) e padding uniforme (`p-6`)
-3. Estruturar o conteúdo interno de cada card identicamente: número no topo, título no meio (com `min-h` para alinhar), descrição em baixo
-
-Estrutura simplificada:
-```tsx
-<div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-  {cards.map((s, i) => (
-    <div key={i} className="relative flex flex-col items-center">
-      <Card className="w-full h-full min-h-[240px] p-6 text-center flex flex-col items-center justify-center gap-3">
-        <div className="w-12 h-12 rounded-full bg-[#4A9FD8] ...">
-          {s.step}
-        </div>
-        <h3 className="font-semibold text-base min-h-[48px] flex items-center">{s.title}</h3>
-        <p className="text-sm text-white/60">{s.desc}</p>
-      </Card>
-      {/* Seta entre cards */}
-      {i < 2 && <ChevronRight className="hidden md:block absolute -right-5 top-1/2 ..." />}
-    </div>
-  ))}
-</div>
-```
-
-### Resultado
-
-Os 3 cards ficam com exatamente o mesmo tamanho e layout uniforme, com setas posicionadas entre eles.
-
+5) Validação (fim a fim)
+- Testar exportação em:
+  - Preview de admin (`/admin/materiais` -> apresentação).
+  - Link público de material (`/m/:token`) quando `file_type === presentation`.
+- Confirmar:
+  - PDF contém todos os slides.
+  - Último slide está presente.
+  - Cores/gradientes/logos legíveis.
+  - Botão mostra estado de carregamento e não dispara múltiplos downloads simultâneos.
