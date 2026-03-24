@@ -1,39 +1,34 @@
 
 
-## Plano: Dividir materiais em 4 seções por categoria
+## Plano: Reduzir tamanho do PDF exportado (de 116MB para ~2-5MB)
 
-### Situação atual
-Todos os 7 materiais aparecem numa única tabela flat. O usuário quer agrupá-los em seções visuais.
+### Problema
+O PDF está enorme porque cada slide é capturado como PNG com `scale: 2` (2560x1440 pixels) — imagens PNG sem compressão resultam em ~10MB por slide. Com 11 slides = ~110MB.
 
-### Mudanças
+### Solução
+Duas mudanças simples no `handleExportPDF`:
 
-**`src/pages/admin/AdminMaterials.tsx`**
+**`src/components/avaliacao/SlidesPresentation.tsx`** (linhas 466-480)
 
-1. Dentro da `TabsContent value="materials"`, substituir a tabela única por 4 seções colapsáveis/visuais:
-   - **Apresentações** — materiais com `file_type === 'presentation'`
-   - **One-Pager** — materiais com `file_type === 'one-pager'`
-   - **Divulgação** — materiais com `file_type === 'posters'` ou `file_type.startsWith('poster-')`
-   - **Templates** — documentos genéricos (`pdf`, `document`, etc.)
+1. **Reduzir escala de captura**: `scale: 2` → `scale: 1.5` (1920x1080 — ainda boa qualidade)
+2. **Usar JPEG em vez de PNG**: `canvas.toDataURL('image/jpeg', 0.75)` — compressão com qualidade visual adequada
+3. **Usar formato JPEG no addImage**: `pdf.addImage(imgData, 'JPEG', ...)` em vez de `'PNG'`
 
-2. Cada seção terá:
-   - Um título (`h2`) com ícone e contagem de itens
-   - A mesma tabela atual (título, tipo, envios, views, data, ações), mas filtrada por categoria
-   - Seções vazias ficam ocultas ou mostram estado vazio discreto
+Resultado estimado: cada slide passa de ~10MB para ~200-400KB → PDF final ~3-5MB.
 
-3. Mover o helper de categorização para uma função que mapeia `file_type` → seção:
-   ```ts
-   function getSectionKey(fileType: string): string {
-     if (fileType === 'presentation') return 'apresentacoes';
-     if (fileType === 'one-pager') return 'onepager';
-     if (fileType === 'posters' || fileType.startsWith('poster-')) return 'divulgacao';
-     return 'templates';
-   }
-   ```
+### Mudança de código
 
-4. Agrupar `materials` por seção e renderizar cada grupo com seu heading + tabela.
+```ts
+const canvas = await html2canvas(sections[i], {
+  scale: 1.5,          // era 2
+  useCORS: true,
+  backgroundColor: '#E8F0FE',  // fundo sólido (evita transparência PNG)
+  width: 1280,
+  height: 720,
+});
 
-5. O botão "Novo material" e contagem total permanecem no topo.
-
-### Resultado
-A página mostra 4 blocos organizados com os materiais distribuídos por tipo, melhorando a navegação visual.
+const imgData = canvas.toDataURL('image/jpeg', 0.75);  // era image/png
+// ...
+pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH);     // era PNG
+```
 
