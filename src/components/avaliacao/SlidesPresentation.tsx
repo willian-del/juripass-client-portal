@@ -235,25 +235,22 @@ const slides: SlideData[] = [
           <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Jornada</p>
           <h2 className="text-3xl md:text-4xl font-bold">Como funciona</h2>
         </div>
-        <div className="flex flex-col md:flex-row items-stretch gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           {[
             { step: '1', title: 'O Colaborador entra em contato direto', desc: 'Via WhatsApp ou aplicativo, de forma simples e confidencial.' },
             { step: '2', title: 'Equipe treinada acolhe e organiza a demanda', desc: 'Recebe orientação informativa em linguagem clara e acessível sobre direitos e caminhos possíveis.' },
             { step: '3', title: 'Situação é encaminhada adequadamente', desc: 'Quando necessário, é encaminhado a advogado, sem sobrecarregar a empresa.' },
           ].map((s, i) => (
-            <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-4">
-               <Card className="h-full flex-1 w-full text-center space-y-3 min-h-[220px] flex flex-col items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold mx-auto">
+            <div key={i} className="relative flex flex-col items-center">
+              <Card className="w-full h-full min-h-[240px] p-6 text-center flex flex-col items-center justify-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-[#4A9FD8] text-white flex items-center justify-center text-xl font-bold">
                   {s.step}
                 </div>
-                <h3 className="font-semibold text-base">{s.title}</h3>
+                <h3 className="font-semibold text-base min-h-[48px] flex items-center justify-center">{s.title}</h3>
                 <p className="text-sm text-white/60">{s.desc}</p>
               </Card>
               {i < 2 && (
-                <>
-                  <ChevronRight className="hidden md:block h-8 w-8 text-white/20 shrink-0" />
-                  <ChevronDown className="md:hidden h-8 w-8 text-white/20" />
-                </>
+                <ChevronRight className="hidden md:block absolute -right-5 top-1/2 -translate-y-1/2 h-6 w-6 text-white/30" />
               )}
             </div>
           ))}
