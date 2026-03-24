@@ -524,152 +524,166 @@ export default function AdminMaterials() {
                   <p className="text-muted-foreground">Nenhum material cadastrado</p>
                 </div>
               ) : (
-                <div className="border rounded-lg bg-card">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Título</TableHead>
-                        <TableHead className="w-[100px]">Tipo</TableHead>
-                        <TableHead className="w-[80px] text-center">Envios</TableHead>
-                        <TableHead className="w-[80px] text-center">Views</TableHead>
-                        <TableHead className="w-[110px]">Data</TableHead>
-                        <TableHead className="w-[260px] text-right">Ações</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {materials.map((m) => {
-                        const materialShares = shares[m.id] || [];
-                        const totalViews = materialShares.reduce((acc, s) => acc + (s.material_views?.length || 0), 0);
-                        const isExpanded = expandedMaterialId === m.id;
+                <div className="space-y-6">
+                  {MATERIAL_SECTIONS.map((section) => {
+                    const sectionMaterials = materials.filter(section.filter);
+                    if (sectionMaterials.length === 0) return null;
 
-                        return (
-                          <>
-                            <TableRow
-                              key={m.id}
-                              className="cursor-pointer"
-                              onClick={() => setExpandedMaterialId(isExpanded ? null : m.id)}
-                            >
-                              <TableCell>
-                                <div>
-                                  <span className="font-medium">{m.title}</span>
-                                  {m.description && (
-                                    <p className="text-xs text-muted-foreground truncate max-w-[300px]">{m.description}</p>
-                                  )}
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                {(() => {
-                                  const cat = getTypeCategory(m.file_type);
-                                  return (
-                                    <Badge variant="outline" className={`text-xs ${cat.className}`}>
-                                      {cat.label}
-                                    </Badge>
-                                  );
-                                })()}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                <span className="flex items-center justify-center gap-1 text-sm">
-                                  <Send className="h-3 w-3 text-muted-foreground" /> {materialShares.length}
-                                </span>
-                              </TableCell>
-                              <TableCell className="text-center">
-                                <span className="flex items-center justify-center gap-1 text-sm">
-                                  <Eye className="h-3 w-3 text-muted-foreground" /> {totalViews}
-                                </span>
-                              </TableCell>
-                              <TableCell className="text-sm text-muted-foreground">
-                                {new Date(m.created_at).toLocaleDateString('pt-BR')}
-                              </TableCell>
-                              <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                                <div className="flex items-center justify-end gap-1">
-                                  <Button variant="ghost" size="icon" title="Visualizar" onClick={() => handlePreview(m)}>
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                  <Button variant="ghost" size="icon" title="Download / Imprimir" onClick={() => handlePreview(m)}>
-                                    <Download className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost" size="icon" title="Editar"
-                                    onClick={() => {
-                                      setEditingMaterial(m);
-                                      setEditTitle(m.title);
-                                      setEditDescription(m.description || '');
-                                      setEditOpen(true);
-                                    }}
-                                  >
-                                    <Pencil className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost" size="icon" title="Enviar para lead"
-                                    onClick={() => { setSharingMaterial(m); setShareOpen(true); }}
-                                  >
-                                    <Link2 className="h-4 w-4" />
-                                  </Button>
-                                  <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                      <Button variant="ghost" size="icon" title="Excluir" className="text-destructive hover:text-destructive">
-                                        <Trash2 className="h-4 w-4" />
-                                      </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                      <AlertDialogHeader>
-                                        <AlertDialogTitle>Excluir material?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                          O material "{m.title}" e todos os envios/visualizações associados serão excluídos permanentemente.
-                                        </AlertDialogDescription>
-                                      </AlertDialogHeader>
-                                      <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => handleDelete(m)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                          Excluir
-                                        </AlertDialogAction>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialog>
-                                </div>
-                              </TableCell>
+                    return (
+                      <div key={section.key} className="border rounded-lg bg-card overflow-hidden">
+                        <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/30">
+                          {section.icon}
+                          <h2 className="font-semibold text-base">{section.title}</h2>
+                          <Badge variant="secondary" className="ml-1 text-xs">{sectionMaterials.length}</Badge>
+                        </div>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Título</TableHead>
+                              <TableHead className="w-[100px]">Tipo</TableHead>
+                              <TableHead className="w-[80px] text-center">Envios</TableHead>
+                              <TableHead className="w-[80px] text-center">Views</TableHead>
+                              <TableHead className="w-[110px]">Data</TableHead>
+                              <TableHead className="w-[260px] text-right">Ações</TableHead>
                             </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {sectionMaterials.map((m) => {
+                              const materialShares = shares[m.id] || [];
+                              const totalViews = materialShares.reduce((acc, s) => acc + (s.material_views?.length || 0), 0);
+                              const isExpanded = expandedMaterialId === m.id;
 
-                            {isExpanded && materialShares.length > 0 && materialShares.map((s) => (
-                              <TableRow key={s.id} className="bg-muted/30">
-                                <TableCell colSpan={2} className="pl-10">
-                                  <span className="text-sm font-medium">{s.leads?.name || '—'}</span>
-                                  <span className="text-sm text-muted-foreground ml-2">{s.leads?.company || ''}</span>
-                                </TableCell>
-                                <TableCell className="text-center text-xs text-muted-foreground">
-                                  {new Date(s.sent_at).toLocaleDateString('pt-BR')}
-                                </TableCell>
-                                <TableCell className="text-center">
-                                  {s.material_views?.length > 0 ? (
-                                    <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full font-medium">
-                                      ✓ {s.material_views.length}x
-                                    </span>
-                                  ) : (
-                                    <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                                      Não abriu
-                                    </span>
+                              return (
+                                <>
+                                  <TableRow
+                                    key={m.id}
+                                    className="cursor-pointer"
+                                    onClick={() => setExpandedMaterialId(isExpanded ? null : m.id)}
+                                  >
+                                    <TableCell>
+                                      <div>
+                                        <span className="font-medium">{m.title}</span>
+                                        {m.description && (
+                                          <p className="text-xs text-muted-foreground truncate max-w-[300px]">{m.description}</p>
+                                        )}
+                                      </div>
+                                    </TableCell>
+                                    <TableCell>
+                                      {(() => {
+                                        const cat = getTypeCategory(m.file_type);
+                                        return (
+                                          <Badge variant="outline" className={`text-xs ${cat.className}`}>
+                                            {cat.label}
+                                          </Badge>
+                                        );
+                                      })()}
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                      <span className="flex items-center justify-center gap-1 text-sm">
+                                        <Send className="h-3 w-3 text-muted-foreground" /> {materialShares.length}
+                                      </span>
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                      <span className="flex items-center justify-center gap-1 text-sm">
+                                        <Eye className="h-3 w-3 text-muted-foreground" /> {totalViews}
+                                      </span>
+                                    </TableCell>
+                                    <TableCell className="text-sm text-muted-foreground">
+                                      {new Date(m.created_at).toLocaleDateString('pt-BR')}
+                                    </TableCell>
+                                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                                      <div className="flex items-center justify-end gap-1">
+                                        <Button variant="ghost" size="icon" title="Visualizar" onClick={() => handlePreview(m)}>
+                                          <Eye className="h-4 w-4" />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" title="Download / Imprimir" onClick={() => handlePreview(m)}>
+                                          <Download className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                          variant="ghost" size="icon" title="Editar"
+                                          onClick={() => {
+                                            setEditingMaterial(m);
+                                            setEditTitle(m.title);
+                                            setEditDescription(m.description || '');
+                                            setEditOpen(true);
+                                          }}
+                                        >
+                                          <Pencil className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                          variant="ghost" size="icon" title="Enviar para lead"
+                                          onClick={() => { setSharingMaterial(m); setShareOpen(true); }}
+                                        >
+                                          <Link2 className="h-4 w-4" />
+                                        </Button>
+                                        <AlertDialog>
+                                          <AlertDialogTrigger asChild>
+                                            <Button variant="ghost" size="icon" title="Excluir" className="text-destructive hover:text-destructive">
+                                              <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                          </AlertDialogTrigger>
+                                          <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                              <AlertDialogTitle>Excluir material?</AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                O material "{m.title}" e todos os envios/visualizações associados serão excluídos permanentemente.
+                                              </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                              <AlertDialogAction onClick={() => handleDelete(m)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                                Excluir
+                                              </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                          </AlertDialogContent>
+                                        </AlertDialog>
+                                      </div>
+                                    </TableCell>
+                                  </TableRow>
+
+                                  {isExpanded && materialShares.length > 0 && materialShares.map((s) => (
+                                    <TableRow key={s.id} className="bg-muted/30">
+                                      <TableCell colSpan={2} className="pl-10">
+                                        <span className="text-sm font-medium">{s.leads?.name || '—'}</span>
+                                        <span className="text-sm text-muted-foreground ml-2">{s.leads?.company || ''}</span>
+                                      </TableCell>
+                                      <TableCell className="text-center text-xs text-muted-foreground">
+                                        {new Date(s.sent_at).toLocaleDateString('pt-BR')}
+                                      </TableCell>
+                                      <TableCell className="text-center">
+                                        {s.material_views?.length > 0 ? (
+                                          <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full font-medium">
+                                            ✓ {s.material_views.length}x
+                                          </span>
+                                        ) : (
+                                          <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                                            Não abriu
+                                          </span>
+                                        )}
+                                      </TableCell>
+                                      <TableCell colSpan={2} className="text-right">
+                                        <Button variant="ghost" size="sm" onClick={() => copyShareLink(s.token)}>
+                                          <Copy className="h-3 w-3 mr-1" /> Copiar link
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+
+                                  {isExpanded && materialShares.length === 0 && (
+                                    <TableRow key={`${m.id}-empty`} className="bg-muted/30">
+                                      <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-3">
+                                        Nenhum envio para este material
+                                      </TableCell>
+                                    </TableRow>
                                   )}
-                                </TableCell>
-                                <TableCell colSpan={2} className="text-right">
-                                  <Button variant="ghost" size="sm" onClick={() => copyShareLink(s.token)}>
-                                    <Copy className="h-3 w-3 mr-1" /> Copiar link
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-
-                            {isExpanded && materialShares.length === 0 && (
-                              <TableRow key={`${m.id}-empty`} className="bg-muted/30">
-                                <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-3">
-                                  Nenhum envio para este material
-                                </TableCell>
-                              </TableRow>
-                            )}
-                          </>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
+                                </>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </TabsContent>
