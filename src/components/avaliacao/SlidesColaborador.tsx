@@ -7,7 +7,7 @@ import {
   Download, ChevronDown, MessageCircle, Gavel,
   BadgePercent, ShieldCheck, CheckCircle2, Gift, BookOpen,
   ShoppingBag, Home, Wallet, FileText, HeartPulse,
-  UserCheck, Loader2
+  UserCheck, Loader2, XCircle, Briefcase, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
