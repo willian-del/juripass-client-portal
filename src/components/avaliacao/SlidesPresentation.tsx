@@ -455,7 +455,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
   };
 
   return (
-    <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#2C3E7D] flex flex-col`}>
+    <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#E8F0FE] flex flex-col`}>
       {/* Print styles */}
       <style>{`
         @media print {
@@ -476,7 +476,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       `}</style>
 
       {/* Progress bar */}
-      <div className="h-1 w-full bg-white/5 print-hidden">
+      <div className="h-1 w-full bg-[#2C3E7D]/10 print-hidden">
         <motion.div
           className="h-full bg-gradient-to-r from-[#4A9FD8] to-[#4A9FD8]/60"
           animate={{ width: `${progress}%` }}
@@ -485,27 +485,27 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 print-hidden">
+      <div className="flex items-center justify-between px-6 py-3 border-b border-[#2C3E7D]/10 print-hidden">
         <img 
-          src="/images/branding/juripass-logo-white.png" 
+          src="/images/branding/juripass-logo-horizontal.svg" 
           alt="Juripass" 
           className="h-8 object-contain"
         />
         <div className="flex items-center gap-4">
-          <span className="text-sm text-white/50 font-medium tabular-nums">
+          <span className="text-sm text-[#2C3E7D]/60 font-medium tabular-nums">
             {current + 1} / {slides.length}
           </span>
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => window.print()}
-            className="text-white/60 hover:text-white hover:bg-white/10"
+            className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10"
           >
             <Download className="h-4 w-4 mr-1" />
             Baixar PDF
           </Button>
           {onClose && (
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-white/60 hover:text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10">
               <X className="h-5 w-5" />
             </Button>
           )}
@@ -544,8 +544,8 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-white/10 print-hidden">
-        <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-white/60 hover:text-white hover:bg-white/10 disabled:text-white/20">
+      <div className="flex items-center justify-between px-6 py-3 border-t border-[#2C3E7D]/10 print-hidden">
+        <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10 disabled:text-[#2C3E7D]/20">
           <ChevronLeft className="h-4 w-4 mr-1" />
           Anterior
         </Button>
@@ -558,13 +558,13 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === current 
                   ? 'w-6 bg-[#4A9FD8]' 
-                  : 'w-2 bg-white/20 hover:bg-white/40'
+                  : 'w-2 bg-[#2C3E7D]/20 hover:bg-[#2C3E7D]/40'
               }`}
             />
           ))}
         </div>
 
-        <Button variant="ghost" size="sm" onClick={next} disabled={current === slides.length - 1} className="text-white/60 hover:text-white hover:bg-white/10 disabled:text-white/20">
+        <Button variant="ghost" size="sm" onClick={next} disabled={current === slides.length - 1} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10 disabled:text-[#2C3E7D]/20">
           Próximo
           <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
