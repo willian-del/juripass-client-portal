@@ -201,7 +201,7 @@ const slides: SlideData[] = [
             { icon: ShieldCheck, title: 'Para o RH', points: ['Menos relatos delicados no dia a dia', 'Apoio à gestão de pessoas e mediação inicial', 'Foco nas demandas estratégicas', 'Fortalecimento do employer branding'] },
             { icon: Users, title: 'Para os Gestores', points: ['Deixam de mediar problemas pessoais', 'Menos desgaste emocional', 'Relação profissional preservada', 'Aderência à prevenção de riscos psicossociais (NR-1)'] },
             { icon: UserCheck, title: 'Para os Colaboradores', points: ['Orientação sem custo no atendimento inicial', 'Decisões importantes com mais clareza', 'Canal confidencial e sem julgamento', 'Conteúdos educativos preventivos'] },
-            { icon: Building2, title: 'Para a Organização', points: ['Indicadores agregados de riscos humanos e psicossociais', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
+            { icon: Building2, title: 'Para a Organização', points: ['Indicadores de riscos humanos e psicossociais', 'Clima organizacional mais saudável', 'Conformidade com a Nova NR-01', 'Diferencial competitivo na atração de talentos'] },
           ].map((col, i) => (
              <Card key={i} className="h-full">
               <div className="space-y-4">
