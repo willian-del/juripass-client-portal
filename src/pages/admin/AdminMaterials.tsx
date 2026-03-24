@@ -343,6 +343,9 @@ export default function AdminMaterials() {
       } else if (m.file_type.startsWith('poster-')) {
         setPreviewType('posters');
         setPreviewPosterId(m.file_type.replace('poster-', ''));
+      } else if (m.file_type === 'presentation-colaborador') {
+        setPreviewType('slides-colaborador');
+        setPreviewPosterId(undefined);
       } else {
         setPreviewType('slides');
         setPreviewPosterId(undefined);
