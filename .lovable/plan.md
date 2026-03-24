@@ -1,34 +1,39 @@
 
 
-## Plano: Tom mais claro no chrome da apresentação
+## Plano: Uniformizar os 3 cards do slide "Como funciona"
 
 ### Problema
 
-A apresentação usa `bg-[#2C3E7D]` (azul escuro) tanto no wrapper/header quanto nos slides, e quando combinado com o header/footer do site (que também usa tons de azul da marca), tudo fica visualmente monótono — "muito azul".
-
-### Abordagem
-
-Clarear o **chrome da apresentação** (barra superior, fundo externo, barra de progresso) mantendo os slides com os gradientes escuros atuais. Isso cria uma separação visual entre a "moldura" e o conteúdo dos slides.
+Os 3 cards têm tamanhos diferentes porque o conteúdo (títulos e descrições) varia em comprimento, e o layout atual com `flex-1` dentro de wrappers que incluem as setas não garante largura igual.
 
 ### Mudanças
 
-**`src/components/avaliacao/SlidesPresentation.tsx`**
+**`src/components/avaliacao/SlidesPresentation.tsx`** (linhas 238-259)
 
-1. **Wrapper principal** (linha 458): trocar `bg-[#2C3E7D]` por `bg-[#E8F0FE]` (azul bem claro, quase branco)
+1. Separar os cards das setas — usar um grid `grid-cols-3` para os cards e posicionar as setas entre eles via overlay ou separadamente
+2. Dar a cada card dimensões fixas iguais (`min-h-[240px]`) e padding uniforme (`p-6`)
+3. Estruturar o conteúdo interno de cada card identicamente: número no topo, título no meio (com `min-h` para alinhar), descrição em baixo
 
-2. **Header bar** (linha 488): trocar `border-b border-white/10` por `border-b border-[#2C3E7D]/10` e ajustar as cores do texto/botões de branco para escuro:
-   - Logo: usar versão normal (não branca)
-   - Texto do contador: `text-[#2C3E7D]/60`
-   - Botão "Baixar PDF": `text-[#2C3E7D]/70 hover:text-[#2C3E7D]`
-   - Botão fechar: mesmos tons escuros
-
-3. **Barra de progresso** (linha 479): trocar `bg-white/5` por `bg-[#2C3E7D]/10`
-
-4. **Navegação inferior** (botões Anterior/Próximo e dots): ajustar de branco para tons escuros sobre fundo claro
-
-Os slides individuais **não mudam** — mantêm os gradientes escuros atuais, criando contraste com o chrome claro ao redor.
+Estrutura simplificada:
+```tsx
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+  {cards.map((s, i) => (
+    <div key={i} className="relative flex flex-col items-center">
+      <Card className="w-full h-full min-h-[240px] p-6 text-center flex flex-col items-center justify-center gap-3">
+        <div className="w-12 h-12 rounded-full bg-[#4A9FD8] ...">
+          {s.step}
+        </div>
+        <h3 className="font-semibold text-base min-h-[48px] flex items-center">{s.title}</h3>
+        <p className="text-sm text-white/60">{s.desc}</p>
+      </Card>
+      {/* Seta entre cards */}
+      {i < 2 && <ChevronRight className="hidden md:block absolute -right-5 top-1/2 ..." />}
+    </div>
+  ))}
+</div>
+```
 
 ### Resultado
 
-O chrome da apresentação fica em azul claro (quase branco), os slides permanecem nos gradientes azul escuro atuais, e a diferenciação visual com o header/footer do site fica clara.
+Os 3 cards ficam com exatamente o mesmo tamanho e layout uniforme, com setas posicionadas entre eles.
 
