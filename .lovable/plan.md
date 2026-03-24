@@ -1,38 +1,44 @@
 
 
-## Corrigir slides achatados no PDF exportado
+## Plano: Criar apresentacao para colaboradores
 
-### Problema
-O canvas é capturado em 16:9 (1280×720) mas é esticado para preencher toda a página A4 landscape (297×210mm = ~1.41:1). Isso achata os slides verticalmente.
+### Objetivo
+Criar uma nova apresentacao de slides (componente React) direcionada ao colaborador, explorando a Juripass como beneficio juridico pessoal. Segue o mesmo padrao visual e tecnico da `SlidesPresentation.tsx` existente.
 
-### Solução
-Manter a proporção 16:9 do slide dentro da página A4, centralizando verticalmente com margens.
+### Conteudo dos slides (8-9 slides)
 
-### Mudança
+1. **Capa** — "Seu novo beneficio juridico" com logo branco, subtitulo sobre apoio juridico acessivel e confidencial
+2. **O problema** — "Imagine ter acesso a advogados e especialistas a qualquer momento" (baseado no slide 3 da referencia Google Slides)
+3. **O que e a Juripass** — Canal externo, confidencial, sem custo no atendimento inicial. Programa de acolhimento juridico (referencia slide 4)
+4. **Cobertura** — 6 areas: Direito do Consumidor, Divorcio e Pensao, Propriedade e Moradia, Heranca e Sucessao, Responsabilidade Civil, Contratos (referencia screenshot cobertura)
+5. **Vantagens para o colaborador** — 8 beneficios em grid (dados do `EmployeeBenefitsSection`: atendimento rapido, contato direto, especialidades, honorarios por sucesso, sigilo, agilidade, beneficio da empresa, educacao juridica) (referencia slide 8 do Google Slides)
+6. **Como funciona** — 4 passos: entra em contato → recebe orientacao → compreende caminhos → encaminhamento formal
+7. **Confidencialidade** — Sigilo, LGPD, dados pertencem ao colaborador, empresa nao tem acesso
+8. **Temas atendidos** — Dividas, conflitos familiares, moradia, golpes, consumidor, saude
+9. **Encerramento** — Logo, mensagem de cuidado, contato
 
-**`src/components/avaliacao/SlidesPresentation.tsx`** — função `handleExportPDF` (linhas 467-480):
+### Mudancas tecnicas
 
-```ts
-const canvas = await html2canvas(sections[i], {
-  scale: 1.5,
-  useCORS: true,
-  backgroundColor: '#E8F0FE',
-  width: 1280,
-  height: 720,
-});
+**Novo arquivo: `src/components/avaliacao/SlidesColaborador.tsx`**
+- Copia a estrutura de `SlidesPresentation.tsx` (SlideWrapper, IconBox, Card, ThemeBadge, navigation, PDF export)
+- Define slides proprios com conteudo para colaborador
+- Exporta `SlidesColaborador` com mesma interface (`onClose`, `standalone`)
+- PDF salva como `Apresentacao_Juripass_Colaborador.pdf`
 
-const imgData = canvas.toDataURL('image/jpeg', 0.75);
-const pageW = 297;
-const pageH = 210;
+**`src/pages/MaterialViewer.tsx`**
+- Adicionar import de `SlidesColaborador`
+- Adicionar case: `if (material.file_type === 'presentation-colaborador') return <SlidesColaborador standalone />`
 
-// Calcular dimensões mantendo aspect ratio 16:9
-const imgWidth = pageW;
-const imgHeight = (canvas.height * imgWidth) / canvas.width;
-const offsetY = (pageH - imgHeight) / 2; // centralizar verticalmente
+**`src/pages/admin/AdminMaterials.tsx`**
+- Atualizar filtro da secao "Apresentacoes" para incluir `presentation-colaborador`:
+  `filter: (m) => m.file_type === 'presentation' || m.file_type === 'presentation-colaborador'`
 
-if (i > 0) pdf.addPage();
-pdf.addImage(imgData, 'JPEG', 0, Math.max(0, offsetY), imgWidth, imgHeight);
+**Banco de dados** — Inserir novo material via migracao:
+```sql
+INSERT INTO materials (title, file_type, is_builtin)
+VALUES ('Apresentação Juripass — Colaborador', 'presentation-colaborador', true);
 ```
 
-A diferença: em vez de forçar `pageH` (210mm), calcula a altura proporcional (~167mm para 16:9) e centraliza o slide na página. Resultado: slides sem distorção, com pequenas margens superior/inferior.
+### Estilo visual
+Mesmo tema escuro (#2C3E7D, #4A9FD8), mesmos componentes (SlideWrapper, Card, IconBox), mesmos gradients. Chrome externo em #E8F0FE.
 
