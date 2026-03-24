@@ -1,34 +1,38 @@
 
 
-## Plano: Reduzir tamanho do PDF exportado (de 116MB para ~2-5MB)
+## Corrigir slides achatados no PDF exportado
 
 ### Problema
-O PDF está enorme porque cada slide é capturado como PNG com `scale: 2` (2560x1440 pixels) — imagens PNG sem compressão resultam em ~10MB por slide. Com 11 slides = ~110MB.
+O canvas é capturado em 16:9 (1280×720) mas é esticado para preencher toda a página A4 landscape (297×210mm = ~1.41:1). Isso achata os slides verticalmente.
 
 ### Solução
-Duas mudanças simples no `handleExportPDF`:
+Manter a proporção 16:9 do slide dentro da página A4, centralizando verticalmente com margens.
 
-**`src/components/avaliacao/SlidesPresentation.tsx`** (linhas 466-480)
+### Mudança
 
-1. **Reduzir escala de captura**: `scale: 2` → `scale: 1.5` (1920x1080 — ainda boa qualidade)
-2. **Usar JPEG em vez de PNG**: `canvas.toDataURL('image/jpeg', 0.75)` — compressão com qualidade visual adequada
-3. **Usar formato JPEG no addImage**: `pdf.addImage(imgData, 'JPEG', ...)` em vez de `'PNG'`
-
-Resultado estimado: cada slide passa de ~10MB para ~200-400KB → PDF final ~3-5MB.
-
-### Mudança de código
+**`src/components/avaliacao/SlidesPresentation.tsx`** — função `handleExportPDF` (linhas 467-480):
 
 ```ts
 const canvas = await html2canvas(sections[i], {
-  scale: 1.5,          // era 2
+  scale: 1.5,
   useCORS: true,
-  backgroundColor: '#E8F0FE',  // fundo sólido (evita transparência PNG)
+  backgroundColor: '#E8F0FE',
   width: 1280,
   height: 720,
 });
 
-const imgData = canvas.toDataURL('image/jpeg', 0.75);  // era image/png
-// ...
-pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH);     // era PNG
+const imgData = canvas.toDataURL('image/jpeg', 0.75);
+const pageW = 297;
+const pageH = 210;
+
+// Calcular dimensões mantendo aspect ratio 16:9
+const imgWidth = pageW;
+const imgHeight = (canvas.height * imgWidth) / canvas.width;
+const offsetY = (pageH - imgHeight) / 2; // centralizar verticalmente
+
+if (i > 0) pdf.addPage();
+pdf.addImage(imgData, 'JPEG', 0, Math.max(0, offsetY), imgWidth, imgHeight);
 ```
+
+A diferença: em vez de forçar `pageH` (210mm), calcula a altura proporcional (~167mm para 16:9) e centraliza o slide na página. Resultado: slides sem distorção, com pequenas margens superior/inferior.
 
