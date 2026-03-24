@@ -455,6 +455,39 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
     exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
   };
 
+  const handleExportPDF = async () => {
+    if (isExporting || !exportRef.current) return;
+    setIsExporting(true);
+
+    try {
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const sections = Array.from(exportRef.current.querySelectorAll('[data-pdf-section]')) as HTMLElement[];
+
+      for (let i = 0; i < sections.length; i++) {
+        const canvas = await html2canvas(sections[i], {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: null,
+          width: 1280,
+          height: 720,
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        const pageW = 297; // A4 landscape width mm
+        const pageH = 210; // A4 landscape height mm
+
+        if (i > 0) pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, 0, pageW, pageH);
+      }
+
+      pdf.save('Apresentacao_Juripass.pdf');
+    } catch (err) {
+      console.error('PDF export error:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#E8F0FE] flex flex-col`}>
       {/* Print styles */}
