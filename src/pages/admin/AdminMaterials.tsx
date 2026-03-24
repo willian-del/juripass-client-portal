@@ -97,6 +97,20 @@ function getTypeCategory(fileType: string): { label: string; className: string }
   return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
 }
 
+type SectionDef = {
+  key: string;
+  title: string;
+  icon: React.ReactNode;
+  filter: (m: Material) => boolean;
+};
+
+const MATERIAL_SECTIONS: SectionDef[] = [
+  { key: 'apresentacoes', title: 'Apresentações', icon: <Presentation className="h-5 w-5" />, filter: (m) => m.file_type === 'presentation' },
+  { key: 'onepager', title: 'One-Pager', icon: <FileCheck className="h-5 w-5" />, filter: (m) => m.file_type === 'one-pager' },
+  { key: 'divulgacao', title: 'Divulgação', icon: <Image className="h-5 w-5" />, filter: (m) => m.file_type === 'posters' || m.file_type.startsWith('poster-') },
+  { key: 'templates', title: 'Templates', icon: <FileText className="h-5 w-5" />, filter: (m) => !['presentation', 'one-pager', 'posters'].includes(m.file_type) && !m.file_type.startsWith('poster-') },
+];
+
 export default function AdminMaterials() {
   const { toast } = useToast();
   const navigate = useNavigate();
