@@ -490,27 +490,8 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
 
   return (
     <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#E8F0FE] flex flex-col`}>
-      {/* Print styles */}
-      <style>{`
-        @media print {
-          body * { visibility: hidden !important; }
-          .slides-print-container, .slides-print-container * { visibility: visible !important; }
-          .slides-print-container { 
-            display: block !important;
-            position: absolute; left: 0; top: 0; width: 100%;
-          }
-          .slide-print-page {
-            page-break-after: always;
-            width: 100vw; height: 100vh;
-            display: flex !important; align-items: center; justify-content: center;
-          }
-          .print-hidden { display: none !important; }
-          @page { size: landscape; margin: 0; }
-        }
-      `}</style>
-
       {/* Progress bar */}
-      <div className="h-1 w-full bg-[#2C3E7D]/10 print-hidden">
+      <div className="h-1 w-full bg-[#2C3E7D]/10">
         <motion.div
           className="h-full bg-gradient-to-r from-[#4A9FD8] to-[#4A9FD8]/60"
           animate={{ width: `${progress}%` }}
@@ -519,7 +500,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[#2C3E7D]/10 print-hidden">
+      <div className="flex items-center justify-between px-6 py-3 border-b border-[#2C3E7D]/10">
         <img 
           src="/images/branding/juripass-logo-full.png" 
           alt="Juripass" 
@@ -532,11 +513,15 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={() => window.print()}
+            onClick={handleExportPDF}
+            disabled={isExporting}
             className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10"
           >
-            <Download className="h-4 w-4 mr-1" />
-            Baixar PDF
+            {isExporting ? (
+              <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Exportando...</>
+            ) : (
+              <><Download className="h-4 w-4 mr-1" /> Baixar PDF</>
+            )}
           </Button>
           {onClose && (
             <Button variant="ghost" size="icon" onClick={onClose} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10">
