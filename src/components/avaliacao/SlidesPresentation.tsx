@@ -1,14 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { 
   ChevronLeft, ChevronRight, X, AlertTriangle, Building2, 
   Lightbulb, ArrowRight, Shield, Users, Heart,
   Scale, Lock, Rocket, Clock, BadgeCheck, Phone, Mail, Globe,
   Brain, ShieldAlert, Unplug, MousePointerClick, UserCheck, ShieldCheck,
-  Download, ChevronDown, Wallet, Home, ShoppingBag, HeartPulse
+  Download, ChevronDown, Wallet, Home, ShoppingBag, HeartPulse, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface SlideData {
   render: () => React.ReactNode;
