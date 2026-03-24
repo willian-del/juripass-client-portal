@@ -1,0 +1,2 @@
+INSERT INTO public.sales_materials (title, description, file_path, file_type)
+VALUES ('Apresentação Juripass — Colaborador', 'Apresentação direcionada ao colaborador explorando a Juripass como benefício jurídico pessoal.', '', 'presentation-colaborador');

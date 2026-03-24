@@ -27,6 +27,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
+import { SlidesColaborador } from '@/components/avaliacao/SlidesColaborador';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import { PostersViewer } from '@/components/avaliacao/PostersViewer';
 
@@ -90,7 +91,7 @@ function replaceVarsForPreview(text: string): string {
 }
 
 function getTypeCategory(fileType: string): { label: string; className: string } {
-  if (fileType === 'presentation') return { label: 'Apresentação', className: 'bg-primary/15 text-primary border-primary/30' };
+  if (fileType === 'presentation' || fileType === 'presentation-colaborador') return { label: 'Apresentação', className: 'bg-primary/15 text-primary border-primary/30' };
   if (fileType === 'one-pager') return { label: 'One-Pager', className: 'bg-accent text-accent-foreground border-accent' };
   if (fileType === 'posters' || fileType.startsWith('poster-')) return { label: 'Cartaz', className: 'bg-secondary text-secondary-foreground border-secondary' };
   if (fileType === 'pdf') return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
@@ -105,7 +106,7 @@ type SectionDef = {
 };
 
 const MATERIAL_SECTIONS: SectionDef[] = [
-  { key: 'apresentacoes', title: 'Apresentações', icon: <Presentation className="h-5 w-5" />, filter: (m) => m.file_type === 'presentation' },
+  { key: 'apresentacoes', title: 'Apresentações', icon: <Presentation className="h-5 w-5" />, filter: (m) => m.file_type === 'presentation' || m.file_type === 'presentation-colaborador' },
   { key: 'onepager', title: 'One-Pager', icon: <FileCheck className="h-5 w-5" />, filter: (m) => m.file_type === 'one-pager' },
   { key: 'divulgacao', title: 'Divulgação', icon: <Image className="h-5 w-5" />, filter: (m) => m.file_type === 'posters' || m.file_type.startsWith('poster-') },
   { key: 'templates', title: 'Templates', icon: <FileText className="h-5 w-5" />, filter: (m) => !['presentation', 'one-pager', 'posters'].includes(m.file_type) && !m.file_type.startsWith('poster-') },
@@ -124,7 +125,7 @@ export default function AdminMaterials() {
   const [shares, setShares] = useState<Record<string, ShareWithViews[]>>({});
 
   // Preview state
-  const [previewType, setPreviewType] = useState<'slides' | 'onepager' | 'posters' | null>(null);
+  const [previewType, setPreviewType] = useState<'slides' | 'slides-colaborador' | 'onepager' | 'posters' | null>(null);
   const [previewPosterId, setPreviewPosterId] = useState<string | undefined>(undefined);
 
   // Edit state
@@ -342,6 +343,9 @@ export default function AdminMaterials() {
       } else if (m.file_type.startsWith('poster-')) {
         setPreviewType('posters');
         setPreviewPosterId(m.file_type.replace('poster-', ''));
+      } else if (m.file_type === 'presentation-colaborador') {
+        setPreviewType('slides-colaborador');
+        setPreviewPosterId(undefined);
       } else {
         setPreviewType('slides');
         setPreviewPosterId(undefined);
@@ -450,6 +454,8 @@ export default function AdminMaterials() {
       <div className="fixed inset-0 z-50 bg-background">
         {previewType === 'slides' ? (
           <SlidesPresentation onClose={() => setPreviewType(null)} />
+        ) : previewType === 'slides-colaborador' ? (
+          <SlidesColaborador onClose={() => setPreviewType(null)} />
         ) : previewType === 'posters' ? (
           <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
         ) : (
