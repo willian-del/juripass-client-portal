@@ -465,19 +465,19 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
 
       for (let i = 0; i < sections.length; i++) {
         const canvas = await html2canvas(sections[i], {
-          scale: 2,
+          scale: 1.5,
           useCORS: true,
-          backgroundColor: null,
+          backgroundColor: '#E8F0FE',
           width: 1280,
           height: 720,
         });
 
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL('image/jpeg', 0.75);
         const pageW = 297; // A4 landscape width mm
         const pageH = 210; // A4 landscape height mm
 
         if (i > 0) pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, 0, pageW, pageH);
+        pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH);
       }
 
       pdf.save('Apresentacao_Juripass.pdf');
