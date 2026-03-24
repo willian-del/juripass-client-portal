@@ -1,14 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { 
   ChevronLeft, ChevronRight, X, AlertTriangle, Building2, 
   Lightbulb, ArrowRight, Shield, Users, Heart,
   Scale, Lock, Rocket, Clock, BadgeCheck, Phone, Mail, Globe,
   Brain, ShieldAlert, Unplug, MousePointerClick, UserCheck, ShieldCheck,
-  Download, ChevronDown, Wallet, Home, ShoppingBag, HeartPulse
+  Download, ChevronDown, Wallet, Home, ShoppingBag, HeartPulse, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface SlideData {
   render: () => React.ReactNode;
@@ -433,6 +435,8 @@ interface SlidesPresentationProps {
 export function SlidesPresentation({ onClose, standalone = false }: SlidesPresentationProps) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isExporting, setIsExporting] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
 
   const go = useCallback((to: number) => {
     setDirection(to > current ? 1 : -1);
@@ -451,29 +455,43 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
     exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
   };
 
+  const handleExportPDF = async () => {
+    if (isExporting || !exportRef.current) return;
+    setIsExporting(true);
+
+    try {
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const sections = Array.from(exportRef.current.querySelectorAll('[data-pdf-section]')) as HTMLElement[];
+
+      for (let i = 0; i < sections.length; i++) {
+        const canvas = await html2canvas(sections[i], {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: null,
+          width: 1280,
+          height: 720,
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        const pageW = 297; // A4 landscape width mm
+        const pageH = 210; // A4 landscape height mm
+
+        if (i > 0) pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, 0, pageW, pageH);
+      }
+
+      pdf.save('Apresentacao_Juripass.pdf');
+    } catch (err) {
+      console.error('PDF export error:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#E8F0FE] flex flex-col`}>
-      {/* Print styles */}
-      <style>{`
-        @media print {
-          body * { visibility: hidden !important; }
-          .slides-print-container, .slides-print-container * { visibility: visible !important; }
-          .slides-print-container { 
-            display: block !important;
-            position: absolute; left: 0; top: 0; width: 100%;
-          }
-          .slide-print-page {
-            page-break-after: always;
-            width: 100vw; height: 100vh;
-            display: flex !important; align-items: center; justify-content: center;
-          }
-          .print-hidden { display: none !important; }
-          @page { size: landscape; margin: 0; }
-        }
-      `}</style>
-
       {/* Progress bar */}
-      <div className="h-1 w-full bg-[#2C3E7D]/10 print-hidden">
+      <div className="h-1 w-full bg-[#2C3E7D]/10">
         <motion.div
           className="h-full bg-gradient-to-r from-[#4A9FD8] to-[#4A9FD8]/60"
           animate={{ width: `${progress}%` }}
@@ -482,7 +500,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[#2C3E7D]/10 print-hidden">
+      <div className="flex items-center justify-between px-6 py-3 border-b border-[#2C3E7D]/10">
         <img 
           src="/images/branding/juripass-logo-full.png" 
           alt="Juripass" 
@@ -495,11 +513,15 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={() => window.print()}
+            onClick={handleExportPDF}
+            disabled={isExporting}
             className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10"
           >
-            <Download className="h-4 w-4 mr-1" />
-            Baixar PDF
+            {isExporting ? (
+              <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Exportando...</>
+            ) : (
+              <><Download className="h-4 w-4 mr-1" /> Baixar PDF</>
+            )}
           </Button>
           {onClose && (
             <Button variant="ghost" size="icon" onClick={onClose} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10">
@@ -510,7 +532,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Slide Content - Interactive */}
-      <div className="flex-1 relative overflow-hidden print-hidden">
+      <div className="flex-1 relative overflow-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={current}
@@ -529,10 +551,10 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
         </AnimatePresence>
       </div>
 
-      {/* Print-only: all slides */}
-      <div className="hidden slides-print-container">
+      {/* Offscreen container for PDF export */}
+      <div ref={exportRef} style={{ position: 'absolute', left: '-9999px', top: 0 }}>
         {slides.map((s, i) => (
-          <div key={i} className="slide-print-page">
+          <div key={i} data-pdf-section style={{ width: 1280, height: 720 }}>
             <SlideWrapper gradient={s.gradient}>
               {s.render()}
             </SlideWrapper>
@@ -541,7 +563,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-[#2C3E7D]/10 print-hidden">
+      <div className="flex items-center justify-between px-6 py-3 border-t border-[#2C3E7D]/10">
         <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10 disabled:text-[#2C3E7D]/20">
           <ChevronLeft className="h-4 w-4 mr-1" />
           Anterior
