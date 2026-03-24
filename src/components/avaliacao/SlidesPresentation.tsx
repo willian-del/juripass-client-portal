@@ -487,9 +487,9 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-[#2C3E7D]/10 print-hidden">
         <img 
-          src="/images/branding/juripass-logo-horizontal.svg" 
+          src="/images/branding/juripass-logo-full.png" 
           alt="Juripass" 
-          className="h-8 object-contain"
+          className="h-10 object-contain"
         />
         <div className="flex items-center gap-4">
           <span className="text-sm text-[#2C3E7D]/60 font-medium tabular-nums">
