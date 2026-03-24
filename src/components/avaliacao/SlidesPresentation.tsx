@@ -462,12 +462,13 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
           body * { visibility: hidden !important; }
           .slides-print-container, .slides-print-container * { visibility: visible !important; }
           .slides-print-container { 
+            display: block !important;
             position: absolute; left: 0; top: 0; width: 100%;
           }
           .slide-print-page {
             page-break-after: always;
             width: 100vw; height: 100vh;
-            display: flex; align-items: center; justify-content: center;
+            display: flex !important; align-items: center; justify-content: center;
           }
           .print-hidden { display: none !important; }
           @page { size: landscape; margin: 0; }
