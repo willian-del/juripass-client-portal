@@ -1,44 +1,20 @@
 
 
-## Plano: Criar apresentacao para colaboradores
+## Plano: Adicionar áreas não cobertas na apresentação do colaborador
 
 ### Objetivo
-Criar uma nova apresentacao de slides (componente React) direcionada ao colaborador, explorando a Juripass como beneficio juridico pessoal. Segue o mesmo padrao visual e tecnico da `SlidesPresentation.tsx` existente.
+Incluir no slide de Cobertura (slide 4) uma seção clara informando que a Juripass **não cobre** Direito do Trabalho, Direito Criminal e temas relacionados ao Código de Ética da empresa.
 
-### Conteudo dos slides (8-9 slides)
+### Mudança
 
-1. **Capa** — "Seu novo beneficio juridico" com logo branco, subtitulo sobre apoio juridico acessivel e confidencial
-2. **O problema** — "Imagine ter acesso a advogados e especialistas a qualquer momento" (baseado no slide 3 da referencia Google Slides)
-3. **O que e a Juripass** — Canal externo, confidencial, sem custo no atendimento inicial. Programa de acolhimento juridico (referencia slide 4)
-4. **Cobertura** — 6 areas: Direito do Consumidor, Divorcio e Pensao, Propriedade e Moradia, Heranca e Sucessao, Responsabilidade Civil, Contratos (referencia screenshot cobertura)
-5. **Vantagens para o colaborador** — 8 beneficios em grid (dados do `EmployeeBenefitsSection`: atendimento rapido, contato direto, especialidades, honorarios por sucesso, sigilo, agilidade, beneficio da empresa, educacao juridica) (referencia slide 8 do Google Slides)
-6. **Como funciona** — 4 passos: entra em contato → recebe orientacao → compreende caminhos → encaminhamento formal
-7. **Confidencialidade** — Sigilo, LGPD, dados pertencem ao colaborador, empresa nao tem acesso
-8. **Temas atendidos** — Dividas, conflitos familiares, moradia, golpes, consumidor, saude
-9. **Encerramento** — Logo, mensagem de cuidado, contato
+**`src/components/avaliacao/SlidesColaborador.tsx`** — Slide 4 (Cobertura, linhas ~142-176)
 
-### Mudancas tecnicas
+Após o grid de 6 áreas cobertas, adicionar um bloco visual de "Não cobrimos" com ícones X em vermelho/destrutivo, listando:
+- **Direito do Trabalho** — Ações e reclamações trabalhistas
+- **Direito Criminal** — Processos criminais e penais  
+- **Código de Ética** — Denúncias e temas de compliance da empresa
 
-**Novo arquivo: `src/components/avaliacao/SlidesColaborador.tsx`**
-- Copia a estrutura de `SlidesPresentation.tsx` (SlideWrapper, IconBox, Card, ThemeBadge, navigation, PDF export)
-- Define slides proprios com conteudo para colaborador
-- Exporta `SlidesColaborador` com mesma interface (`onClose`, `standalone`)
-- PDF salva como `Apresentacao_Juripass_Colaborador.pdf`
+Visualmente será um card com fundo diferenciado (ex: `bg-red-500/10 border-red-500/20`) para se destacar das áreas cobertas, seguindo o mesmo padrão usado no `CoverageSection.tsx` da home.
 
-**`src/pages/MaterialViewer.tsx`**
-- Adicionar import de `SlidesColaborador`
-- Adicionar case: `if (material.file_type === 'presentation-colaborador') return <SlidesColaborador standalone />`
-
-**`src/pages/admin/AdminMaterials.tsx`**
-- Atualizar filtro da secao "Apresentacoes" para incluir `presentation-colaborador`:
-  `filter: (m) => m.file_type === 'presentation' || m.file_type === 'presentation-colaborador'`
-
-**Banco de dados** — Inserir novo material via migracao:
-```sql
-INSERT INTO materials (title, file_type, is_builtin)
-VALUES ('Apresentação Juripass — Colaborador', 'presentation-colaborador', true);
-```
-
-### Estilo visual
-Mesmo tema escuro (#2C3E7D, #4A9FD8), mesmos componentes (SlideWrapper, Card, IconBox), mesmos gradients. Chrome externo em #E8F0FE.
+Será necessário importar o ícone `XCircle` (ou `X`) do lucide-react.
 
