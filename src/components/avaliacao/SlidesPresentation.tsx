@@ -476,8 +476,13 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
         const pageW = 297; // A4 landscape width mm
         const pageH = 210; // A4 landscape height mm
 
+        // Maintain aspect ratio instead of stretching to full page
+        const imgWidth = pageW;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const offsetY = (pageH - imgHeight) / 2;
+
         if (i > 0) pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH);
+        pdf.addImage(imgData, 'JPEG', 0, Math.max(0, offsetY), imgWidth, imgHeight);
       }
 
       pdf.save('Apresentacao_Juripass.pdf');
