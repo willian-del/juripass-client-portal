@@ -454,6 +454,8 @@ export default function AdminMaterials() {
       <div className="fixed inset-0 z-50 bg-background">
         {previewType === 'slides' ? (
           <SlidesPresentation onClose={() => setPreviewType(null)} />
+        ) : previewType === 'slides-colaborador' ? (
+          <SlidesColaborador onClose={() => setPreviewType(null)} />
         ) : previewType === 'posters' ? (
           <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
         ) : (
