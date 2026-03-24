@@ -7,7 +7,7 @@ import {
   Download, ChevronDown, MessageCircle, Gavel,
   BadgePercent, ShieldCheck, CheckCircle2, Gift, BookOpen,
   ShoppingBag, Home, Wallet, FileText, HeartPulse,
-  UserCheck, Loader2
+  UserCheck, Loader2, XCircle, Briefcase, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -170,6 +170,29 @@ const slides: SlideData[] = [
               </div>
             </Card>
           ))}
+        </div>
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <XCircle className="h-5 w-5 text-red-400" />
+            <h4 className="text-red-400 font-semibold text-sm">O que não cobrimos</h4>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { icon: Briefcase, title: 'Direito do Trabalho', desc: 'Ações e reclamações trabalhistas' },
+              { icon: AlertTriangle, title: 'Direito Criminal', desc: 'Processos criminais e penais' },
+              { icon: FileText, title: 'Código de Ética', desc: 'Denúncias e temas de compliance da sua empresa' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center shrink-0">
+                  <item.icon className="h-4 w-4 text-red-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-sm text-red-300">{item.title}</h3>
+                  <p className="text-white/50 text-xs mt-0.5">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     ),
