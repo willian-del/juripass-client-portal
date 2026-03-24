@@ -532,7 +532,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Slide Content - Interactive */}
-      <div className="flex-1 relative overflow-hidden print-hidden">
+      <div className="flex-1 relative overflow-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={current}
@@ -551,10 +551,10 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
         </AnimatePresence>
       </div>
 
-      {/* Print-only: all slides */}
-      <div className="hidden slides-print-container">
+      {/* Offscreen container for PDF export */}
+      <div ref={exportRef} style={{ position: 'absolute', left: '-9999px', top: 0 }}>
         {slides.map((s, i) => (
-          <div key={i} className="slide-print-page">
+          <div key={i} data-pdf-section style={{ width: 1280, height: 720 }}>
             <SlideWrapper gradient={s.gradient}>
               {s.render()}
             </SlideWrapper>
@@ -563,7 +563,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-[#2C3E7D]/10 print-hidden">
+      <div className="flex items-center justify-between px-6 py-3 border-t border-[#2C3E7D]/10">
         <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10 disabled:text-[#2C3E7D]/20">
           <ChevronLeft className="h-4 w-4 mr-1" />
           Anterior
