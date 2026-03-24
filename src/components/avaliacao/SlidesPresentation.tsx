@@ -544,8 +544,8 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-white/10 print-hidden">
-        <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-white/60 hover:text-white hover:bg-white/10 disabled:text-white/20">
+      <div className="flex items-center justify-between px-6 py-3 border-t border-[#2C3E7D]/10 print-hidden">
+        <Button variant="ghost" size="sm" onClick={prev} disabled={current === 0} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10 disabled:text-[#2C3E7D]/20">
           <ChevronLeft className="h-4 w-4 mr-1" />
           Anterior
         </Button>
@@ -558,13 +558,13 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === current 
                   ? 'w-6 bg-[#4A9FD8]' 
-                  : 'w-2 bg-white/20 hover:bg-white/40'
+                  : 'w-2 bg-[#2C3E7D]/20 hover:bg-[#2C3E7D]/40'
               }`}
             />
           ))}
         </div>
 
-        <Button variant="ghost" size="sm" onClick={next} disabled={current === slides.length - 1} className="text-white/60 hover:text-white hover:bg-white/10 disabled:text-white/20">
+        <Button variant="ghost" size="sm" onClick={next} disabled={current === slides.length - 1} className="text-[#2C3E7D]/70 hover:text-[#2C3E7D] hover:bg-[#2C3E7D]/10 disabled:text-[#2C3E7D]/20">
           Próximo
           <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
