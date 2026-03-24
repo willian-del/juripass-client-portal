@@ -91,7 +91,7 @@ function replaceVarsForPreview(text: string): string {
 }
 
 function getTypeCategory(fileType: string): { label: string; className: string } {
-  if (fileType === 'presentation') return { label: 'Apresentação', className: 'bg-primary/15 text-primary border-primary/30' };
+  if (fileType === 'presentation' || fileType === 'presentation-colaborador') return { label: 'Apresentação', className: 'bg-primary/15 text-primary border-primary/30' };
   if (fileType === 'one-pager') return { label: 'One-Pager', className: 'bg-accent text-accent-foreground border-accent' };
   if (fileType === 'posters' || fileType.startsWith('poster-')) return { label: 'Cartaz', className: 'bg-secondary text-secondary-foreground border-secondary' };
   if (fileType === 'pdf') return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
