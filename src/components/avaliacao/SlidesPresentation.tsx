@@ -476,7 +476,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
       `}</style>
 
       {/* Progress bar */}
-      <div className="h-1 w-full bg-white/5 print-hidden">
+      <div className="h-1 w-full bg-[#2C3E7D]/10 print-hidden">
         <motion.div
           className="h-full bg-gradient-to-r from-[#4A9FD8] to-[#4A9FD8]/60"
           animate={{ width: `${progress}%` }}
