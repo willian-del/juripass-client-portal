@@ -106,7 +106,7 @@ type SectionDef = {
 };
 
 const MATERIAL_SECTIONS: SectionDef[] = [
-  { key: 'apresentacoes', title: 'Apresentações', icon: <Presentation className="h-5 w-5" />, filter: (m) => m.file_type === 'presentation' },
+  { key: 'apresentacoes', title: 'Apresentações', icon: <Presentation className="h-5 w-5" />, filter: (m) => m.file_type === 'presentation' || m.file_type === 'presentation-colaborador' },
   { key: 'onepager', title: 'One-Pager', icon: <FileCheck className="h-5 w-5" />, filter: (m) => m.file_type === 'one-pager' },
   { key: 'divulgacao', title: 'Divulgação', icon: <Image className="h-5 w-5" />, filter: (m) => m.file_type === 'posters' || m.file_type.startsWith('poster-') },
   { key: 'templates', title: 'Templates', icon: <FileText className="h-5 w-5" />, filter: (m) => !['presentation', 'one-pager', 'posters'].includes(m.file_type) && !m.file_type.startsWith('poster-') },

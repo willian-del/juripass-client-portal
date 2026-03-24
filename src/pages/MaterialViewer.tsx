@@ -80,6 +80,9 @@ export default function MaterialViewer() {
     if (material.file_type === 'presentation') {
       return <SlidesPresentation standalone />;
     }
+    if (material.file_type === 'presentation-colaborador') {
+      return <SlidesColaborador standalone />;
+    }
     if (material.file_type === 'one-pager') {
       return <OnePager standalone />;
     }
