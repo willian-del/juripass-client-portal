@@ -455,7 +455,7 @@ export function SlidesPresentation({ onClose, standalone = false }: SlidesPresen
   };
 
   return (
-    <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#2C3E7D] flex flex-col`}>
+    <div className={`${standalone ? 'min-h-screen' : 'fixed inset-0 z-50'} bg-[#E8F0FE] flex flex-col`}>
       {/* Print styles */}
       <style>{`
         @media print {
