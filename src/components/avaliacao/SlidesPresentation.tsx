@@ -435,6 +435,8 @@ interface SlidesPresentationProps {
 export function SlidesPresentation({ onClose, standalone = false }: SlidesPresentationProps) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isExporting, setIsExporting] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
 
   const go = useCallback((to: number) => {
     setDirection(to > current ? 1 : -1);
