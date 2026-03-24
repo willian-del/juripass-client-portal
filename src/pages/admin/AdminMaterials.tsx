@@ -22,7 +22,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   LogOut, Plus, Upload, Link2, FileText, Eye, Copy, Send, ArrowLeft,
-  Pencil, Trash2, Mail, X, Star, Code, Download,
+  Pencil, Trash2, Mail, X, Star, Code, Download, Presentation, Image, FileCheck,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
