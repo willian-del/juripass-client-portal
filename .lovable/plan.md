@@ -1,20 +1,24 @@
 
 
-## Plano: Adicionar áreas não cobertas na apresentação do colaborador
+## Plano: Reorganizar materiais em abas por categoria
 
-### Objetivo
-Incluir no slide de Cobertura (slide 4) uma seção clara informando que a Juripass **não cobre** Direito do Trabalho, Direito Criminal e temas relacionados ao Código de Ética da empresa.
+### Situacao atual
+A pagina tem 2 abas no topo: "Materiais" (com 4 secoes visuais dentro) e "Templates de Email". O usuario quer que cada categoria de material vire sua propria aba.
 
-### Mudança
+### Mudanca
 
-**`src/components/avaliacao/SlidesColaborador.tsx`** — Slide 4 (Cobertura, linhas ~142-176)
+**`src/pages/admin/AdminMaterials.tsx`**
 
-Após o grid de 6 áreas cobertas, adicionar um bloco visual de "Não cobrimos" com ícones X em vermelho/destrutivo, listando:
-- **Direito do Trabalho** — Ações e reclamações trabalhistas
-- **Direito Criminal** — Processos criminais e penais  
-- **Código de Ética** — Denúncias e temas de compliance da empresa
+Substituir as 2 abas atuais por 5 abas:
+- **Apresentacoes** — `presentation`, `presentation-colaborador`
+- **One-Pager** — `one-pager`
+- **Divulgacao** — `posters`, `poster-*`
+- **Templates** — documentos genericos (pdf, etc.)
+- **Templates de Email** — conteudo atual da aba "templates" (emails)
 
-Visualmente será um card com fundo diferenciado (ex: `bg-red-500/10 border-red-500/20`) para se destacar das áreas cobertas, seguindo o mesmo padrão usado no `CoverageSection.tsx` da home.
+Cada aba de material mostra diretamente a tabela filtrada (sem os blocos de secao com header). O botao "+ Novo material" e a contagem ficam dentro de cada aba.
 
-Será necessário importar o ícone `XCircle` (ou `X`) do lucide-react.
+Remover `MATERIAL_SECTIONS` e o loop de secoes. Cada `TabsContent` renderiza a tabela de materiais filtrada pela categoria correspondente, reutilizando o mesmo JSX da tabela atual.
+
+Para evitar duplicacao, extrair o bloco da tabela de materiais numa funcao auxiliar `renderMaterialsTable(filteredMaterials)` que recebe a lista filtrada e retorna o JSX da tabela com acoes.
 
