@@ -682,7 +682,7 @@ export default function AdminMaterials() {
             </TabsContent>
 
             {/* === TEMPLATES TAB === */}
-            <TabsContent value="templates" className="space-y-4 mt-4">
+            <TabsContent value="templates-email" className="space-y-4 mt-4">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm text-muted-foreground">
