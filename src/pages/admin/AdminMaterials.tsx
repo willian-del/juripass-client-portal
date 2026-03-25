@@ -468,308 +468,241 @@ export default function AdminMaterials() {
         </header>
 
         <div className="max-w-6xl mx-auto px-4 py-6">
-          <Tabs defaultValue="materials">
-            <TabsList>
-              <TabsTrigger value="materials">
-                <FileText className="h-4 w-4 mr-1" /> Materiais
-              </TabsTrigger>
-              <TabsTrigger value="templates">
-                <Mail className="h-4 w-4 mr-1" /> Templates de Email
-              </TabsTrigger>
-            </TabsList>
-
-            {/* === MATERIALS TAB === */}
-            <TabsContent value="materials" className="space-y-4 mt-4">
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-muted-foreground">
-                  {materials.length} material{materials.length !== 1 ? 'is' : ''}
-                </p>
-                <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
-                  <DialogTrigger asChild>
-                    <Button><Plus className="h-4 w-4 mr-1" /> Novo material</Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Adicionar material</DialogTitle>
-                      <DialogDescription>Preencha os dados do novo material comercial.</DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-2">
-                      <Input placeholder="Título do material" value={title} onChange={(e) => setTitle(e.target.value)} />
-                      <Textarea placeholder="Descrição (opcional)" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
-                      <div>
-                        <label className="text-sm text-muted-foreground block mb-1">Arquivo (PDF, PPT, etc.) — opcional</label>
-                        <Input type="file" accept=".pdf,.ppt,.pptx,.doc,.docx" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                      </div>
-                      <Button onClick={handleUpload} disabled={uploading} className="w-full">
-                        <Upload className="h-4 w-4 mr-1" />
-                        {uploading ? 'Enviando...' : 'Salvar material'}
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {loading ? (
-                <p className="text-center py-12 text-muted-foreground">Carregando...</p>
-              ) : materials.length === 0 ? (
-                <div className="text-center py-16 space-y-2">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto" />
-                  <p className="text-muted-foreground">Nenhum material cadastrado</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {MATERIAL_SECTIONS.map((section) => {
-                    const sectionMaterials = materials.filter(section.filter);
-                    if (sectionMaterials.length === 0) return null;
-
-                    return (
-                      <div key={section.key} className="border rounded-lg bg-card overflow-hidden">
-                        <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/30">
-                          {section.icon}
-                          <h2 className="font-semibold text-base">{section.title}</h2>
-                          <Badge variant="secondary" className="ml-1 text-xs">{sectionMaterials.length}</Badge>
-                        </div>
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Título</TableHead>
-                              <TableHead className="w-[100px]">Tipo</TableHead>
-                              <TableHead className="w-[80px] text-center">Envios</TableHead>
-                              <TableHead className="w-[80px] text-center">Views</TableHead>
-                              <TableHead className="w-[110px]">Data</TableHead>
-                              <TableHead className="w-[260px] text-right">Ações</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {sectionMaterials.map((m) => {
-                              const materialShares = shares[m.id] || [];
-                              const totalViews = materialShares.reduce((acc, s) => acc + (s.material_views?.length || 0), 0);
-                              const isExpanded = expandedMaterialId === m.id;
-
-                              return (
-                                <>
-                                  <TableRow
-                                    key={m.id}
-                                    className="cursor-pointer"
-                                    onClick={() => setExpandedMaterialId(isExpanded ? null : m.id)}
-                                  >
-                                    <TableCell>
-                                      <div>
-                                        <span className="font-medium">{m.title}</span>
-                                        {m.description && (
-                                          <p className="text-xs text-muted-foreground truncate max-w-[300px]">{m.description}</p>
-                                        )}
-                                      </div>
-                                    </TableCell>
-                                    <TableCell>
-                                      {(() => {
-                                        const cat = getTypeCategory(m.file_type);
-                                        return (
-                                          <Badge variant="outline" className={`text-xs ${cat.className}`}>
-                                            {cat.label}
-                                          </Badge>
-                                        );
-                                      })()}
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                      <span className="flex items-center justify-center gap-1 text-sm">
-                                        <Send className="h-3 w-3 text-muted-foreground" /> {materialShares.length}
-                                      </span>
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                      <span className="flex items-center justify-center gap-1 text-sm">
-                                        <Eye className="h-3 w-3 text-muted-foreground" /> {totalViews}
-                                      </span>
-                                    </TableCell>
-                                    <TableCell className="text-sm text-muted-foreground">
-                                      {new Date(m.created_at).toLocaleDateString('pt-BR')}
-                                    </TableCell>
-                                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                                      <div className="flex items-center justify-end gap-1">
-                                        <Button variant="ghost" size="icon" title="Visualizar" onClick={() => handlePreview(m)}>
-                                          <Eye className="h-4 w-4" />
-                                        </Button>
-                                        <Button variant="ghost" size="icon" title="Download / Imprimir" onClick={() => handlePreview(m)}>
-                                          <Download className="h-4 w-4" />
-                                        </Button>
-                                        <Button
-                                          variant="ghost" size="icon" title="Editar"
-                                          onClick={() => {
-                                            setEditingMaterial(m);
-                                            setEditTitle(m.title);
-                                            setEditDescription(m.description || '');
-                                            setEditOpen(true);
-                                          }}
-                                        >
-                                          <Pencil className="h-4 w-4" />
-                                        </Button>
-                                        <Button
-                                          variant="ghost" size="icon" title="Enviar para lead"
-                                          onClick={() => { setSharingMaterial(m); setShareOpen(true); }}
-                                        >
-                                          <Link2 className="h-4 w-4" />
-                                        </Button>
-                                        <AlertDialog>
-                                          <AlertDialogTrigger asChild>
-                                            <Button variant="ghost" size="icon" title="Excluir" className="text-destructive hover:text-destructive">
-                                              <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                          </AlertDialogTrigger>
-                                          <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                              <AlertDialogTitle>Excluir material?</AlertDialogTitle>
-                                              <AlertDialogDescription>
-                                                O material "{m.title}" e todos os envios/visualizações associados serão excluídos permanentemente.
-                                              </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                              <AlertDialogAction onClick={() => handleDelete(m)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                                Excluir
-                                              </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                          </AlertDialogContent>
-                                        </AlertDialog>
-                                      </div>
-                                    </TableCell>
-                                  </TableRow>
-
-                                  {isExpanded && materialShares.length > 0 && materialShares.map((s) => (
-                                    <TableRow key={s.id} className="bg-muted/30">
-                                      <TableCell colSpan={2} className="pl-10">
-                                        <span className="text-sm font-medium">{s.leads?.name || '—'}</span>
-                                        <span className="text-sm text-muted-foreground ml-2">{s.leads?.company || ''}</span>
-                                      </TableCell>
-                                      <TableCell className="text-center text-xs text-muted-foreground">
-                                        {new Date(s.sent_at).toLocaleDateString('pt-BR')}
-                                      </TableCell>
-                                      <TableCell className="text-center">
-                                        {s.material_views?.length > 0 ? (
-                                          <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full font-medium">
-                                            ✓ {s.material_views.length}x
-                                          </span>
-                                        ) : (
-                                          <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                                            Não abriu
-                                          </span>
-                                        )}
-                                      </TableCell>
-                                      <TableCell colSpan={2} className="text-right">
-                                        <Button variant="ghost" size="sm" onClick={() => copyShareLink(s.token)}>
-                                          <Copy className="h-3 w-3 mr-1" /> Copiar link
-                                        </Button>
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-
-                                  {isExpanded && materialShares.length === 0 && (
-                                    <TableRow key={`${m.id}-empty`} className="bg-muted/30">
-                                      <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-3">
-                                        Nenhum envio para este material
-                                      </TableCell>
-                                    </TableRow>
-                                  )}
-                                </>
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </TabsContent>
-
-            {/* === TEMPLATES TAB === */}
-            <TabsContent value="templates-email" className="space-y-4 mt-4">
-              <div className="flex justify-between items-center">
-                <div>
+          {(() => {
+            const renderMaterialsTab = (filtered: Material[]) => (
+              <>
+                <div className="flex justify-between items-center">
                   <p className="text-sm text-muted-foreground">
-                    {templates.length} template{templates.length !== 1 ? 's' : ''}
+                    {filtered.length} material{filtered.length !== 1 ? 'is' : ''}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Use variáveis como <code className="bg-muted px-1 rounded">{'{{lead_name}}'}</code> no assunto e corpo do email.
-                  </p>
+                  <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+                    <DialogTrigger asChild>
+                      <Button><Plus className="h-4 w-4 mr-1" /> Novo material</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Adicionar material</DialogTitle>
+                        <DialogDescription>Preencha os dados do novo material comercial.</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 mt-2">
+                        <Input placeholder="Título do material" value={title} onChange={(e) => setTitle(e.target.value)} />
+                        <Textarea placeholder="Descrição (opcional)" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+                        <div>
+                          <label className="text-sm text-muted-foreground block mb-1">Arquivo (PDF, PPT, etc.) — opcional</label>
+                          <Input type="file" accept=".pdf,.ppt,.pptx,.doc,.docx" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+                        </div>
+                        <Button onClick={handleUpload} disabled={uploading} className="w-full">
+                          <Upload className="h-4 w-4 mr-1" />
+                          {uploading ? 'Enviando...' : 'Salvar material'}
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
-                <Button onClick={openNewTemplate}>
-                  <Plus className="h-4 w-4 mr-1" /> Novo template
-                </Button>
-              </div>
 
-              {templates.length === 0 ? (
-                <div className="text-center py-16 space-y-2">
-                  <Mail className="h-12 w-12 text-muted-foreground mx-auto" />
-                  <p className="text-muted-foreground">Nenhum template cadastrado</p>
-                </div>
-              ) : (
-                <div className="border rounded-lg bg-card">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Nome</TableHead>
-                        <TableHead>Assunto</TableHead>
-                        <TableHead className="w-[100px] text-center">Padrão</TableHead>
-                        <TableHead className="w-[200px] text-right">Ações</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {templates.map((t) => (
-                        <TableRow key={t.id}>
-                          <TableCell className="font-medium">{t.name}</TableCell>
-                          <TableCell className="text-sm text-muted-foreground truncate max-w-[250px]">
-                            {t.subject_template}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {t.is_default ? (
-                              <Star className="h-4 w-4 text-yellow-500 mx-auto fill-yellow-500" />
-                            ) : (
-                              <Button variant="ghost" size="icon" title="Definir como padrão" onClick={() => handleSetDefault(t)}>
-                                <Star className="h-4 w-4 text-muted-foreground" />
-                              </Button>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex items-center justify-end gap-1">
-                              <Button variant="ghost" size="icon" title="Preview" onClick={() => openTemplatePreview(t)}>
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="icon" title="Editar" onClick={() => openEditTemplate(t)}>
-                                <Pencil className="h-4 w-4" />
-                              </Button>
-                              {!t.is_default && (
-                                <AlertDialog>
-                                  <AlertDialogTrigger asChild>
-                                    <Button variant="ghost" size="icon" title="Excluir" className="text-destructive hover:text-destructive">
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle>Excluir template?</AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        O template "{t.name}" será excluído permanentemente.
-                                      </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => handleDeleteTemplate(t)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                        Excluir
-                                      </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              )}
-                            </div>
-                          </TableCell>
+                {loading ? (
+                  <p className="text-center py-12 text-muted-foreground">Carregando...</p>
+                ) : filtered.length === 0 ? (
+                  <div className="text-center py-16 space-y-2">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto" />
+                    <p className="text-muted-foreground">Nenhum material nesta categoria</p>
+                  </div>
+                ) : (
+                  <div className="border rounded-lg bg-card overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Título</TableHead>
+                          <TableHead className="w-[100px]">Tipo</TableHead>
+                          <TableHead className="w-[80px] text-center">Envios</TableHead>
+                          <TableHead className="w-[80px] text-center">Views</TableHead>
+                          <TableHead className="w-[110px]">Data</TableHead>
+                          <TableHead className="w-[260px] text-right">Ações</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
+                      </TableHeader>
+                      <TableBody>
+                        {filtered.map((m) => {
+                          const materialShares = shares[m.id] || [];
+                          const totalViews = materialShares.reduce((acc, s) => acc + (s.material_views?.length || 0), 0);
+                          const isExpanded = expandedMaterialId === m.id;
+                          return (
+                            <>
+                              <TableRow key={m.id} className="cursor-pointer" onClick={() => setExpandedMaterialId(isExpanded ? null : m.id)}>
+                                <TableCell>
+                                  <div>
+                                    <span className="font-medium">{m.title}</span>
+                                    {m.description && <p className="text-xs text-muted-foreground truncate max-w-[300px]">{m.description}</p>}
+                                  </div>
+                                </TableCell>
+                                <TableCell>
+                                  {(() => { const cat = getTypeCategory(m.file_type); return <Badge variant="outline" className={`text-xs ${cat.className}`}>{cat.label}</Badge>; })()}
+                                </TableCell>
+                                <TableCell className="text-center">
+                                  <span className="flex items-center justify-center gap-1 text-sm"><Send className="h-3 w-3 text-muted-foreground" /> {materialShares.length}</span>
+                                </TableCell>
+                                <TableCell className="text-center">
+                                  <span className="flex items-center justify-center gap-1 text-sm"><Eye className="h-3 w-3 text-muted-foreground" /> {totalViews}</span>
+                                </TableCell>
+                                <TableCell className="text-sm text-muted-foreground">{new Date(m.created_at).toLocaleDateString('pt-BR')}</TableCell>
+                                <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                                  <div className="flex items-center justify-end gap-1">
+                                    <Button variant="ghost" size="icon" title="Visualizar" onClick={() => handlePreview(m)}><Eye className="h-4 w-4" /></Button>
+                                    <Button variant="ghost" size="icon" title="Download / Imprimir" onClick={() => handlePreview(m)}><Download className="h-4 w-4" /></Button>
+                                    <Button variant="ghost" size="icon" title="Editar" onClick={() => { setEditingMaterial(m); setEditTitle(m.title); setEditDescription(m.description || ''); setEditOpen(true); }}><Pencil className="h-4 w-4" /></Button>
+                                    <Button variant="ghost" size="icon" title="Enviar para lead" onClick={() => { setSharingMaterial(m); setShareOpen(true); }}><Link2 className="h-4 w-4" /></Button>
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button variant="ghost" size="icon" title="Excluir" className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>Excluir material?</AlertDialogTitle>
+                                          <AlertDialogDescription>O material "{m.title}" e todos os envios/visualizações associados serão excluídos permanentemente.</AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                          <AlertDialogAction onClick={() => handleDelete(m)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Excluir</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                              {isExpanded && materialShares.length > 0 && materialShares.map((s) => (
+                                <TableRow key={s.id} className="bg-muted/30">
+                                  <TableCell colSpan={2} className="pl-10">
+                                    <span className="text-sm font-medium">{s.leads?.name || '—'}</span>
+                                    <span className="text-sm text-muted-foreground ml-2">{s.leads?.company || ''}</span>
+                                  </TableCell>
+                                  <TableCell className="text-center text-xs text-muted-foreground">{new Date(s.sent_at).toLocaleDateString('pt-BR')}</TableCell>
+                                  <TableCell className="text-center">
+                                    {s.material_views?.length > 0 ? (
+                                      <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full font-medium">✓ {s.material_views.length}x</span>
+                                    ) : (
+                                      <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">Não abriu</span>
+                                    )}
+                                  </TableCell>
+                                  <TableCell colSpan={2} className="text-right">
+                                    <Button variant="ghost" size="sm" onClick={() => copyShareLink(s.token)}><Copy className="h-3 w-3 mr-1" /> Copiar link</Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                              {isExpanded && materialShares.length === 0 && (
+                                <TableRow key={`${m.id}-empty`} className="bg-muted/30">
+                                  <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-3">Nenhum envio para este material</TableCell>
+                                </TableRow>
+                              )}
+                            </>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </>
+            );
+
+            return (
+              <Tabs defaultValue="apresentacoes">
+                <TabsList className="flex-wrap h-auto gap-1">
+                  <TabsTrigger value="apresentacoes"><Presentation className="h-4 w-4 mr-1" /> Apresentações</TabsTrigger>
+                  <TabsTrigger value="onepager"><FileCheck className="h-4 w-4 mr-1" /> One-Pager</TabsTrigger>
+                  <TabsTrigger value="divulgacao"><Image className="h-4 w-4 mr-1" /> Divulgação</TabsTrigger>
+                  <TabsTrigger value="templates-doc"><FileText className="h-4 w-4 mr-1" /> Templates</TabsTrigger>
+                  <TabsTrigger value="templates-email"><Mail className="h-4 w-4 mr-1" /> Templates de Email</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="apresentacoes" className="space-y-4 mt-4">
+                  {renderMaterialsTab(materials.filter(m => m.file_type === 'presentation' || m.file_type === 'presentation-colaborador'))}
+                </TabsContent>
+                <TabsContent value="onepager" className="space-y-4 mt-4">
+                  {renderMaterialsTab(materials.filter(m => m.file_type === 'one-pager'))}
+                </TabsContent>
+                <TabsContent value="divulgacao" className="space-y-4 mt-4">
+                  {renderMaterialsTab(materials.filter(m => m.file_type === 'posters' || m.file_type.startsWith('poster-')))}
+                </TabsContent>
+                <TabsContent value="templates-doc" className="space-y-4 mt-4">
+                  {renderMaterialsTab(materials.filter(m => !['presentation', 'presentation-colaborador', 'one-pager', 'posters'].includes(m.file_type) && !m.file_type.startsWith('poster-')))}
+                </TabsContent>
+
+                <TabsContent value="templates-email" className="space-y-4 mt-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        {templates.length} template{templates.length !== 1 ? 's' : ''}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Use variáveis como <code className="bg-muted px-1 rounded">{'{{lead_name}}'}</code> no assunto e corpo do email.
+                      </p>
+                    </div>
+                    <Button onClick={openNewTemplate}>
+                      <Plus className="h-4 w-4 mr-1" /> Novo template
+                    </Button>
+                  </div>
+
+                  {templates.length === 0 ? (
+                    <div className="text-center py-16 space-y-2">
+                      <Mail className="h-12 w-12 text-muted-foreground mx-auto" />
+                      <p className="text-muted-foreground">Nenhum template cadastrado</p>
+                    </div>
+                  ) : (
+                    <div className="border rounded-lg bg-card">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Nome</TableHead>
+                            <TableHead>Assunto</TableHead>
+                            <TableHead className="w-[100px] text-center">Padrão</TableHead>
+                            <TableHead className="w-[200px] text-right">Ações</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {templates.map((t) => (
+                            <TableRow key={t.id}>
+                              <TableCell className="font-medium">{t.name}</TableCell>
+                              <TableCell className="text-sm text-muted-foreground truncate max-w-[250px]">{t.subject_template}</TableCell>
+                              <TableCell className="text-center">
+                                {t.is_default ? (
+                                  <Star className="h-4 w-4 text-yellow-500 mx-auto fill-yellow-500" />
+                                ) : (
+                                  <Button variant="ghost" size="icon" title="Definir como padrão" onClick={() => handleSetDefault(t)}>
+                                    <Star className="h-4 w-4 text-muted-foreground" />
+                                  </Button>
+                                )}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-1">
+                                  <Button variant="ghost" size="icon" title="Preview" onClick={() => openTemplatePreview(t)}><Eye className="h-4 w-4" /></Button>
+                                  <Button variant="ghost" size="icon" title="Editar" onClick={() => openEditTemplate(t)}><Pencil className="h-4 w-4" /></Button>
+                                  {!t.is_default && (
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button variant="ghost" size="icon" title="Excluir" className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>Excluir template?</AlertDialogTitle>
+                                          <AlertDialogDescription>O template "{t.name}" será excluído permanentemente.</AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                          <AlertDialogAction onClick={() => handleDeleteTemplate(t)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Excluir</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+            );
+          })()}
         </div>
 
         {/* Share dialog with template selector */}
