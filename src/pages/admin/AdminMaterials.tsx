@@ -322,7 +322,10 @@ export default function AdminMaterials() {
 
   const handlePreview = async (m: Material) => {
     if (!m.file_path) {
-      if (m.file_type === 'one-pager') {
+      if (m.file_type === 'proposal') {
+        setPreviewType('proposta');
+        setPreviewPosterId(undefined);
+      } else if (m.file_type === 'one-pager') {
         setPreviewType('onepager');
         setPreviewPosterId(undefined);
       } else if (m.file_type === 'posters') {
