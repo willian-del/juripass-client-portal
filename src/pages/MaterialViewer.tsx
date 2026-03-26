@@ -87,6 +87,9 @@ export default function MaterialViewer() {
     if (material.file_type === 'one-pager') {
       return <OnePager standalone />;
     }
+    if (material.file_type === 'proposal') {
+      return <PropostaComercial standalone />;
+    }
     if (material.file_type === 'posters') {
       return <PostersViewer standalone />;
     }
