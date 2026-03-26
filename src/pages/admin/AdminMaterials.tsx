@@ -30,6 +30,7 @@ import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { SlidesColaborador } from '@/components/avaliacao/SlidesColaborador';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import { PostersViewer } from '@/components/avaliacao/PostersViewer';
+import { PropostaComercial } from '@/components/avaliacao/PropostaComercial';
 
 type Material = {
   id: string;
@@ -94,6 +95,7 @@ function getTypeCategory(fileType: string): { label: string; className: string }
   if (fileType === 'presentation' || fileType === 'presentation-colaborador') return { label: 'Apresentação', className: 'bg-primary/15 text-primary border-primary/30' };
   if (fileType === 'one-pager') return { label: 'One-Pager', className: 'bg-accent text-accent-foreground border-accent' };
   if (fileType === 'posters' || fileType.startsWith('poster-')) return { label: 'Cartaz', className: 'bg-secondary text-secondary-foreground border-secondary' };
+  if (fileType === 'proposal') return { label: 'Proposta', className: 'bg-primary/15 text-primary border-primary/30' };
   if (fileType === 'pdf') return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
   return { label: 'Documento', className: 'bg-muted text-muted-foreground border-muted' };
 }
@@ -112,7 +114,7 @@ export default function AdminMaterials() {
   const [shares, setShares] = useState<Record<string, ShareWithViews[]>>({});
 
   // Preview state
-  const [previewType, setPreviewType] = useState<'slides' | 'slides-colaborador' | 'onepager' | 'posters' | null>(null);
+  const [previewType, setPreviewType] = useState<'slides' | 'slides-colaborador' | 'onepager' | 'posters' | 'proposta' | null>(null);
   const [previewPosterId, setPreviewPosterId] = useState<string | undefined>(undefined);
 
   // Edit state
@@ -321,7 +323,10 @@ export default function AdminMaterials() {
 
   const handlePreview = async (m: Material) => {
     if (!m.file_path) {
-      if (m.file_type === 'one-pager') {
+      if (m.file_type === 'proposal') {
+        setPreviewType('proposta');
+        setPreviewPosterId(undefined);
+      } else if (m.file_type === 'one-pager') {
         setPreviewType('onepager');
         setPreviewPosterId(undefined);
       } else if (m.file_type === 'posters') {
@@ -445,6 +450,8 @@ export default function AdminMaterials() {
           <SlidesColaborador onClose={() => setPreviewType(null)} />
         ) : previewType === 'posters' ? (
           <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
+        ) : previewType === 'proposta' ? (
+          <PropostaComercial onClose={() => setPreviewType(null)} />
         ) : (
           <OnePager onClose={() => setPreviewType(null)} />
         )}
