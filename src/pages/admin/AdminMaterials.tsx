@@ -449,6 +449,8 @@ export default function AdminMaterials() {
           <SlidesColaborador onClose={() => setPreviewType(null)} />
         ) : previewType === 'posters' ? (
           <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
+        ) : previewType === 'proposta' ? (
+          <PropostaComercial onClose={() => setPreviewType(null)} />
         ) : (
           <OnePager onClose={() => setPreviewType(null)} />
         )}
