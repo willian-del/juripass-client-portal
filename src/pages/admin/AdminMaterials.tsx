@@ -113,7 +113,7 @@ export default function AdminMaterials() {
   const [shares, setShares] = useState<Record<string, ShareWithViews[]>>({});
 
   // Preview state
-  const [previewType, setPreviewType] = useState<'slides' | 'slides-colaborador' | 'onepager' | 'posters' | null>(null);
+  const [previewType, setPreviewType] = useState<'slides' | 'slides-colaborador' | 'onepager' | 'posters' | 'proposta' | null>(null);
   const [previewPosterId, setPreviewPosterId] = useState<string | undefined>(undefined);
 
   // Edit state
