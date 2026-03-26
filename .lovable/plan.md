@@ -1,24 +1,24 @@
 
 
-## Plano: Reorganizar materiais em abas por categoria
+## Plano: Separar cobertura e exclusões em dois slides
 
-### Situacao atual
-A pagina tem 2 abas no topo: "Materiais" (com 4 secoes visuais dentro) e "Templates de Email". O usuario quer que cada categoria de material vire sua propria aba.
+### Problema
+O slide 4 está muito denso — mistura 6 cards de cobertura + bloco de exclusões no mesmo slide.
 
-### Mudanca
+### Mudanças em `src/components/avaliacao/SlidesColaborador.tsx`
 
-**`src/pages/admin/AdminMaterials.tsx`**
+**Slide 4 — Cobertura (harmonizar cards)**
+- Remover o bloco vermelho "O que não cobrimos" deste slide
+- Uniformizar os 6 cards: usar layout centrado com ícone no topo (mesmo padrão do slide 3 "O que é a Juripass"), em vez do layout horizontal atual com ícone à esquerda
+- Resultado: slide limpo com 6 cards harmonizados em grid 3×2
 
-Substituir as 2 abas atuais por 5 abas:
-- **Apresentacoes** — `presentation`, `presentation-colaborador`
-- **One-Pager** — `one-pager`
-- **Divulgacao** — `posters`, `poster-*`
-- **Templates** — documentos genericos (pdf, etc.)
-- **Templates de Email** — conteudo atual da aba "templates" (emails)
+**Novo Slide 5 — O que não cobrimos**
+- Slide dedicado com título "O que não cobrimos"
+- 3 cards com visual vermelho/destrutivo:
+  - **Direito do Trabalho** — "Consultas, dúvidas, ações e reclamações trabalhistas" (texto atualizado conforme pedido)
+  - **Direito Criminal** — "Processos criminais e penais"
+  - **Código de Ética** — "Denúncias e temas relacionados ao código de ética da sua empresa"
+- Layout espaçado (grid 3 colunas), sem competir com outros conteúdos
 
-Cada aba de material mostra diretamente a tabela filtrada (sem os blocos de secao com header). O botao "+ Novo material" e a contagem ficam dentro de cada aba.
-
-Remover `MATERIAL_SECTIONS` e o loop de secoes. Cada `TabsContent` renderiza a tabela de materiais filtrada pela categoria correspondente, reutilizando o mesmo JSX da tabela atual.
-
-Para evitar duplicacao, extrair o bloco da tabela de materiais numa funcao auxiliar `renderMaterialsTable(filteredMaterials)` que recebe a lista filtrada e retorna o JSX da tabela com acoes.
+Os slides seguintes (Vantagens, Como funciona, etc.) deslocam-se uma posição adiante. Total passa de 9 para 10 slides.
 
