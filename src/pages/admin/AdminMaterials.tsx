@@ -30,6 +30,7 @@ import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { SlidesColaborador } from '@/components/avaliacao/SlidesColaborador';
 import { OnePager } from '@/components/avaliacao/OnePager';
 import { PostersViewer } from '@/components/avaliacao/PostersViewer';
+import { PropostaComercial } from '@/components/avaliacao/PropostaComercial';
 
 type Material = {
   id: string;
