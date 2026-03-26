@@ -139,7 +139,7 @@ const slides: SlideData[] = [
       </div>
     ),
   },
-  // 4 — Cobertura
+  // 4 — Cobertura (harmonizado)
   {
     gradient: 'linear-gradient(150deg, #1e2d5e 0%, #2C3E7D 100%)',
     render: () => (
@@ -158,41 +158,42 @@ const slides: SlideData[] = [
             { icon: Shield, title: 'Responsabilidade Civil', desc: 'Acidentes, danos morais e materiais, indenizações e reparações.' },
             { icon: FileText, title: 'Contratos', desc: 'Elaboração, revisão e rescisão de contratos pessoais e comerciais.' },
           ].map((item, i) => (
-            <Card key={i} className="h-full">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4A9FD8] to-[#4A9FD8]/60 flex items-center justify-center shrink-0">
-                  <item.icon className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base">{item.title}</h3>
-                  <p className="text-white/60 text-xs leading-relaxed mt-1">{item.desc}</p>
-                </div>
+            <Card key={i} className="h-full text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
+                <item.icon className="h-6 w-6 text-[#4A9FD8]" />
               </div>
+              <h3 className="font-semibold text-base">{item.title}</h3>
+              <p className="text-white/60 text-xs leading-relaxed">{item.desc}</p>
             </Card>
           ))}
         </div>
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <XCircle className="h-5 w-5 text-red-400" />
-            <h4 className="text-red-400 font-semibold text-sm">O que não cobrimos</h4>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { icon: Briefcase, title: 'Direito do Trabalho', desc: 'Ações e reclamações trabalhistas' },
-              { icon: AlertTriangle, title: 'Direito Criminal', desc: 'Processos criminais e penais' },
-              { icon: FileText, title: 'Código de Ética', desc: 'Denúncias e temas de compliance da sua empresa' },
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center shrink-0">
-                  <item.icon className="h-4 w-4 text-red-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm text-red-300">{item.title}</h3>
-                  <p className="text-white/50 text-xs mt-0.5">{item.desc}</p>
-                </div>
+      </div>
+    ),
+  },
+  // 5 — O que não cobrimos
+  {
+    gradient: 'linear-gradient(150deg, #2C3E7D 0%, #1e2d5e 100%)',
+    render: () => (
+      <div className="max-w-4xl w-full space-y-8">
+        <div className="space-y-3 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-red-400">Importante</p>
+          <h2 className="text-3xl md:text-4xl font-bold">O que não cobrimos</h2>
+          <p className="text-white/60">Algumas áreas não fazem parte do escopo do benefício jurídico</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            { icon: Briefcase, title: 'Direito do Trabalho', desc: 'Consultas, dúvidas, ações e reclamações trabalhistas' },
+            { icon: AlertTriangle, title: 'Direito Criminal', desc: 'Processos criminais e penais' },
+            { icon: FileText, title: 'Código de Ética', desc: 'Denúncias e temas relacionados ao código de ética da sua empresa' },
+          ].map((item, i) => (
+            <Card key={i} className="bg-red-500/10 border-red-500/20 text-center space-y-4 p-6">
+              <div className="w-14 h-14 rounded-full bg-red-500/15 flex items-center justify-center mx-auto">
+                <item.icon className="h-7 w-7 text-red-400" />
               </div>
-            ))}
-          </div>
+              <h3 className="font-semibold text-lg text-red-300">{item.title}</h3>
+              <p className="text-white/50 text-sm leading-relaxed">{item.desc}</p>
+            </Card>
+          ))}
         </div>
       </div>
     ),
