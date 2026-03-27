@@ -1,80 +1,54 @@
 
 
-## Plano: Template de Proposta Comercial com PDF
+## Plano: Reescrever Proposta Comercial conforme PDF anexo + corrigir exportação PDF
 
-### Objetivo
-Criar um componente React `PropostaComercial.tsx` como material builtin na seção de materiais do admin. Documento de 2 paginas A4 com campos dinamicos, logica automatica de precificacao e exportacao PDF.
+### Duas mudanças
 
-### Componente principal
-**`src/components/avaliacao/PropostaComercial.tsx`**
+**1. Conteúdo e layout — seguir o PDF da Komatsu**
 
-Documento A4 (210mm) com 2 paginas, estilo premium corporativo (fundo branco, tipografia limpa, azul escuro #2C3E7D + azul claro #4A9FD8). Segue o padrao visual do OnePager existente (header band azul com logo, footer band, secoes numeradas).
+O PDF anexado usa um layout linear e limpo (não usa cards em 3 colunas). A estrutura será reescrita para espelhar fielmente o documento:
 
-**Campos dinamicos** — formulario no topo (print:hidden) com 3 inputs:
-- `client_name` (texto)
-- `proposal_date` (date, default hoje)
-- `employee_count` (numero)
+*Página 1:*
+- Header azul com logo + "Proposta Comercial" + subtítulo
+- Linha divisória
+- **1. Visão Geral** — parágrafo simples
+- **2. Frentes de Atuação** — 3 blocos sequenciais (não lado a lado):
+  - "Para o Colaborador | Canal de Acolhimento Jurídico" — bullets + nota itálica
+  - "Para o RH | Gestão de Riscos Humanos" — bullets
+  - "Para o RH | Canal de Integridade" — bullets + nota itálica
+- **3. O que a empresa Ganha?** — lista de 4 bullets
+- **4. Componentes da Solução** — texto + 6 bullets simples
+- Footer azul com logo centralizado
 
-**Logica de precificacao** — tabela de faixas hardcoded:
-```
-ate 300 → R$ 1.990
-301-600 → R$ 3.490
-601-1000 → R$ 5.490
-1001-1500 → R$ 7.490
-1501-2500 → R$ 9.990
-2501-4000 → R$ 14.990
-4000+ → sob consulta
-```
-A linha correspondente ao `employee_count` é destacada em azul claro. Abaixo da tabela: faixa aplicavel, numero de colaboradores e valor mensal contratado.
+*Página 2:*
+- Header azul idêntico
+- **5. Tabela de Valores** — tabela com highlight na faixa ativa
+- **6. Investimento** — faixa aplicável, valor contratado (campo dinâmico), nota de tributos
+- **7. Condições Comerciais** — 4 bullets
+- **8. Escopo e Limitações** — texto + 3 bullets "Não estão contemplados" + frase final em azul
+- Condições Especiais (se preenchida, via campo dinâmico)
+- Footer azul com logo centralizado
 
-**Secao "Condicoes Especiais"** — toggle (print:hidden) para mostrar/ocultar um campo de texto livre para descontos ou condicoes especificas.
+Os campos dinâmicos (`clientName`, `proposalDate`, `employeeCount`, condições especiais) permanecem no formulário `print:hidden` no topo.
 
-**Estrutura das 2 paginas:**
+**2. Exportação PDF — substituir `window.print()` por html2canvas + jsPDF**
 
-*Pagina 1 — Capa + Visao Geral + Frentes de Atuacao*
-- Header band com logo branca
-- Titulo: "Acolhimento Juridico, Gestao de Riscos Humanos e Canal de Integridade"
-- Subtitulo: Proposta Comercial
-- Cliente e data dinamicos
-- Secao 1: Visao Geral (texto curto)
-- Secao 2: Frentes de atuacao — 3 blocos visuais lado a lado (Colaborador, RH, Canal de Integridade) com icones e bullets
-- Secao 3: Como funciona (4 steps) + badges SLA/LGPD
+O `window.print()` gera PDFs achatados de página única. Será substituído por:
+- Instalar `jspdf` e `html2canvas` como dependências
+- Cada página do documento terá um `id` próprio (`proposal-page-1`, `proposal-page-2`)
+- Botão "Baixar PDF" renderiza cada página com `html2canvas` (scale 2) e insere no jsPDF como imagem A4 portrait, gerando um PDF de 2 páginas real
+- Manter botão "Imprimir" separado com `window.print()` como fallback
 
-*Pagina 2 — Solucao + Comercial + Condicoes*
-- Secao 4: Componentes da Solucao (6 items com icones)
-- Secao 5: Modelo Comercial + tabela de precos com highlight
-- Secao 6: Condicoes (12 meses, 30 dias aviso, etc.)
-- Secao 7: Escopo e Limitacoes
-- Secao 8: Encerramento
-- Condicoes Especiais (se ativada)
-- Footer band com contato
+### Arquivos alterados
 
-**Exportacao PDF** — botao "Imprimir / Salvar como PDF" via `window.print()` (mesmo padrao do OnePager). CSS `@media print` garante paginacao e ocultacao dos controles.
-
-**Props**: `onClose?: () => void`, `standalone?: boolean` (mesmo padrao dos outros materiais).
-
-### Integracao
-
-**`src/pages/admin/AdminMaterials.tsx`**:
-- Import `PropostaComercial`
-- Adicionar ao `previewType` (novo valor `'proposta'`)
-- Renderizar no overlay de preview
-- Incluir na aba "Templates" (filtro por `file_type === 'proposal'`)
-
-**`src/pages/MaterialViewer.tsx`**:
-- Adicionar case `proposal` no bloco de builtins
-
-**Banco de dados** — migracao SQL:
-```sql
-INSERT INTO sales_materials (title, file_type, is_builtin, description)
-VALUES ('Proposta Comercial Juripass', 'proposal', true, 'Template de proposta comercial com preços e campos dinâmicos');
-```
+- `src/components/avaliacao/PropostaComercial.tsx` — reescrita completa do conteúdo e layout + nova função de exportação PDF
+- `package.json` — adicionar `jspdf` e `html2canvas`
 
 ### Design
-- Layout tipo OnePager: `max-w-[210mm]`, header/footer bands em #2C3E7D
-- Secoes com `SectionTitle` numerado
-- Tabela de precos com bordas sutis, header azul escuro, linha destacada em `bg-[#4A9FD8]/10`
-- 3 blocos de frentes de atuacao com icone em circulo azul + bullets
-- Espacamento generoso, tipografia limpa
-- Print CSS para quebra de pagina entre pag 1 e 2
+
+- Layout linear como no PDF: seções com títulos bold em azul escuro, bullets simples, sem cards/grids de 3 colunas
+- Header/footer azul `#2C3E7D` com logo centralizada no footer
+- Tabela de preços com header azul, linhas alternadas, highlight na faixa ativa
+- Tipografia maior e mais legível (text-sm/text-base em vez de text-[9px])
+- Espaço em branco generoso entre seções
 
