@@ -8,7 +8,7 @@ import {
   BadgePercent, ShieldCheck, CheckCircle2, Gift, BookOpen,
   ShoppingBag, Home, Wallet, FileText, HeartPulse,
   UserCheck, Loader2, XCircle, Briefcase, AlertTriangle,
-  BarChart3, Eye
+  BarChart3, Eye, GraduationCap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
