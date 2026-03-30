@@ -8,7 +8,7 @@ import {
   BadgePercent, ShieldCheck, CheckCircle2, Gift, BookOpen,
   ShoppingBag, Home, Wallet, FileText, HeartPulse,
   UserCheck, Loader2, XCircle, Briefcase, AlertTriangle,
-  BarChart3, Eye
+  BarChart3, Eye, GraduationCap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -107,40 +107,54 @@ const slides: SlideData[] = [
       </div>
     ),
   },
-  // 3 — O que é a Juripass (tom RH)
+  // 3 — Canal de Acolhimento Jurídico (tom RH)
   {
     gradient: 'linear-gradient(135deg, #2C3E7D 0%, #344785 50%, #1e2d5e 100%)',
     render: () => (
-      <div className="max-w-4xl w-full space-y-8">
-        <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">A solução</p>
-          <h2 className="text-3xl md:text-4xl font-bold">Como a Juripass funciona para o colaborador</h2>
+      <div className="max-w-4xl w-full space-y-6">
+        <div className="space-y-2">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Para o Colaborador</p>
+          <h2 className="text-3xl md:text-4xl font-bold">Canal de Acolhimento Jurídico</h2>
           <p className="text-lg text-white/60 leading-relaxed">
-            O colaborador acessa um canal externo, independente e confidencial para buscar orientação
-            sobre questões jurídicas pessoais — sem custo no atendimento inicial e sem que a empresa
-            tenha acesso ao conteúdo individual.
+            Como o programa Juripass funciona na prática para o colaborador — e o que a empresa oferece como benefício.
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {[
-            { icon: Shield, title: 'Canal externo e confidencial', desc: 'Sem vínculo com a empresa. As informações do colaborador são protegidas por sigilo profissional.' },
-            { icon: Heart, title: 'Sem custo no atendimento inicial', desc: 'A orientação jurídica informativa é parte do benefício, sem custo para o colaborador.' },
-            { icon: BarChart3, title: 'Dados para mensuração de risco', desc: 'O canal gera indicadores anonimizados e agregados que permitem ao RH mensurar riscos humanos.' },
-          ].map((item, i) => (
-            <Card key={i} className="h-full text-center space-y-4">
-              <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
-                <item.icon className="h-7 w-7 text-[#4A9FD8]" />
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Bullets principais */}
+          <div className="flex-1 space-y-4">
+            {[
+              { icon: BookOpen, text: 'Orientação sobre dívidas, família, moradia, consumo e contratos' },
+              { icon: Heart, text: 'Atendimento humano, confidencial e acessível, com linguagem simples e prática' },
+              { icon: Shield, text: 'Sem custo inicial ao colaborador' },
+              { icon: GraduationCap, text: 'Treinamentos e conteúdos educativos sobre direitos e prevenção' },
+              { icon: Clock, text: 'Primeiro retorno em até 1 dia útil' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <item.icon className="h-4.5 w-4.5 text-[#4A9FD8]" />
+                </div>
+                <p className="text-white/80 text-base leading-relaxed">{item.text}</p>
               </div>
-              <h3 className="font-semibold text-lg">{item.title}</h3>
-              <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+            ))}
+            <p className="text-white/40 text-sm italic leading-relaxed pt-2">
+              Caso necessário, o colaborador poderá contratar diretamente um advogado de sua confiança,
+              inclusive entre os parceiros da Juripass, sem qualquer custo ou responsabilidade para a empresa.
+            </p>
+          </div>
+          {/* Card destaque — pulo do gato */}
+          <div className="md:w-72 flex-shrink-0">
+            <Card className="bg-[#4A9FD8]/10 border-[#4A9FD8]/30 space-y-3 h-full flex flex-col justify-center">
+              <div className="w-12 h-12 rounded-full bg-[#4A9FD8]/20 flex items-center justify-center mx-auto">
+                <BarChart3 className="h-6 w-6 text-[#4A9FD8]" />
+              </div>
+              <h3 className="font-semibold text-center text-[#4A9FD8]">Mensuração de Risco Humano</h3>
+              <p className="text-white/60 text-sm text-center leading-relaxed">
+                Este canal é o mecanismo que gera dados anonimizados e agregados, permitindo ao RH
+                mensurar riscos humanos na organização — sem acessar informações individuais.
+              </p>
             </Card>
-          ))}
+          </div>
         </div>
-        <Card className="text-center">
-          <p className="text-[#4A9FD8] text-sm font-medium">
-            💡 O pulo do gato: o canal de acolhimento é o próprio mecanismo de captura de dados para mensuração de risco humano.
-          </p>
-        </Card>
       </div>
     ),
   },
