@@ -1,54 +1,32 @@
 
 
-## Plano: Reescrever Proposta Comercial conforme PDF anexo + corrigir exportação PDF
+## Plano: Reposicionar tom da apresentação "Colaborador" para RH + corrigir cores do chrome
 
-### Duas mudanças
+### Problema
+1. A apresentação fala diretamente com o colaborador ("você", "seu benefício"), mas o público real é o RH — o objetivo é vender ao RH a ideia de oferecer o programa Juripass como benefício, mostrando como funciona para o colaborador e destacando que o canal criado é o mecanismo para mensurar risco humano.
+2. O header/footer usa `bg-[#E8F0FE]` (azul claro) que ficou estranho. Deve ser branco.
 
-**1. Conteúdo e layout — seguir o PDF da Komatsu**
+### Mudanças em `src/components/avaliacao/SlidesColaborador.tsx`
 
-O PDF anexado usa um layout linear e limpo (não usa cards em 3 colunas). A estrutura será reescrita para espelhar fielmente o documento:
+**1. Chrome (header, footer, fundo) → branco**
+- Trocar `bg-[#E8F0FE]` por `bg-white` no container principal
+- Bordas e textos do header/footer: `border-gray-200`, `text-gray-500`
+- `backgroundColor` do html2canvas: `#FFFFFF`
 
-*Página 1:*
-- Header azul com logo + "Proposta Comercial" + subtítulo
-- Linha divisória
-- **1. Visão Geral** — parágrafo simples
-- **2. Frentes de Atuação** — 3 blocos sequenciais (não lado a lado):
-  - "Para o Colaborador | Canal de Acolhimento Jurídico" — bullets + nota itálica
-  - "Para o RH | Gestão de Riscos Humanos" — bullets
-  - "Para o RH | Canal de Integridade" — bullets + nota itálica
-- **3. O que a empresa Ganha?** — lista de 4 bullets
-- **4. Componentes da Solução** — texto + 6 bullets simples
-- Footer azul com logo centralizado
+**2. Reescrever tom e conteúdo dos slides para audiência RH**
 
-*Página 2:*
-- Header azul idêntico
-- **5. Tabela de Valores** — tabela com highlight na faixa ativa
-- **6. Investimento** — faixa aplicável, valor contratado (campo dinâmico), nota de tributos
-- **7. Condições Comerciais** — 4 bullets
-- **8. Escopo e Limitações** — texto + 3 bullets "Não estão contemplados" + frase final em azul
-- Condições Especiais (se preenchida, via campo dinâmico)
-- Footer azul com logo centralizado
+Manter a mesma estrutura de 10 slides, mas reescrever títulos e textos:
 
-Os campos dinâmicos (`clientName`, `proposalDate`, `employeeCount`, condições especiais) permanecem no formulário `print:hidden` no topo.
+- **Slide 1 (Capa)**: "Programa Juripass para Colaboradores" / subtítulo: "Como o benefício jurídico funciona na prática — e por que ele é o canal ideal para mensurar riscos humanos."
+- **Slide 2 (Problema)**: Reposicionar para o RH: "Problemas pessoais dos colaboradores impactam o ambiente de trabalho" — mostrar que dívidas, conflitos familiares e problemas de consumo geram absenteísmo, presenteísmo e demandas ao RH.
+- **Slide 3 (O que é)**: "Como a Juripass funciona para o colaborador" — explicar ao RH que o colaborador acessa um canal externo e confidencial, sem custo. Destacar que este canal é o mecanismo que gera dados anonimizados para mensuração de risco humano.
+- **Slide 4 (Cobertura)**: Manter as 6 áreas, mas ajustar linguagem: "Áreas cobertas pelo programa"
+- **Slide 5 (Exclusões)**: Manter, ajustar tom para RH: "Áreas fora do escopo"
+- **Slide 6 (Vantagens)**: Trocar "Vantagens para você" → "Vantagens para o colaborador" — mostrar ao RH o que o colaborador ganha, reforçando o valor percebido do benefício
+- **Slide 7 (Como funciona)**: "Jornada do colaborador" — manter os 4 passos mas narrar em terceira pessoa ("o colaborador entra em contato...")
+- **Slide 8 (Confidencialidade)**: Reposicionar para RH: "Segurança e conformidade" — explicar que a empresa não acessa dados individuais, garantindo LGPD, e que recebe apenas indicadores agregados de risco
+- **Slide 9 (Temas)**: "Exemplos de demandas atendidas" — manter os temas mas em tom descritivo (terceira pessoa)
+- **Slide 10 (Encerramento)**: "O benefício que protege o colaborador — e informa o RH" / subtítulo sobre o canal como ferramenta de mensuração de risco humano + contato
 
-**2. Exportação PDF — substituir `window.print()` por html2canvas + jsPDF**
-
-O `window.print()` gera PDFs achatados de página única. Será substituído por:
-- Instalar `jspdf` e `html2canvas` como dependências
-- Cada página do documento terá um `id` próprio (`proposal-page-1`, `proposal-page-2`)
-- Botão "Baixar PDF" renderiza cada página com `html2canvas` (scale 2) e insere no jsPDF como imagem A4 portrait, gerando um PDF de 2 páginas real
-- Manter botão "Imprimir" separado com `window.print()` como fallback
-
-### Arquivos alterados
-
-- `src/components/avaliacao/PropostaComercial.tsx` — reescrita completa do conteúdo e layout + nova função de exportação PDF
-- `package.json` — adicionar `jspdf` e `html2canvas`
-
-### Design
-
-- Layout linear como no PDF: seções com títulos bold em azul escuro, bullets simples, sem cards/grids de 3 colunas
-- Header/footer azul `#2C3E7D` com logo centralizada no footer
-- Tabela de preços com header azul, linhas alternadas, highlight na faixa ativa
-- Tipografia maior e mais legível (text-sm/text-base em vez de text-[9px])
-- Espaço em branco generoso entre seções
+**Princípio geral**: eliminar "você/seu" → usar "o colaborador", "o programa", "a empresa". Reforçar em 2-3 slides que o canal de acolhimento é o mecanismo de captura de dados para mensuração de risco humano (o "pulo do gato").
 
