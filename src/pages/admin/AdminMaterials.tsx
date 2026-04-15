@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -22,7 +24,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   LogOut, Plus, Upload, Link2, FileText, Eye, Copy, Send, ArrowLeft,
-  Pencil, Trash2, Mail, X, Star, Code, Download, Presentation, Image, FileCheck,
+  Pencil, Trash2, Mail, X, Star, Code, Download, Presentation, Image, FileCheck, UserPlus, Loader2,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
@@ -132,6 +134,16 @@ export default function AdminMaterials() {
 
   // Email sending
   const [sendingEmail, setSendingEmail] = useState(false);
+
+  // Quick lead creation
+  const [quickLeadMode, setQuickLeadMode] = useState(false);
+  const [quickLeadName, setQuickLeadName] = useState('');
+  const [quickLeadCompany, setQuickLeadCompany] = useState('');
+  const [quickLeadEmail, setQuickLeadEmail] = useState('');
+  const [quickLeadSaving, setQuickLeadSaving] = useState(false);
+
+  // Gate toggle
+  const [requireLeadInfo, setRequireLeadInfo] = useState(false);
 
   // Expanded shares row
   const [expandedMaterialId, setExpandedMaterialId] = useState<string | null>(null);
