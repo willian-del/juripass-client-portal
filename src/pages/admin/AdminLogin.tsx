@@ -28,7 +28,7 @@ export default function AdminLogin() {
     }
 
     // Auth guard will validate admin role
-    navigate('/admin/leads', { replace: true });
+    navigate('/admin', { replace: true });
     setLoading(false);
   };
 

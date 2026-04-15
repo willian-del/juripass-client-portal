@@ -22,6 +22,7 @@ const StandaloneOnePager = lazy(() => import("./components/avaliacao/OnePager").
 const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
 const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
 const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
+const AdminHub = lazy(() => import("./pages/admin/AdminHub"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
 const AdminMaterials = lazy(() => import("./pages/admin/AdminMaterials"));
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/materiais/apresentacao" element={<StandalonePresentation />} />
             <Route path="/materiais/one-pager" element={<StandaloneOnePager />} />
             <Route path="/site-anterior" element={<LegacyHome />} />
+            <Route path="/admin" element={<AdminHub />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
             <Route path="/admin/materiais" element={<AdminMaterials />} />
