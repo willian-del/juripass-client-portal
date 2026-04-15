@@ -53,6 +53,7 @@ const App = () => (
             <Route path="/materiais/apresentacao" element={<StandalonePresentation />} />
             <Route path="/materiais/one-pager" element={<StandaloneOnePager />} />
             <Route path="/site-anterior" element={<LegacyHome />} />
+            <Route path="/admin" element={<AdminHub />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
             <Route path="/admin/materiais" element={<AdminMaterials />} />
