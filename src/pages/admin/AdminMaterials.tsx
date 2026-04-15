@@ -763,18 +763,50 @@ export default function AdminMaterials() {
               <DialogDescription>Selecione o lead, o template de email e escolha como compartilhar.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-2">
-              <Select value={selectedLeadId} onValueChange={setSelectedLeadId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um lead..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {leads.map((l) => (
-                    <SelectItem key={l.id} value={l.id}>
-                      {l.name} — {l.company}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {/* Lead selector + quick create */}
+              {!quickLeadMode ? (
+                <div className="space-y-2">
+                  <Select value={selectedLeadId} onValueChange={setSelectedLeadId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um lead..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {leads.map((l) => (
+                        <SelectItem key={l.id} value={l.id}>
+                          {l.name} — {l.company}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button variant="ghost" size="sm" className="text-xs" onClick={() => setQuickLeadMode(true)}>
+                    <UserPlus className="h-3.5 w-3.5 mr-1" /> Criar lead rápido
+                  </Button>
+                </div>
+              ) : (
+                <div className="border rounded-lg p-3 space-y-3 bg-muted/30">
+                  <p className="text-sm font-medium">Novo lead rápido</p>
+                  <Input placeholder="Nome *" value={quickLeadName} onChange={(e) => setQuickLeadName(e.target.value)} />
+                  <Input placeholder="Empresa (opcional)" value={quickLeadCompany} onChange={(e) => setQuickLeadCompany(e.target.value)} />
+                  <Input placeholder="Email (opcional)" type="email" value={quickLeadEmail} onChange={(e) => setQuickLeadEmail(e.target.value)} />
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={() => { setQuickLeadMode(false); setQuickLeadName(''); setQuickLeadCompany(''); setQuickLeadEmail(''); }} className="flex-1">
+                      Cancelar
+                    </Button>
+                    <Button size="sm" onClick={handleQuickLeadSave} disabled={quickLeadSaving || !quickLeadName.trim()} className="flex-1">
+                      {quickLeadSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Salvar'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Gate toggle */}
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="space-y-0.5">
+                  <Label htmlFor="require-info" className="text-sm font-medium">Solicitar dados ao destinatário</Label>
+                  <p className="text-xs text-muted-foreground">O destinatário precisará informar nome e email antes de acessar</p>
+                </div>
+                <Switch id="require-info" checked={requireLeadInfo} onCheckedChange={setRequireLeadInfo} />
+              </div>
 
               <div>
                 <label className="text-sm font-medium mb-1 block">Template de email</label>
