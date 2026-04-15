@@ -12,7 +12,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { token } = await req.json();
+    const body = await req.json();
+    const { token, action, name, email } = body;
 
     if (!token || typeof token !== "string") {
       return new Response(JSON.stringify({ error: "Token inválido" }), {
@@ -29,13 +30,43 @@ Deno.serve(async (req) => {
     // Find the share by token
     const { data: share, error: shareError } = await supabase
       .from("material_shares")
-      .select("id, material_id, sales_materials(file_path, file_type, title)")
+      .select("id, material_id, lead_id, require_lead_info, sales_materials(file_path, file_type, title)")
       .eq("token", token)
       .single();
 
     if (shareError || !share) {
       return new Response(JSON.stringify({ error: "Material não encontrado" }), {
         status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Handle lead info update action
+    if (action === "update_lead_info") {
+      if (!name || typeof name !== "string" || name.trim().length === 0) {
+        return new Response(JSON.stringify({ error: "Nome é obrigatório" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!email || typeof email !== "string" || !email.includes("@")) {
+        return new Response(JSON.stringify({ error: "Email inválido" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Update the lead with name and email
+      await supabase
+        .from("leads")
+        .update({
+          name: name.trim().slice(0, 100),
+          email: email.trim().toLowerCase().slice(0, 255),
+        })
+        .eq("id", share.lead_id);
+
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -53,12 +84,12 @@ Deno.serve(async (req) => {
     const material = (share as any).sales_materials;
 
     if (!material?.file_path) {
-      // No file uploaded — return material info for rendering built-in content
       return new Response(
         JSON.stringify({
           type: "builtin",
           title: material?.title || "Material",
           file_type: material?.file_type || "presentation",
+          require_lead_info: share.require_lead_info || false,
         }),
         {
           status: 200,
@@ -88,6 +119,7 @@ Deno.serve(async (req) => {
         url: signedUrlData.signedUrl,
         title: material.title,
         file_type: material.file_type,
+        require_lead_info: share.require_lead_info || false,
       }),
       {
         status: 200,

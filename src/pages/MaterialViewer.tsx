@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import {
   FileText, Loader2, AlertCircle, Eye, Download,
-  Presentation, Image, Briefcase, ExternalLink
+  Presentation, Image, Briefcase, ExternalLink, Send, Mail
 } from 'lucide-react';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { SlidesColaborador } from '@/components/avaliacao/SlidesColaborador';
@@ -14,12 +14,14 @@ import { PropostaComercial } from '@/components/avaliacao/PropostaComercial';
 import { SEOHead } from '@/components/ui/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 
 type MaterialResult = {
   type: 'file' | 'builtin';
   url?: string;
   title: string;
   file_type: string;
+  require_lead_info?: boolean;
 };
 
 function getMaterialMeta(fileType: string) {
@@ -78,6 +80,13 @@ export default function MaterialViewer() {
   const [material, setMaterial] = useState<MaterialResult | null>(null);
   const [showViewer, setShowViewer] = useState(false);
 
+  // Lead gate state
+  const [gateCompleted, setGateCompleted] = useState(false);
+  const [gateName, setGateName] = useState('');
+  const [gateEmail, setGateEmail] = useState('');
+  const [gateSubmitting, setGateSubmitting] = useState(false);
+  const [gateError, setGateError] = useState('');
+
   useEffect(() => {
     if (!token) return;
     const fetchMaterial = async () => {
@@ -98,6 +107,27 @@ export default function MaterialViewer() {
     };
     fetchMaterial();
   }, [token]);
+
+  const handleGateSubmit = async () => {
+    if (!gateName.trim()) { setGateError('Informe seu nome'); return; }
+    if (!gateEmail.trim() || !gateEmail.includes('@')) { setGateError('Informe um email válido'); return; }
+    setGateSubmitting(true);
+    setGateError('');
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('serve-material', {
+        body: { token, action: 'update_lead_info', name: gateName.trim(), email: gateEmail.trim() },
+      });
+      if (fnError || data?.error) {
+        setGateError(data?.error || 'Erro ao salvar dados');
+        return;
+      }
+      setGateCompleted(true);
+    } catch {
+      setGateError('Erro ao salvar dados. Tente novamente.');
+    } finally {
+      setGateSubmitting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -145,16 +175,15 @@ export default function MaterialViewer() {
       if (material.file_type === 'posters') return <PostersViewer standalone />;
       if (posterMap[material.file_type]) return <PostersViewer standalone posterId={posterMap[material.file_type]} />;
     }
-    // Fallback — should not happen, but just in case
     return null;
   }
 
-  // Landing page
   if (!material) return null;
 
   const meta = getMaterialMeta(material.file_type);
   const IconComponent = meta.icon;
   const isFile = material.type === 'file';
+  const needsGate = material.require_lead_info && !gateCompleted;
 
   return (
     <>
@@ -195,28 +224,67 @@ export default function MaterialViewer() {
                   {material.title}
                 </h1>
                 <p className="text-white/50 text-sm leading-relaxed">
-                  {meta.description}
+                  {needsGate
+                    ? 'Para acessar este material, por favor informe seus dados abaixo.'
+                    : meta.description}
                 </p>
               </div>
 
               {/* Divider */}
               <div className="border-t border-white/10" />
 
-              {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                {isFile ? (
+              {needsGate ? (
+                /* Lead gate form */
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <Input
+                      placeholder="Seu nome *"
+                      value={gateName}
+                      onChange={(e) => setGateName(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[#4A9FD8]"
+                      onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()}
+                    />
+                    <Input
+                      type="email"
+                      placeholder="Seu email *"
+                      value={gateEmail}
+                      onChange={(e) => setGateEmail(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[#4A9FD8]"
+                      onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()}
+                    />
+                  </div>
+                  {gateError && (
+                    <p className="text-red-400 text-xs">{gateError}</p>
+                  )}
                   <Button
                     size="lg"
-                    className="flex-1 bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
-                    asChild
+                    className="w-full bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
+                    onClick={handleGateSubmit}
+                    disabled={gateSubmitting}
                   >
-                    <a href={material.url} target="_blank" rel="noopener noreferrer">
-                      <Download className="h-5 w-5" />
-                      Baixar Arquivo
-                    </a>
+                    {gateSubmitting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5" />
+                    )}
+                    {gateSubmitting ? 'Verificando...' : 'Acessar Material'}
                   </Button>
-                ) : (
-                  <>
+                </div>
+              ) : (
+                /* Normal actions */
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {isFile ? (
+                    <Button
+                      size="lg"
+                      className="flex-1 bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
+                      asChild
+                    >
+                      <a href={material.url} target="_blank" rel="noopener noreferrer">
+                        <Download className="h-5 w-5" />
+                        Baixar Arquivo
+                      </a>
+                    </Button>
+                  ) : (
                     <Button
                       size="lg"
                       className="flex-1 bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
@@ -225,9 +293,9 @@ export default function MaterialViewer() {
                       <Eye className="h-5 w-5" />
                       Visualizar Material
                     </Button>
-                  </>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Trust strip */}
