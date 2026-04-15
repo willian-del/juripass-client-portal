@@ -154,33 +154,33 @@ const slides: SlideData[] = [
             O mesmo canal que acolhe{' '}
             <span className="text-[#4A9FD8]">é o que mensura</span>
           </h2>
-          <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-white/60 leading-relaxed max-w-2xl mx-auto text-base">
             Ao oferecer um benefício que o colaborador quer usar, a empresa cria um canal ativo e confiável para mensurar riscos humanos em múltiplas frentes.
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-5 text-base">
           {[
             {
               icon: BarChart3,
               title: 'Pulsos e Pesquisas',
-              desc: 'O canal ativo permite coletar pulsos periódicos e pesquisas qualitativas sobre o clima e vulnerabilidades dos colaboradores.',
+              desc: 'O canal ativo permite coletar pulsos periódicos e pesquisas sobre o clima e vulnerabilidades dos colaboradores.',
             },
             {
               icon: Shield,
-              title: 'Canal de Denúncias e Integridade',
+              title: 'Canal de Denúncias',
               desc: 'O mesmo canal serve como via segura e independente para relatos de assédio, discriminação e desvios de conduta.',
             },
             {
               icon: Eye,
-              title: 'Indicadores de Risco Humano',
-              desc: 'Dados anonimizados e agregados alimentam relatórios que permitem ao RH identificar padrões de vulnerabilidade e agir preventivamente.',
+              title: 'Indicadores de Risco',
+              desc: 'Dados alimentam relatórios que permitem ao RH identificar padrões de vulnerabilidade e agir preventivamente.',
             },
           ].map((item, i) => (
             <Card key={i} className="h-full text-center space-y-4 p-6">
               <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
                 <item.icon className="h-7 w-7 text-[#4A9FD8]" />
               </div>
-              <h3 className="font-semibold text-lg">{item.title}</h3>
+              <h3 className="font-semibold text-base">{item.title}</h3>
               <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
             </Card>
           ))}
