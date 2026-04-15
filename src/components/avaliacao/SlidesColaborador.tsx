@@ -149,7 +149,7 @@ const slides: SlideData[] = [
     render: () => (
       <div className="max-w-4xl w-full space-y-6">
         <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">O Pulo do Gato</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">{"\n"}</p>
           <h2 className="text-3xl md:text-4xl font-bold">
             O mesmo canal que acolhe{' '}
             <span className="text-[#4A9FD8]">é o que mensura</span>
