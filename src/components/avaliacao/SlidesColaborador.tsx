@@ -107,54 +107,89 @@ const slides: SlideData[] = [
       </div>
     ),
   },
-  // 3 — Canal de Acolhimento Jurídico (tom RH)
+  // 3 — Canal de Acolhimento Jurídico (o benefício)
   {
     gradient: 'linear-gradient(135deg, #2C3E7D 0%, #344785 50%, #1e2d5e 100%)',
     render: () => (
       <div className="max-w-4xl w-full space-y-6">
-        <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">Para o Colaborador</p>
+        <div className="space-y-2 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">O Benefício</p>
           <h2 className="text-3xl md:text-4xl font-bold">Canal de Acolhimento Jurídico</h2>
-          <p className="text-lg text-white/60 leading-relaxed">
-            Como o programa Juripass funciona na prática para o colaborador — e o que a empresa oferece como benefício.
+          <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto">
+            Um benefício que o colaborador tem interesse real em utilizar — orientação jurídica gratuita para questões pessoais do dia a dia.
           </p>
         </div>
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Bullets principais */}
-          <div className="flex-1 space-y-4">
-            {[
-              { icon: BookOpen, text: 'Orientação sobre dívidas, família, moradia, consumo e contratos' },
-              { icon: Heart, text: 'Atendimento humano, confidencial e acessível, com linguagem simples e prática' },
-              { icon: Shield, text: 'Sem custo inicial ao colaborador' },
-              { icon: GraduationCap, text: 'Treinamentos e conteúdos educativos sobre direitos e prevenção' },
-              { icon: Clock, text: 'Primeiro retorno em até 1 dia útil' },
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <item.icon className="h-4.5 w-4.5 text-[#4A9FD8]" />
-                </div>
-                <p className="text-white/80 text-base leading-relaxed">{item.text}</p>
+        <div className="grid md:grid-cols-2 gap-5">
+          {[
+            { icon: BookOpen, text: 'Orientação sobre dívidas, família, moradia, consumo e contratos' },
+            { icon: Heart, text: 'Atendimento humano, confidencial e acessível, com linguagem simples e prática' },
+            { icon: Shield, text: 'Sem custo inicial ao colaborador' },
+            { icon: GraduationCap, text: 'Treinamentos e conteúdos educativos sobre direitos e prevenção' },
+            { icon: Clock, text: 'Primeiro retorno em até 1 dia útil' },
+            { icon: UserCheck, text: 'Canal externo e independente — sem vínculo com a empresa' },
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <item.icon className="h-5 w-5 text-[#4A9FD8]" />
               </div>
-            ))}
-            <p className="text-white/40 text-sm italic leading-relaxed pt-2">
-              Caso necessário, o colaborador poderá contratar diretamente um advogado de sua confiança,
-              inclusive entre os parceiros da Juripass, sem qualquer custo ou responsabilidade para a empresa.
-            </p>
-          </div>
-          {/* Card destaque — pulo do gato */}
-          <div className="md:w-72 flex-shrink-0">
-            <Card className="bg-[#4A9FD8]/10 border-[#4A9FD8]/30 space-y-3 h-full flex flex-col justify-center">
-              <div className="w-12 h-12 rounded-full bg-[#4A9FD8]/20 flex items-center justify-center mx-auto">
-                <BarChart3 className="h-6 w-6 text-[#4A9FD8]" />
-              </div>
-              <h3 className="font-semibold text-center text-[#4A9FD8]">Mensuração de Risco Humano</h3>
-              <p className="text-white/60 text-sm text-center leading-relaxed">
-                Este canal é o mecanismo que gera dados anonimizados e agregados, permitindo ao RH
-                mensurar riscos humanos na organização — sem acessar informações individuais.
-              </p>
-            </Card>
-          </div>
+              <p className="text-white/80 text-base leading-relaxed">{item.text}</p>
+            </div>
+          ))}
         </div>
+        <p className="text-white/40 text-sm italic leading-relaxed text-center max-w-2xl mx-auto">
+          Caso necessário, o colaborador poderá contratar diretamente um advogado de sua confiança,
+          inclusive entre os parceiros da Juripass, sem qualquer custo ou responsabilidade para a empresa.
+        </p>
+      </div>
+    ),
+  },
+  // 4 — Por que este canal é o melhor para mensuração de risco humano
+  {
+    gradient: 'linear-gradient(140deg, #1e2d5e 0%, #2C3E7D 60%, #253570 100%)',
+    render: () => (
+      <div className="max-w-4xl w-full space-y-6">
+        <div className="space-y-2 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#4A9FD8]">O Pulo do Gato</p>
+          <h2 className="text-3xl md:text-4xl font-bold">
+            O mesmo canal que acolhe{' '}
+            <span className="text-[#4A9FD8]">é o que mensura</span>
+          </h2>
+          <p className="text-lg text-white/60 leading-relaxed max-w-2xl mx-auto">
+            Ao oferecer um benefício que o colaborador quer usar, a empresa cria um canal ativo e confiável para mensurar riscos humanos em múltiplas frentes.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-5">
+          {[
+            {
+              icon: BarChart3,
+              title: 'Pulsos e Pesquisas',
+              desc: 'O canal ativo permite coletar pulsos periódicos e pesquisas qualitativas sobre o clima e vulnerabilidades dos colaboradores.',
+            },
+            {
+              icon: Shield,
+              title: 'Canal de Denúncias e Integridade',
+              desc: 'O mesmo canal serve como via segura e independente para relatos de assédio, discriminação e desvios de conduta.',
+            },
+            {
+              icon: Eye,
+              title: 'Indicadores de Risco Humano',
+              desc: 'Dados anonimizados e agregados alimentam relatórios que permitem ao RH identificar padrões de vulnerabilidade e agir preventivamente.',
+            },
+          ].map((item, i) => (
+            <Card key={i} className="h-full text-center space-y-4 p-6">
+              <div className="w-14 h-14 rounded-full bg-[#4A9FD8]/15 flex items-center justify-center mx-auto">
+                <item.icon className="h-7 w-7 text-[#4A9FD8]" />
+              </div>
+              <h3 className="font-semibold text-lg">{item.title}</h3>
+              <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+            </Card>
+          ))}
+        </div>
+        <Card className="bg-[#4A9FD8]/10 border-[#4A9FD8]/30 text-center py-4 px-6">
+          <p className="text-white/80 text-sm leading-relaxed">
+            <span className="font-semibold text-[#4A9FD8]">Por que funciona:</span> Diferente de pesquisas de clima tradicionais, o colaborador já está engajado porque o canal resolve problemas reais dele. O RH ganha visibilidade sem precisar "empurrar" mais uma ferramenta.
+          </p>
+        </Card>
       </div>
     ),
   },
