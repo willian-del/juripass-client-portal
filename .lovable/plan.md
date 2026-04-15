@@ -1,35 +1,48 @@
 
 
-## Plano: Landing Page no MaterialViewer
+## Plano: Criação rápida de lead + Gate opcional no MaterialViewer
 
-### Situacao atual
-O `MaterialViewer` (`/m/:token`) carrega o material e imediatamente renderiza o componente (slides, one-pager, etc.) ou redireciona para o arquivo. Nao ha nenhuma pagina intermediaria com branding.
+### Problema
+Ao compartilhar um material via WhatsApp, o admin muitas vezes só tem o nome do prospect. Atualmente, é obrigatório selecionar um lead existente (com nome, empresa, email) para gerar o link.
 
-### Proposta
-Adicionar um estado intermediario (`showViewer = false`) que exibe uma landing page branded antes de mostrar o material. O usuario ve o branding Juripass, o titulo do material e botoes de acao. Ao clicar em "Visualizar", o componente real e renderizado.
+### Solução em duas partes
 
-### Mudancas em `src/pages/MaterialViewer.tsx`
+---
 
-1. **Novo estado `showViewer`** — inicia como `false`
-2. **Landing page intermediaria** com:
-   - Header com gradiente azul escuro (#2C3E7D → #1e2d5e) e logo branca
-   - Card central com:
-     - Icone do tipo de material (Presentation, FileText, Image, etc.)
-     - Badge com a categoria (Apresentacao, One-Pager, Cartaz, Proposta)
-     - Titulo do material
-     - Descricao generica contextual
-     - Dois botoes: **"Visualizar Material"** (primario) e **"Baixar PDF"** (outline/secundario, chama a funcao de download do componente se disponivel, ou abre em nova aba para arquivos)
-   - Footer discreto com "Juripass © 2026" e link para o site
-3. **Ao clicar "Visualizar"** → `setShowViewer(true)` → renderiza o componente normalmente (slides, one-pager, etc.)
-4. **Para materiais tipo `file`** — nao redireciona automaticamente; mostra a landing page com botao "Baixar Arquivo"
+### Parte 1 — Criar lead rápido no diálogo de compartilhamento
 
-### Mapeamento de categorias e icones
-- `presentation` / `presentation-colaborador` → Apresentacao → Slides icon
-- `one-pager` → One-Pager → FileText icon
-- `posters` / `poster-*` → Cartaz → Image icon
-- `proposal` → Proposta Comercial → Briefcase icon
-- `file` → Documento → Download icon
+No diálogo de compartilhamento em `AdminMaterials.tsx`:
 
-### Arquivo alterado
-- `src/pages/MaterialViewer.tsx` — refatoracao completa do fluxo de renderizacao
+- Adicionar um botão **"+ Novo lead rápido"** abaixo do Select de leads
+- Ao clicar, exibe campos inline: **Nome** (obrigatório), **Empresa** e **Email** (opcionais)
+- Ao salvar, insere o lead na tabela `leads` (com os campos opcionais como string vazia) e seleciona-o automaticamente no Select
+- Adicionar um **toggle/switch** "Solicitar dados ao destinatário" (padrão: desligado) que será salvo junto com o share
+
+### Parte 2 — Gate opcional no MaterialViewer
+
+- **Migração SQL**: Adicionar coluna `require_lead_info boolean default false` na tabela `material_shares`
+- Atualizar `handleShare` para incluir o valor do toggle ao criar o share
+- Atualizar a edge function `serve-material` para retornar a flag `require_lead_info` e o `share_id`
+- No `MaterialViewer.tsx`, antes de exibir o material: se `require_lead_info = true`, mostrar um formulário elegante (mesmo visual da landing page) pedindo **Nome** e **Email**
+- Ao submeter, atualizar o lead correspondente via uma nova edge function (ou a mesma `serve-material` com ação de update), preenchendo nome/email se estiverem vazios
+- Após preenchimento, liberar a visualização normalmente
+
+### Detalhes técnicos
+
+**Arquivos modificados:**
+1. `src/pages/admin/AdminMaterials.tsx` — botão de criação rápida + toggle no share dialog
+2. `src/pages/MaterialViewer.tsx` — gate de captura de dados
+3. `supabase/functions/serve-material/index.ts` — retornar flag + aceitar update de lead
+4. Migração SQL — nova coluna `require_lead_info` em `material_shares`
+
+**Fluxo do admin:**
+1. Clica "Enviar para lead" no material
+2. Clica "+ Novo lead rápido" → digita só o nome → Salvar
+3. Opcionalmente ativa "Solicitar dados ao destinatário"
+4. Copia o link e envia por WhatsApp
+
+**Fluxo do prospect (com gate ativo):**
+1. Abre o link → vê a landing page com formulário de Nome + Email
+2. Preenche e clica "Acessar Material"
+3. Dados salvos no lead → material liberado
 
