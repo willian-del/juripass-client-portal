@@ -1,35 +1,35 @@
 
-## Plano: Separar slide 3 em dois slides
 
-### Slide 3 — "O Benefício: Canal de Acolhimento Jurídico"
-Foco: mostrar ao RH que este é um benefício que o colaborador **quer usar**.
+## Plano: Landing Page no MaterialViewer
 
-- Subtítulo: "O Benefício"
-- Título: "Canal de Acolhimento Jurídico"
-- Descrição: "Um benefício que o colaborador tem interesse real em utilizar — orientação jurídica gratuita para questões pessoais do dia a dia."
-- 6 bullets em grid 2 colunas:
-  1. Orientação sobre dívidas, família, moradia, consumo e contratos
-  2. Atendimento humano, confidencial e acessível
-  3. Sem custo inicial ao colaborador
-  4. Treinamentos e conteúdos educativos
-  5. Primeiro retorno em até 1 dia útil
-  6. Canal externo e independente — sem vínculo com a empresa
-- Nota itálica sobre contratação direta de advogado
+### Situacao atual
+O `MaterialViewer` (`/m/:token`) carrega o material e imediatamente renderiza o componente (slides, one-pager, etc.) ou redireciona para o arquivo. Nao ha nenhuma pagina intermediaria com branding.
 
-### Slide 4 (novo) — "O Pulo do Gato: O mesmo canal que acolhe é o que mensura"
-Foco: explicar ao RH que este canal de alto engajamento é a ferramenta ideal para mensuração de risco humano em múltiplas frentes.
+### Proposta
+Adicionar um estado intermediario (`showViewer = false`) que exibe uma landing page branded antes de mostrar o material. O usuario ve o branding Juripass, o titulo do material e botoes de acao. Ao clicar em "Visualizar", o componente real e renderizado.
 
-- Subtítulo: "O Pulo do Gato"
-- Título: "O mesmo canal que acolhe **é o que mensura**"
-- 3 cards:
-  - **Pulsos e Pesquisas** — coletar pulsos periódicos e pesquisas qualitativas sobre clima e vulnerabilidades
-  - **Canal de Denúncias e Integridade** — via segura e independente para relatos de assédio, discriminação e desvios de conduta
-  - **Indicadores de Risco Humano** — dados anonimizados e agregados que alimentam relatórios para o RH agir preventivamente
-- Card de destaque: "Por que funciona: diferente de pesquisas de clima tradicionais, o colaborador já está engajado porque o canal resolve problemas reais dele. O RH ganha visibilidade sem precisar 'empurrar' mais uma ferramenta."
+### Mudancas em `src/pages/MaterialViewer.tsx`
 
-### Impacto
-- Total de slides: 10 → 11
-- Slides seguintes (cobertura, exclusões, vantagens, etc.) deslocam uma posição
+1. **Novo estado `showViewer`** — inicia como `false`
+2. **Landing page intermediaria** com:
+   - Header com gradiente azul escuro (#2C3E7D → #1e2d5e) e logo branca
+   - Card central com:
+     - Icone do tipo de material (Presentation, FileText, Image, etc.)
+     - Badge com a categoria (Apresentacao, One-Pager, Cartaz, Proposta)
+     - Titulo do material
+     - Descricao generica contextual
+     - Dois botoes: **"Visualizar Material"** (primario) e **"Baixar PDF"** (outline/secundario, chama a funcao de download do componente se disponivel, ou abre em nova aba para arquivos)
+   - Footer discreto com "Juripass © 2026" e link para o site
+3. **Ao clicar "Visualizar"** → `setShowViewer(true)` → renderiza o componente normalmente (slides, one-pager, etc.)
+4. **Para materiais tipo `file`** — nao redireciona automaticamente; mostra a landing page com botao "Baixar Arquivo"
+
+### Mapeamento de categorias e icones
+- `presentation` / `presentation-colaborador` → Apresentacao → Slides icon
+- `one-pager` → One-Pager → FileText icon
+- `posters` / `poster-*` → Cartaz → Image icon
+- `proposal` → Proposta Comercial → Briefcase icon
+- `file` → Documento → Download icon
 
 ### Arquivo alterado
-- `src/components/avaliacao/SlidesColaborador.tsx` — substituir slide 3 por dois novos slides
+- `src/pages/MaterialViewer.tsx` — refatoracao completa do fluxo de renderizacao
+
