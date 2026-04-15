@@ -250,6 +250,35 @@ export default function AdminMaterials() {
     }
   };
 
+  const handleQuickLeadSave = async () => {
+    if (!quickLeadName.trim()) {
+      toast({ title: 'Informe ao menos o nome', variant: 'destructive' });
+      return;
+    }
+    setQuickLeadSaving(true);
+    try {
+      const { data, error } = await supabase.from('leads').insert({
+        name: quickLeadName.trim(),
+        company: quickLeadCompany.trim() || 'Não informado',
+        email: quickLeadEmail.trim() || `pendente-${Date.now()}@juripass.temp`,
+        phone: '',
+        role_title: '',
+      }).select('id, name, company, email').single();
+      if (error) throw error;
+      setLeads((prev) => [...prev, data as Lead].sort((a, b) => a.name.localeCompare(b.name)));
+      setSelectedLeadId(data.id);
+      setQuickLeadMode(false);
+      setQuickLeadName('');
+      setQuickLeadCompany('');
+      setQuickLeadEmail('');
+      toast({ title: 'Lead criado!' });
+    } catch {
+      toast({ title: 'Erro ao criar lead', variant: 'destructive' });
+    } finally {
+      setQuickLeadSaving(false);
+    }
+  };
+
   const handleShare = async (alsoSendEmail = false) => {
     if (!sharingMaterial || !selectedLeadId) return;
     const { data: { session } } = await supabase.auth.getSession();
@@ -257,6 +286,7 @@ export default function AdminMaterials() {
       material_id: sharingMaterial.id,
       lead_id: selectedLeadId,
       created_by: session?.user?.id || null,
+      require_lead_info: requireLeadInfo,
     }).select('token').single();
     if (error || !data) {
       toast({ title: 'Erro ao compartilhar', variant: 'destructive' });
@@ -289,6 +319,7 @@ export default function AdminMaterials() {
     }
     setShareOpen(false);
     setSelectedLeadId('');
+    setRequireLeadInfo(false);
     fetchShares();
   };
 
