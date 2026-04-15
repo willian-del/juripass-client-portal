@@ -1,48 +1,35 @@
 
 
-## Plano: Criação rápida de lead + Gate opcional no MaterialViewer
+## Plano: Hub Administrativo + Rota `/admin`
 
-### Problema
-Ao compartilhar um material via WhatsApp, o admin muitas vezes só tem o nome do prospect. Atualmente, é obrigatório selecionar um lead existente (com nome, empresa, email) para gerar o link.
+### O que será feito
 
-### Solução em duas partes
+Criar uma página de entrada do painel administrativo (`/admin`) com dois cards lado a lado — **CRM** e **Materiais** — seguindo o mesmo design system da landing page de materiais (gradiente azul escuro, cards glassmorphism, logo branca).
 
----
+### Detalhes
 
-### Parte 1 — Criar lead rápido no diálogo de compartilhamento
+**Novo arquivo:** `src/pages/admin/AdminHub.tsx`
+- Layout fullscreen com gradiente Juripass (`#2C3E7D → #162048`)
+- Header com logo branca + botão "Sair"
+- Título "Painel Administrativo" centralizado
+- Grid de 2 cards com ícones (`Users` para CRM, `FolderOpen` para Materiais), cada um navegando para `/admin/leads` e `/admin/materiais`
+- Verifica sessão ativa; redireciona para `/admin/login` se não autenticado
+- Footer discreto
 
-No diálogo de compartilhamento em `AdminMaterials.tsx`:
+**Alterações em `src/App.tsx`:**
+- Adicionar lazy import para `AdminHub`
+- Adicionar rota `/admin` apontando para `AdminHub`
 
-- Adicionar um botão **"+ Novo lead rápido"** abaixo do Select de leads
-- Ao clicar, exibe campos inline: **Nome** (obrigatório), **Empresa** e **Email** (opcionais)
-- Ao salvar, insere o lead na tabela `leads` (com os campos opcionais como string vazia) e seleciona-o automaticamente no Select
-- Adicionar um **toggle/switch** "Solicitar dados ao destinatário" (padrão: desligado) que será salvo junto com o share
+**Alteração em `src/pages/admin/AdminLogin.tsx`:**
+- Mudar redirect pós-login de `/admin/leads` para `/admin` (o hub)
 
-### Parte 2 — Gate opcional no MaterialViewer
+**Sobre o domínio `crm.juripass.com.br`:**
+- Isso requer configuração DNS no seu provedor de domínio (um registro CNAME ou A apontando para o mesmo servidor)
+- Dentro do Lovable, você pode configurar isso em **Project Settings → Domains**
+- Depois de configurado, o acesso via `crm.juripass.com.br/admin` cairá direto no hub
 
-- **Migração SQL**: Adicionar coluna `require_lead_info boolean default false` na tabela `material_shares`
-- Atualizar `handleShare` para incluir o valor do toggle ao criar o share
-- Atualizar a edge function `serve-material` para retornar a flag `require_lead_info` e o `share_id`
-- No `MaterialViewer.tsx`, antes de exibir o material: se `require_lead_info = true`, mostrar um formulário elegante (mesmo visual da landing page) pedindo **Nome** e **Email**
-- Ao submeter, atualizar o lead correspondente via uma nova edge function (ou a mesma `serve-material` com ação de update), preenchendo nome/email se estiverem vazios
-- Após preenchimento, liberar a visualização normalmente
-
-### Detalhes técnicos
-
-**Arquivos modificados:**
-1. `src/pages/admin/AdminMaterials.tsx` — botão de criação rápida + toggle no share dialog
-2. `src/pages/MaterialViewer.tsx` — gate de captura de dados
-3. `supabase/functions/serve-material/index.ts` — retornar flag + aceitar update de lead
-4. Migração SQL — nova coluna `require_lead_info` em `material_shares`
-
-**Fluxo do admin:**
-1. Clica "Enviar para lead" no material
-2. Clica "+ Novo lead rápido" → digita só o nome → Salvar
-3. Opcionalmente ativa "Solicitar dados ao destinatário"
-4. Copia o link e envia por WhatsApp
-
-**Fluxo do prospect (com gate ativo):**
-1. Abre o link → vê a landing page com formulário de Nome + Email
-2. Preenche e clica "Acessar Material"
-3. Dados salvos no lead → material liberado
+### Arquivos impactados
+1. `src/pages/admin/AdminHub.tsx` (novo)
+2. `src/App.tsx` (nova rota)
+3. `src/pages/admin/AdminLogin.tsx` (redirect)
 
