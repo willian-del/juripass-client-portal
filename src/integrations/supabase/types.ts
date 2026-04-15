@@ -154,6 +154,7 @@ export type Database = {
           id: string
           lead_id: string
           material_id: string
+          require_lead_info: boolean
           sent_at: string
           token: string
         }
@@ -162,6 +163,7 @@ export type Database = {
           id?: string
           lead_id: string
           material_id: string
+          require_lead_info?: boolean
           sent_at?: string
           token?: string
         }
@@ -170,6 +172,7 @@ export type Database = {
           id?: string
           lead_id?: string
           material_id?: string
+          require_lead_info?: boolean
           sent_at?: string
           token?: string
         }

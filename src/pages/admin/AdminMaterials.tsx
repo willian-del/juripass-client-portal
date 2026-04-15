@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -22,7 +24,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   LogOut, Plus, Upload, Link2, FileText, Eye, Copy, Send, ArrowLeft,
-  Pencil, Trash2, Mail, X, Star, Code, Download, Presentation, Image, FileCheck,
+  Pencil, Trash2, Mail, X, Star, Code, Download, Presentation, Image, FileCheck, UserPlus, Loader2,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
@@ -133,6 +135,16 @@ export default function AdminMaterials() {
   // Email sending
   const [sendingEmail, setSendingEmail] = useState(false);
 
+  // Quick lead creation
+  const [quickLeadMode, setQuickLeadMode] = useState(false);
+  const [quickLeadName, setQuickLeadName] = useState('');
+  const [quickLeadCompany, setQuickLeadCompany] = useState('');
+  const [quickLeadEmail, setQuickLeadEmail] = useState('');
+  const [quickLeadSaving, setQuickLeadSaving] = useState(false);
+
+  // Gate toggle
+  const [requireLeadInfo, setRequireLeadInfo] = useState(false);
+
   // Expanded shares row
   const [expandedMaterialId, setExpandedMaterialId] = useState<string | null>(null);
 
@@ -238,6 +250,35 @@ export default function AdminMaterials() {
     }
   };
 
+  const handleQuickLeadSave = async () => {
+    if (!quickLeadName.trim()) {
+      toast({ title: 'Informe ao menos o nome', variant: 'destructive' });
+      return;
+    }
+    setQuickLeadSaving(true);
+    try {
+      const { data, error } = await supabase.from('leads').insert({
+        name: quickLeadName.trim(),
+        company: quickLeadCompany.trim() || 'Não informado',
+        email: quickLeadEmail.trim() || `pendente-${Date.now()}@juripass.temp`,
+        phone: '',
+        role_title: '',
+      }).select('id, name, company, email').single();
+      if (error) throw error;
+      setLeads((prev) => [...prev, data as Lead].sort((a, b) => a.name.localeCompare(b.name)));
+      setSelectedLeadId(data.id);
+      setQuickLeadMode(false);
+      setQuickLeadName('');
+      setQuickLeadCompany('');
+      setQuickLeadEmail('');
+      toast({ title: 'Lead criado!' });
+    } catch {
+      toast({ title: 'Erro ao criar lead', variant: 'destructive' });
+    } finally {
+      setQuickLeadSaving(false);
+    }
+  };
+
   const handleShare = async (alsoSendEmail = false) => {
     if (!sharingMaterial || !selectedLeadId) return;
     const { data: { session } } = await supabase.auth.getSession();
@@ -245,6 +286,7 @@ export default function AdminMaterials() {
       material_id: sharingMaterial.id,
       lead_id: selectedLeadId,
       created_by: session?.user?.id || null,
+      require_lead_info: requireLeadInfo,
     }).select('token').single();
     if (error || !data) {
       toast({ title: 'Erro ao compartilhar', variant: 'destructive' });
@@ -277,6 +319,7 @@ export default function AdminMaterials() {
     }
     setShareOpen(false);
     setSelectedLeadId('');
+    setRequireLeadInfo(false);
     fetchShares();
   };
 
@@ -720,18 +763,50 @@ export default function AdminMaterials() {
               <DialogDescription>Selecione o lead, o template de email e escolha como compartilhar.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-2">
-              <Select value={selectedLeadId} onValueChange={setSelectedLeadId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um lead..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {leads.map((l) => (
-                    <SelectItem key={l.id} value={l.id}>
-                      {l.name} — {l.company}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {/* Lead selector + quick create */}
+              {!quickLeadMode ? (
+                <div className="space-y-2">
+                  <Select value={selectedLeadId} onValueChange={setSelectedLeadId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um lead..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {leads.map((l) => (
+                        <SelectItem key={l.id} value={l.id}>
+                          {l.name} — {l.company}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button variant="ghost" size="sm" className="text-xs" onClick={() => setQuickLeadMode(true)}>
+                    <UserPlus className="h-3.5 w-3.5 mr-1" /> Criar lead rápido
+                  </Button>
+                </div>
+              ) : (
+                <div className="border rounded-lg p-3 space-y-3 bg-muted/30">
+                  <p className="text-sm font-medium">Novo lead rápido</p>
+                  <Input placeholder="Nome *" value={quickLeadName} onChange={(e) => setQuickLeadName(e.target.value)} />
+                  <Input placeholder="Empresa (opcional)" value={quickLeadCompany} onChange={(e) => setQuickLeadCompany(e.target.value)} />
+                  <Input placeholder="Email (opcional)" type="email" value={quickLeadEmail} onChange={(e) => setQuickLeadEmail(e.target.value)} />
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={() => { setQuickLeadMode(false); setQuickLeadName(''); setQuickLeadCompany(''); setQuickLeadEmail(''); }} className="flex-1">
+                      Cancelar
+                    </Button>
+                    <Button size="sm" onClick={handleQuickLeadSave} disabled={quickLeadSaving || !quickLeadName.trim()} className="flex-1">
+                      {quickLeadSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Salvar'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Gate toggle */}
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="space-y-0.5">
+                  <Label htmlFor="require-info" className="text-sm font-medium">Solicitar dados ao destinatário</Label>
+                  <p className="text-xs text-muted-foreground">O destinatário precisará informar nome e email antes de acessar</p>
+                </div>
+                <Switch id="require-info" checked={requireLeadInfo} onCheckedChange={setRequireLeadInfo} />
+              </div>
 
               <div>
                 <label className="text-sm font-medium mb-1 block">Template de email</label>
