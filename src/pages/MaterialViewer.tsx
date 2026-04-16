@@ -58,7 +58,7 @@ function getMaterialMeta(fileType: string) {
     };
   }
   return {
-    icon: Download,
+    icon: FileText,
     category: 'Documento',
     description: 'Material preparado exclusivamente para você. Clique para visualizar ou baixar.',
     color: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
