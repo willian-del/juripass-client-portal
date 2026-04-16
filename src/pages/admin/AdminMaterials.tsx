@@ -486,17 +486,19 @@ export default function AdminMaterials() {
   if (previewType) {
     return (
       <div className="fixed inset-0 z-50 bg-background">
-        {previewType === 'slides' ? (
-          <SlidesPresentation onClose={() => setPreviewType(null)} />
-        ) : previewType === 'slides-colaborador' ? (
-          <SlidesColaborador onClose={() => setPreviewType(null)} />
-        ) : previewType === 'posters' ? (
-          <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
-        ) : previewType === 'proposta' ? (
-          <PropostaComercial onClose={() => setPreviewType(null)} />
-        ) : (
-          <OnePager onClose={() => setPreviewType(null)} />
-        )}
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
+          {previewType === 'slides' ? (
+            <SlidesPresentation onClose={() => setPreviewType(null)} />
+          ) : previewType === 'slides-colaborador' ? (
+            <SlidesColaborador onClose={() => setPreviewType(null)} />
+          ) : previewType === 'posters' ? (
+            <PostersViewer onClose={() => setPreviewType(null)} posterId={previewPosterId} />
+          ) : previewType === 'proposta' ? (
+            <PropostaComercial onClose={() => setPreviewType(null)} />
+          ) : (
+            <OnePager onClose={() => setPreviewType(null)} />
+          )}
+        </Suspense>
       </div>
     );
   }
