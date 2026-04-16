@@ -788,7 +788,7 @@ export default function AdminMaterials() {
                   <p className="text-sm font-medium">Novo lead rápido</p>
                   <Input placeholder="Nome *" value={quickLeadName} onChange={(e) => setQuickLeadName(e.target.value)} />
                   <Input placeholder="Empresa (opcional)" value={quickLeadCompany} onChange={(e) => setQuickLeadCompany(e.target.value)} />
-                  <Input placeholder="Email (opcional)" type="email" value={quickLeadEmail} onChange={(e) => setQuickLeadEmail(e.target.value)} />
+                  <Input placeholder="Email (opcional — ficará como 'Pendente')" type="email" value={quickLeadEmail} onChange={(e) => setQuickLeadEmail(e.target.value)} />
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" onClick={() => { setQuickLeadMode(false); setQuickLeadName(''); setQuickLeadCompany(''); setQuickLeadEmail(''); }} className="flex-1">
                       Cancelar
