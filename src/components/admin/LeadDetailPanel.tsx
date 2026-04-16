@@ -87,6 +87,14 @@ export function LeadDetailPanel({
   const [availableMaterials, setAvailableMaterials] = useState<any[]>([]);
   const [generating, setGenerating] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
+  const [editingContact, setEditingContact] = useState(false);
+  const [contactDraft, setContactDraft] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    role_title: '',
+  });
 
   const refreshShares = async (leadId: string) => {
     const { data } = await supabase
