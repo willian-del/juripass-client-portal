@@ -20,6 +20,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { getPublicShareBaseUrl } from '@/lib/constants';
 
 interface Lead {
   id: string;
@@ -147,7 +148,7 @@ export function LeadDetailPanel({
   };
 
   const copyLink = async (token: string) => {
-    const url = `${window.location.origin}/m/${token}`;
+    const url = `${getPublicShareBaseUrl()}/m/${token}`;
     await navigator.clipboard.writeText(url);
     toast({ title: 'Link copiado!', description: url });
   };
@@ -156,7 +157,7 @@ export function LeadDetailPanel({
     if (!lead) return;
     setResending(share.id);
     try {
-      const shareUrl = `${window.location.origin}/m/${share.token}`;
+      const shareUrl = `${getPublicShareBaseUrl()}/m/${share.token}`;
       const { error } = await supabase.functions.invoke('send-material-email', {
         body: { materialId: share.material_id, leadId: lead.id, shareUrl },
       });
@@ -181,7 +182,7 @@ export function LeadDetailPanel({
         .single();
       if (error || !share) throw error || new Error('insert failed');
 
-      const shareUrl = `${window.location.origin}/m/${share.token}`;
+      const shareUrl = `${getPublicShareBaseUrl()}/m/${share.token}`;
       await refreshShares(lead.id);
 
       if (sendEmail && hasRealEmail) {

@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
+import { getPublicShareBaseUrl } from '@/lib/constants';
 
 const SlidesPresentation = lazy(() => import('@/components/avaliacao/SlidesPresentation').then(m => ({ default: m.SlidesPresentation })));
 const SlidesColaborador = lazy(() => import('@/components/avaliacao/SlidesColaborador').then(m => ({ default: m.SlidesColaborador })));
@@ -293,7 +294,7 @@ export default function AdminMaterials() {
       toast({ title: 'Erro ao compartilhar', variant: 'destructive' });
       return;
     }
-    const shareUrl = `${window.location.origin}/m/${data.token}`;
+    const shareUrl = `${getPublicShareBaseUrl()}/m/${data.token}`;
 
     if (alsoSendEmail) {
       setSendingEmail(true);
@@ -393,7 +394,7 @@ export default function AdminMaterials() {
   };
 
   const copyShareLink = async (token: string) => {
-    const url = `${window.location.origin}/m/${token}`;
+    const url = `${getPublicShareBaseUrl()}/m/${token}`;
     await navigator.clipboard.writeText(url);
     toast({ title: 'Link copiado!' });
   };
