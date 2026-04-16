@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useRef, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
@@ -18,6 +18,8 @@ export function useAdminAuth() {
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const navigateRef = useRef(navigate);
+  navigateRef.current = navigate;
   const [state, setState] = useState<'checking' | 'authorized' | 'rejected'>('checking');
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       if (cancelled) return;
 
       if (!session) {
-        navigate('/admin/login', { replace: true });
+        navigateRef.current('/admin/login', { replace: true });
         return;
       }
 
@@ -43,7 +45,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
       if (!data) {
         await supabase.auth.signOut();
-        navigate('/admin/login', { replace: true });
+        navigateRef.current('/admin/login', { replace: true });
         return;
       }
 
@@ -55,7 +57,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session && !cancelled) {
         setState('rejected');
-        navigate('/admin/login', { replace: true });
+        navigateRef.current('/admin/login', { replace: true });
       }
     });
 
@@ -63,7 +65,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, []);
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut();

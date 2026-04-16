@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { Button } from '@/components/ui/button';
@@ -28,11 +28,12 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
-import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
-import { SlidesColaborador } from '@/components/avaliacao/SlidesColaborador';
-import { OnePager } from '@/components/avaliacao/OnePager';
-import { PostersViewer } from '@/components/avaliacao/PostersViewer';
-import { PropostaComercial } from '@/components/avaliacao/PropostaComercial';
+
+const SlidesPresentation = lazy(() => import('@/components/avaliacao/SlidesPresentation').then(m => ({ default: m.SlidesPresentation })));
+const SlidesColaborador = lazy(() => import('@/components/avaliacao/SlidesColaborador').then(m => ({ default: m.SlidesColaborador })));
+const OnePager = lazy(() => import('@/components/avaliacao/OnePager').then(m => ({ default: m.OnePager })));
+const PostersViewer = lazy(() => import('@/components/avaliacao/PostersViewer').then(m => ({ default: m.PostersViewer })));
+const PropostaComercial = lazy(() => import('@/components/avaliacao/PropostaComercial').then(m => ({ default: m.PropostaComercial })));
 
 type Material = {
   id: string;
