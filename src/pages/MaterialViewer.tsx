@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
 import {
-  FileText, Loader2, AlertCircle, Eye, Download,
-  Presentation, Image, Briefcase, ExternalLink, Send, Mail
+  FileText, Loader2, AlertCircle,
+  Presentation, Image, Briefcase, ExternalLink, Send
 } from 'lucide-react';
 import { SlidesPresentation } from '@/components/avaliacao/SlidesPresentation';
 import { SlidesColaborador } from '@/components/avaliacao/SlidesColaborador';
