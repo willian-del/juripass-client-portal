@@ -169,6 +169,38 @@ export function LeadDetailPanel({
     }
   };
 
+  const handleGenerateLink = async (materialId: string, sendEmail: boolean) => {
+    if (!lead) return;
+    setGenerating(true);
+    setPopoverOpen(false);
+    try {
+      const { data: share, error } = await supabase
+        .from('material_shares')
+        .insert({ lead_id: lead.id, material_id: materialId })
+        .select('id, token')
+        .single();
+      if (error || !share) throw error || new Error('insert failed');
+
+      const shareUrl = `${window.location.origin}/m/${share.token}`;
+      await refreshShares(lead.id);
+
+      if (sendEmail && hasRealEmail) {
+        const { error: mailErr } = await supabase.functions.invoke('send-material-email', {
+          body: { materialId, leadId: lead.id, shareUrl },
+        });
+        if (mailErr) throw mailErr;
+        toast({ title: 'Link gerado e email enviado!', description: shareUrl });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        toast({ title: 'Link gerado e copiado!', description: shareUrl });
+      }
+    } catch {
+      toast({ title: 'Erro ao gerar link', variant: 'destructive' });
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   if (lead && notes !== (lead.notes || '') && !saving) {
     setNotes(lead.notes || '');
   }
