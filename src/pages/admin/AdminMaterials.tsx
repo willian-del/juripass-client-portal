@@ -505,8 +505,8 @@ export default function AdminMaterials() {
       <div className="min-h-screen bg-muted/20">
         <header className="border-b bg-card px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/admin/leads')}>
-              <ArrowLeft className="h-4 w-4 mr-1" /> CRM
+            <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
+              <ArrowLeft className="h-4 w-4 mr-1" /> Painel
             </Button>
             <h1 className="text-lg font-bold">Materiais Comerciais</h1>
           </div>
