@@ -1,42 +1,30 @@
 
 
-## Plano: Otimizar navegacao admin (eliminar re-auth e melhorar transicoes)
+## Plano: Corrigir lentidão na navegação admin
 
-### Diagnostico
+### Diagnóstico
 
-A lentidao vem de **3 problemas**:
+Dois problemas principais:
 
-1. **Auth re-check em cada pagina**: `AdminAuthGuard` faz `getSession()` + query `user_roles` toda vez que voce navega entre CRM, Materiais e Hub. Isso adiciona ~500-1000ms por transicao.
-2. **AdminHub** tambem faz seu proprio `getSession()` independente.
-3. **AdminMaterials** dispara 4 fetches simultaneos (materials, shares, leads, templates) no mount — sem cache.
+**1. Chunk gigante no AdminMaterials** — As linhas 31-35 importam diretamente `SlidesPresentation`, `SlidesColaborador`, `OnePager`, `PostersViewer` e `PropostaComercial`. Esses componentes trazem consigo `html2canvas` e `jsPDF` (~1.5MB). Como o Vite agrupa tudo no mesmo chunk lazy, qualquer navegação para `/admin/materiais` baixa e parseia esse bundle inteiro, causando atraso de vários segundos. E como estão no mesmo grupo de rotas nested, isso pode afetar o carregamento inicial do layout.
 
-### Solucao
+**2. useEffect re-executando** — `AdminAuthContext` tem `[navigate]` como dependência do `useEffect`. Em React Router v6, `useNavigate()` pode retornar uma referência instável, fazendo o efeito de auth re-executar em cada transição de rota, gerando novas chamadas `getSession()` + `user_roles`.
 
-**1. Criar `AdminAuthContext`** (`src/contexts/AdminAuthContext.tsx`)
-- Context React que verifica auth/role **uma unica vez** e mantém o estado em memoria.
-- Expoe `authorized`, `loading` e `logout()`.
-- Escuta `onAuthStateChange` para invalidar se sessao expirar.
+### Solução
 
-**2. Criar `AdminLayout`** (`src/layouts/AdminLayout.tsx`)
-- Layout wrapper com `<Outlet />` que envolve todas as rotas `/admin/*`.
-- Renderiza o `AdminAuthProvider` uma vez, eliminando re-checks.
+**1. Lazy import dos componentes pesados em AdminMaterials**
+- Trocar os imports estáticos (linhas 31-35) por `React.lazy()` para `SlidesPresentation`, `SlidesColaborador`, `OnePager`, `PostersViewer` e `PropostaComercial`
+- Envolver os usos desses componentes em `<Suspense>` com fallback de loading
+- Isso separa o chunk pesado (~1.5MB) e só carrega quando o usuário realmente abre uma preview
 
-**3. Atualizar rotas em `App.tsx`**
-- Agrupar `/admin`, `/admin/leads` e `/admin/materiais` dentro de um `<Route element={<AdminLayout />}>` com rotas filhas.
-
-**4. Simplificar paginas admin**
-- **AdminHub**: Remover check de sessao proprio, usar `useAdminAuth()` para logout.
-- **AdminLeads**: Remover `<AdminAuthGuard>` wrapper, usar `useAdminAuth()` para logout.
-- **AdminMaterials**: Remover `<AdminAuthGuard>` wrapper.
+**2. Estabilizar dependência do useEffect no AdminAuthContext**
+- Usar `useRef` para armazenar `navigate` e remover da lista de dependências do `useEffect`
+- Isso garante que o check de auth roda **exatamente uma vez** por sessão
 
 ### Arquivos impactados
-1. `src/contexts/AdminAuthContext.tsx` — **novo**
-2. `src/layouts/AdminLayout.tsx` — **novo**
-3. `src/App.tsx` — reestruturar rotas admin como nested
-4. `src/pages/admin/AdminHub.tsx` — remover auth check duplicado
-5. `src/pages/admin/AdminLeads.tsx` — remover AdminAuthGuard, usar context
-6. `src/pages/admin/AdminMaterials.tsx` — remover AdminAuthGuard
+1. `src/pages/admin/AdminMaterials.tsx` — lazy imports dos 5 componentes pesados
+2. `src/contexts/AdminAuthContext.tsx` — estabilizar navigate ref
 
 ### Resultado esperado
-Navegacao entre paginas admin sera instantanea (sem loading "Carregando..." a cada clique).
+Transições entre Hub → CRM → Materiais serão instantâneas (sem re-auth, sem carregar bundles pesados desnecessariamente).
 
