@@ -80,11 +80,23 @@ export function LeadDetailPanel({
   const [materialShares, setMaterialShares] = useState<any[]>([]);
   const [chatConversations, setChatConversations] = useState<any[]>([]);
   const [resending, setResending] = useState<string | null>(null);
+  const [availableMaterials, setAvailableMaterials] = useState<any[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const refreshShares = async (leadId: string) => {
+    const { data } = await supabase
+      .from('material_shares')
+      .select('id, token, sent_at, material_id, sales_materials(title, file_type), material_views(id, viewed_at)')
+      .eq('lead_id', leadId)
+      .order('sent_at', { ascending: false });
+    setMaterialShares(data || []);
+  };
 
   useEffect(() => {
     if (!lead) return;
     const fetchData = async () => {
-      const [sharesRes, chatsRes] = await Promise.all([
+      const [sharesRes, chatsRes, materialsRes] = await Promise.all([
         supabase
           .from('material_shares')
           .select('id, token, sent_at, material_id, sales_materials(title, file_type), material_views(id, viewed_at)')
@@ -95,9 +107,14 @@ export function LeadDetailPanel({
           .select('id, messages, created_at, updated_at, mode')
           .eq('lead_id', lead.id)
           .order('created_at', { ascending: false }),
+        supabase
+          .from('sales_materials')
+          .select('id, title, file_type, description')
+          .order('created_at', { ascending: false }),
       ]);
       setMaterialShares(sharesRes.data || []);
       setChatConversations(chatsRes.data || []);
+      setAvailableMaterials(materialsRes.data || []);
     };
     fetchData();
   }, [lead]);
