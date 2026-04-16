@@ -78,7 +78,6 @@ export default function MaterialViewer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [material, setMaterial] = useState<MaterialResult | null>(null);
-  const [showViewer, setShowViewer] = useState(false);
 
   // Lead gate state
   const [gateCompleted, setGateCompleted] = useState(false);
@@ -98,7 +97,13 @@ export default function MaterialViewer() {
           setError(data?.error || 'Material não encontrado');
           return;
         }
-        setMaterial(data as MaterialResult);
+        const mat = data as MaterialResult;
+        setMaterial(mat);
+
+        // For file-type materials without gate, redirect immediately
+        if (mat.type === 'file' && !mat.require_lead_info && mat.url) {
+          window.location.href = mat.url;
+        }
       } catch {
         setError('Erro ao carregar material');
       } finally {
@@ -122,6 +127,11 @@ export default function MaterialViewer() {
         return;
       }
       setGateCompleted(true);
+
+      // After gate completion, redirect for file-type materials
+      if (material?.type === 'file' && material.url) {
+        window.location.href = material.url;
+      }
     } catch {
       setGateError('Erro ao salvar dados. Tente novamente.');
     } finally {
@@ -129,6 +139,7 @@ export default function MaterialViewer() {
     }
   };
 
+  // Loading state
   if (loading) {
     return (
       <>
@@ -142,6 +153,7 @@ export default function MaterialViewer() {
     );
   }
 
+  // Error state
   if (error) {
     return (
       <>
@@ -165,153 +177,79 @@ export default function MaterialViewer() {
     );
   }
 
-  // If user clicked "Visualizar" — render the actual component
-  if (showViewer && material) {
-    if (material.type === 'builtin') {
-      if (material.file_type === 'presentation') return <SlidesPresentation standalone />;
-      if (material.file_type === 'presentation-colaborador') return <SlidesColaborador standalone />;
-      if (material.file_type === 'one-pager') return <OnePager standalone />;
-      if (material.file_type === 'proposal') return <PropostaComercial standalone />;
-      if (material.file_type === 'posters') return <PostersViewer standalone />;
-      if (posterMap[material.file_type]) return <PostersViewer standalone posterId={posterMap[material.file_type]} />;
-    }
-    return null;
-  }
-
   if (!material) return null;
 
-  const meta = getMaterialMeta(material.file_type);
-  const IconComponent = meta.icon;
-  const isFile = material.type === 'file';
   const needsGate = material.require_lead_info && !gateCompleted;
 
-  return (
-    <>
-      <SEOHead title={`${material.title} | Juripass`} description={meta.description} noindex={true} />
-      <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(160deg, #2C3E7D 0%, #1e2d5e 60%, #162048 100%)' }}>
-        {/* Header */}
-        <header className="p-6 md:p-8 flex items-center justify-between">
-          <LogoJuripass variant="full" size="md" color="white" format="png" clickable={false} />
-          <a
-            href="https://www.juripass.com.br"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/40 hover:text-white/70 transition-colors text-sm flex items-center gap-1.5"
-          >
-            juripass.com.br
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </header>
-
-        {/* Main */}
-        <main className="flex-1 flex items-center justify-center px-4 pb-12">
-          <div className="max-w-lg w-full space-y-6">
-            {/* Card */}
-            <div className="bg-white/[0.06] backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-10 space-y-6">
-              {/* Icon + Badge */}
-              <div className="flex items-start justify-between">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${meta.color.split(' ')[0]}`}>
-                  <IconComponent className={`h-7 w-7 ${meta.color.split(' ')[1]}`} />
+  // Lead gate — only stop before showing material
+  if (needsGate) {
+    const meta = getMaterialMeta(material.file_type);
+    return (
+      <>
+        <SEOHead title={`${material.title} | Juripass`} description={meta.description} noindex={true} />
+        <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(160deg, #2C3E7D 0%, #1e2d5e 60%, #162048 100%)' }}>
+          <header className="p-6 md:p-8 flex items-center justify-between">
+            <LogoJuripass variant="full" size="md" color="white" format="png" clickable={false} />
+            <a href="https://www.juripass.com.br" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white/70 transition-colors text-sm flex items-center gap-1.5">
+              juripass.com.br <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </header>
+          <main className="flex-1 flex items-center justify-center px-4 pb-12">
+            <div className="max-w-lg w-full space-y-6">
+              <div className="bg-white/[0.06] backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-10 space-y-6">
+                <div className="space-y-2">
+                  <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight">{material.title}</h1>
+                  <p className="text-white/50 text-sm leading-relaxed">Para acessar este material, por favor informe seus dados abaixo.</p>
                 </div>
-                <Badge className={`${meta.color} border text-xs`}>
-                  {meta.category}
-                </Badge>
-              </div>
-
-              {/* Title + Description */}
-              <div className="space-y-2">
-                <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight">
-                  {material.title}
-                </h1>
-                <p className="text-white/50 text-sm leading-relaxed">
-                  {needsGate
-                    ? 'Para acessar este material, por favor informe seus dados abaixo.'
-                    : meta.description}
-                </p>
-              </div>
-
-              {/* Divider */}
-              <div className="border-t border-white/10" />
-
-              {needsGate ? (
-                /* Lead gate form */
+                <div className="border-t border-white/10" />
                 <div className="space-y-4">
                   <div className="space-y-3">
-                    <Input
-                      placeholder="Seu nome *"
-                      value={gateName}
-                      onChange={(e) => setGateName(e.target.value)}
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[#4A9FD8]"
-                      onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()}
-                    />
-                    <Input
-                      type="email"
-                      placeholder="Seu email *"
-                      value={gateEmail}
-                      onChange={(e) => setGateEmail(e.target.value)}
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[#4A9FD8]"
-                      onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()}
-                    />
+                    <Input placeholder="Seu nome *" value={gateName} onChange={(e) => setGateName(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[#4A9FD8]" onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()} />
+                    <Input type="email" placeholder="Seu email *" value={gateEmail} onChange={(e) => setGateEmail(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[#4A9FD8]" onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()} />
                   </div>
-                  {gateError && (
-                    <p className="text-red-400 text-xs">{gateError}</p>
-                  )}
-                  <Button
-                    size="lg"
-                    className="w-full bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
-                    onClick={handleGateSubmit}
-                    disabled={gateSubmitting}
-                  >
-                    {gateSubmitting ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <Send className="h-5 w-5" />
-                    )}
+                  {gateError && <p className="text-red-400 text-xs">{gateError}</p>}
+                  <Button size="lg" className="w-full bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2" onClick={handleGateSubmit} disabled={gateSubmitting}>
+                    {gateSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                     {gateSubmitting ? 'Verificando...' : 'Acessar Material'}
                   </Button>
                 </div>
-              ) : (
-                /* Normal actions */
-                <div className="flex flex-col sm:flex-row gap-3">
-                  {isFile ? (
-                    <Button
-                      size="lg"
-                      className="flex-1 bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
-                      asChild
-                    >
-                      <a href={material.url} target="_blank" rel="noopener noreferrer">
-                        <Download className="h-5 w-5" />
-                        Baixar Arquivo
-                      </a>
-                    </Button>
-                  ) : (
-                    <Button
-                      size="lg"
-                      className="flex-1 bg-[#4A9FD8] hover:bg-[#4A9FD8]/90 text-white gap-2"
-                      onClick={() => setShowViewer(true)}
-                    >
-                      <Eye className="h-5 w-5" />
-                      Visualizar Material
-                    </Button>
-                  )}
-                </div>
-              )}
+              </div>
+              <div className="flex items-center justify-center gap-6 text-white/30 text-xs">
+                <span className="flex items-center gap-1.5">
+                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
+                  Link seguro
+                </span>
+                <span>•</span>
+                <span>Acesso exclusivo</span>
+                <span>•</span>
+                <span>Juripass © {new Date().getFullYear()}</span>
+              </div>
             </div>
+          </main>
+        </div>
+      </>
+    );
+  }
 
-            {/* Trust strip */}
-            <div className="flex items-center justify-center gap-6 text-white/30 text-xs">
-              <span className="flex items-center gap-1.5">
-                <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
-                Link seguro
-              </span>
-              <span>•</span>
-              <span>Acesso exclusivo</span>
-              <span>•</span>
-              <span>Juripass © {new Date().getFullYear()}</span>
-            </div>
-          </div>
-        </main>
+  // Render material directly — no intermediate page
+  if (material.type === 'builtin') {
+    if (material.file_type === 'presentation') return <SlidesPresentation standalone />;
+    if (material.file_type === 'presentation-colaborador') return <SlidesColaborador standalone />;
+    if (material.file_type === 'one-pager') return <OnePager standalone />;
+    if (material.file_type === 'proposal') return <PropostaComercial standalone />;
+    if (material.file_type === 'posters') return <PostersViewer standalone />;
+    if (posterMap[material.file_type]) return <PostersViewer standalone posterId={posterMap[material.file_type]} />;
+  }
+
+  // File type already redirected in useEffect/handleGateSubmit; show fallback loader
+  if (material.type === 'file') {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">Redirecionando para o arquivo...</p>
       </div>
-    </>
-  );
+    );
+  }
+
+  return null;
 }
