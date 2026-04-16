@@ -462,33 +462,57 @@ export function LeadDetailPanel({
                       <p className="text-xs font-semibold text-muted-foreground">Escolha um material</p>
                     </div>
                     <div className="max-h-72 overflow-y-auto py-1">
-                      {availableMaterials.map((m) => (
-                        <div key={m.id} className="px-3 py-2 hover:bg-muted/50 transition-colors">
-                          <p className="text-sm font-medium truncate">{m.title}</p>
-                          {m.description && (
-                            <p className="text-xs text-muted-foreground truncate mb-1.5">{m.description}</p>
-                          )}
-                          <div className="flex gap-1.5 mt-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-7 text-xs"
-                              onClick={() => handleGenerateLink(m.id, false)}
-                            >
-                              <Copy className="h-3 w-3 mr-1" /> Copiar link
-                            </Button>
-                            {hasRealEmail && (
-                              <Button
-                                size="sm"
-                                className="h-7 text-xs"
-                                onClick={() => handleGenerateLink(m.id, true)}
-                              >
-                                <Send className="h-3 w-3 mr-1" /> Enviar email
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                      {(() => {
+                        const sentCounts = materialShares.reduce((acc: Record<string, number>, s: any) => {
+                          acc[s.material_id] = (acc[s.material_id] || 0) + 1;
+                          return acc;
+                        }, {});
+                        return availableMaterials.map((m) => {
+                          const count = sentCounts[m.id] || 0;
+                          const alreadySent = count > 0;
+                          return (
+                            <div key={m.id} className="px-3 py-2 hover:bg-muted/50 transition-colors">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex items-start gap-1.5 min-w-0 flex-1">
+                                  {alreadySent && (
+                                    <CheckCircle2 className="h-3.5 w-3.5 text-green-600 mt-0.5 shrink-0" />
+                                  )}
+                                  <p className={`text-sm font-medium truncate ${alreadySent ? 'text-muted-foreground' : ''}`}>
+                                    {m.title}
+                                  </p>
+                                </div>
+                                {alreadySent && (
+                                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-5 shrink-0">
+                                    Já enviado · {count}x
+                                  </Badge>
+                                )}
+                              </div>
+                              {m.description && (
+                                <p className="text-xs text-muted-foreground truncate mb-1.5 mt-0.5">{m.description}</p>
+                              )}
+                              <div className="flex gap-1.5 mt-1">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-7 text-xs"
+                                  onClick={() => handleGenerateLink(m.id, false)}
+                                >
+                                  <Copy className="h-3 w-3 mr-1" /> Copiar link
+                                </Button>
+                                {hasRealEmail && (
+                                  <Button
+                                    size="sm"
+                                    className="h-7 text-xs"
+                                    onClick={() => handleGenerateLink(m.id, true)}
+                                  >
+                                    <Send className="h-3 w-3 mr-1" /> {alreadySent ? 'Reenviar' : 'Enviar email'}
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        });
+                      })()}
                     </div>
                   </PopoverContent>
                 </Popover>
