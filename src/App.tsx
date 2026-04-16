@@ -54,10 +54,12 @@ const App = () => (
             <Route path="/materiais/apresentacao" element={<StandalonePresentation />} />
             <Route path="/materiais/one-pager" element={<StandaloneOnePager />} />
             <Route path="/site-anterior" element={<LegacyHome />} />
-            <Route path="/admin" element={<AdminHub />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminHub />} />
+              <Route path="leads" element={<AdminLeads />} />
+              <Route path="materiais" element={<AdminMaterials />} />
+            </Route>
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/leads" element={<AdminLeads />} />
-            <Route path="/admin/materiais" element={<AdminMaterials />} />
             <Route path="/m/:token" element={<MaterialViewer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
