@@ -138,10 +138,48 @@ export function LeadDetailPanel({
     setSaving(false);
     if (error) {
       toast({ title: 'Erro ao salvar', variant: 'destructive' });
-    } else {
-      toast({ title: 'Atualizado!' });
-      onUpdate();
+      return false;
     }
+    toast({ title: 'Atualizado!' });
+    onUpdate();
+    return true;
+  };
+
+  const startEditingContact = () => {
+    if (!lead) return;
+    setContactDraft({
+      name: lead.name || '',
+      email: isTempEmail(lead.email) ? '' : (lead.email || ''),
+      phone: lead.phone || '',
+      company: lead.company || '',
+      role_title: lead.role_title || '',
+    });
+    setEditingContact(true);
+  };
+
+  const saveContact = async () => {
+    const name = contactDraft.name.trim();
+    const company = contactDraft.company.trim();
+    const email = contactDraft.email.trim();
+    const phone = contactDraft.phone.trim();
+    const role_title = contactDraft.role_title.trim();
+
+    if (!name || !company) {
+      toast({ title: 'Nome e empresa são obrigatórios', variant: 'destructive' });
+      return;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast({ title: 'Email inválido', variant: 'destructive' });
+      return;
+    }
+    if (!lead) return;
+
+    const fields: Record<string, unknown> = { name, company, phone, role_title };
+    // Keep temp email if user left it blank; otherwise overwrite
+    if (email) fields.email = email;
+
+    const ok = await updateField(fields);
+    if (ok) setEditingContact(false);
   };
 
   const handleDelete = async () => {
