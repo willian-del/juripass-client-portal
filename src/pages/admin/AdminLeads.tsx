@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { LeadTable } from '@/components/admin/LeadTable';
 import { LeadKanban } from '@/components/admin/LeadKanban';
 import { LeadDetailPanel } from '@/components/admin/LeadDetailPanel';

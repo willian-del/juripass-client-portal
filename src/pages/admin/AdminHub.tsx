@@ -1,42 +1,18 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { LogoJuripass } from '@/components/ui/LogoJuripass';
-import { Users, FolderOpen, LogOut, Loader2 } from 'lucide-react';
+import { Users, FolderOpen, LogOut } from 'lucide-react';
 
 export default function AdminHub() {
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        navigate('/admin/login', { replace: true });
-      } else {
-        setChecking(false);
-      }
-    });
-  }, [navigate]);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/admin/login', { replace: true });
-  };
-
-  if (checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(160deg, #2C3E7D 0%, #1e2d5e 60%, #162048 100%)' }}>
-        <Loader2 className="h-8 w-8 animate-spin text-white/60" />
-      </div>
-    );
-  }
+  const { logout } = useAdminAuth();
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(160deg, #2C3E7D 0%, #1e2d5e 60%, #162048 100%)' }}>
       <header className="p-6 md:p-8 flex items-center justify-between">
         <LogoJuripass variant="full" size="md" color="white" format="png" clickable={false} />
         <button
-          onClick={handleLogout}
+          onClick={logout}
           className="text-white/40 hover:text-white/70 transition-colors text-sm flex items-center gap-1.5"
         >
           <LogOut className="h-4 w-4" />

@@ -22,6 +22,7 @@ const StandaloneOnePager = lazy(() => import("./components/avaliacao/OnePager").
 const GestaoRiscosPsicossociais = lazy(() => import("./pages/GestaoRiscosPsicossociais"));
 const NR01RiscosPsicossociais = lazy(() => import("./pages/NR01RiscosPsicossociais"));
 const GestaoRiscosHumanos = lazy(() => import("./pages/GestaoRiscosHumanos"));
+const AdminLayout = lazy(() => import("./layouts/AdminLayout"));
 const AdminHub = lazy(() => import("./pages/admin/AdminHub"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
