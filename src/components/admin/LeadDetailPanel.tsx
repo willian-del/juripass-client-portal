@@ -1,15 +1,24 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { PriorityBadge } from './PriorityBadge';
 import { FUNNEL_STAGES } from './FunnelBadge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Phone, FileText, Eye, Trash2, Mail, MessageSquare, Copy, Send, Link2 } from 'lucide-react';
+import {
+  Phone, FileText, Eye, Trash2, Mail, MessageSquare,
+  Copy, Send, Building2, User, Briefcase, Users,
+  MoreHorizontal, X, ClipboardCheck, Clock, CheckCircle2
+} from 'lucide-react';
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 
 interface Lead {
   id: string;
@@ -131,11 +140,7 @@ export function LeadDetailPanel({
     try {
       const shareUrl = `${window.location.origin}/m/${share.token}`;
       const { error } = await supabase.functions.invoke('send-material-email', {
-        body: {
-          materialId: share.material_id,
-          leadId: lead.id,
-          shareUrl,
-        },
+        body: { materialId: share.material_id, leadId: lead.id, shareUrl },
       });
       if (error) throw error;
       toast({ title: 'Email reenviado!' });
@@ -146,7 +151,6 @@ export function LeadDetailPanel({
     }
   };
 
-  // Sync notes when lead changes
   if (lead && notes !== (lead.notes || '') && !saving) {
     setNotes(lead.notes || '');
   }
@@ -154,251 +158,369 @@ export function LeadDetailPanel({
   if (!lead) return null;
 
   const hasRealEmail = !isTempEmail(lead.email);
-  const mailtoUrl = hasRealEmail
-    ? `mailto:${lead.email}?subject=${encodeURIComponent(`Juripass — ${lead.company}`)}&body=${encodeURIComponent(`Olá ${lead.name},\n\n`)}`
-    : '';
+  const initials = lead.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const createdDate = new Date(lead.created_at).toLocaleDateString('pt-BR');
+  const currentStage = lead.funnel_stage || 'novo';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl flex items-center gap-3">
-            {lead.name}
-            <PriorityBadge priority={lead.lead_priority || 'normal'} />
-            <span className="text-sm font-normal text-muted-foreground">Score: {lead.lead_score ?? 0}</span>
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent className="max-w-4xl p-0 overflow-hidden gap-0 [&>button]:hidden">
+        {/* ── HEADER ── */}
+        <div className="bg-primary/5 border-b px-8 py-6">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-14 w-14 text-lg">
+                <AvatarFallback className="bg-primary text-primary-foreground font-semibold text-lg">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight">{lead.name}</h2>
+                <div className="flex items-center gap-2 mt-1 text-muted-foreground">
+                  <Building2 className="h-4 w-4" />
+                  <span className="text-sm">{lead.company}</span>
+                  <span className="text-xs">·</span>
+                  <span className="text-sm">{lead.role_title || '—'}</span>
+                </div>
+              </div>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-          {/* LEFT COLUMN: Contact + Qualification + Funnel */}
-          <div className="space-y-5">
-            <Section title="Contato">
-              <Info label="Email" value={
-                hasRealEmail ? lead.email : undefined
-              } badge={!hasRealEmail ? 'Pendente' : undefined} />
-              <Info label="Telefone" value={lead.phone || '—'} />
-              <Info label="Empresa" value={lead.company} />
-              <Info label="Cargo" value={lead.role_title || '—'} />
-              {hasRealEmail && (
-                <a href={mailtoUrl} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className="mt-2 w-full">
-                    <Mail className="h-4 w-4 mr-1" /> Enviar email
+            <div className="flex items-center gap-2">
+              <PriorityBadge priority={lead.lead_priority || 'normal'} />
+              <Badge variant="outline" className="text-sm font-semibold px-3 py-1">
+                Score {lead.lead_score ?? 0}
+              </Badge>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreHorizontal className="h-4 w-4" />
                   </Button>
-                </a>
-              )}
-            </Section>
-
-            <Section title="Qualificação">
-              <Info label="Colaboradores" value={getLabel('employee_count', lead.employee_count)} />
-              <Info label="Área" value={getLabel('department', lead.department)} />
-              <Info label="Interesse" value={getLabel('interest', lead.interest)} />
-              <Info label="Riscos psicossociais" value={getLabel('evaluating_psychosocial', lead.evaluating_psychosocial)} />
-              <Info label="Benefício jurídico" value={getLabel('has_legal_benefit', lead.has_legal_benefit)} />
-            </Section>
-
-            {lead.message && (
-              <Section title="Mensagem">
-                <p className="text-sm">{lead.message}</p>
-              </Section>
-            )}
-
-            <Section title="Funil">
-              <Select
-                value={lead.funnel_stage || 'novo'}
-                onValueChange={(v) => updateField({ funnel_stage: v })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {FUNNEL_STAGES.map((s) => (
-                    <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {!lead.contacted_at && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 w-full"
-                  onClick={() => updateField({ contacted_at: new Date().toISOString() })}
-                  disabled={saving}
-                >
-                  <Phone className="h-4 w-4 mr-1" /> Marcar como contatado
-                </Button>
-              )}
-              {lead.contacted_at && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  Contatado em {new Date(lead.contacted_at).toLocaleDateString('pt-BR')}
-                </p>
-              )}
-            </Section>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:text-destructive">
+                        <Trash2 className="h-4 w-4 mr-2" /> Excluir lead
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Excluir lead?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Essa ação é irreversível. <strong>{lead.name}</strong> ({lead.company}) será excluído permanentemente.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                          Excluir
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onOpenChange(false)}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
-          {/* RIGHT COLUMN: Materials + Chat + Notes + Delete */}
-          <div className="space-y-5">
-            <Section title={`Materiais enviados (${materialShares.length})`}>
+          {/* ── FUNNEL PROGRESS ── */}
+          <div className="mt-5 flex items-center gap-1">
+            {FUNNEL_STAGES.map((stage, i) => {
+              const currentIndex = FUNNEL_STAGES.findIndex(s => s.value === currentStage);
+              const isActive = i <= currentIndex;
+              const isCurrent = stage.value === currentStage;
+              return (
+                <button
+                  key={stage.value}
+                  onClick={() => updateField({ funnel_stage: stage.value })}
+                  className={`
+                    flex-1 py-1.5 text-xs font-medium rounded-md transition-all
+                    ${isCurrent
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : isActive
+                        ? 'bg-primary/20 text-primary'
+                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                    }
+                  `}
+                >
+                  {stage.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── TABS CONTENT ── */}
+        <Tabs defaultValue="overview" className="flex-1">
+          <div className="px-8 pt-4 border-b">
+            <TabsList className="bg-transparent p-0 h-auto gap-6">
+              <TabsTrigger
+                value="overview"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 pb-3 text-sm"
+              >
+                Visão Geral
+              </TabsTrigger>
+              <TabsTrigger
+                value="materials"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 pb-3 text-sm"
+              >
+                Materiais ({materialShares.length})
+              </TabsTrigger>
+              <TabsTrigger
+                value="history"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 pb-3 text-sm"
+              >
+                Histórico
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <div className="px-8 py-6 max-h-[50vh] overflow-y-auto">
+            {/* ── VISÃO GERAL ── */}
+            <TabsContent value="overview" className="mt-0 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Contact Card */}
+                <div className="rounded-xl bg-muted/30 border p-5 space-y-4">
+                  <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
+                    <User className="h-4 w-4" /> Contato
+                  </h3>
+                  <div className="space-y-3">
+                    <InfoRow icon={<Mail className="h-4 w-4" />} label="Email">
+                      {hasRealEmail ? (
+                        <span className="font-medium">{lead.email}</span>
+                      ) : (
+                        <Badge variant="secondary" className="text-xs">Pendente</Badge>
+                      )}
+                    </InfoRow>
+                    <InfoRow icon={<Phone className="h-4 w-4" />} label="Telefone">
+                      <span className="font-medium">{lead.phone || '—'}</span>
+                    </InfoRow>
+                    <InfoRow icon={<Building2 className="h-4 w-4" />} label="Empresa">
+                      <span className="font-medium">{lead.company}</span>
+                    </InfoRow>
+                    <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Cargo">
+                      <span className="font-medium">{lead.role_title || '—'}</span>
+                    </InfoRow>
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    {hasRealEmail && (
+                      <a
+                        href={`mailto:${lead.email}?subject=${encodeURIComponent(`Juripass — ${lead.company}`)}&body=${encodeURIComponent(`Olá ${lead.name},\n\n`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1"
+                      >
+                        <Button variant="outline" size="sm" className="w-full">
+                          <Mail className="h-4 w-4 mr-1" /> Email
+                        </Button>
+                      </a>
+                    )}
+                    {!lead.contacted_at ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => updateField({ contacted_at: new Date().toISOString() })}
+                        disabled={saving}
+                      >
+                        <Phone className="h-4 w-4 mr-1" /> Marcar contatado
+                      </Button>
+                    ) : (
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
+                        Contatado em {new Date(lead.contacted_at).toLocaleDateString('pt-BR')}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Qualification Card */}
+                <div className="rounded-xl bg-muted/30 border p-5 space-y-4">
+                  <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4" /> Qualificação
+                  </h3>
+                  <div className="space-y-3">
+                    <InfoRow icon={<Users className="h-4 w-4" />} label="Colaboradores">
+                      <span className="font-medium">{getLabel('employee_count', lead.employee_count)}</span>
+                    </InfoRow>
+                    <InfoRow icon={<Building2 className="h-4 w-4" />} label="Área">
+                      <span className="font-medium">{getLabel('department', lead.department)}</span>
+                    </InfoRow>
+                    <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Interesse">
+                      <span className="font-medium">{getLabel('interest', lead.interest)}</span>
+                    </InfoRow>
+                    <InfoRow label="Riscos psicossociais">
+                      <span className="font-medium">{getLabel('evaluating_psychosocial', lead.evaluating_psychosocial)}</span>
+                    </InfoRow>
+                    <InfoRow label="Benefício jurídico">
+                      <span className="font-medium">{getLabel('has_legal_benefit', lead.has_legal_benefit)}</span>
+                    </InfoRow>
+                  </div>
+                </div>
+              </div>
+
+              {/* Message */}
+              {lead.message && (
+                <div className="rounded-xl bg-muted/30 border p-5">
+                  <h3 className="text-sm font-semibold text-primary mb-2">Mensagem do lead</h3>
+                  <p className="text-sm leading-relaxed">{lead.message}</p>
+                </div>
+              )}
+
+              {/* Notes */}
+              <div className="rounded-xl bg-muted/30 border p-5 space-y-3">
+                <h3 className="text-sm font-semibold text-primary">Notas internas</h3>
+                <Textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={3}
+                  placeholder="Adicionar notas sobre este lead..."
+                  className="resize-none bg-background"
+                />
+                <Button size="sm" onClick={() => updateField({ notes })} disabled={saving}>
+                  Salvar notas
+                </Button>
+              </div>
+
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <Clock className="h-3 w-3" /> Criado em {createdDate}
+              </p>
+            </TabsContent>
+
+            {/* ── MATERIAIS ── */}
+            <TabsContent value="materials" className="mt-0 space-y-4">
               {materialShares.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Nenhum material compartilhado.</p>
+                <div className="text-center py-12 text-muted-foreground">
+                  <FileText className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">Nenhum material compartilhado com este lead.</p>
+                </div>
               ) : (
-                <div className="space-y-3">
-                  {materialShares.map((s: any) => {
-                    const views = s.material_views?.length || 0;
-                    const material = s.sales_materials;
-                    return (
-                      <div key={s.id} className="border rounded-lg p-3 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <FileText className="h-4 w-4 text-primary shrink-0" />
-                            <div className="min-w-0">
-                              <span className="font-medium text-sm block truncate">{material?.title || '—'}</span>
-                              <span className="text-xs text-muted-foreground">
-                                {new Date(s.sent_at).toLocaleDateString('pt-BR')}
-                              </span>
-                            </div>
+                materialShares.map((s: any) => {
+                  const views = s.material_views?.length || 0;
+                  const material = s.sales_materials;
+                  return (
+                    <div key={s.id} className="rounded-xl border p-5 space-y-3 hover:bg-muted/20 transition-colors">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                            <FileText className="h-5 w-5 text-primary" />
                           </div>
-                          {views > 0 ? (
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full font-medium flex items-center gap-1 shrink-0">
-                              <Eye className="h-3 w-3" /> {views}x
-                            </span>
-                          ) : (
-                            <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full shrink-0">
-                              Não abriu
-                            </span>
-                          )}
+                          <div>
+                            <p className="font-semibold">{material?.title || '—'}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              Enviado em {new Date(s.sent_at).toLocaleDateString('pt-BR')}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex gap-2">
+                        {views > 0 ? (
+                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
+                            <Eye className="h-3 w-3 mr-1" /> {views} visualização{views > 1 ? 'ões' : ''}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">Não abriu</Badge>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => copyLink(s.token)}>
+                          <Copy className="h-3.5 w-3.5 mr-1.5" /> Copiar link
+                        </Button>
+                        {hasRealEmail && (
                           <Button
                             variant="outline"
                             size="sm"
-                            className="flex-1 text-xs h-7"
-                            onClick={() => copyLink(s.token)}
+                            onClick={() => resendEmail(s)}
+                            disabled={resending === s.id}
                           >
-                            <Copy className="h-3 w-3 mr-1" /> Copiar link
+                            <Send className="h-3.5 w-3.5 mr-1.5" />
+                            {resending === s.id ? 'Enviando...' : 'Reenviar email'}
                           </Button>
-                          {hasRealEmail && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex-1 text-xs h-7"
-                              onClick={() => resendEmail(s)}
-                              disabled={resending === s.id}
-                            >
-                              <Send className="h-3 w-3 mr-1" /> {resending === s.id ? 'Enviando...' : 'Reenviar'}
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </Section>
-
-            {chatConversations.length > 0 && (
-              <Section title="Histórico de Chat">
-                <div className="space-y-3">
-                  {chatConversations.map((conv: any) => {
-                    const msgs = (Array.isArray(conv.messages) ? conv.messages : []) as ChatMessage[];
-                    const userMsgs = msgs.filter((m) => m.role === 'user');
-                    const lastUserMsg = userMsgs[userMsgs.length - 1]?.content || '';
-                    return (
-                      <div key={conv.id} className="border rounded-md p-3 space-y-1">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <MessageSquare className="h-3 w-3" />
-                            {new Date(conv.created_at).toLocaleDateString('pt-BR')} — {msgs.length} msg
-                          </div>
-                        </div>
-                        {lastUserMsg && (
-                          <p className="text-sm text-foreground line-clamp-2">"{lastUserMsg}"</p>
                         )}
-                        <details className="text-xs">
-                          <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                            Ver conversa completa
-                          </summary>
-                          <div className="mt-2 space-y-1.5 max-h-60 overflow-y-auto">
-                            {msgs.map((m, i) => (
-                              <div key={i} className={`text-xs p-2 rounded ${m.role === 'user' ? 'bg-primary/10' : 'bg-muted'}`}>
-                                <span className="font-semibold">{m.role === 'user' ? 'Lead' : 'Bot'}:</span>{' '}
-                                {m.content}
-                              </div>
-                            ))}
-                          </div>
-                        </details>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })
+              )}
+            </TabsContent>
+
+            {/* ── HISTÓRICO ── */}
+            <TabsContent value="history" className="mt-0 space-y-4">
+              {chatConversations.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <MessageSquare className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">Nenhuma conversa registrada com este lead.</p>
                 </div>
-              </Section>
-            )}
-
-            <Section title="Notas internas">
-              <Textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                rows={4}
-                placeholder="Adicionar notas..."
-              />
-              <Button
-                size="sm"
-                className="mt-2"
-                onClick={() => updateField({ notes })}
-                disabled={saving}
-              >
-                Salvar notas
-              </Button>
-            </Section>
-
-            <div className="pt-4 border-t">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm" className="w-full" disabled={deleting}>
-                    <Trash2 className="h-4 w-4 mr-1" /> Excluir lead
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Excluir lead?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Essa ação é irreversível. O lead <strong>{lead.name}</strong> ({lead.company}) será excluído permanentemente.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                      Excluir
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+              ) : (
+                chatConversations.map((conv: any) => {
+                  const msgs = (Array.isArray(conv.messages) ? conv.messages : []) as ChatMessage[];
+                  const userMsgs = msgs.filter((m) => m.role === 'user');
+                  const lastUserMsg = userMsgs[userMsgs.length - 1]?.content || '';
+                  return (
+                    <div key={conv.id} className="rounded-xl border p-5 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <MessageSquare className="h-4 w-4" />
+                          {new Date(conv.created_at).toLocaleDateString('pt-BR')}
+                          <Badge variant="secondary" className="text-xs">{msgs.length} mensagens</Badge>
+                        </div>
+                      </div>
+                      {lastUserMsg && (
+                        <p className="text-sm leading-relaxed line-clamp-2 italic text-foreground/80">
+                          "{lastUserMsg}"
+                        </p>
+                      )}
+                      <details className="text-sm">
+                        <summary className="cursor-pointer text-primary hover:underline text-xs font-medium">
+                          Ver conversa completa
+                        </summary>
+                        <div className="mt-3 space-y-2 max-h-72 overflow-y-auto">
+                          {msgs.map((m, i) => (
+                            <div
+                              key={i}
+                              className={`text-sm p-3 rounded-lg ${
+                                m.role === 'user'
+                                  ? 'bg-primary/10 ml-4'
+                                  : 'bg-muted mr-4'
+                              }`}
+                            >
+                              <span className="font-semibold text-xs block mb-1">
+                                {m.role === 'user' ? 'Lead' : 'Bot'}
+                              </span>
+                              {m.content}
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    </div>
+                  );
+                })
+              )}
+            </TabsContent>
           </div>
-        </div>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function InfoRow({
+  icon,
+  label,
+  children,
+}: {
+  icon?: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">{title}</h4>
-      <div className="space-y-1">{children}</div>
-    </div>
-  );
-}
-
-function Info({ label, value, badge }: { label: string; value?: string; badge?: string }) {
-  return (
-    <div className="flex justify-between text-sm">
-      <span className="text-muted-foreground">{label}</span>
-      {badge ? (
-        <Badge variant="secondary" className="text-xs">{badge}</Badge>
-      ) : (
-        <span className="font-medium text-right">{value}</span>
-      )}
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+        {icon}
+        <span>{label}</span>
+      </div>
+      <div className="text-sm text-right">{children}</div>
     </div>
   );
 }
