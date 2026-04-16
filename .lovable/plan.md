@@ -1,30 +1,29 @@
 
 
-## Plano: Corrigir lentidão na navegação admin
+## Plano: Acesso direto ao material (sem tela intermediária)
 
-### Diagnóstico
-
-Dois problemas principais:
-
-**1. Chunk gigante no AdminMaterials** — As linhas 31-35 importam diretamente `SlidesPresentation`, `SlidesColaborador`, `OnePager`, `PostersViewer` e `PropostaComercial`. Esses componentes trazem consigo `html2canvas` e `jsPDF` (~1.5MB). Como o Vite agrupa tudo no mesmo chunk lazy, qualquer navegação para `/admin/materiais` baixa e parseia esse bundle inteiro, causando atraso de vários segundos. E como estão no mesmo grupo de rotas nested, isso pode afetar o carregamento inicial do layout.
-
-**2. useEffect re-executando** — `AdminAuthContext` tem `[navigate]` como dependência do `useEffect`. Em React Router v6, `useNavigate()` pode retornar uma referência instável, fazendo o efeito de auth re-executar em cada transição de rota, gerando novas chamadas `getSession()` + `user_roles`.
+### Problema
+Quando o lead abre o link compartilhado, ele vê uma landing page intermediária e precisa clicar em "Visualizar Material" para acessar o conteúdo. Isso adiciona fricção desnecessária e risco de perder o lead.
 
 ### Solução
 
-**1. Lazy import dos componentes pesados em AdminMaterials**
-- Trocar os imports estáticos (linhas 31-35) por `React.lazy()` para `SlidesPresentation`, `SlidesColaborador`, `OnePager`, `PostersViewer` e `PropostaComercial`
-- Envolver os usos desses componentes em `<Suspense>` com fallback de loading
-- Isso separa o chunk pesado (~1.5MB) e só carrega quando o usuário realmente abre uma preview
+Eliminar a tela intermediária: após carregar os dados do material, renderizar diretamente o conteúdo — exceto quando o gate de lead (nome/email) estiver ativo.
 
-**2. Estabilizar dependência do useEffect no AdminAuthContext**
-- Usar `useRef` para armazenar `navigate` e remover da lista de dependências do `useEffect`
-- Isso garante que o check de auth roda **exatamente uma vez** por sessão
+### Alteração em `src/pages/MaterialViewer.tsx`
 
-### Arquivos impactados
-1. `src/pages/admin/AdminMaterials.tsx` — lazy imports dos 5 componentes pesados
-2. `src/contexts/AdminAuthContext.tsx` — estabilizar navigate ref
+**Lógica atual:**
+1. Fetch material → mostra landing page → clica "Visualizar" → `setShowViewer(true)` → renderiza componente
 
-### Resultado esperado
-Transições entre Hub → CRM → Materiais serão instantâneas (sem re-auth, sem carregar bundles pesados desnecessariamente).
+**Nova lógica:**
+1. Fetch material → se `require_lead_info` ativo e não preenchido → mostra gate (formulário nome/email)
+2. Caso contrário → renderiza o componente diretamente (sem landing page intermediária)
+3. Para materiais do tipo `file` (download) → redireciona direto para a URL do arquivo
+
+Na prática:
+- Remover o estado `showViewer` 
+- Após o fetch bem-sucedido, se não precisa de gate, renderizar imediatamente o componente builtin ou redirecionar para o URL do arquivo
+- Manter a tela de gate (formulário nome/email) como único ponto de parada antes do material
+
+### Arquivo impactado
+1. `src/pages/MaterialViewer.tsx` — simplificar fluxo removendo tela intermediária
 
