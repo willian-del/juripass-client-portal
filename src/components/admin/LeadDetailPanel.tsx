@@ -14,11 +14,12 @@ import { useToast } from '@/hooks/use-toast';
 import {
   Phone, FileText, Eye, Trash2, Mail, MessageSquare,
   Copy, Send, Building2, User, Briefcase, Users,
-  MoreHorizontal, X, ClipboardCheck, Clock, CheckCircle2
+  MoreHorizontal, X, ClipboardCheck, Clock, CheckCircle2, Plus
 } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Lead {
   id: string;
@@ -79,11 +80,23 @@ export function LeadDetailPanel({
   const [materialShares, setMaterialShares] = useState<any[]>([]);
   const [chatConversations, setChatConversations] = useState<any[]>([]);
   const [resending, setResending] = useState<string | null>(null);
+  const [availableMaterials, setAvailableMaterials] = useState<any[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const refreshShares = async (leadId: string) => {
+    const { data } = await supabase
+      .from('material_shares')
+      .select('id, token, sent_at, material_id, sales_materials(title, file_type), material_views(id, viewed_at)')
+      .eq('lead_id', leadId)
+      .order('sent_at', { ascending: false });
+    setMaterialShares(data || []);
+  };
 
   useEffect(() => {
     if (!lead) return;
     const fetchData = async () => {
-      const [sharesRes, chatsRes] = await Promise.all([
+      const [sharesRes, chatsRes, materialsRes] = await Promise.all([
         supabase
           .from('material_shares')
           .select('id, token, sent_at, material_id, sales_materials(title, file_type), material_views(id, viewed_at)')
@@ -94,9 +107,14 @@ export function LeadDetailPanel({
           .select('id, messages, created_at, updated_at, mode')
           .eq('lead_id', lead.id)
           .order('created_at', { ascending: false }),
+        supabase
+          .from('sales_materials')
+          .select('id, title, file_type, description')
+          .order('created_at', { ascending: false }),
       ]);
       setMaterialShares(sharesRes.data || []);
       setChatConversations(chatsRes.data || []);
+      setAvailableMaterials(materialsRes.data || []);
     };
     fetchData();
   }, [lead]);
@@ -148,6 +166,38 @@ export function LeadDetailPanel({
       toast({ title: 'Erro ao reenviar email', variant: 'destructive' });
     } finally {
       setResending(null);
+    }
+  };
+
+  const handleGenerateLink = async (materialId: string, sendEmail: boolean) => {
+    if (!lead) return;
+    setGenerating(true);
+    setPopoverOpen(false);
+    try {
+      const { data: share, error } = await supabase
+        .from('material_shares')
+        .insert({ lead_id: lead.id, material_id: materialId })
+        .select('id, token')
+        .single();
+      if (error || !share) throw error || new Error('insert failed');
+
+      const shareUrl = `${window.location.origin}/m/${share.token}`;
+      await refreshShares(lead.id);
+
+      if (sendEmail && hasRealEmail) {
+        const { error: mailErr } = await supabase.functions.invoke('send-material-email', {
+          body: { materialId, leadId: lead.id, shareUrl },
+        });
+        if (mailErr) throw mailErr;
+        toast({ title: 'Link gerado e email enviado!', description: shareUrl });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        toast({ title: 'Link gerado e copiado!', description: shareUrl });
+      }
+    } catch {
+      toast({ title: 'Erro ao gerar link', variant: 'destructive' });
+    } finally {
+      setGenerating(false);
     }
   };
 
@@ -392,6 +442,58 @@ export function LeadDetailPanel({
 
             {/* ── MATERIAIS ── */}
             <TabsContent value="materials" className="mt-0 space-y-4">
+              {/* Generate new link */}
+              <div className="flex items-center justify-between rounded-xl border border-dashed bg-muted/20 p-4">
+                <div>
+                  <p className="text-sm font-semibold">Enviar novo material</p>
+                  <p className="text-xs text-muted-foreground">
+                    Gere um link rastreável para este lead sem sair do card.
+                  </p>
+                </div>
+                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button size="sm" disabled={generating || availableMaterials.length === 0}>
+                      <Plus className="h-4 w-4 mr-1.5" />
+                      {generating ? 'Gerando...' : 'Gerar novo link'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-80 p-0">
+                    <div className="px-3 py-2 border-b">
+                      <p className="text-xs font-semibold text-muted-foreground">Escolha um material</p>
+                    </div>
+                    <div className="max-h-72 overflow-y-auto py-1">
+                      {availableMaterials.map((m) => (
+                        <div key={m.id} className="px-3 py-2 hover:bg-muted/50 transition-colors">
+                          <p className="text-sm font-medium truncate">{m.title}</p>
+                          {m.description && (
+                            <p className="text-xs text-muted-foreground truncate mb-1.5">{m.description}</p>
+                          )}
+                          <div className="flex gap-1.5 mt-1">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs"
+                              onClick={() => handleGenerateLink(m.id, false)}
+                            >
+                              <Copy className="h-3 w-3 mr-1" /> Copiar link
+                            </Button>
+                            {hasRealEmail && (
+                              <Button
+                                size="sm"
+                                className="h-7 text-xs"
+                                onClick={() => handleGenerateLink(m.id, true)}
+                              >
+                                <Send className="h-3 w-3 mr-1" /> Enviar email
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+
               {materialShares.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <FileText className="h-10 w-10 mx-auto mb-3 opacity-40" />
