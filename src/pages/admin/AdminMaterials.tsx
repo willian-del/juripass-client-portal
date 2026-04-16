@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -397,9 +397,7 @@ export default function AdminMaterials() {
     toast({ title: 'Link copiado!' });
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
+  const { logout: handleLogout } = useAdminAuth();
 
   // Template CRUD
   const openNewTemplate = () => {
@@ -503,12 +501,12 @@ export default function AdminMaterials() {
   }
 
   return (
-    <AdminAuthGuard>
+    <>
       <div className="min-h-screen bg-muted/20">
         <header className="border-b bg-card px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/admin/leads')}>
-              <ArrowLeft className="h-4 w-4 mr-1" /> CRM
+            <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
+              <ArrowLeft className="h-4 w-4 mr-1" /> Painel
             </Button>
             <h1 className="text-lg font-bold">Materiais Comerciais</h1>
           </div>
@@ -931,6 +929,6 @@ export default function AdminMaterials() {
           </DialogContent>
         </Dialog>
       </div>
-    </AdminAuthGuard>
+    </>
   );
 }
