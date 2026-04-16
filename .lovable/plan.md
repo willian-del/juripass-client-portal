@@ -1,35 +1,42 @@
 
 
-## Plano: Hub Administrativo + Rota `/admin`
+## Plano: Otimizar navegacao admin (eliminar re-auth e melhorar transicoes)
 
-### O que será feito
+### Diagnostico
 
-Criar uma página de entrada do painel administrativo (`/admin`) com dois cards lado a lado — **CRM** e **Materiais** — seguindo o mesmo design system da landing page de materiais (gradiente azul escuro, cards glassmorphism, logo branca).
+A lentidao vem de **3 problemas**:
 
-### Detalhes
+1. **Auth re-check em cada pagina**: `AdminAuthGuard` faz `getSession()` + query `user_roles` toda vez que voce navega entre CRM, Materiais e Hub. Isso adiciona ~500-1000ms por transicao.
+2. **AdminHub** tambem faz seu proprio `getSession()` independente.
+3. **AdminMaterials** dispara 4 fetches simultaneos (materials, shares, leads, templates) no mount — sem cache.
 
-**Novo arquivo:** `src/pages/admin/AdminHub.tsx`
-- Layout fullscreen com gradiente Juripass (`#2C3E7D → #162048`)
-- Header com logo branca + botão "Sair"
-- Título "Painel Administrativo" centralizado
-- Grid de 2 cards com ícones (`Users` para CRM, `FolderOpen` para Materiais), cada um navegando para `/admin/leads` e `/admin/materiais`
-- Verifica sessão ativa; redireciona para `/admin/login` se não autenticado
-- Footer discreto
+### Solucao
 
-**Alterações em `src/App.tsx`:**
-- Adicionar lazy import para `AdminHub`
-- Adicionar rota `/admin` apontando para `AdminHub`
+**1. Criar `AdminAuthContext`** (`src/contexts/AdminAuthContext.tsx`)
+- Context React que verifica auth/role **uma unica vez** e mantém o estado em memoria.
+- Expoe `authorized`, `loading` e `logout()`.
+- Escuta `onAuthStateChange` para invalidar se sessao expirar.
 
-**Alteração em `src/pages/admin/AdminLogin.tsx`:**
-- Mudar redirect pós-login de `/admin/leads` para `/admin` (o hub)
+**2. Criar `AdminLayout`** (`src/layouts/AdminLayout.tsx`)
+- Layout wrapper com `<Outlet />` que envolve todas as rotas `/admin/*`.
+- Renderiza o `AdminAuthProvider` uma vez, eliminando re-checks.
 
-**Sobre o domínio `crm.juripass.com.br`:**
-- Isso requer configuração DNS no seu provedor de domínio (um registro CNAME ou A apontando para o mesmo servidor)
-- Dentro do Lovable, você pode configurar isso em **Project Settings → Domains**
-- Depois de configurado, o acesso via `crm.juripass.com.br/admin` cairá direto no hub
+**3. Atualizar rotas em `App.tsx`**
+- Agrupar `/admin`, `/admin/leads` e `/admin/materiais` dentro de um `<Route element={<AdminLayout />}>` com rotas filhas.
+
+**4. Simplificar paginas admin**
+- **AdminHub**: Remover check de sessao proprio, usar `useAdminAuth()` para logout.
+- **AdminLeads**: Remover `<AdminAuthGuard>` wrapper, usar `useAdminAuth()` para logout.
+- **AdminMaterials**: Remover `<AdminAuthGuard>` wrapper.
 
 ### Arquivos impactados
-1. `src/pages/admin/AdminHub.tsx` (novo)
-2. `src/App.tsx` (nova rota)
-3. `src/pages/admin/AdminLogin.tsx` (redirect)
+1. `src/contexts/AdminAuthContext.tsx` — **novo**
+2. `src/layouts/AdminLayout.tsx` — **novo**
+3. `src/App.tsx` — reestruturar rotas admin como nested
+4. `src/pages/admin/AdminHub.tsx` — remover auth check duplicado
+5. `src/pages/admin/AdminLeads.tsx` — remover AdminAuthGuard, usar context
+6. `src/pages/admin/AdminMaterials.tsx` — remover AdminAuthGuard
+
+### Resultado esperado
+Navegacao entre paginas admin sera instantanea (sem loading "Carregando..." a cada clique).
 
