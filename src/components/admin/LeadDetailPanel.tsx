@@ -384,57 +384,149 @@ export function LeadDetailPanel({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Contact Card */}
                 <div className="rounded-xl bg-muted/30 border p-5 space-y-4">
-                  <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <User className="h-4 w-4" /> Contato
-                  </h3>
-                  <div className="space-y-3">
-                    <InfoRow icon={<Mail className="h-4 w-4" />} label="Email">
-                      {hasRealEmail ? (
-                        <span className="font-medium">{lead.email}</span>
-                      ) : (
-                        <Badge variant="secondary" className="text-xs">Pendente</Badge>
-                      )}
-                    </InfoRow>
-                    <InfoRow icon={<Phone className="h-4 w-4" />} label="Telefone">
-                      <span className="font-medium">{lead.phone || '—'}</span>
-                    </InfoRow>
-                    <InfoRow icon={<Building2 className="h-4 w-4" />} label="Empresa">
-                      <span className="font-medium">{lead.company}</span>
-                    </InfoRow>
-                    <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Cargo">
-                      <span className="font-medium">{lead.role_title || '—'}</span>
-                    </InfoRow>
-                  </div>
-                  <div className="flex gap-2 pt-2">
-                    {hasRealEmail && (
-                      <a
-                        href={`mailto:${lead.email}?subject=${encodeURIComponent(`Juripass — ${lead.company}`)}&body=${encodeURIComponent(`Olá ${lead.name},\n\n`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1"
-                      >
-                        <Button variant="outline" size="sm" className="w-full">
-                          <Mail className="h-4 w-4 mr-1" /> Email
-                        </Button>
-                      </a>
-                    )}
-                    {!lead.contacted_at ? (
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
+                      <User className="h-4 w-4" /> Contato
+                    </h3>
+                    {!editingContact && (
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
-                        className="flex-1"
-                        onClick={() => updateField({ contacted_at: new Date().toISOString() })}
-                        disabled={saving}
+                        className="h-7 px-2 text-xs"
+                        onClick={startEditingContact}
                       >
-                        <Phone className="h-4 w-4 mr-1" /> Marcar contatado
+                        <Pencil className="h-3.5 w-3.5 mr-1" /> Editar
                       </Button>
-                    ) : (
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
-                        Contatado em {new Date(lead.contacted_at).toLocaleDateString('pt-BR')}
-                      </div>
                     )}
                   </div>
+
+                  {editingContact ? (
+                    <div className="space-y-3">
+                      <div className="space-y-1">
+                        <Label htmlFor="edit-name" className="text-xs text-muted-foreground">Nome *</Label>
+                        <Input
+                          id="edit-name"
+                          value={contactDraft.name}
+                          onChange={(e) => setContactDraft(d => ({ ...d, name: e.target.value }))}
+                          maxLength={100}
+                          className="h-9"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="edit-email" className="text-xs text-muted-foreground">Email</Label>
+                        <Input
+                          id="edit-email"
+                          type="email"
+                          placeholder="email@empresa.com"
+                          value={contactDraft.email}
+                          onChange={(e) => setContactDraft(d => ({ ...d, email: e.target.value }))}
+                          maxLength={255}
+                          className="h-9"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="edit-phone" className="text-xs text-muted-foreground">Telefone</Label>
+                        <Input
+                          id="edit-phone"
+                          type="tel"
+                          value={contactDraft.phone}
+                          onChange={(e) => setContactDraft(d => ({ ...d, phone: e.target.value }))}
+                          maxLength={30}
+                          className="h-9"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="edit-company" className="text-xs text-muted-foreground">Empresa *</Label>
+                        <Input
+                          id="edit-company"
+                          value={contactDraft.company}
+                          onChange={(e) => setContactDraft(d => ({ ...d, company: e.target.value }))}
+                          maxLength={150}
+                          className="h-9"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="edit-role" className="text-xs text-muted-foreground">Cargo</Label>
+                        <Input
+                          id="edit-role"
+                          value={contactDraft.role_title}
+                          onChange={(e) => setContactDraft(d => ({ ...d, role_title: e.target.value }))}
+                          maxLength={100}
+                          className="h-9"
+                        />
+                      </div>
+                      <div className="flex gap-2 pt-1">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => setEditingContact(false)}
+                          disabled={saving}
+                        >
+                          Cancelar
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="flex-1"
+                          onClick={saveContact}
+                          disabled={saving}
+                        >
+                          {saving ? 'Salvando...' : 'Salvar'}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-3">
+                        <InfoRow icon={<Mail className="h-4 w-4" />} label="Email">
+                          {hasRealEmail ? (
+                            <span className="font-medium">{lead.email}</span>
+                          ) : (
+                            <Badge variant="secondary" className="text-xs">Pendente</Badge>
+                          )}
+                        </InfoRow>
+                        <InfoRow icon={<Phone className="h-4 w-4" />} label="Telefone">
+                          <span className="font-medium">{lead.phone || '—'}</span>
+                        </InfoRow>
+                        <InfoRow icon={<Building2 className="h-4 w-4" />} label="Empresa">
+                          <span className="font-medium">{lead.company}</span>
+                        </InfoRow>
+                        <InfoRow icon={<Briefcase className="h-4 w-4" />} label="Cargo">
+                          <span className="font-medium">{lead.role_title || '—'}</span>
+                        </InfoRow>
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        {hasRealEmail && (
+                          <a
+                            href={`mailto:${lead.email}?subject=${encodeURIComponent(`Juripass — ${lead.company}`)}&body=${encodeURIComponent(`Olá ${lead.name},\n\n`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1"
+                          >
+                            <Button variant="outline" size="sm" className="w-full">
+                              <Mail className="h-4 w-4 mr-1" /> Email
+                            </Button>
+                          </a>
+                        )}
+                        {!lead.contacted_at ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                            onClick={() => updateField({ contacted_at: new Date().toISOString() })}
+                            disabled={saving}
+                          >
+                            <Phone className="h-4 w-4 mr-1" /> Marcar contatado
+                          </Button>
+                        ) : (
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
+                            Contatado em {new Date(lead.contacted_at).toLocaleDateString('pt-BR')}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Qualification Card */}
