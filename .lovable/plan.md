@@ -1,29 +1,35 @@
 
 
-## Plano: Acesso direto ao material (sem tela intermediária)
+## Plano: Melhorar card de oportunidade no CRM
 
-### Problema
-Quando o lead abre o link compartilhado, ele vê uma landing page intermediária e precisa clicar em "Visualizar Material" para acessar o conteúdo. Isso adiciona fricção desnecessária e risco de perder o lead.
+### Problemas identificados
 
-### Solução
+1. **Painel muito estreito** — Usa `Sheet` (sidebar lateral `max-w-md` ~448px), espremido no canto da tela
+2. **Email temporário confuso** — Quando o lead é criado rápido (sem email), gera `pendente-{timestamp}@juripass.temp`, que aparece como se fosse o email real
+3. **Links de materiais sem ação** — A seção "Materiais enviados" mostra o material mas não permite copiar o link ou reenviar
 
-Eliminar a tela intermediária: após carregar os dados do material, renderizar diretamente o conteúdo — exceto quando o gate de lead (nome/email) estiver ativo.
+### Solucao
 
-### Alteração em `src/pages/MaterialViewer.tsx`
+**1. Trocar Sheet por Dialog centralizado e largo**
+- Substituir o `Sheet` (sidebar) por um `Dialog` centralizado com `max-w-2xl` (~672px)
+- Layout em duas colunas no desktop: esquerda (contato + qualificacao + funil) e direita (materiais + chat + notas)
+- Mais espaço para respirar, sem sensacao de aperto
 
-**Lógica atual:**
-1. Fetch material → mostra landing page → clica "Visualizar" → `setShowViewer(true)` → renderiza componente
+**2. Tratar email temporário**
+- Na exibicao do email, detectar o padrao `pendente-*@juripass.temp` e mostrar "Pendente" com badge em vez do email cru
+- No formulario de criacao rapida de lead (AdminMaterials), tornar mais claro que o email esta vazio
 
-**Nova lógica:**
-1. Fetch material → se `require_lead_info` ativo e não preenchido → mostra gate (formulário nome/email)
-2. Caso contrário → renderiza o componente diretamente (sem landing page intermediária)
-3. Para materiais do tipo `file` (download) → redireciona direto para a URL do arquivo
+**3. Adicionar acoes nos materiais enviados**
+- Botao "Copiar link" ao lado de cada material compartilhado (gera a URL `/m/{token}`)
+- Botao "Reenviar" que chama a edge function `send-material-email` novamente
+- Mostrar a URL completa de forma copiavel
 
-Na prática:
-- Remover o estado `showViewer` 
-- Após o fetch bem-sucedido, se não precisa de gate, renderizar imediatamente o componente builtin ou redirecionar para o URL do arquivo
-- Manter a tela de gate (formulário nome/email) como único ponto de parada antes do material
+### Arquivos impactados
+1. `src/components/admin/LeadDetailPanel.tsx` — refactor completo: Dialog em vez de Sheet, layout 2 colunas, tratamento de email temp, botoes de copiar/reenviar link
+2. `src/pages/admin/AdminMaterials.tsx` — ajustar label do campo email no quick lead (indicar que sera "Pendente" se vazio)
 
-### Arquivo impactado
-1. `src/pages/MaterialViewer.tsx` — simplificar fluxo removendo tela intermediária
+### Resultado esperado
+- Card de lead amplo e organizado em 2 colunas
+- Email temporario aparece como "Pendente" em vez de string confusa
+- Links de materiais com botoes de copiar e reenviar direto do card
 
