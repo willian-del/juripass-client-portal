@@ -14,11 +14,12 @@ import { useToast } from '@/hooks/use-toast';
 import {
   Phone, FileText, Eye, Trash2, Mail, MessageSquare,
   Copy, Send, Building2, User, Briefcase, Users,
-  MoreHorizontal, X, ClipboardCheck, Clock, CheckCircle2
+  MoreHorizontal, X, ClipboardCheck, Clock, CheckCircle2, Plus
 } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Lead {
   id: string;
