@@ -442,6 +442,58 @@ export function LeadDetailPanel({
 
             {/* ── MATERIAIS ── */}
             <TabsContent value="materials" className="mt-0 space-y-4">
+              {/* Generate new link */}
+              <div className="flex items-center justify-between rounded-xl border border-dashed bg-muted/20 p-4">
+                <div>
+                  <p className="text-sm font-semibold">Enviar novo material</p>
+                  <p className="text-xs text-muted-foreground">
+                    Gere um link rastreável para este lead sem sair do card.
+                  </p>
+                </div>
+                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button size="sm" disabled={generating || availableMaterials.length === 0}>
+                      <Plus className="h-4 w-4 mr-1.5" />
+                      {generating ? 'Gerando...' : 'Gerar novo link'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-80 p-0">
+                    <div className="px-3 py-2 border-b">
+                      <p className="text-xs font-semibold text-muted-foreground">Escolha um material</p>
+                    </div>
+                    <div className="max-h-72 overflow-y-auto py-1">
+                      {availableMaterials.map((m) => (
+                        <div key={m.id} className="px-3 py-2 hover:bg-muted/50 transition-colors">
+                          <p className="text-sm font-medium truncate">{m.title}</p>
+                          {m.description && (
+                            <p className="text-xs text-muted-foreground truncate mb-1.5">{m.description}</p>
+                          )}
+                          <div className="flex gap-1.5 mt-1">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs"
+                              onClick={() => handleGenerateLink(m.id, false)}
+                            >
+                              <Copy className="h-3 w-3 mr-1" /> Copiar link
+                            </Button>
+                            {hasRealEmail && (
+                              <Button
+                                size="sm"
+                                className="h-7 text-xs"
+                                onClick={() => handleGenerateLink(m.id, true)}
+                              >
+                                <Send className="h-3 w-3 mr-1" /> Enviar email
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+
               {materialShares.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <FileText className="h-10 w-10 mx-auto mb-3 opacity-40" />
