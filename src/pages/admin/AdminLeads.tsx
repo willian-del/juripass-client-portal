@@ -67,9 +67,7 @@ export default function AdminLeads() {
     setDetailOpen(true);
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
+  const { logout: handleLogout } = useAdminAuth();
 
   const handleBulkDelete = async () => {
     if (selectedIds.size === 0) return;
@@ -87,7 +85,7 @@ export default function AdminLeads() {
   };
 
   return (
-    <AdminAuthGuard>
+    <>
       <div className="min-h-screen bg-muted/20">
         <header className="border-b bg-card px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -229,6 +227,6 @@ export default function AdminLeads() {
           lead={selectedLead}
         />
       </div>
-    </AdminAuthGuard>
+    </>
   );
 }
