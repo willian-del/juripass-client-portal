@@ -1,35 +1,39 @@
 
 
-## Plano: Melhorar card de oportunidade no CRM
+## Plano: Redesign do card de oportunidade no CRM
 
-### Problemas identificados
+### Problema
+O dialog atual (`max-w-2xl`) ainda parece compacto e denso — textos pequenos, seções apertadas, sem hierarquia visual clara.
 
-1. **Painel muito estreito** — Usa `Sheet` (sidebar lateral `max-w-md` ~448px), espremido no canto da tela
-2. **Email temporário confuso** — Quando o lead é criado rápido (sem email), gera `pendente-{timestamp}@juripass.temp`, que aparece como se fosse o email real
-3. **Links de materiais sem ação** — A seção "Materiais enviados" mostra o material mas não permite copiar o link ou reenviar
+### Solução
 
-### Solucao
+Redesign completo do `LeadDetailPanel.tsx` com foco em respiração, hierarquia e usabilidade:
 
-**1. Trocar Sheet por Dialog centralizado e largo**
-- Substituir o `Sheet` (sidebar) por um `Dialog` centralizado com `max-w-2xl` (~672px)
-- Layout em duas colunas no desktop: esquerda (contato + qualificacao + funil) e direita (materiais + chat + notas)
-- Mais espaço para respirar, sem sensacao de aperto
+**1. Dialog maior e mais espaçoso**
+- Aumentar para `max-w-4xl` (~896px) com padding generoso (`p-8`)
+- Header com avatar/iniciais do lead, nome grande, empresa como subtítulo, badges de prioridade e score com mais destaque
 
-**2. Tratar email temporário**
-- Na exibicao do email, detectar o padrao `pendente-*@juripass.temp` e mostrar "Pendente" com badge em vez do email cru
-- No formulario de criacao rapida de lead (AdminMaterials), tornar mais claro que o email esta vazio
+**2. Layout em abas (Tabs) em vez de scroll longo**
+- **Aba "Visão Geral"**: Contato + Qualificação em cards separados com ícones, layout em grid com mais espaço
+- **Aba "Materiais"**: Lista de materiais enviados com cards maiores, botões de ação mais visíveis
+- **Aba "Histórico"**: Chat e notas internas com mais espaço para leitura
+- Isso elimina o scroll infinito e organiza a informação por contexto
 
-**3. Adicionar acoes nos materiais enviados**
-- Botao "Copiar link" ao lado de cada material compartilhado (gera a URL `/m/{token}`)
-- Botao "Reenviar" que chama a edge function `send-material-email` novamente
-- Mostrar a URL completa de forma copiavel
+**3. Melhorias visuais nos componentes**
+- `Info` items com ícones pequenos e padding maior entre linhas
+- Cards de material com layout mais claro (título, data, views em linha, ações em linha separada)
+- Seção de Funil com visual de progresso (steps/dots) em vez de dropdown isolado
+- Botão "Excluir" movido para um menu discreto (dropdown "⋯") no header em vez de botão vermelho gigante no fim
+- Notas internas com auto-save ou feedback visual mais sutil
 
-### Arquivos impactados
-1. `src/components/admin/LeadDetailPanel.tsx` — refactor completo: Dialog em vez de Sheet, layout 2 colunas, tratamento de email temp, botoes de copiar/reenviar link
-2. `src/pages/admin/AdminMaterials.tsx` — ajustar label do campo email no quick lead (indicar que sera "Pendente" se vazio)
+**4. Cores e tipografia**
+- Títulos de seção maiores e com cor primária
+- Separadores visuais entre seções
+- Background sutil nos cards internos (`bg-muted/30`)
+
+### Arquivo impactado
+1. `src/components/admin/LeadDetailPanel.tsx` — redesign completo
 
 ### Resultado esperado
-- Card de lead amplo e organizado em 2 colunas
-- Email temporario aparece como "Pendente" em vez de string confusa
-- Links de materiais com botoes de copiar e reenviar direto do card
+Card de lead amplo, limpo, com abas para navegar entre contextos, hierarquia visual clara e ações acessíveis sem parecer apertado.
 
