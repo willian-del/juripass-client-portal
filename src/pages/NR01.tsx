@@ -101,8 +101,9 @@ export default function NR01() {
   return (
     <>
       <SEOHead
-        title="Nova NR-01 e Riscos Psicossociais — Juripass | Como Adequar Sua Empresa"
-        description="Entenda o que muda com a Nova NR-01 sobre riscos psicossociais no trabalho. Saiba como um programa de acolhimento jurídico ajuda sua empresa na conformidade e prevenção."
+        title="Nova NR-01 e Riscos Psicossociais | Juripass"
+        description="O que muda com a Nova NR-01 sobre riscos psicossociais. Como o acolhimento jurídico ajuda na conformidade e prevenção."
+        type="article"
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 

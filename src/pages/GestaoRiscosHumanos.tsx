@@ -57,8 +57,9 @@ export default function GestaoRiscosHumanos() {
   return (
     <>
       <SEOHead
-        title="Gestão de Riscos Humanos para RH — Juripass | Prevenção e Suporte"
-        description="Como o RH pode estruturar a gestão de riscos humanos: problemas pessoais, conflitos familiares, riscos psicossociais e a importância de canais de orientação."
+        title="Gestão de Riscos Humanos para RH | Juripass"
+        description="Como o RH estrutura a gestão de riscos humanos: problemas pessoais, conflitos familiares e canais de orientação."
+        type="article"
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 

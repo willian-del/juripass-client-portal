@@ -56,8 +56,8 @@ export default function GestaoRiscosPsicossociais() {
   return (
     <>
       <SEOHead
-        title="Gestão de Riscos Psicossociais na NR-01 — Juripass | Guia para Empresas"
-        description="Entenda o que são riscos psicossociais, o que muda com a NR-01 e como empresas podem estruturar a gestão desses riscos. Guia prático para profissionais de RH."
+        title="Gestão de Riscos Psicossociais na NR-01 | Juripass"
+        description="O que são riscos psicossociais, o que muda com a NR-01 e como estruturar essa gestão. Guia prático para o RH."
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 
