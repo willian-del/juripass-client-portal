@@ -9,6 +9,7 @@ interface SEOHeadProps {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
   keywords?: string;
+  type?: 'website' | 'article';
 }
 
 const BASE_URL = 'https://www.juripass.com.br';
