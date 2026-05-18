@@ -9,11 +9,12 @@ interface SEOHeadProps {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
   keywords?: string;
+  type?: 'website' | 'article';
 }
 
 const BASE_URL = 'https://www.juripass.com.br';
 
-export function SEOHead({ title, description, canonical, ogImage, jsonLd, noindex, keywords }: SEOHeadProps) {
+export function SEOHead({ title, description, canonical, ogImage, jsonLd, noindex, keywords, type = 'website' }: SEOHeadProps) {
   const { pathname } = useLocation();
   const url = canonical || `${BASE_URL}${pathname}`;
   const image = ogImage || `${BASE_URL}/images/branding/juripass-logo-full-white.png`;
@@ -42,7 +43,7 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd, noinde
     setMeta('property', 'og:image', image);
     setMeta('property', 'og:image:width', '1200');
     setMeta('property', 'og:image:height', '630');
-    setMeta('property', 'og:type', 'website');
+    setMeta('property', 'og:type', type);
     setMeta('property', 'og:site_name', 'Juripass');
     setMeta('property', 'og:locale', 'pt_BR');
     setMeta('name', 'twitter:card', 'summary_large_image');
@@ -87,7 +88,7 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd, noinde
       const robotsMeta = document.querySelector('meta[name="robots"]');
       if (robotsMeta) robotsMeta.remove();
     };
-  }, [title, description, url, image, jsonLd, noindex, finalKeywords]);
+  }, [title, description, url, image, jsonLd, noindex, finalKeywords, type]);
 
   return null;
 }

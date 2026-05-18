@@ -1,0 +1,26 @@
+# Juripass
+
+> Plataforma de gestão preventiva de suporte jurídico para o RH. Canal externo e confidencial para acolher colaboradores em questões pessoais sensíveis, em conformidade com a Nova NR-01 (riscos psicossociais).
+
+A Juripass é uma plataforma B2B voltada a áreas de Recursos Humanos. Ajuda empresas a desonerar o RH, monitorar riscos humanos e cumprir a Nova NR-01 ao oferecer um canal jurídico externo e confidencial para os colaboradores. Não é escritório de advocacia: não atua em casos penais, em compliance corporativo ou em causas trabalhistas contra a empresa contratante.
+
+## Páginas
+
+- [Home](/): Visão geral da plataforma, posicionamento e principais benefícios para o RH.
+- [Como Funciona](/como-funciona): Fluxo do colaborador e jornada de implantação na empresa.
+- [Para Quem](/para-quem): Perfis de empresas e cenários ideais de uso.
+- [Para seus Colaboradores](/para-seus-colaboradores): O que o colaborador encontra ao acionar o canal Juripass.
+- [FAQ](/faq): Perguntas frequentes sobre o serviço, escopo, sigilo e LGPD.
+- [Nova NR-01](/nr-01): O que muda com a Nova NR-01 sobre riscos psicossociais e como o RH se prepara.
+- [Gestão de Riscos Psicossociais](/gestao-riscos-psicossociais-nr01): Guia de estruturação da gestão de riscos psicossociais.
+- [NR-01 Riscos Psicossociais 2026](/nr01-riscos-psicossociais): Mudanças da NR-01 que passam a vigorar em 2026.
+- [Gestão de Riscos Humanos](/gestao-riscos-humanos-rh): Como o RH organiza prevenção e suporte para riscos humanos.
+- [Blog](/blog): Artigos para profissionais de RH sobre NR-01, saúde mental e benefícios corporativos.
+
+## Optional
+
+- [Absenteísmo jurídico](/blog/absenteismo-juridico-problema-silencioso)
+- [NR-01 — guia prático](/blog/nr-01-riscos-psicossociais-guia-pratico)
+- [Benefícios e retenção](/blog/beneficios-corporativos-retencao-talentos)
+- [Acolhimento jurídico — implementação](/blog/como-implementar-acolhimento-juridico)
+- [Saúde mental e o papel do RH](/blog/saude-mental-trabalho-papel-rh)

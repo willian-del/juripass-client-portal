@@ -66,8 +66,9 @@ export default function NR01RiscosPsicossociais() {
   return (
     <>
       <SEOHead
-        title="NR-01 e Riscos Psicossociais em 2026 — Juripass | O Que Muda"
-        description="Entenda o que muda com a NR-01 sobre riscos psicossociais a partir de 2026. Saiba o que empresas precisarão gerenciar e como o RH pode se preparar."
+        title="NR-01 e Riscos Psicossociais em 2026 | Juripass"
+        description="O que muda com a NR-01 sobre riscos psicossociais em 2026 e como o RH pode se preparar."
+        type="article"
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 

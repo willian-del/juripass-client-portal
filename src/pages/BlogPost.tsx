@@ -30,8 +30,9 @@ const BlogPost = () => {
   return (
     <>
       <SEOHead
-        title={`${article.title} — Juripass`}
-        description={article.description}
+        title={article.title.length > 50 ? article.title.slice(0, 57) + '…' : `${article.title} — Juripass`}
+        description={article.description.length > 160 ? article.description.slice(0, 157) + '…' : article.description}
+        type="article"
         jsonLd={[articleJsonLd, organizationJsonLd]}
       />
 

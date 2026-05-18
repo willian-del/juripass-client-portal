@@ -8,8 +8,8 @@ const Blog = () => {
   return (
     <>
       <SEOHead
-        title="Conteúdo para RH | Juripass — Artigos sobre Gestão de Pessoas e NR-01"
-        description="Artigos educativos sobre gestão de pessoas, riscos psicossociais, Nova NR-01, benefícios corporativos e saúde mental no trabalho. Conteúdo para profissionais de RH."
+        title="Blog Juripass | Conteúdo de RH e Nova NR-01"
+        description="Artigos sobre gestão de pessoas, riscos psicossociais, Nova NR-01, benefícios corporativos e saúde mental no trabalho."
         jsonLd={[organizationJsonLd]}
       />
 
