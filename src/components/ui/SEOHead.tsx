@@ -88,7 +88,7 @@ export function SEOHead({ title, description, canonical, ogImage, jsonLd, noinde
       const robotsMeta = document.querySelector('meta[name="robots"]');
       if (robotsMeta) robotsMeta.remove();
     };
-  }, [title, description, url, image, jsonLd, noindex, finalKeywords]);
+  }, [title, description, url, image, jsonLd, noindex, finalKeywords, type]);
 
   return null;
 }
