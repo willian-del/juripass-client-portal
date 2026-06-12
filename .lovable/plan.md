@@ -1,22 +1,40 @@
-## Plano: Conectar e verificar o site no Google Search Console
+## Problema
 
-### Status
-Conector Google Search Console já está vinculado ao projeto. Token de verificação META obtido:
+Na tela `/admin/materiais` todas as abas (Apresentações, Cartazes, etc.) aparecem vazias — "Nenhum material nesta categoria" — mesmo havendo 9 materiais cadastrados no banco (apresentações, one-pager, proposta, cartazes).
 
+## Causa raiz
+
+A migration de segurança anterior executou `REVOKE EXECUTE ... ON FUNCTION public.has_role FROM PUBLIC, anon, authenticated`.
+
+Mas `has_role(auth.uid(), 'admin')` é usada dentro das policies RLS das tabelas:
+
+- `sales_materials`
+- `material_shares`
+- `material_views`
+- `leads`
+- `email_templates`
+- `chat_conversations`
+
+Mesmo sendo `SECURITY DEFINER`, o caller (role `authenticated`) precisa ter EXECUTE para a função ser chamada dentro da policy. Sem EXECUTE, a chamada falha, a policy retorna falso, e todo SELECT do admin retorna 0 linhas — quebrando toda a área administrativa, não só Materiais.
+
+As outras duas funções revogadas (`sanitize_lead_insert`, `calculate_lead_score`) são usadas apenas em **triggers**, que rodam como o owner da tabela — não precisam de EXECUTE para o caller. Podem ficar revogadas.
+
+## Correção
+
+Migration única:
+
+```sql
+GRANT EXECUTE ON FUNCTION public.has_role(uuid, app_role) TO authenticated;
 ```
-<meta name="google-site-verification" content="HbrzU_3ahhV7o2bswwlKZg4-bUWKnFVaEwLC24Z5BNs" />
-```
 
-### Passos
+Não conceder a `anon` nem a `public` — nenhuma policy chama `has_role` em contexto anônimo. Mantém o nível de segurança original sem expor a função fora do ciclo normal de avaliação de RLS.
 
-1. **Adicionar meta tag em `index.html`** dentro do `<head>` (logo após as outras meta tags de SEO).
-2. **Publicar o site** para que a tag fique disponível em `https://www.juripass.com.br/`.
-3. **Chamar o endpoint de verificação** do Google via gateway (`siteVerification/v1/webResource`) para confirmar a propriedade.
-4. **Adicionar o site à Search Console** via `PUT /webmasters/v3/sites/<url-encoded>`.
-5. **Marcar o finding `agent_metadata:google_search_console`** como fixed.
+## Verificação
 
-### Importante
-Os passos 3 e 4 só funcionam depois que o site for **republicado** com a meta tag no HTML servido em produção. Você precisará clicar em **Publish** antes que eu rode a verificação final.
+1. Recarregar `/admin/materiais` → as 4 abas devem listar os 9 materiais existentes.
+2. Conferir `/admin/leads` → leads devem voltar a aparecer.
+3. Atualizar a memória de segurança esclarecendo que `has_role` precisa de EXECUTE para `authenticated` por ser usada em policies RLS (revogar quebra o admin).
 
-### Arquivo impactado
-- `index.html` — inclusão da meta tag de verificação.
+## Nada mais é alterado
+
+Nenhuma mudança em código React, edge functions ou outras policies.
